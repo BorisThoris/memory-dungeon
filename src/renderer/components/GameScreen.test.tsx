@@ -268,9 +268,11 @@ describe('GameScreen (OVR-014)', () => {
         const run = renderBombRun();
         const bomb = screen.getByTestId('tool-bomb');
         expect(bomb).toBeEnabled();
+        gameSfxMocks.playPowerArmSfx.mockClear();
         fireEvent.click(bomb);
         expect(bomb).toHaveAttribute('aria-pressed', 'true');
         expect(bomb).toHaveAccessibleName(/choose a card to bomb/i);
+        expect(gameSfxMocks.playPowerArmSfx).toHaveBeenCalledTimes(1);
         expect(useAppStore.getState().run!.bombCharges).toBe(1);
         fireEvent.click(screen.getByTestId('tile-board-stub-pick'));
         const after = useAppStore.getState().run!;

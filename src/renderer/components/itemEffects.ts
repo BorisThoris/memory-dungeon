@@ -84,7 +84,7 @@ export const ITEM_EFFECT_TRAUMA: Readonly<Record<ItemEffectKind, number>> = {
     undo: 0.1,
     wild: 0.25,
     gambit: 0.2,
-    reprise: 0.25,
+    reprise: 0.32,
     carve: 0.3,
     hold: 0.08,
     hold_release: 0.65,
@@ -376,12 +376,14 @@ export const itemEffectRecipe = ({
             });
             break;
         case 'reprise':
-            // The last turns ring again: a gold echo running across the board, a ring under each card.
+            // The last turns ring again: a gold echo running across the board, each card struck
+            // like a coin, then a ring out from it. It has to read as a payout on a busy deep floor.
             at.forEach((anchor, index) => {
                 const delay = index * 0.04;
-                motes(anchor, 'spark', '#ffd24a', 0.8, `echo${index}`, delay, 1.2);
-                motes(anchor, 'vapor', '#ffb347', 0.5, `echo-haze${index}`, delay + 0.1, 1.5);
-                shockwave(anchor, 0.4, `echo-ring${index}`, delay + 0.05);
+                motes(anchor, 'spark', '#ffe27a', 1, `echo${index}`, delay, 1.5);
+                motes(anchor, 'shard', '#ffd24a', 0.75, `echo-coin${index}`, delay, 1.1);
+                motes(anchor, 'vapor', '#ffb347', 0.6, `echo-haze${index}`, delay + 0.1, 1.5);
+                shockwave(anchor, 0.7, `echo-ring${index}`, delay + 0.05);
             });
             break;
         case 'carve': {

@@ -257,6 +257,7 @@ test.describe('Every tool can be used from the dock', () => {
         await page.getByTestId('tool-reprise').click();
         await expect.poll(async () => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.stats.totalScore)).toBeGreaterThan(before);
         await expect.poll(() => itemBursts(page)).toBeGreaterThan(bursts);
+        await expect(page.locator('[data-callout-kind="reprise"]')).toBeAttached();
         await expect(page.getByTestId('tool-reprise')).toBeDisabled();
     });
 
@@ -385,8 +386,9 @@ test.describe('Every tool can be used from the dock', () => {
     });
 
     test('ignite: at Inferno press Ignite, turn four cards with nothing resolving, press Resolve', async ({ page }) => {
-        await openRoom(page, 'zone');
+        await openRoom(page, 'zone', false);
         await expect(tool(page, /ignite/i)).toBeEnabled();
+        const bursts = await itemBursts(page);
         await tool(page, /ignite/i).click();
         await expect.poll(async () => page.evaluate(async () => {
             const { useAppStore } = await import('/src/renderer/store/useAppStore.ts');
@@ -394,12 +396,15 @@ test.describe('Every tool can be used from the dock', () => {
         })).toBe(3);
         await expect(page.getByTestId('zone-veil')).toHaveAttribute('data-zone', 'true');
         await expect(page.getByTestId('hud-zone')).toHaveText('ZONE');
+        await expect.poll(() => itemBursts(page)).toBeGreaterThan(bursts);
         for (const id of ['a-1', 'a-2', 'c-1', 'd-1']) await pick(page, id);
         await expect.poll(async () => (await read(page)).flipped.length).toBe(4);
         expect((await read(page)).status).toBe('playing');
         await expect(tool(page, /resolve/i)).toBeEnabled();
+        const ignited = await itemBursts(page);
         await tool(page, /resolve/i).click();
         await expect.poll(async () => (await read(page)).states['a-2']).toBe('matched');
+        await expect.poll(() => itemBursts(page)).toBeGreaterThan(ignited);
         const after = await read(page);
         expect(after.flipped).toEqual([]);
         expect(after.states['c-1']).toBe('hidden');

@@ -1,5 +1,45 @@
 import { describe, expect, it, vi } from 'vitest';
-import { STUDY_CLOSING_TAP_MS, tapStudyClosing } from './touchHaptics';
+import {
+    ITEM_IMPACT_MIN_TRAUMA,
+    STUDY_CLOSING_TAP_MS,
+    TOOL_PRESS_TAP_MS,
+    itemImpactBuzzMs,
+    tapItemImpact,
+    tapStudyClosing,
+    tapToolPress
+} from './touchHaptics';
+
+describe('tapToolPress', () => {
+    it('ticks for a press, and stays a tick', () => {
+        const vibrate = vi.fn(() => true);
+        expect(tapToolPress(false, { vibrate })).toBe(true);
+        expect(vibrate).toHaveBeenCalledWith(TOOL_PRESS_TAP_MS);
+        expect(TOOL_PRESS_TAP_MS).toBeLessThan(30);
+    });
+
+    it('is silent under reduce motion', () => {
+        const vibrate = vi.fn(() => true);
+        expect(tapToolPress(true, { vibrate })).toBe(false);
+        expect(vibrate).not.toHaveBeenCalled();
+    });
+});
+
+describe('tapItemImpact', () => {
+    it('buzzes harder the harder the item lands', () => {
+        const vibrate = vi.fn(() => true);
+        expect(tapItemImpact(false, 0.9, { vibrate })).toBe(true);
+        expect(vibrate).toHaveBeenCalledWith(itemImpactBuzzMs(0.9));
+        expect(itemImpactBuzzMs(0.9)).toBeGreaterThan(itemImpactBuzzMs(ITEM_IMPACT_MIN_TRAUMA));
+        expect(itemImpactBuzzMs(4)).toBe(itemImpactBuzzMs(1));
+    });
+
+    it('leaves a light effect to the press that made it, and reduce motion to silence', () => {
+        const vibrate = vi.fn(() => true);
+        expect(tapItemImpact(false, ITEM_IMPACT_MIN_TRAUMA - 0.01, { vibrate })).toBe(false);
+        expect(tapItemImpact(true, 0.9, { vibrate })).toBe(false);
+        expect(vibrate).not.toHaveBeenCalled();
+    });
+});
 
 describe('tapStudyClosing', () => {
     it('taps once, briefly: this fires inside the player\'s concentration', () => {

@@ -5,7 +5,7 @@ import { createNewRun, finishMemorizePhase } from '../../shared/game-core';
 import RunShell, { type RunShellTool } from './RunShell';
 
 vi.mock('../audio/gameSfx', () => ({ playStudyClosingTickSfx: vi.fn() }));
-vi.mock('../input/touchHaptics', () => ({ tapStudyClosing: vi.fn(() => true) }));
+vi.mock('../input/touchHaptics', () => ({ tapStudyClosing: vi.fn(() => true), tapToolPress: vi.fn(() => true) }));
 
 const run = () => finishMemorizePhase(createNewRun(0, { echoFeedbackEnabled: false, runSeed: 90_210 }));
 const tool = (id: string, extra: Partial<RunShellTool> = {}): RunShellTool => ({ id, label: id, glyph: <svg />, onClick: vi.fn(), ...extra });

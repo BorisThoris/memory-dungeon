@@ -38,7 +38,7 @@ import { REALMS, REALM_SEVERITIES, realmIntervalFor, realmWeatherClockRuns } fro
  * Major stamps take the centre and hold; minors sit higher and go faster. When one turn makes
  * several, only the first fresh stamp in this priority order is shown. New events replace it.
  */
-export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought' | 'ignite' | 'zone' | 'realm' | 'cashin' | 'potlost';
+export type ScreenCalloutKind = 'rank' | 'milestone' | 'temper' | 'broken' | 'last' | 'miss' | 'banked' | 'pickup' | 'bought' | 'ignite' | 'zone' | 'reprise' | 'realm' | 'cashin' | 'potlost';
 export type ScreenCalloutTone = 'hot' | 'blazing' | 'inferno' | 'legendary' | 'miss' | 'gold' | 'cyan';
 
 export interface ScreenCallout {
@@ -62,7 +62,7 @@ export interface ScreenCallout {
 
 type TurnEvent = BoardTurnResolvedEvent;
 
-const ORDER: readonly ScreenCalloutKind[] = ['realm', 'ignite', 'zone', 'cashin', 'milestone', 'rank', 'temper', 'broken', 'potlost', 'last', 'banked', 'pickup', 'miss', 'bought'];
+const ORDER: readonly ScreenCalloutKind[] = ['realm', 'ignite', 'zone', 'reprise', 'cashin', 'milestone', 'rank', 'temper', 'broken', 'potlost', 'last', 'banked', 'pickup', 'miss', 'bought'];
 
 const isMiss = (event: TurnEvent): boolean => event.outcome === 'mismatch' || event.outcome === 'gambit_mismatch';
 
@@ -287,6 +287,23 @@ export const deriveZoneCallouts = (
         });
     }
     return callouts;
+};
+
+/** Reprise's stamp (`reprise-rules.ts`): what the replay paid, from the score it moved. */
+export const deriveRepriseCallouts = (
+    previous: { reprises: number; score: number },
+    next: { reprises: number; score: number }
+): ScreenCallout[] => {
+    if (next.reprises <= previous.reprises) return [];
+    const paid = next.score - previous.score;
+    return [{
+        key: `reprise:${next.reprises}`,
+        kind: 'reprise',
+        size: 'major',
+        tone: 'gold',
+        title: 'REPRISE!',
+        sub: paid > 0 ? `+${paid.toLocaleString()} · the last turns paid again` : 'The last turns, played again'
+    }];
 };
 
 export const derivePurchaseCallouts = (

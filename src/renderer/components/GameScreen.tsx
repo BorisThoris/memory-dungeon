@@ -148,6 +148,7 @@ import {
     playComboStageSfx,
     playItemDropSfx,
     playMismatchRecoveryCrescendoSfx,
+    playPowerArmSfx,
     resumeAudioContext,
     sfxGainFromSettings
 } from '../audio/gameSfx';
@@ -163,7 +164,7 @@ import { comboDepth, comboHeatLevels, comboHeatStageIndex, comboHeatThemeForRun,
 import { ScreenCalloutQueue } from './ScreenCalloutQueue';
 import { deriveSceneMood, latestMissEvent, voidReturnKeyFor } from './sceneMood';
 import { IceSheetOverlay } from './IceSheetOverlay';
-import { deriveCashInCallouts, derivePurchaseCallouts, deriveRealmCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
+import { deriveCashInCallouts, derivePurchaseCallouts, deriveRealmCallouts, deriveRepriseCallouts, deriveTurnCallouts, deriveZoneCallouts, type RealmCalloutSnapshot, type ScreenCallout } from './screenCallouts';
 import { nextFloorRealmDoor, REALMS, runRealmId, runRealmSecondaryId, runRealmSeverity } from '../../shared/realm-rules';
 import { dailyMusicCreditLine } from '../audio/dailyMusic';
 import { BOSS_ROOM_BY_ACT, realmRoomPlateUrls } from './realmRoomArt';
@@ -335,6 +336,20 @@ const useZoneCallouts = (run: RunState): ScreenCallout[] => {
         previous.current = { zonesThisRun, lastZone };
         if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
     }, [zonesThisRun, lastZone]);
+    return callouts;
+};
+
+/** Reprise's stamp, on the run's count going up; the first read is the baseline. */
+const useRepriseCallouts = (run: RunState): ScreenCallout[] => {
+    const reprises = run.reprisesThisRun ?? 0;
+    const score = run.stats.totalScore;
+    const previous = useRef({ reprises, score });
+    const [callouts, setCallouts] = useState<ScreenCallout[]>([]);
+    useEffect(() => {
+        const fresh = deriveRepriseCallouts(previous.current, { reprises, score });
+        previous.current = { reprises, score };
+        if (fresh.length > 0) setCallouts((current) => [...current, ...fresh].slice(-8));
+    }, [reprises, score]);
     return callouts;
 };
 
@@ -1247,6 +1262,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
      */
     const purchaseCallouts = usePurchaseCallouts(run.storePurchases);
     const zoneCallouts = useZoneCallouts(run);
+    const repriseCallouts = useRepriseCallouts(run);
     const cashInCallouts = useCashInCallouts(run);
     const realmCallouts = useRealmCallouts(run);
     const voidCallouts = useVoidCallouts(run);
@@ -1307,6 +1323,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 : []),
             ...purchaseCallouts,
             ...zoneCallouts,
+            ...repriseCallouts,
             ...cashInCallouts,
             ...realmCallouts,
             ...voidCallouts,
@@ -1315,7 +1332,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         ],
         // The bank is read for the turn that just resolved; a later grant is its own turn.
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey, zoneCallouts, cashInCallouts, realmCallouts, voidCallouts, colossusCallouts, hourglassCallouts]
+        [latestTurnForPulse, purchaseCallouts, comboTemper, voidReturnKey, zoneCallouts, repriseCallouts, cashInCallouts, realmCallouts, voidCallouts, colossusCallouts, hourglassCallouts]
     );
     // What the player got (a pickup, a prize, a purchase) is an item drop (`itemDropFeed.ts`), not a stamp.
     const stampCallouts = useMemo(() => screenCallouts.filter((callout) => !callout.drop), [screenCallouts]);
@@ -2060,6 +2077,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         useAppStore.setState({ boardPinMode: false, peekModeArmed: false,
                             regionShuffleArmed: false, tileSwapArmed: false, tileSwapFirstTileId: null });
                         setBombArmedFor(run);
+                        // Every other tool arms in the store, which sounds it; this one arms here.
+                        void resumeAudioContext();
+                        playPowerArmSfx(shuffleSfxGain);
                     }
                 }
             },

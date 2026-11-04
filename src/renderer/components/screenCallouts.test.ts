@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { createBoardTurnResolvedEventFixture } from '../../shared/test/gameplay-event-fixtures';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import { COMBO_HEAT_THEMES } from '../../shared/combo-heat-rules';
-import { deriveCashInCallouts, derivePurchaseCallouts, deriveTurnCallouts, deriveRealmCallouts, type RealmCalloutSnapshot } from './screenCallouts';
+import { deriveCashInCallouts, derivePurchaseCallouts, deriveRepriseCallouts, deriveTurnCallouts, deriveRealmCallouts, type RealmCalloutSnapshot } from './screenCallouts';
 import { RUN_SHELL_LABELS } from '../copy/runDialogCopy';
 
 const turn = (overrides: Partial<Parameters<typeof createBoardTurnResolvedEventFixture>[0]> & { before: number; after: number }): BoardTurnResolvedEvent =>
@@ -106,5 +106,19 @@ describe('cash in stamps (?combo2=1)', () => {
         expect(RUN_SHELL_LABELS.comboLost(9, 4)).toBe('Lost 9 · ×4');
         expect(RUN_SHELL_LABELS.comboPot(1667, 5)).toBe('Pot 1,667 · 5 gold');
         expect(RUN_SHELL_LABELS.comboBanked(491, 7, 3)).toBe('Banked +491 · 7 → 3');
+    });
+});
+
+describe('deriveRepriseCallouts', () => {
+    it('stamps what the replay paid, once, on the count going up', () => {
+        const [stamp, ...rest] = deriveRepriseCallouts({ reprises: 0, score: 500 }, { reprises: 1, score: 1740 });
+        expect(rest).toEqual([]);
+        expect(stamp).toMatchObject({ key: 'reprise:1', kind: 'reprise', size: 'major', title: 'REPRISE!' });
+        expect(stamp!.sub).toContain('+1,240');
+    });
+
+    it('stays quiet while the score moves for any other reason, and promises nothing when nothing paid', () => {
+        expect(deriveRepriseCallouts({ reprises: 1, score: 500 }, { reprises: 1, score: 900 })).toEqual([]);
+        expect(deriveRepriseCallouts({ reprises: 1, score: 500 }, { reprises: 2, score: 500 })[0]!.sub).not.toContain('+');
     });
 });

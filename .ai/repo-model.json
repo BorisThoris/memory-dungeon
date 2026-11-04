@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3408,
     "codeFileCount": 1328,
-    "exportedSymbolCount": 4406,
+    "exportedSymbolCount": 4412,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12319
+    "relationshipCount": 12326
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "d537769f8524faec23baa8b5b789d15c5b809bc9324b702239dd2affbff36416"
+      "sha256": "c4d1b75f520116c55a490a9ef70700be1aacf1e9732f95a60ed71cda888931b4"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4221,8 +4221,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 29123,
-      "sha256": "75b9d0ebd6d3eb7a3b002287f4f1b8e7445be70e7ac2b0b459501eb06b4ef648"
+      "bytes": 29460,
+      "sha256": "2945d5661c8c3b24b63cdf2a55fe5a46d97fed6090627da248fb5ce0c161a160"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -11295,14 +11295,14 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 80716,
-      "sha256": "616ed073415d150c23371eebd2e8dd55807f1d9bc45a3cccb600a8385ab1ef87"
+      "bytes": 80837,
+      "sha256": "e0c092ecb4b5f1688c47bb56c5458713a4df6276dc47170608093311c5ab7cff"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 155970,
-      "sha256": "87577f0825f142287456ec5d50353bca984d9f5fd7357c9de504936ec46fd25b"
+      "bytes": 156974,
+      "sha256": "0b2ce325a51c5b434211c1a285d4de43b305f0a663cbc0f3cffed9afb814f135"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11451,8 +11451,8 @@
     {
       "path": "src/renderer/components/itemEffects.ts",
       "category": "source",
-      "bytes": 24815,
-      "sha256": "e7cce3f605572ad3b9296590b8bb8b31b1ca4053972e1878dcc030670fd2cae7"
+      "bytes": 24998,
+      "sha256": "bde98e255f51c17c5a56a7ca87e590c625a17b4a645b75d5bb6fa5714e018102"
     },
     {
       "path": "src/renderer/components/LayerEdges.tsx",
@@ -11925,20 +11925,20 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 44754,
-      "sha256": "bf011c60caacce5fba8e9c3da61ba016e19eb3efef7d7a7bf6d7086dc6bef4c8"
+      "bytes": 44813,
+      "sha256": "73010f2fff9d0cb120516280af53f92f2c592d8f9367478e70d4d09a6e76c2d0"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 64502,
-      "sha256": "729bfdf22b224b2095bcb146ec21654da0e7316f10e1d79d9b44215d63859da0"
+      "bytes": 64552,
+      "sha256": "76fa3b4726a9d0f77711f4777af6efd991775b31f5ae875c93ee1b8c2445f6e8"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
       "category": "test",
-      "bytes": 2453,
-      "sha256": "62139061104088ed70d2fbe2581eb35477dc978aec89dc98d7626ff2b1be3675"
+      "bytes": 2486,
+      "sha256": "5b943f154c10cd3e54b4501f88e9e346ea439f6c820a6ecec6868f58137e7064"
     },
     {
       "path": "src/renderer/components/runShellFreshTools.ts",
@@ -11955,8 +11955,8 @@
     {
       "path": "src/renderer/components/RunShellItemTray.test.tsx",
       "category": "test",
-      "bytes": 4749,
-      "sha256": "eaa2332af8dd5d1ae1f4be9f9c8cb265b4b8e9f5d12541f5745da7ed0e517bad"
+      "bytes": 4782,
+      "sha256": "ac61a40e8eebe682a970109a234847f9805909493c7e137d8c9c18adf6dbdc2c"
     },
     {
       "path": "src/renderer/components/runShellToolCatalog.test.ts",
@@ -12111,14 +12111,14 @@
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
       "category": "test",
-      "bytes": 7963,
-      "sha256": "48813a871334ee2229fc535e2ab98052998181d097560fdc0f7223ca48b75804"
+      "bytes": 8902,
+      "sha256": "a7e99b5ad7ef988a16c2fefccc544c649679e614dc9418e5a421f473515fa126"
     },
     {
       "path": "src/renderer/components/screenCallouts.ts",
       "category": "source",
-      "bytes": 19344,
-      "sha256": "269f24e284f11893f22cb721b50752a66e574082e1e52ade002b3263e5343269"
+      "bytes": 19998,
+      "sha256": "df30b5c95162862d37b115405b4556455a9fca8e0564afc2998ef891c45832fd"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -12783,8 +12783,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 36377,
-      "sha256": "de85be4fceaef38f1b682d778aae30e1f5ff34278dcaf05f16079e9536558bfa"
+      "bytes": 36679,
+      "sha256": "ac9e9af40d733f27f02ead3eb78fc09200ffaa81dc21e01f3596d7c8adf919a3"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -14073,14 +14073,14 @@
     {
       "path": "src/renderer/input/touchHaptics.test.ts",
       "category": "test",
-      "bytes": 2687,
-      "sha256": "b56948c793d8bb690ae04fd58f2c5dff91d33be689b0e1527f424de2cbf5c275"
+      "bytes": 4136,
+      "sha256": "fc51b054a2b665cc50d29f4fa98d041b71b2021984e4bd2153e5ef8b98218572"
     },
     {
       "path": "src/renderer/input/touchHaptics.ts",
       "category": "source",
-      "bytes": 2604,
-      "sha256": "f699f19ea6648ae337b64b61fe7776922046ed022b0ad3bd468fe55bfbc358ce"
+      "bytes": 3746,
+      "sha256": "1bb698ad8e80fbca01d5dfb3ce9fff195dfb0074c630cf960ea29d68a4bf1a7c"
     },
     {
       "path": "src/renderer/keyboard/gameplayShortcuts.ts",
@@ -25021,7 +25021,7 @@
       "path": "src/renderer/components/GameScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1850,
+      "lineCount": 1852,
       "imports": [
         "file:src/renderer/components/GameScreen.tsx",
         "file:src/renderer/components/gameScreenFeedback.ts",
@@ -25043,7 +25043,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2907,
+      "lineCount": 2927,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -25553,7 +25553,7 @@
       "path": "src/renderer/components/itemEffects.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 489,
+      "lineCount": 491,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/cardDepartureParticles.ts",
@@ -26790,7 +26790,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 807,
+      "lineCount": 808,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
@@ -26810,7 +26810,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1099,
+      "lineCount": 1100,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -27360,7 +27360,7 @@
       "path": "src/renderer/components/screenCallouts.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 111,
+      "lineCount": 125,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/renderer/copy/runDialogCopy.ts",
@@ -27376,7 +27376,7 @@
       "path": "src/renderer/components/screenCallouts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 319,
+      "lineCount": 336,
       "imports": [
         "file:src/renderer/components/itemDrops.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -27392,6 +27392,7 @@
         "symbol:src/renderer/components/screenCallouts.ts#deriveCashInCallouts",
         "symbol:src/renderer/components/screenCallouts.ts#derivePurchaseCallouts",
         "symbol:src/renderer/components/screenCallouts.ts#deriveRealmCallouts",
+        "symbol:src/renderer/components/screenCallouts.ts#deriveRepriseCallouts",
         "symbol:src/renderer/components/screenCallouts.ts#deriveTurnCallouts",
         "symbol:src/renderer/components/screenCallouts.ts#deriveZoneCallouts",
         "symbol:src/renderer/components/screenCallouts.ts#RealmCalloutSnapshot",
@@ -29448,7 +29449,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 759,
+      "lineCount": 766,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -29492,6 +29493,7 @@
         "file:src/renderer/dev/boardWebglPerfSample.ts",
         "file:src/renderer/dev/legacy/tileStepLegacy.ts",
         "file:src/renderer/hooks/useSceneEffectTier.ts",
+        "file:src/renderer/input/touchHaptics.ts",
         "file:src/renderer/platformTilt/platformTiltTypes.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/styles/theme.ts",
@@ -32930,7 +32932,7 @@
       "path": "src/renderer/input/touchHaptics.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 56,
+      "lineCount": 96,
       "imports": [
         "file:src/renderer/input/touchHaptics.ts"
       ],
@@ -32942,11 +32944,16 @@
       "path": "src/renderer/input/touchHaptics.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 63,
+      "lineCount": 81,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/input/touchHaptics.ts#ITEM_IMPACT_MIN_TRAUMA",
+        "symbol:src/renderer/input/touchHaptics.ts#itemImpactBuzzMs",
         "symbol:src/renderer/input/touchHaptics.ts#STUDY_CLOSING_TAP_MS",
+        "symbol:src/renderer/input/touchHaptics.ts#tapItemImpact",
         "symbol:src/renderer/input/touchHaptics.ts#tapStudyClosing",
+        "symbol:src/renderer/input/touchHaptics.ts#tapToolPress",
+        "symbol:src/renderer/input/touchHaptics.ts#TOOL_PRESS_TAP_MS",
         "symbol:src/renderer/input/touchHaptics.ts#VibrateFn"
       ],
       "testedBy": [
@@ -51800,40 +51807,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2906,
-      "endLine": 2906
+      "line": 2926,
+      "endLine": 2926
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 304,
-      "endLine": 304
+      "line": 305,
+      "endLine": 305
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 302,
-      "endLine": 302
+      "line": 303,
+      "endLine": 303
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 306,
-      "endLine": 306
+      "line": 307,
+      "endLine": 307
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 296,
-      "endLine": 296
+      "line": 297,
+      "endLine": 297
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -52345,7 +52352,7 @@
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
       "line": 235,
-      "endLine": 476
+      "endLine": 478
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#itemEffectsFromEvents",
@@ -52368,8 +52375,8 @@
       "name": "publishItemEffects",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 485,
-      "endLine": 488
+      "line": 487,
+      "endLine": 490
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#spreadTileIds",
@@ -52384,8 +52391,8 @@
       "name": "useItemEffectChannel",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 483,
-      "endLine": 483
+      "line": 485,
+      "endLine": 485
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#verbItemEffect",
@@ -53832,8 +53839,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 1098,
-      "endLine": 1098
+      "line": 1099,
+      "endLine": 1099
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -54680,8 +54687,8 @@
       "name": "derivePurchaseCallouts",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 292,
-      "endLine": 313
+      "line": 309,
+      "endLine": 330
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveRealmCallouts",
@@ -54690,6 +54697,14 @@
       "file": "src/renderer/components/screenCallouts.ts",
       "line": 229,
       "endLine": 243
+    },
+    {
+      "id": "symbol:src/renderer/components/screenCallouts.ts#deriveRepriseCallouts",
+      "name": "deriveRepriseCallouts",
+      "kind": "value",
+      "file": "src/renderer/components/screenCallouts.ts",
+      "line": 293,
+      "endLine": 307
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveTurnCallouts",
@@ -54760,8 +54775,8 @@
       "name": "stageTone",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 316,
-      "endLine": 316
+      "line": 333,
+      "endLine": 333
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
@@ -57096,24 +57111,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 758,
-      "endLine": 758
+      "line": 765,
+      "endLine": 765
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 180,
-      "endLine": 180
+      "line": 181,
+      "endLine": 181
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 97,
-      "endLine": 97
+      "line": 98,
+      "endLine": 98
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -60884,6 +60899,22 @@
       "endLine": 23
     },
     {
+      "id": "symbol:src/renderer/input/touchHaptics.ts#ITEM_IMPACT_MIN_TRAUMA",
+      "name": "ITEM_IMPACT_MIN_TRAUMA",
+      "kind": "value",
+      "file": "src/renderer/input/touchHaptics.ts",
+      "line": 43,
+      "endLine": 43
+    },
+    {
+      "id": "symbol:src/renderer/input/touchHaptics.ts#itemImpactBuzzMs",
+      "name": "itemImpactBuzzMs",
+      "kind": "value",
+      "file": "src/renderer/input/touchHaptics.ts",
+      "line": 46,
+      "endLine": 46
+    },
+    {
       "id": "symbol:src/renderer/input/touchHaptics.ts#STUDY_CLOSING_TAP_MS",
       "name": "STUDY_CLOSING_TAP_MS",
       "kind": "value",
@@ -60892,12 +60923,36 @@
       "endLine": 37
     },
     {
+      "id": "symbol:src/renderer/input/touchHaptics.ts#tapItemImpact",
+      "name": "tapItemImpact",
+      "kind": "value",
+      "file": "src/renderer/input/touchHaptics.ts",
+      "line": 79,
+      "endLine": 80
+    },
+    {
       "id": "symbol:src/renderer/input/touchHaptics.ts#tapStudyClosing",
       "name": "tapStudyClosing",
       "kind": "value",
       "file": "src/renderer/input/touchHaptics.ts",
-      "line": 45,
-      "endLine": 62
+      "line": 71,
+      "endLine": 72
+    },
+    {
+      "id": "symbol:src/renderer/input/touchHaptics.ts#tapToolPress",
+      "name": "tapToolPress",
+      "kind": "value",
+      "file": "src/renderer/input/touchHaptics.ts",
+      "line": 75,
+      "endLine": 76
+    },
+    {
+      "id": "symbol:src/renderer/input/touchHaptics.ts#TOOL_PRESS_TAP_MS",
+      "name": "TOOL_PRESS_TAP_MS",
+      "kind": "value",
+      "file": "src/renderer/input/touchHaptics.ts",
+      "line": 40,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/input/touchHaptics.ts#VibrateFn",
@@ -82426,7 +82481,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 115
+          "line": 116
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -82943,7 +82998,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1724
+          "line": 1741
         }
       ],
       "tests": [
@@ -83765,7 +83820,7 @@
       "tests": [
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 30
+          "line": 31
         },
         {
           "path": "src/renderer/components/GameScreen.test.tsx",
@@ -86117,7 +86172,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1726
+          "line": 1743
         }
       ],
       "tests": [
@@ -86177,7 +86232,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 323
+          "line": 324
         }
       ],
       "enables": [],
@@ -95387,6 +95442,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/screenCallouts.ts->symbol:src/renderer/components/screenCallouts.ts#deriveRepriseCallouts",
+      "source": "file:src/renderer/components/screenCallouts.ts",
+      "target": "symbol:src/renderer/components/screenCallouts.ts#deriveRepriseCallouts",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/screenCallouts.ts->symbol:src/renderer/components/screenCallouts.ts#deriveTurnCallouts",
       "source": "file:src/renderer/components/screenCallouts.ts",
       "target": "symbol:src/renderer/components/screenCallouts.ts#deriveTurnCallouts",
@@ -100031,15 +100092,45 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/input/touchHaptics.ts->symbol:src/renderer/input/touchHaptics.ts#ITEM_IMPACT_MIN_TRAUMA",
+      "source": "file:src/renderer/input/touchHaptics.ts",
+      "target": "symbol:src/renderer/input/touchHaptics.ts#ITEM_IMPACT_MIN_TRAUMA",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/touchHaptics.ts->symbol:src/renderer/input/touchHaptics.ts#itemImpactBuzzMs",
+      "source": "file:src/renderer/input/touchHaptics.ts",
+      "target": "symbol:src/renderer/input/touchHaptics.ts#itemImpactBuzzMs",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/input/touchHaptics.ts->symbol:src/renderer/input/touchHaptics.ts#STUDY_CLOSING_TAP_MS",
       "source": "file:src/renderer/input/touchHaptics.ts",
       "target": "symbol:src/renderer/input/touchHaptics.ts#STUDY_CLOSING_TAP_MS",
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/input/touchHaptics.ts->symbol:src/renderer/input/touchHaptics.ts#tapItemImpact",
+      "source": "file:src/renderer/input/touchHaptics.ts",
+      "target": "symbol:src/renderer/input/touchHaptics.ts#tapItemImpact",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/input/touchHaptics.ts->symbol:src/renderer/input/touchHaptics.ts#tapStudyClosing",
       "source": "file:src/renderer/input/touchHaptics.ts",
       "target": "symbol:src/renderer/input/touchHaptics.ts#tapStudyClosing",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/touchHaptics.ts->symbol:src/renderer/input/touchHaptics.ts#tapToolPress",
+      "source": "file:src/renderer/input/touchHaptics.ts",
+      "target": "symbol:src/renderer/input/touchHaptics.ts#tapToolPress",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/input/touchHaptics.ts->symbol:src/renderer/input/touchHaptics.ts#TOOL_PRESS_TAP_MS",
+      "source": "file:src/renderer/input/touchHaptics.ts",
+      "target": "symbol:src/renderer/input/touchHaptics.ts#TOOL_PRESS_TAP_MS",
       "kind": "exports"
     },
     {
@@ -128788,6 +128879,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/hooks/useSceneEffectTier.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/hooks/useSceneEffectTier.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/input/touchHaptics.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/input/touchHaptics.ts",
       "kind": "imports"
     },
     {

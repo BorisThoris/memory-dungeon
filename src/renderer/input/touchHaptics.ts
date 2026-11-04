@@ -36,16 +36,22 @@ const defaultVibrate = (): VibrateFn | null => {
  */
 export const STUDY_CLOSING_TAP_MS = 14;
 
+/** A press of a tool in the dock: the same tick, a touch firmer, because the player asked for it. */
+export const TOOL_PRESS_TAP_MS = 18;
+
+/** Below this trauma an item effect is a flourish, and its press has already said so. */
+export const ITEM_IMPACT_MIN_TRAUMA = 0.5;
+
+/** The buzz of an item that hits the board, from the trauma it adds: a bomb under a meteor. */
+export const itemImpactBuzzMs = (trauma: number): number => Math.round(20 + Math.min(1, trauma) * 40);
+
+type TapOptions = { vibrate?: VibrateFn | null };
+
 /**
- * Taps the device once for a second of the closing study window. Returns whether it fired.
- *
  * Never throws: a browser without the API, a device that refuses the effect, and a page that has
  * not been interacted with yet are all silent no-ops, the same contract the gamepad rumble keeps.
  */
-export const tapStudyClosing = (
-    reduceMotion: boolean,
-    options: { vibrate?: VibrateFn | null } = {}
-): boolean => {
+const tap = (reduceMotion: boolean, ms: number, options: TapOptions): boolean => {
     if (reduceMotion) {
         return false;
     }
@@ -55,8 +61,20 @@ export const tapStudyClosing = (
     }
     try {
         // Chrome returns false when it declines (no user gesture yet, or the page is hidden).
-        return vibrate(STUDY_CLOSING_TAP_MS) !== false;
+        return vibrate(ms) !== false;
     } catch {
         return false;
     }
 };
+
+/** Taps the device once for a second of the closing study window. Returns whether it fired. */
+export const tapStudyClosing = (reduceMotion: boolean, options: TapOptions = {}): boolean =>
+    tap(reduceMotion, STUDY_CLOSING_TAP_MS, options);
+
+/** Taps the device for a press of a dock tool. Returns whether it fired. */
+export const tapToolPress = (reduceMotion: boolean, options: TapOptions = {}): boolean =>
+    tap(reduceMotion, TOOL_PRESS_TAP_MS, options);
+
+/** Buzzes the device as an item lands on the board, if it lands hard enough. Returns whether it fired. */
+export const tapItemImpact = (reduceMotion: boolean, trauma: number, options: TapOptions = {}): boolean =>
+    trauma >= ITEM_IMPACT_MIN_TRAUMA && tap(reduceMotion, itemImpactBuzzMs(trauma), options);

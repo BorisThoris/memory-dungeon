@@ -6,7 +6,7 @@ import { TILE_SUIT_CATALOG } from '../../shared/tile-suit-rules';
 import RunShell from './RunShell';
 
 vi.mock('../audio/gameSfx', () => ({ playStudyClosingTickSfx: vi.fn() }));
-vi.mock('../input/touchHaptics', () => ({ tapStudyClosing: vi.fn(() => true) }));
+vi.mock('../input/touchHaptics', () => ({ tapStudyClosing: vi.fn(() => true), tapToolPress: vi.fn(() => true) }));
 
 /** Floor 5 of the schedule features the amplified reaction, floor 7 the calm one. */
 const floor = (level: number) => {

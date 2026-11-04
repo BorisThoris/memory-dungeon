@@ -80,6 +80,7 @@ import { preloadCardIllustrationImages } from '../cardFace/cardIllustrationImage
 import { useTileBoardTextureRevision } from './useTileBoardTextureRevision';
 import { runTileBoardSceneFrame } from './tileBoardSceneFrame';
 import { TileBoardSceneBoardGroup } from './TileBoardSceneBoardGroup';
+import { tapItemImpact } from '../input/touchHaptics';
 import { ITEM_EFFECT_TRAUMA, METEOR_IMPACT_DELAY_SECONDS, useItemEffectChannel } from './itemEffects';
 import { createHitStopClock, ITEM_HIT_STOP_SECONDS } from './meteorImpactMotion';
 import { getTileBoardCardWindow } from './tileBoardCardWindow';
@@ -413,7 +414,10 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
                 for (const effect of state.latest) {
                     const landsIn = effect.kind === 'meteor' && !reduceMotionRef.current ? METEOR_IMPACT_DELAY_SECONDS : 0;
                     if (landsIn > 0) delayedTraumaRef.current.push({ at: visualTime.current + landsIn, amount: ITEM_EFFECT_TRAUMA[effect.kind] });
-                    else traumaPulseRef.current += ITEM_EFFECT_TRAUMA[effect.kind];
+                    else {
+                        traumaPulseRef.current += ITEM_EFFECT_TRAUMA[effect.kind];
+                        tapItemImpact(reduceMotionRef.current, ITEM_EFFECT_TRAUMA[effect.kind]);
+                    }
                     const stop = ITEM_HIT_STOP_SECONDS[effect.kind];
                     if (stop && !reduceMotionRef.current) hitStop.hold(visualTime.current + landsIn, stop);
                 }
@@ -613,7 +617,10 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         const due = delayedTraumaRef.current.filter((pulse) => pulse.at <= visualTime.current);
         if (due.length > 0) {
             delayedTraumaRef.current = delayedTraumaRef.current.filter((pulse) => pulse.at > visualTime.current);
-            for (const pulse of due) traumaPulseRef.current += pulse.amount;
+            for (const pulse of due) {
+                traumaPulseRef.current += pulse.amount;
+                tapItemImpact(reduceMotionRef.current, pulse.amount);
+            }
         }
     }, -2);
 

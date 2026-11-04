@@ -39,7 +39,7 @@ import {
     runChainTier
 } from '../../shared/chain-tier-rules';
 import { playStudyClosingTickSfx } from '../audio/gameSfx';
-import { tapStudyClosing } from '../input/touchHaptics';
+import { tapStudyClosing, tapToolPress } from '../input/touchHaptics';
 import { memorizeUrgency } from './memorizeUrgency';
 import { isPassAndPlayRun, PASS_AND_PLAY_FLOORS } from '../../shared/pass-and-play-rules';
 import { getSecondaryObjectiveProgress } from '../../shared/secondary-objectives';
@@ -517,6 +517,7 @@ const RunShell = ({
         if (compactDock) {
             setTrayOpenOnFloor(null);
         }
+        tapToolPress(reduceMotion);
         tool.onClick();
     };
     const toolButton = (tool: RunShellTool): ReactElement => (
