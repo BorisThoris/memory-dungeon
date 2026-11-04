@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3408,
     "codeFileCount": 1328,
-    "exportedSymbolCount": 4403,
+    "exportedSymbolCount": 4406,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12315
+    "relationshipCount": 12319
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "2c640a5790bc36bdec5ad2535eb4465382f1a6478e69a3a9f8b4568f3dd1549f"
+      "sha256": "d537769f8524faec23baa8b5b789d15c5b809bc9324b702239dd2affbff36416"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4221,8 +4221,8 @@
     {
       "path": "e2e/tools-usable.spec.ts",
       "category": "test",
-      "bytes": 27310,
-      "sha256": "8f6e3ea8ade63f7efa005fe8a2aacdbe7ce82caa592c6b722cab0c5150638ba1"
+      "bytes": 29123,
+      "sha256": "75b9d0ebd6d3eb7a3b002287f4f1b8e7445be70e7ac2b0b459501eb06b4ef648"
     },
     {
       "path": "e2e/ui-design-reference.spec.ts",
@@ -10209,8 +10209,8 @@
     {
       "path": "src/renderer/audio/gameSfx.ts",
       "category": "source",
-      "bytes": 63943,
-      "sha256": "7f6a748980df3de38cf1ee0dd03c28ccc18888a9b198d1ae473962fdaeac76f8"
+      "bytes": 67528,
+      "sha256": "52dc3144b747c99cf24e5639c13539d0f9429a74c94a910fd8725d3b431fe2f9"
     },
     {
       "path": "src/renderer/audio/gameSfxCancellation.test.ts",
@@ -10959,8 +10959,8 @@
     {
       "path": "src/renderer/components/ColossusCard.module.css",
       "category": "source",
-      "bytes": 6831,
-      "sha256": "69a68e0cc8de4bc257c4633cecd5421f12e84eaaa53a12cbf8cded2612fba645"
+      "bytes": 6919,
+      "sha256": "c4d69159424bc510a4ead782bc9dbe6d437b15dd7fd14cbd177a87481c67a097"
     },
     {
       "path": "src/renderer/components/ColossusCard.tsx",
@@ -11289,8 +11289,8 @@
     {
       "path": "src/renderer/components/GameScreen.module.css",
       "category": "source",
-      "bytes": 56532,
-      "sha256": "5cf029949cc95880b0a0e950b132059e849561e65347a33fe74f742ac921ce6f"
+      "bytes": 58427,
+      "sha256": "2aa0d076c580e93803bc69a2be15b2428f8e19e887a0963c3dd558935e041812"
     },
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
@@ -11301,8 +11301,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 154626,
-      "sha256": "307f38f4e817b0f0348d0f780d7117d7fc3974028a6f90637db38d5c86e8dc89"
+      "bytes": 155970,
+      "sha256": "87577f0825f142287456ec5d50353bca984d9f5fd7357c9de504936ec46fd25b"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11445,14 +11445,14 @@
     {
       "path": "src/renderer/components/itemEffects.test.ts",
       "category": "test",
-      "bytes": 9280,
-      "sha256": "d5f19c23241fb3944a6d8b0dcdbcb4bd6609d4e8d4f584ce56b73af6e361891e"
+      "bytes": 11516,
+      "sha256": "cb9e7ad6a202244551f518827aa1c53a872687d533672b03795cc4975e669834"
     },
     {
       "path": "src/renderer/components/itemEffects.ts",
       "category": "source",
-      "bytes": 17740,
-      "sha256": "1880fdf970fe5771905ab936b8a1986841288ab31c3720b4e24e6fb5fe59e449"
+      "bytes": 24815,
+      "sha256": "e7cce3f605572ad3b9296590b8bb8b31b1ca4053972e1878dcc030670fd2cae7"
     },
     {
       "path": "src/renderer/components/LayerEdges.tsx",
@@ -11595,8 +11595,8 @@
     {
       "path": "src/renderer/components/meteorImpactMotion.ts",
       "category": "source",
-      "bytes": 6310,
-      "sha256": "9e5fe575c269d598d0363f8b59b3b1e1604125ff1afb39a9a605ae8b43fec661"
+      "bytes": 6542,
+      "sha256": "f4cadae562dbdeeb7e1ea95d9427bf26a0e4a65a417eae24de47811b6d843675"
     },
     {
       "path": "src/renderer/components/MeteorStrike.tsx",
@@ -11619,14 +11619,14 @@
     {
       "path": "src/renderer/components/OddCardLegend.module.css",
       "category": "source",
-      "bytes": 1625,
-      "sha256": "fb069835fbfcf8a720f76fcb41cb81623e633b7ab380324c93ed221a933db40f"
+      "bytes": 2353,
+      "sha256": "698ce720fb375d507241786226092384d918fb0e1a3a1222f3a8616fc95f2904"
     },
     {
       "path": "src/renderer/components/OddCardLegend.tsx",
       "category": "source",
-      "bytes": 1572,
-      "sha256": "67229beef47faf6013d38111f38f9d240c9ed88f52b460fadabf2e04239eb2ef"
+      "bytes": 1733,
+      "sha256": "80e5b68ba8a7cf0c7e3456eb7585867c6db3a4d3206fdbe1849aafa11cb6f8bf"
     },
     {
       "path": "src/renderer/components/OverlayModal.module.css",
@@ -12273,8 +12273,8 @@
     {
       "path": "src/renderer/components/TileBoard.tsx",
       "category": "source",
-      "bytes": 148803,
-      "sha256": "bc9c35328dcea4ab15a25784e3a66e4006fee91aa26e89e11e582ac68886344c"
+      "bytes": 149991,
+      "sha256": "49b302f774bde63ced482e442a048ceb92d8fade296ddd898b0a0b6c346977b2"
     },
     {
       "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -14583,8 +14583,8 @@
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 34710,
-      "sha256": "83feb7df5036fddc52ed65a593e850e4784397510c165bdb6079382cf4c8b6a4"
+      "bytes": 35632,
+      "sha256": "17016fa55d2a9c65e8fa8a6520611297f012343e85b22bdf07faf1b78a158811"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -21927,7 +21927,7 @@
       "path": "src/renderer/audio/gameSfx.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1456,
+      "lineCount": 1499,
       "imports": [
         "file:src/renderer/audio/audioSafety.ts",
         "file:src/renderer/audio/comboVoicing.ts",
@@ -25043,7 +25043,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2886,
+      "lineCount": 2907,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -25538,7 +25538,7 @@
       "path": "src/renderer/components/itemEffects.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 139,
+      "lineCount": 172,
       "imports": [
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/itemEffects.ts",
@@ -25553,7 +25553,7 @@
       "path": "src/renderer/components/itemEffects.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 360,
+      "lineCount": 489,
       "imports": [
         "file:src/renderer/components/boardParticleSystem.ts",
         "file:src/renderer/components/cardDepartureParticles.ts",
@@ -25573,7 +25573,9 @@
         "symbol:src/renderer/components/itemEffects.ts#itemEffectsFromEvents",
         "symbol:src/renderer/components/itemEffects.ts#METEOR_IMPACT_DELAY_SECONDS",
         "symbol:src/renderer/components/itemEffects.ts#publishItemEffects",
-        "symbol:src/renderer/components/itemEffects.ts#useItemEffectChannel"
+        "symbol:src/renderer/components/itemEffects.ts#spreadTileIds",
+        "symbol:src/renderer/components/itemEffects.ts#useItemEffectChannel",
+        "symbol:src/renderer/components/itemEffects.ts#verbItemEffect"
       ],
       "testedBy": [
         "file:src/renderer/components/itemEffects.test.ts",
@@ -25910,7 +25912,7 @@
       "path": "src/renderer/components/meteorImpactMotion.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 128,
+      "lineCount": 135,
       "imports": [
         "file:src/renderer/components/itemEffects.ts",
         "file:src/shared/board-grid-dimensions.ts",
@@ -25988,7 +25990,7 @@
       "path": "src/renderer/components/OddCardLegend.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 32,
+      "lineCount": 35,
       "imports": [
         "file:src/renderer/copy/oddCardBeat.ts",
         "file:src/shared/tile-suit-rules.ts"
@@ -27842,7 +27844,7 @@
       "path": "src/renderer/components/TileBoard.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 3342,
+      "lineCount": 3362,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -27889,6 +27891,7 @@
         "file:src/shared/trait-opportunities.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/TileBoard.tsx#BOARD_CROWN_PLACED_EVENT",
         "symbol:src/renderer/components/TileBoard.tsx#default",
         "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
         "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle"
@@ -34431,10 +34434,11 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 945,
+      "lineCount": 963,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
+        "file:src/renderer/components/itemEffects.ts",
         "file:src/renderer/desktop-client.ts",
         "file:src/renderer/store/achievementPersistence.ts",
         "file:src/renderer/store/appStoreInitialState.ts",
@@ -48412,16 +48416,16 @@
       "name": "DeepGameCue",
       "kind": "type",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1336,
-      "endLine": 1345
+      "line": 1379,
+      "endLine": 1388
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#deepGameCues",
       "name": "deepGameCues",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1351,
-      "endLine": 1366
+      "line": 1394,
+      "endLine": 1409
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playChainOpportunityBeatSfx",
@@ -48444,8 +48448,8 @@
       "name": "playDeepGameSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1441,
-      "endLine": 1442
+      "line": 1484,
+      "endLine": 1485
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playFlipSfx",
@@ -48476,8 +48480,8 @@
       "name": "playItemDropSfx",
       "kind": "value",
       "file": "src/renderer/audio/gameSfx.ts",
-      "line": 1313,
-      "endLine": 1314
+      "line": 1356,
+      "endLine": 1357
     },
     {
       "id": "symbol:src/renderer/audio/gameSfx.ts#playItemEffectSfx",
@@ -51796,8 +51800,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2885,
-      "endLine": 2885
+      "line": 2906,
+      "endLine": 2906
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -52300,32 +52304,32 @@
       "name": "ITEM_EFFECT_MAX_CARDS",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 172,
-      "endLine": 172
+      "line": 229,
+      "endLine": 229
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ITEM_EFFECT_TRAUMA",
       "name": "ITEM_EFFECT_TRAUMA",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 64,
-      "endLine": 80
+      "line": 71,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ItemEffect",
       "name": "ItemEffect",
       "kind": "interface",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 44,
-      "endLine": 58
+      "line": 51,
+      "endLine": 65
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ItemEffectAnchor",
       "name": "ItemEffectAnchor",
       "kind": "interface",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 163,
-      "endLine": 167
+      "line": 220,
+      "endLine": 224
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ItemEffectKind",
@@ -52333,47 +52337,63 @@
       "kind": "type",
       "file": "src/renderer/components/itemEffects.ts",
       "line": 27,
-      "endLine": 42
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#itemEffectRecipe",
       "name": "itemEffectRecipe",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 178,
-      "endLine": 347
+      "line": 235,
+      "endLine": 476
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#itemEffectsFromEvents",
       "name": "itemEffectsFromEvents",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 92,
-      "endLine": 161
+      "line": 105,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#METEOR_IMPACT_DELAY_SECONDS",
       "name": "METEOR_IMPACT_DELAY_SECONDS",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 170,
-      "endLine": 170
+      "line": 227,
+      "endLine": 227
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#publishItemEffects",
       "name": "publishItemEffects",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 356,
-      "endLine": 359
+      "line": 485,
+      "endLine": 488
+    },
+    {
+      "id": "symbol:src/renderer/components/itemEffects.ts#spreadTileIds",
+      "name": "spreadTileIds",
+      "kind": "value",
+      "file": "src/renderer/components/itemEffects.ts",
+      "line": 177,
+      "endLine": 180
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#useItemEffectChannel",
       "name": "useItemEffectChannel",
       "kind": "value",
       "file": "src/renderer/components/itemEffects.ts",
-      "line": 354,
-      "endLine": 354
+      "line": 483,
+      "endLine": 483
+    },
+    {
+      "id": "symbol:src/renderer/components/itemEffects.ts#verbItemEffect",
+      "name": "verbItemEffect",
+      "kind": "value",
+      "file": "src/renderer/components/itemEffects.ts",
+      "line": 190,
+      "endLine": 218
     },
     {
       "id": "symbol:src/renderer/components/LayerEdges.tsx#LayerEdges",
@@ -52636,8 +52656,8 @@
       "name": "createHitStopClock",
       "kind": "value",
       "file": "src/renderer/components/meteorImpactMotion.ts",
-      "line": 90,
-      "endLine": 127
+      "line": 97,
+      "endLine": 134
     },
     {
       "id": "symbol:src/renderer/components/meteorImpactMotion.ts#ITEM_HIT_STOP_SECONDS",
@@ -52645,7 +52665,7 @@
       "kind": "value",
       "file": "src/renderer/components/meteorImpactMotion.ts",
       "line": 24,
-      "endLine": 27
+      "endLine": 34
     },
     {
       "id": "symbol:src/renderer/components/meteorImpactMotion.ts#METEOR_RIPPLE_MAX_SECONDS",
@@ -52676,32 +52696,32 @@
       "name": "meteorDepartureDelaySec",
       "kind": "value",
       "file": "src/renderer/components/meteorImpactMotion.ts",
-      "line": 39,
-      "endLine": 47
+      "line": 46,
+      "endLine": 54
     },
     {
       "id": "symbol:src/renderer/components/meteorImpactMotion.ts#meteorThrowDirection",
       "name": "meteorThrowDirection",
       "kind": "value",
       "file": "src/renderer/components/meteorImpactMotion.ts",
-      "line": 50,
-      "endLine": 61
+      "line": 57,
+      "endLine": 68
     },
     {
       "id": "symbol:src/renderer/components/meteorImpactMotion.ts#putMeteorThrow",
       "name": "putMeteorThrow",
       "kind": "value",
       "file": "src/renderer/components/meteorImpactMotion.ts",
-      "line": 75,
-      "endLine": 83
+      "line": 82,
+      "endLine": 90
     },
     {
       "id": "symbol:src/renderer/components/meteorImpactMotion.ts#takeBackMeteorThrow",
       "name": "takeBackMeteorThrow",
       "kind": "value",
       "file": "src/renderer/components/meteorImpactMotion.ts",
-      "line": 66,
-      "endLine": 72
+      "line": 73,
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/components/MeteorStrike.tsx#METEOR_GROUND_SHADER",
@@ -52796,8 +52816,8 @@
       "name": "OddCardLegend",
       "kind": "function",
       "file": "src/renderer/components/OddCardLegend.tsx",
-      "line": 10,
-      "endLine": 31
+      "line": 12,
+      "endLine": 34
     },
     {
       "id": "symbol:src/renderer/components/OverlayModal.tsx#default",
@@ -55120,28 +55140,36 @@
       "endLine": 171
     },
     {
+      "id": "symbol:src/renderer/components/TileBoard.tsx#BOARD_CROWN_PLACED_EVENT",
+      "name": "BOARD_CROWN_PLACED_EVENT",
+      "kind": "value",
+      "file": "src/renderer/components/TileBoard.tsx",
+      "line": 305,
+      "endLine": 305
+    },
+    {
       "id": "symbol:src/renderer/components/TileBoard.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 3341,
-      "endLine": 3341
+      "line": 3361,
+      "endLine": 3361
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardClientRect",
       "name": "TileBoardClientRect",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 304,
-      "endLine": 311
+      "line": 307,
+      "endLine": 314
     },
     {
       "id": "symbol:src/renderer/components/TileBoard.tsx#TileBoardHandle",
       "name": "TileBoardHandle",
       "kind": "type",
       "file": "src/renderer/components/TileBoard.tsx",
-      "line": 313,
-      "endLine": 317
+      "line": 316,
+      "endLine": 320
     },
     {
       "id": "symbol:src/renderer/components/tileBoardBreakWave.ts#BREAK_WAVE_MAX_DELAY_SECONDS",
@@ -62396,8 +62424,8 @@
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 254,
-      "endLine": 932
+      "line": 267,
+      "endLine": 950
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -82915,7 +82943,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1711
+          "line": 1724
         }
       ],
       "tests": [
@@ -83302,7 +83330,7 @@
         },
         {
           "path": "src/renderer/components/OddCardLegend.tsx",
-          "line": 23
+          "line": 26
         },
         {
           "path": "src/renderer/copy/oddCardBeat.ts",
@@ -84634,7 +84662,7 @@
         },
         {
           "path": "src/renderer/components/itemEffects.test.ts",
-          "line": 6
+          "line": 7
         }
       ],
       "enables": [
@@ -86089,7 +86117,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1713
+          "line": 1726
         }
       ],
       "tests": [
@@ -93619,9 +93647,21 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/itemEffects.ts->symbol:src/renderer/components/itemEffects.ts#spreadTileIds",
+      "source": "file:src/renderer/components/itemEffects.ts",
+      "target": "symbol:src/renderer/components/itemEffects.ts#spreadTileIds",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/itemEffects.ts->symbol:src/renderer/components/itemEffects.ts#useItemEffectChannel",
       "source": "file:src/renderer/components/itemEffects.ts",
       "target": "symbol:src/renderer/components/itemEffects.ts#useItemEffectChannel",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/itemEffects.ts->symbol:src/renderer/components/itemEffects.ts#verbItemEffect",
+      "source": "file:src/renderer/components/itemEffects.ts",
+      "target": "symbol:src/renderer/components/itemEffects.ts#verbItemEffect",
       "kind": "exports"
     },
     {
@@ -95680,6 +95720,12 @@
       "id": "exports:src/renderer/components/TileBezel.tsx->symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
       "source": "file:src/renderer/components/TileBezel.tsx",
       "target": "symbol:src/renderer/components/TileBezel.tsx#TileHoverTiltState",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/TileBoard.tsx->symbol:src/renderer/components/TileBoard.tsx#BOARD_CROWN_PLACED_EVENT",
+      "source": "file:src/renderer/components/TileBoard.tsx",
+      "target": "symbol:src/renderer/components/TileBoard.tsx#BOARD_CROWN_PLACED_EVENT",
       "kind": "exports"
     },
     {
@@ -132630,6 +132676,12 @@
       "id": "imports:src/renderer/store/useAppStore.ts->src/renderer/audio/uiSfx.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/renderer/audio/uiSfx.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/useAppStore.ts->src/renderer/components/itemEffects.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/renderer/components/itemEffects.ts",
       "kind": "imports"
     },
     {

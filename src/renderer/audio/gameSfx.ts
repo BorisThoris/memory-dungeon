@@ -1269,10 +1269,53 @@ const playItemEffectSfxUnguarded = (rawGain: number, kind: ItemEffectKind): void
                 playNoise({ durationSec: 1.4, gain: gain * 0.9, filter: 'lowpass', from: 1800, to: 60, attackSec: 0.004 });
             }, METEOR_IMPACT_DELAY_SECONDS * 1000);
             return;
-        // A peek, a shuffle and a gambit already have their own sounds (`playPeekPowerSfx`, `playShuffleSfx`, `gambitCommit`).
+        // A peek, a shuffle and a gambit already have their own sounds (`playPeekPowerSfx`, the board's
+        // shuffle animation's `playShuffleSfx`, `gambitCommit`).
         case 'peek':
         case 'shuffle':
+            return;
         case 'row_shuffle':
+            // Nothing else plays it: a row is riffled without the board's whole shuffle animation.
+            playShuffleSfx(rawGain, true);
+            return;
+        case 'reprise':
+            // The last turns ring again: a bright A struck twice, the second softer, over a shimmer.
+            playTone({ frequency: 880, durationSec: 0.45, gain: gain * 0.2, type: 'triangle', category: 'power' });
+            scheduleCue(() => playTone({ frequency: 880, durationSec: 0.6, gain: gain * 0.12, type: 'triangle', category: 'power' }), 160);
+            scheduleCue(() => playTone({ frequency: 1318.5, durationSec: 0.7, gain: gain * 0.1, type: 'sine', category: 'power' }), 160);
+            playNoise({ durationSec: 0.5, gain: gain * 0.12, filter: 'highpass', from: 7000, to: 3500, attackSec: 0.04 });
+            return;
+        case 'carve':
+            // A blade drawn: a fast metallic slash falling in pitch, a ring off the edge.
+            playNoise({ durationSec: 0.16, gain: gain * 0.4, filter: 'bandpass', from: 7000, peak: 3800, to: 1600, q: 4, attackSec: 0.004 });
+            playTone({ frequency: 2637, frequencyEnd: 1760, durationSec: 0.18, gain: gain * 0.1, type: 'sine', category: 'power' });
+            scheduleCue(() => playTone({ frequency: 1760, durationSec: 0.5, gain: gain * 0.07, type: 'triangle', category: 'power' }), 90);
+            return;
+        case 'hold':
+            // Embers banked: a low A breathing in under a soft roar.
+            playTone({ frequency: 110, frequencyEnd: 165, durationSec: 0.7, gain: gain * 0.28, type: 'sine', category: 'power' });
+            playNoise({ durationSec: 0.8, gain: gain * 0.18, filter: 'lowpass', from: 300, to: 900, attackSec: 0.25 });
+            return;
+        case 'hold_release':
+            // The rising bells play from the deep cue; this is the weight under them: a crack and a drop.
+            playNoise({ durationSec: 0.08, gain: gain * 0.7, filter: 'highpass', from: 3200, to: 1800, attackSec: 0.002 });
+            playTone({ frequency: 110, frequencyEnd: 41, durationSec: 0.8, gain: gain * 0.6, type: 'sine', category: 'realm' });
+            playNoise({ durationSec: 1, gain: gain * 0.5, filter: 'lowpass', from: 2400, to: 90, attackSec: 0.004, delaySec: 0.02 });
+            return;
+        case 'ignite':
+            // Cold fire rushing in: a rising hiss and a cold E climbing to A.
+            playNoise({ durationSec: 0.7, gain: gain * 0.35, filter: 'bandpass', from: 1200, peak: 6000, to: 4000, q: 1.2, attackSec: 0.12 });
+            playTone({ frequency: 659.3, frequencyEnd: 880, durationSec: 0.6, gain: gain * 0.14, type: 'sine', category: 'power' });
+            playTone({ frequency: 82.4, durationSec: 0.8, gain: gain * 0.25, type: 'sine', category: 'realm' });
+            return;
+        case 'resolve':
+            // Ice snapping: a high ping, bright shatter, and a short thump under it.
+            playTone({ frequency: 3520, frequencyEnd: 2637, durationSec: 0.12, gain: gain * 0.12, type: 'sine', category: 'power' });
+            playNoise({ durationSec: 0.3, gain: gain * 0.5, filter: 'highpass', from: 6500, to: 3000, attackSec: 0.002 });
+            [0, 35, 80].forEach((delayMs, index) =>
+                scheduleCue(() => playTone({ frequency: 2093 + index * 440, durationSec: 0.08, gain: gain * 0.07, type: 'triangle', category: 'power' }), delayMs + 20)
+            );
+            playTone({ frequency: 98, frequencyEnd: 49, durationSec: 0.35, gain: gain * 0.45, type: 'sine', category: 'realm' });
             return;
         case 'swap':
             playNoise({ durationSec: 0.22, gain: gain * 0.3, filter: 'bandpass', from: 600, peak: 3200, to: 900, q: 3, attackSec: 0.02 });

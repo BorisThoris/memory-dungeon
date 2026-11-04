@@ -2,12 +2,15 @@ import { afterEach, describe, expect, it } from 'vitest';
 import type { BoardState, Tile } from '../../shared/contracts';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import {
+    ITEM_EFFECT_MAX_CARDS,
     ITEM_EFFECT_TRAUMA,
     METEOR_IMPACT_DELAY_SECONDS,
     itemEffectRecipe,
     itemEffectsFromEvents,
     publishItemEffects,
+    spreadTileIds,
     useItemEffectChannel,
+    verbItemEffect,
     type ItemEffectKind
 } from './itemEffects';
 import { sampleTraumaShake, setScreenShakeIntensity } from './boardTrauma';
@@ -19,6 +22,36 @@ const at = (x: number) => ({ x, y: 0, z: 0.04 });
 
 describe('item effects', () => {
     afterEach(() => setScreenShakeIntensity(1));
+
+    it('every verb plays something on the board, not just the arming click (2026-11-04)', () => {
+        for (const kind of ['reprise', 'carve', 'hold', 'hold_release', 'ignite', 'resolve', 'peek', 'pin'] as ItemEffectKind[]) {
+            const { bursts } = itemEffectRecipe({ effect: { key: `k-${kind}`, kind, tileIds: ['a', 'b', 'c'] }, anchors: [at(0), at(1), at(2)], time: 0, quality: 'high', reduceMotion: false });
+            expect(bursts.length, kind).toBeGreaterThanOrEqual(6);
+        }
+        // The release is the biggest payoff short of a meteor.
+        expect(ITEM_EFFECT_TRAUMA.hold_release).toBeGreaterThan(ITEM_EFFECT_TRAUMA.bomb);
+        expect(ITEM_EFFECT_TRAUMA.hold_release).toBeLessThan(ITEM_EFFECT_TRAUMA.meteor);
+    });
+
+    it("a verb's effect lands on the cards it acts on, a carve's in the order it cuts", () => {
+        // 3 columns: a b c / d e f, with b face up and f gone.
+        const before = board([card('a', 'p'), card('b', 'p', 'flipped'), card('c', 'q'), card('d', 'q'), card('e', 'r'), card('f', 'r', 'removed')], { columns: 3, flippedTileIds: ['b'] });
+        expect(verbItemEffect('carve', before, { direction: 'left' }).tileIds).toEqual(['c', 'e', 'a', 'd']);
+        expect(verbItemEffect('carve', before, { direction: 'down' }).tileIds).toEqual(['a', 'c', 'd', 'e']);
+        expect(verbItemEffect('resolve', before).tileIds).toEqual(['b']);
+        expect(verbItemEffect('hold_release', before, { heldTileIds: ['d', 'e'] }).tileIds).toEqual(['d', 'e']);
+        expect(verbItemEffect('ignite', before).tileIds).toEqual(['a', 'c', 'd', 'e']);
+        // Each use is its own effect, so the channel plays it.
+        expect(verbItemEffect('reprise', before).key).not.toBe(verbItemEffect('reprise', before).key);
+    });
+
+    it('a verb on a big board reaches across all of it within the particle budget', () => {
+        const ids = Array.from({ length: 40 }, (_, index) => `t${index}`);
+        const spread = spreadTileIds(ids);
+        expect(spread).toHaveLength(ITEM_EFFECT_MAX_CARDS);
+        expect(spread[0]).toBe('t0');
+        expect(Number(spread[spread.length - 1]!.slice(1))).toBeGreaterThan(30);
+    });
 
     it('reads each item off the journal event the rules wrote for it', () => {
         const before = board([card('a-A', 'a', 'flipped'), card('a-B', 'a'), card('b-A', 'b'), card('b-B', 'b')]);

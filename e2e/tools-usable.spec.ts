@@ -72,6 +72,10 @@ const pick = async (page: Page, id: string): Promise<void> => {
     }, id);
 };
 
+/** How many item effects the board's particles have played (`TileBoardParticles`): a verb must land on the board, not just click. */
+const itemBursts = async (page: Page): Promise<number> =>
+    page.evaluate(() => Number(document.querySelector('canvas[data-particle-item-bursts]')?.getAttribute('data-particle-item-bursts') ?? 0));
+
 /** A phone folds the dock into Items (RunShell); open it the way a player would before reaching for a tool. */
 const openItemsIfFolded = async (page: Page): Promise<void> => {
     const toggle = page.getByTestId('tool-tray-toggle');
@@ -82,8 +86,9 @@ const openItemsIfFolded = async (page: Page): Promise<void> => {
 
 const tool = (page: Page, name: RegExp) => page.getByRole('toolbar', { name: /game controls/i }).getByRole('button', { name }).first();
 
-const openRoom = async (page: Page, room: string): Promise<void> => {
-    await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), `hallRoom=${room}`);
+/** `reduceMotion: false` for a test that reads the board's particles: the setting turns them off. */
+const openRoom = async (page: Page, room: string, reduceMotion = true): Promise<void> => {
+    await gotoWithSaveAndQuery(page, buildVisualSaveJson(true, reduceMotion), `hallRoom=${room}`);
     await expect(page.getByTestId('game-hud')).toBeVisible({ timeout: 150_000 });
     await expect.poll(async () => (await read(page)).status, { timeout: 30_000 }).toBe('playing');
 };
@@ -238,7 +243,7 @@ test.describe('Every tool can be used from the dock', () => {
     });
 
     test('reprise: after three matches press it, and they pay again', async ({ page }) => {
-        await openRoom(page, 'reprise-pays');
+        await openRoom(page, 'reprise-pays', false);
         for (const key of ['a', 'b', 'c']) {
             await pick(page, `${key}-1`);
             await pick(page, `${key}-2`);
@@ -248,9 +253,29 @@ test.describe('Every tool can be used from the dock', () => {
         await openItemsIfFolded(page);
         await expect(page.getByTestId('tool-reprise')).toBeEnabled();
         const before = await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.stats.totalScore);
+        const bursts = await itemBursts(page);
         await page.getByTestId('tool-reprise').click();
         await expect.poll(async () => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.stats.totalScore)).toBeGreaterThan(before);
+        await expect.poll(() => itemBursts(page)).toBeGreaterThan(bursts);
         await expect(page.getByTestId('tool-reprise')).toBeDisabled();
+    });
+
+    test("the crown's chips open their sentences over the board, on the screen and without moving it", async ({ page }) => {
+        await openRoom(page, 'warden-past-par');
+        const chip = page.getByTestId('warden-rules');
+        await expect(chip).toBeVisible();
+        const line = chip.locator('span').nth(1);
+        const opacity = () => line.evaluate((node) => Number(getComputedStyle(node).opacity));
+        await expect.poll(opacity).toBe(0);
+        const crownHeight = async () => (await page.getByTestId('board-crown').boundingBox())!.height;
+        const closed = await crownHeight();
+        await chip.focus();
+        await expect.poll(opacity).toBe(1);
+        const box = (await line.boundingBox())!;
+        const viewport = page.viewportSize()!;
+        expect(box.x).toBeGreaterThanOrEqual(0);
+        expect(box.x + box.width).toBeLessThanOrEqual(viewport.width);
+        expect(await crownHeight()).toBe(closed);
     });
 
     test('camp: two relics at rank 3 and their blueprint evolve as the floor is left (DGE-014)', async ({ page }) => {
@@ -271,11 +296,13 @@ test.describe('Every tool can be used from the dock', () => {
     });
 
     test('hold: press it, match a pair, and Release breaks what was held', async ({ page }) => {
-        await openRoom(page, 'hold-release');
+        await openRoom(page, 'hold-release', false);
         await openItemsIfFolded(page);
         await expect(page.getByTestId('tool-hold')).toBeEnabled();
+        const bursts = await itemBursts(page);
         await page.getByTestId('tool-hold').click();
         await expect.poll(async () => page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().run!.holding)).toBe(true);
+        await expect.poll(() => itemBursts(page)).toBeGreaterThan(bursts);
         await pick(page, 'a-1');
         await pick(page, 'a-2');
         await expect.poll(async () => (await read(page)).states['a-2'], { timeout: 30_000 }).toBe('matched');
@@ -288,14 +315,16 @@ test.describe('Every tool can be used from the dock', () => {
     });
 
     test('carve: press it, pick a way with an arrow key, and the next pop walks that way', async ({ page }) => {
-        await openRoom(page, 'carve-right');
+        await openRoom(page, 'carve-right', false);
         await openItemsIfFolded(page);
         await expect(page.getByTestId('tool-carve')).toBeEnabled();
+        const bursts = await itemBursts(page);
         await page.getByTestId('tool-carve').click();
         await expect(page.getByTestId('carve-picker')).toBeVisible();
         await page.keyboard.press('ArrowRight');
         await expect(page.getByTestId('carve-arrow')).toBeVisible();
         await expect(page.getByTestId('carve-arrow')).toHaveAttribute('data-direction', 'right');
+        await expect.poll(() => itemBursts(page)).toBeGreaterThan(bursts);
         await pick(page, 'm-1');
         await pick(page, 'm-2');
         await expect.poll(async () => (await read(page)).states['b-1'], { timeout: 30_000 }).toBe('removed');

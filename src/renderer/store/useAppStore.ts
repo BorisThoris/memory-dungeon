@@ -97,6 +97,7 @@ import { projectGameplayFeedback } from './gameplayFeedbackAdapter';
 import {
     playFlipSfx,
     playGambitCommitSfx,
+    playItemEffectSfx,
     playPeekPowerSfx,
     playPowerArmSfx,
     resumeAudioContext,
@@ -115,12 +116,24 @@ import { createRunLifecycleController } from './runLifecycleController';
 import { createAppStoreInitialState } from './appStoreInitialState';
 import { enqueueItemDrops, itemDropsBetween } from './itemDropFeed';
 import type { AppState } from './appStoreTypes';
+import { publishItemEffects, verbItemEffect, type ItemEffect } from '../components/itemEffects';
 
 const RUN_SURFACE_RESET = createRunSurfaceReset();
 
 const sfxGainFromStore = (): number => {
     const { settings } = useAppStore.getState();
     return sfxGainFromSettings(settings.masterVolume, settings.sfxVolume);
+};
+
+/**
+ * A verb the rules apply outside the gameplay journal (Reprise, Carve, the Hold, the Zone) plays
+ * its effect the way an item does: on the board through the effect channel, with its own sound
+ * (`itemEffects.ts`). Before this each made the arming click and nothing else.
+ */
+const playVerbEffect = (effect: ItemEffect): void => {
+    void resumeAudioContext();
+    publishItemEffects([effect]);
+    playItemEffectSfx(sfxGainFromStore(), effect.kind);
 };
 
 /**
@@ -610,6 +623,10 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (result.kind === 'ignored') {
             return;
         }
+        if (result.playArmSfx) {
+            void resumeAudioContext();
+            playPowerArmSfx(sfxGainFromStore() * 0.9);
+        }
         set(result.patch);
     },
 
@@ -682,6 +699,8 @@ export const useAppStore = create<AppState>((set, get) => ({
         if (!run || view !== 'playing') return;
         if (run.meteorArmed) { set({run:{...run,meteorArmed:false}}); return; }
         if (!canAimMeteor(run)) return;
+        void resumeAudioContext();
+        playPowerArmSfx(sfxGainFromStore());
         set({run:{...run,meteorArmed:true},boardPinMode:false,peekModeArmed:false,regionShuffleArmed:false,tileSwapArmed:false,tileSwapFirstTileId:null});
     },
     useMeteor: (tileId) => {
@@ -763,8 +782,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     igniteZone: () => {
         const { run, view } = get();
         if (!run || view !== 'playing' || !canIgniteZone(run)) return;
-        void resumeAudioContext();
-        playPowerArmSfx(sfxGainFromStore());
+        playVerbEffect(verbItemEffect('ignite', run.board));
         set({ run: igniteZoneRule(run) });
     },
 
@@ -779,24 +797,21 @@ export const useAppStore = create<AppState>((set, get) => ({
     startHold: () => {
         const { run, view } = get();
         if (!run || view !== 'playing' || !canStartHold(run)) return;
-        void resumeAudioContext();
-        playPowerArmSfx(sfxGainFromStore());
+        playVerbEffect(verbItemEffect('hold', run.board));
         set({ run: startHoldRule(run) });
     },
 
     carve: (direction) => {
         const { run, view } = get();
         if (!run || view !== 'playing' || !canCarve(run)) return;
-        void resumeAudioContext();
-        playPowerArmSfx(sfxGainFromStore());
+        playVerbEffect(verbItemEffect('carve', run.board, { direction }));
         set({ run: carveRule(run, direction) });
     },
 
     reprise: () => {
         const { run, view } = get();
         if (!run || view !== 'playing' || !canReprise(run)) return;
-        void resumeAudioContext();
-        playPowerArmSfx(sfxGainFromStore());
+        playVerbEffect(verbItemEffect('reprise', run.board));
         applyResolvedRun(repriseRule(run, applyMissBudget));
     },
 
@@ -804,12 +819,15 @@ export const useAppStore = create<AppState>((set, get) => ({
         const { run, view } = get();
         if (!run || view !== 'playing') return;
         const released = releaseHoldRule(run);
-        if (released) applyResolvedRun(released.run);
+        if (!released) return;
+        playVerbEffect(verbItemEffect('hold_release', run.board, { heldTileIds: run.heldSeedIds ?? [] }));
+        applyResolvedRun(released.run);
     },
 
     resolveZone: () => {
         const { run, view } = get();
         if (!run || view !== 'playing' || !isZoneActive(run)) return;
+        playVerbEffect(verbItemEffect('resolve', run.board));
         set({ run: resolveZoneRule(run) });
     },
 

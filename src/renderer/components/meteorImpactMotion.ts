@@ -23,7 +23,14 @@ export const METEOR_THROW_DISTANCE = 0.34;
 /** Seconds the board's visual clock holds at an impact, by item. */
 export const ITEM_HIT_STOP_SECONDS: Partial<Readonly<Record<ItemEffectKind, number>>> = {
     bomb: 0.06,
-    meteor: 0.12
+    meteor: 0.12,
+    // The other heavy hits hold a beat too (2026-11-04): the release is the biggest payoff short of a meteor.
+    hold_release: 0.1,
+    resolve: 0.06,
+    storm_glass: 0.06,
+    crucible: 0.04,
+    reprise: 0.04,
+    carve: 0.03
 };
 
 const struckBy = (board: Pick<BoardState, 'meteorImpact'>, tile: Tile): boolean =>

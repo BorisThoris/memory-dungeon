@@ -1,5 +1,5 @@
 import { create } from 'zustand/react';
-import type { BoardState, GraphicsQualityPreset, RealmId, TileSuit } from '../../shared/contracts';
+import type { BoardState, CarveDirection, GraphicsQualityPreset, RealmId, TileSuit } from '../../shared/contracts';
 import { REALMS } from '../../shared/realm-rules';
 import type { GameplayEvent } from '../../shared/gameplay-core-contracts';
 import { hashStringToSeed } from '../../shared/rng';
@@ -39,7 +39,14 @@ export type ItemEffectKind =
     | 'flash'
     | 'undo'
     | 'wild'
-    | 'gambit';
+    | 'gambit'
+    // The verbs (2026-11-04): before this each made the same arming click and nothing on the board.
+    | 'reprise'
+    | 'carve'
+    | 'hold'
+    | 'hold_release'
+    | 'ignite'
+    | 'resolve';
 
 export interface ItemEffect {
     /** The journal event's id: unique, so an effect plays once. */
@@ -76,7 +83,13 @@ export const ITEM_EFFECT_TRAUMA: Readonly<Record<ItemEffectKind, number>> = {
     flash: 0.08,
     undo: 0.1,
     wild: 0.25,
-    gambit: 0.2
+    gambit: 0.2,
+    reprise: 0.25,
+    carve: 0.3,
+    hold: 0.08,
+    hold_release: 0.65,
+    ignite: 0.35,
+    resolve: 0.55
 };
 
 const cardsOf = (board: BoardState | null | undefined, tileId: string): string[] => {
@@ -158,6 +171,50 @@ export const itemEffectsFromEvents = (
         }
     }
     return effects;
+};
+
+/** `ids` thinned to at most `max`, evenly across the list, so an effect on a big board reaches all of it. */
+export const spreadTileIds = (ids: readonly string[], max = ITEM_EFFECT_MAX_CARDS): string[] => {
+    if (ids.length <= max) return [...ids];
+    return Array.from({ length: max }, (_, index) => ids[Math.floor((index * ids.length) / max)]!);
+};
+
+type VerbEffectKind = Extract<ItemEffectKind, 'reprise' | 'carve' | 'hold' | 'hold_release' | 'ignite' | 'resolve'>;
+let verbEffectSerial = 0;
+
+/**
+ * The effect of a verb the rules apply outside the gameplay journal (`reprise`, `carve`, the Hold
+ * and the Zone), on the cards it acts on: `before` is the board as the verb found it. A carve's
+ * cards come ordered the way it cuts, so its sweep runs that way across the board.
+ */
+export const verbItemEffect = (
+    kind: VerbEffectKind,
+    before: Pick<BoardState, 'tiles' | 'columns' | 'flippedTileIds'> | null | undefined,
+    options: { heldTileIds?: readonly string[]; direction?: CarveDirection } = {}
+): ItemEffect => {
+    verbEffectSerial += 1;
+    const key = `verb:${kind}:${verbEffectSerial}`;
+    const tiles = before?.tiles ?? [];
+    const hidden = tiles.filter((tile) => tile.state === 'hidden').map((tile) => tile.id);
+    switch (kind) {
+        case 'hold_release':
+            return { key, kind, tileIds: spreadTileIds(options.heldTileIds ?? []) };
+        case 'resolve':
+            return { key, kind, tileIds: spreadTileIds(before?.flippedTileIds ?? []) };
+        case 'reprise':
+            return { key, kind, tileIds: spreadTileIds(tiles.filter((tile) => tile.state !== 'removed').map((tile) => tile.id)) };
+        case 'carve': {
+            const columns = Math.max(1, before?.columns ?? 1);
+            const direction = options.direction ?? 'right';
+            const placed = tiles.map((tile, index) => ({ tile, col: index % columns, row: Math.floor(index / columns) })).filter(({ tile }) => tile.state === 'hidden');
+            const along = (entry: { col: number; row: number }): number =>
+                direction === 'right' ? entry.col * 1000 + entry.row : direction === 'left' ? -entry.col * 1000 + entry.row : direction === 'down' ? entry.row * 1000 + entry.col : -entry.row * 1000 + entry.col;
+            return { key, kind, tileIds: spreadTileIds(placed.sort((a, b) => along(a) - along(b)).map(({ tile }) => tile.id)) };
+        }
+        case 'hold':
+        case 'ignite':
+            return { key, kind, tileIds: spreadTileIds(hidden) };
+    }
 };
 
 export interface ItemEffectAnchor {
@@ -302,14 +359,86 @@ export const itemEffectRecipe = ({
             break;
         }
         case 'peek':
-            // An eye opening: a cool glint and a soft ring.
+            // An eye opening: a cool glint, a breath of light lifting off the card, two soft rings.
             at.forEach((anchor, index) => {
-                motes(anchor, 'spark', '#9cf2ff', 0.6, `glint${index}`);
+                motes(anchor, 'spark', '#9cf2ff', 0.7, `glint${index}`, 0, 1.2);
+                motes(anchor, 'vapor', '#bff6ff', 0.4, `gaze${index}`, 0.04, 1.1);
                 shockwave(anchor, 0.25, `ring${index}`);
+                shockwave(anchor, 0.18, `ring-echo${index}`, 0.14);
             });
             break;
         case 'pin':
-            at.forEach((anchor, index) => motes(anchor, 'spark', '#ffd977', 0.5, `pin${index}`));
+            // A gold nail driven in: a few hard shards and a tight ring at the point.
+            at.forEach((anchor, index) => {
+                motes(anchor, 'shard', '#ffd977', 0.5, `pin${index}`, 0, 0.8);
+                motes(anchor, 'spark', '#fff1c4', 0.45, `pin-glint${index}`);
+                shockwave(anchor, 0.25, `pin-ring${index}`);
+            });
+            break;
+        case 'reprise':
+            // The last turns ring again: a gold echo running across the board, a ring under each card.
+            at.forEach((anchor, index) => {
+                const delay = index * 0.04;
+                motes(anchor, 'spark', '#ffd24a', 0.8, `echo${index}`, delay, 1.2);
+                motes(anchor, 'vapor', '#ffb347', 0.5, `echo-haze${index}`, delay + 0.1, 1.5);
+                shockwave(anchor, 0.4, `echo-ring${index}`, delay + 0.05);
+            });
+            break;
+        case 'carve': {
+            // A blade drawn across the board the way the next pop will break: copper shards and
+            // sparks in a sweep along the cards, which come ordered along the carve.
+            at.forEach((anchor, index) => {
+                const delay = index * 0.022;
+                motes(anchor, 'shard', '#c8804a', 0.7, `carve${index}`, delay, 0.8);
+                motes(anchor, 'spark', '#ff7a3a', 0.6, `carve-spark${index}`, delay + 0.04);
+                shockwave(anchor, 0.3, `carve-ring${index}`, delay);
+            });
+            const first = at[0];
+            const last = at[at.length - 1];
+            if (first && last && at.length > 1) arcs.push({ from: first, to: last, seed: seed('carve-edge'), time, intensity: 0.6, reduceMotion, quality, tint: '#ffb070' });
+            break;
+        }
+        case 'hold':
+            // Embers drawn in and banked: a low glow breathing over the face-down cards.
+            at.forEach((anchor, index) => {
+                const delay = index * 0.045;
+                motes(anchor, 'vapor', '#ff6a2a', 0.3, `bank${index}`, delay, 1.3);
+                motes(anchor, 'flame', '#ff9a3a', 0.4, `ember${index}`, delay + 0.18);
+            });
+            break;
+        case 'hold_release': {
+            // Everything held breaks at once: white-hot cores, gold fire, a ring under each, and the
+            // light running from the first held card to the rest.
+            at.forEach((anchor, index) => {
+                const delay = index * 0.02;
+                shockwave(anchor, 0.8, `release-wave${index}`, delay);
+                bursts.push({ ...base, kind: 'bomb', energy: 0.7, delay: delay + 0.02, x: anchor.x, y: anchor.y, z: anchor.z, seed: seed(`release${index}`) });
+                motes(anchor, 'spark', '#ffffff', 0.9, `release-spark${index}`, delay, 1.5);
+                motes(anchor, 'flame', '#ffd24a', 1, `release-fire${index}`, delay + 0.05, 1.7);
+            });
+            const origin = at[0];
+            at.slice(1, 6).forEach((anchor, index) => {
+                if (origin) arcs.push({ from: origin, to: anchor, seed: seed(`release-arc${index}`), time, intensity: 0.8, reduceMotion, quality, tint: '#ffe08a' });
+            });
+            break;
+        }
+        case 'ignite':
+            // A cold flame rushes over the board as the zone opens.
+            at.forEach((anchor, index) => {
+                const delay = index * 0.04;
+                motes(anchor, 'vapor', '#4fc8ff', 0.8, `rush${index}`, delay, 1.5);
+                motes(anchor, 'flame', '#5a7cff', 0.9, `coldfire${index}`, delay + 0.1, 1.2);
+                shockwave(anchor, 0.5, `ignite-ring${index}`, delay);
+            });
+            break;
+        case 'resolve':
+            // The zone snaps shut: ice shatters off every face-up card at once.
+            at.forEach((anchor, index) => {
+                const delay = index * 0.015;
+                shockwave(anchor, 0.7, `snap${index}`, delay);
+                bursts.push({ ...base, kind: 'bomb', energy: 0.55, delay: delay + 0.04, x: anchor.x, y: anchor.y, z: anchor.z, seed: seed(`snap-core${index}`) });
+                motes(anchor, 'shard', '#e0ffff', 0.85, `ice${index}`, delay, 0.9);
+            });
             break;
         case 'shuffle':
         case 'row_shuffle':
