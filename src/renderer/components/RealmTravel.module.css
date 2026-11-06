@@ -15,7 +15,8 @@
     padding: max(1rem, env(safe-area-inset-top, 0px)) 1rem max(1rem, env(safe-area-inset-bottom, 0px));
     overflow-y: auto;
     pointer-events: auto;
-    background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(6, 6, 10, 0.55), rgba(6, 6, 10, 0.88));
+    /* Dark enough at the centre that the floor clear behind it does not ghost through the doors. */
+    background: radial-gradient(ellipse 80% 70% at 50% 50%, rgba(6, 6, 10, 0.82), rgba(6, 6, 10, 0.9));
     font-family: var(--margin-body-font, 'Lora', Georgia, serif);
     color: var(--margin-paper, #f8f4f4);
     animation: travelIn 260ms ease-out;

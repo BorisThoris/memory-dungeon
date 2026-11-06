@@ -10695,8 +10695,8 @@
     {
       "path": "src/renderer/components/Camp.module.css",
       "category": "source",
-      "bytes": 4201,
-      "sha256": "057297f32d54e2d0ec7329e805d0998e00f0d62d3ca292547dad52ccabbf1b8e"
+      "bytes": 4426,
+      "sha256": "13221ea67c97cad5ae4b9f309dcb777e58832c1839ddd87aa8cfa3094d4804b0"
     },
     {
       "path": "src/renderer/components/cardArcaneGlowMaterial.test.ts",
@@ -11835,8 +11835,8 @@
     {
       "path": "src/renderer/components/RealmTravel.module.css",
       "category": "source",
-      "bytes": 7526,
-      "sha256": "41bdbcdc437998378922823b395a1c230fe336ec5cea16e1192b8cf03d6fb66f"
+      "bytes": 7626,
+      "sha256": "8cd0aa3f5fa02e504fce20453de84905bee36adedd5c67fe7e8ab4e36031bf2b"
     },
     {
       "path": "src/renderer/components/RealmTravel.test.tsx",

@@ -38,6 +38,11 @@
     .purse { font-size: 1.7rem; }
     .card { padding: 0.75rem; }
 }
+/* A laptop's height: both shelves fit whole, without the last row running under the footer. */
+@media (max-height: 800px) and (min-width: 651px) {
+    .section { margin-top: 0.7rem; }
+    .card { padding-block: 0.65rem; }
+}
 @media (max-height: 500px) {
     .camp { padding-block: 0.6rem; gap: 0.35rem; }
     .head h2 { font-size: 1.25rem; }
