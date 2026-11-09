@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3408,
     "codeFileCount": 1328,
-    "exportedSymbolCount": 4412,
+    "exportedSymbolCount": 4413,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12326
+    "relationshipCount": 12327
   },
   "inventory": [
     {
@@ -831,8 +831,8 @@
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
-      "bytes": 132836,
-      "sha256": "2bd2b49923c1c9f4124ca7e1a8ce6159ecd1f1af681837009041333094400bde"
+      "bytes": 133866,
+      "sha256": "664942072821bbe45219c13dcfe254b8c549a7e6dce125ba9f22ab9c57be2fc6"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2488,13 +2488,13 @@
       "path": "docs/system-diagrams/AUDIT.md",
       "category": "documentation",
       "bytes": 10620,
-      "sha256": "d70e85fdf381e433498ff6d64d2a394d89222ddd71936aa70b8e66fbf82f084c"
+      "sha256": "bcb4902775b3ca4bc21320079200cee5783263302cce846889d173ad7db8d7b3"
     },
     {
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "c4d1b75f520116c55a490a9ef70700be1aacf1e9732f95a60ed71cda888931b4"
+      "sha256": "fd93da7f43b676bcd537de1e642e833ad8d51f487501f0f67e1169bce0c0bb5d"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4617,8 +4617,8 @@
     {
       "path": "public/og-image.jpg",
       "category": "asset",
-      "bytes": 71884,
-      "sha256": "e9926cbdea84b35610adb3a2a6cb7c5f961c41278de1d11898b2bce692c96f72"
+      "bytes": 76127,
+      "sha256": "c3e55a73d26b09b4bb6907b9bba16283b001558b9c0254d38c5cec95a8868337"
     },
     {
       "path": "public/privacy.html",
@@ -5421,8 +5421,8 @@
     {
       "path": "scripts/mechanic-accountability.ts",
       "category": "script",
-      "bytes": 24940,
-      "sha256": "755fb6c4cfa979fa64ea8163bded608522161a0fd9b9e2497b7254a4099215dd"
+      "bytes": 24974,
+      "sha256": "bfa268e3b35e04edf63b6bdf3d9af33d322c676cbbbf7570b4f52279a0eab8d9"
     },
     {
       "path": "scripts/min-type-size.ts",
@@ -14853,8 +14853,8 @@
     {
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
-      "bytes": 133252,
-      "sha256": "c5f7ca9c06d30d62088786aea7f4a6156b8c82305b6ba7708e29b6ff6b627774"
+      "bytes": 134282,
+      "sha256": "191ff30d95e8244c7d8dd107b0425396d57e5bde1314f62bb58dadc403e2db21"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15447,8 +15447,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 68899,
-      "sha256": "2baf0ee04d7b46b62b389ca4139761604d521c040b97f3ebc9e062fdecc7ebf4"
+      "bytes": 68959,
+      "sha256": "d53c28a9eae9ee17176df0fc9f0d730d7db4c2e1649fb543da7d7f41ec8f6a5d"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -16497,8 +16497,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 79638,
-      "sha256": "ec4b90011b45a116ad61560c09e2d7770e8e8d918456cf8ffc40123ae7c6378b"
+      "bytes": 78904,
+      "sha256": "45451fc93162d75dcc468e868dfe80f32397313d6135ddaaf28afa5785ce66ba"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16683,8 +16683,8 @@
     {
       "path": "src/shared/odd-card-rules.ts",
       "category": "source",
-      "bytes": 11723,
-      "sha256": "93fa60f633d10125402760217e4a43ba6f34d66976c2303b9fa96e23c7b50573"
+      "bytes": 12167,
+      "sha256": "4edb46399c98e276cc8c51aaddcb50af362ecd6061f7f2e213804e6fd874f6a5"
     },
     {
       "path": "src/shared/overlay-decision-policy.test.ts",
@@ -17307,8 +17307,8 @@
     {
       "path": "src/shared/run-soak.test.ts",
       "category": "test",
-      "bytes": 13012,
-      "sha256": "ff4b210ec90f049631e9953ad96e04bf73f44dea390b2f6ef6ad738dd2e2cb06"
+      "bytes": 13004,
+      "sha256": "b09f8c1a438677a9959446de214e6df97b2537bcffefb4287ae7d69f305ca1fa"
     },
     {
       "path": "src/shared/run-soak.ts",
@@ -17643,8 +17643,8 @@
     {
       "path": "src/shared/system-refinement-ledger.ts",
       "category": "source",
-      "bytes": 157408,
-      "sha256": "f1b9bbd16d70a6259cd55043ea9ce8327068853e0dd0c7a9d6363d37e125686b"
+      "bytes": 158438,
+      "sha256": "d3f6a655105e4941d79f42c6d2462db6a8be3c0de6e3f88352fd0ce1614ed9c9"
     },
     {
       "path": "src/shared/telemetry.test.ts",
@@ -17667,8 +17667,8 @@
     {
       "path": "src/shared/test-hall-rooms.ts",
       "category": "source",
-      "bytes": 266322,
-      "sha256": "df06ced75397601a83a3045b6b08f95104cc3f3060b095bf50c8a652f27bd42f"
+      "bytes": 266346,
+      "sha256": "42d0285ee5042cc8461e9621dfbeff95c0b6be29e9586e10d419267f7a5f2c2a"
     },
     {
       "path": "src/shared/test-only-export-audit.test.ts",
@@ -17938,7 +17938,7 @@
       "path": "src/shared/version-gate.test.ts",
       "category": "test",
       "bytes": 7364,
-      "sha256": "865ff5ca7fbc2c9619ed2052313d11cb2020ed0a29db22938b1e73547ae8fe3f"
+      "sha256": "033201cc75be95f516647fa8d1e0a6b5bbdd1182333fa77ebbadd8fe5523dfb1"
     },
     {
       "path": "src/shared/version-gate.ts",
@@ -41347,7 +41347,7 @@
       "path": "src/shared/mechanics-encyclopedia.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 990,
+      "lineCount": 989,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
         "file:src/shared/boss-reward-rules.ts",
@@ -42032,7 +42032,7 @@
       "path": "src/shared/odd-card-rules.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 221,
+      "lineCount": 227,
       "imports": [
         "file:src/shared/colossus-rules.ts",
         "file:src/shared/contracts.ts",
@@ -42056,6 +42056,7 @@
         "symbol:src/shared/odd-card-rules.ts#OddCardTurn",
         "symbol:src/shared/odd-card-rules.ts#resolveOddCardTurn",
         "symbol:src/shared/odd-card-rules.ts#TURNCOAT_FROM_FLOOR",
+        "symbol:src/shared/odd-card-rules.ts#TURNCOAT_RETIRED_FROM",
         "symbol:src/shared/odd-card-rules.ts#turncoatNextSuit"
       ],
       "testedBy": [
@@ -73447,16 +73448,16 @@
       "name": "ENCYCLOPEDIA_CONTRACT_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 950,
-      "endLine": 968
+      "line": 949,
+      "endLine": 967
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "name": "ENCYCLOPEDIA_FEATURED_RUN_TOPICS",
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
-      "line": 971,
-      "endLine": 989
+      "line": 970,
+      "endLine": 988
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS",
@@ -73464,7 +73465,7 @@
       "kind": "value",
       "file": "src/shared/mechanics-encyclopedia.ts",
       "line": 812,
-      "endLine": 947
+      "endLine": 946
     },
     {
       "id": "symbol:src/shared/mechanics-encyclopedia.ts#ENCYCLOPEDIA_POWER_TOPICS",
@@ -74391,104 +74392,112 @@
       "name": "applyOddCardTurnToRun",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 193,
-      "endLine": 220
+      "line": 199,
+      "endLine": 226
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#dealOddCards",
       "name": "dealOddCards",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 94,
-      "endLine": 128
+      "line": 100,
+      "endLine": 134
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#HOURGLASS_FROM_FLOOR",
       "name": "HOURGLASS_FROM_FLOOR",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 32,
-      "endLine": 32
+      "line": 38,
+      "endLine": 38
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#HOURGLASS_GOLD",
       "name": "HOURGLASS_GOLD",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 35,
-      "endLine": 35
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#HOURGLASS_SCORE",
       "name": "HOURGLASS_SCORE",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 36,
-      "endLine": 36
+      "line": 42,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#hourglassTurnsForPairs",
       "name": "hourglassTurnsForPairs",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 39,
-      "endLine": 39
+      "line": 45,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#isRealmHeld",
       "name": "isRealmHeld",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 43,
-      "endLine": 43
+      "line": 49,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#ODD_CARD_MIN_PAIRS",
       "name": "ODD_CARD_MIN_PAIRS",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 34,
-      "endLine": 34
+      "line": 40,
+      "endLine": 40
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#ODD_CARD_RULES_FROM",
       "name": "ODD_CARD_RULES_FROM",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 30,
-      "endLine": 30
+      "line": 34,
+      "endLine": 34
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#OddCardTurn",
       "name": "OddCardTurn",
       "kind": "interface",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 130,
-      "endLine": 137
+      "line": 136,
+      "endLine": 143
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#resolveOddCardTurn",
       "name": "resolveOddCardTurn",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 144,
-      "endLine": 190
+      "line": 150,
+      "endLine": 196
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#TURNCOAT_FROM_FLOOR",
       "name": "TURNCOAT_FROM_FLOOR",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 31,
-      "endLine": 31
+      "line": 35,
+      "endLine": 35
+    },
+    {
+      "id": "symbol:src/shared/odd-card-rules.ts#TURNCOAT_RETIRED_FROM",
+      "name": "TURNCOAT_RETIRED_FROM",
+      "kind": "value",
+      "file": "src/shared/odd-card-rules.ts",
+      "line": 37,
+      "endLine": 37
     },
     {
       "id": "symbol:src/shared/odd-card-rules.ts#turncoatNextSuit",
       "name": "turncoatNextSuit",
       "kind": "value",
       "file": "src/shared/odd-card-rules.ts",
-      "line": 84,
-      "endLine": 87
+      "line": 90,
+      "endLine": 93
     },
     {
       "id": "symbol:src/shared/overlay-decision-policy.ts#getOverlayDecisionPolicyRow",
@@ -110277,6 +110286,12 @@
       "id": "exports:src/shared/odd-card-rules.ts->symbol:src/shared/odd-card-rules.ts#TURNCOAT_FROM_FLOOR",
       "source": "file:src/shared/odd-card-rules.ts",
       "target": "symbol:src/shared/odd-card-rules.ts#TURNCOAT_FROM_FLOOR",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/odd-card-rules.ts->symbol:src/shared/odd-card-rules.ts#TURNCOAT_RETIRED_FROM",
+      "source": "file:src/shared/odd-card-rules.ts",
+      "target": "symbol:src/shared/odd-card-rules.ts#TURNCOAT_RETIRED_FROM",
       "kind": "exports"
     },
     {

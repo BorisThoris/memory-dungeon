@@ -79,8 +79,8 @@ describe('the run soak', () => {
         expect(reports.some((report) => report.colossusHits > 0), 'no hit ever landed on a Colossus').toBe(true);
         expect(reports.some((report) => report.colossiFelled > 0), 'no Colossus was ever felled').toBe(true);
         expect(reports.some((report) => report.colossusSplits > 0), 'no Colossus ever split').toBe(true);
-        // The odd cards: a Turncoat is dealt and turns, an Hourglass is dealt, caught by some and run out on others.
-        expect(reports.some((report) => report.turncoatFloors > 0 && report.turncoatTurns > 0), 'no Turncoat was ever dealt and turned').toBe(true);
+        // The odd cards: from rules 108 no Turncoat is dealt; an Hourglass is dealt, caught by some and run out on others.
+        expect(reports.filter((report) => report.turncoatFloors > 0).length, 'a Turncoat was dealt on rules that retired it').toBe(0);
         expect(reports.some((report) => report.flurryGrabs > 0), 'no pair was ever grabbed in a Flurry').toBe(true);
         expect(reports.some((report) => report.growingRelics > 0 && report.peakRelicMultiplier > 1), 'no relic that grows was ever bought and grew').toBe(true);
         expect(reports.some((report) => report.fusions > 0), 'no fusion was ever bought').toBe(true);

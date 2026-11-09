@@ -3646,7 +3646,7 @@ const BASE_TEST_HALL_ROOMS: readonly TestHallRoom[] = [
     },
     {
         id: 'turncoat',
-        title: 'Turncoat: the pair that changes element',
+        title: 'Turncoat (runs before rules 108): the pair that changes element',
         mechanic: 'A Turncoat pair turns to its next element every turn, match or miss, both halves together. Its back shows what it is; its badge shows what it will be. It counts as what it is when it is matched.',
         graphMechanicIds: ['board.turncoat_pair'],
         tryThis: 'Pair a is a Turncoat: fire now, water next. Miss anything and watch both of its backs turn to water; match anything and they turn back.',

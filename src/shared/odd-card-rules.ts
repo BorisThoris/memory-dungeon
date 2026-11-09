@@ -26,9 +26,15 @@ import { contentFloor } from './descent-length-rules';
  * Both are dealt from the run's seed when the floor is, onto plain pairs only (no findable, no
  * trait, no ward, bounty or curse, nothing the realm is holding), and neither can hold a floor:
  * they are ordinary pairs to turn and to clear at every moment.
+ *
+ * From rules 108 the Turncoat is no longer dealt (the owner, 2026-11-09: it was "really
+ * confusing"). A run begun before keeps dealing it, and every rule that reads one stays, so a
+ * saved run with a Turncoat on the board plays out as it began.
  */
 export const ODD_CARD_RULES_FROM = 62;
 export const TURNCOAT_FROM_FLOOR = 5;
+/** The first rules version that deals no Turncoat. */
+export const TURNCOAT_RETIRED_FROM = 108;
 export const HOURGLASS_FROM_FLOOR = 3;
 /** Floors smaller than this have no pair to spare for one. */
 export const ODD_CARD_MIN_PAIRS = 6;
@@ -88,8 +94,8 @@ export const turncoatNextSuit = (tiles: readonly Tile[], own: TileSuit): TileSui
 
 /**
  * Deal the floor's odd cards, or leave the board as it is. Called once the floor's elements are
- * final. A floor a Colossus stands over always has a Turncoat (it is the fight's wild card); any
- * other has each on half its floors.
+ * final. Before rules 108 a floor a Colossus stands over always has a Turncoat (it is the fight's
+ * wild card); any other has each on half its floors. From 108 only the Hourglass is dealt.
  */
 export const dealOddCards = (board: BoardState, { runSeed, rulesVersion }: { runSeed: number; rulesVersion: number }): BoardState => {
     if (rulesVersion < ODD_CARD_RULES_FROM || board.pairCount < ODD_CARD_MIN_PAIRS) {
@@ -104,7 +110,7 @@ export const dealOddCards = (board: BoardState, { runSeed, rulesVersion }: { run
         tiles = tiles.map((tile) => (tile.pairKey === pairKey ? edit(tile) : tile));
     };
     const suitsHeld = new Set(tiles.filter((tile) => tile.suit && !isSingletonUtilityPairKey(tile.pairKey)).map((tile) => tile.suit));
-    if (contentFloor(board) >= TURNCOAT_FROM_FLOOR && suitsHeld.size >= 2 && (colossusStands(board) || turncoatRoll < 0.5)) {
+    if (rulesVersion < TURNCOAT_RETIRED_FROM && contentFloor(board) >= TURNCOAT_FROM_FLOOR && suitsHeld.size >= 2 && (colossusStands(board) || turncoatRoll < 0.5)) {
         const protectedKeys = rulesVersion >= 64 ? featuredRecipePairKeys(board) : new Set<string>();
         const candidates = plainPairKeys({ ...board, tiles }).filter(key => !protectedKeys.has(key));
         if (candidates.length > 0) {

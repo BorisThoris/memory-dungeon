@@ -240,7 +240,7 @@ export const MECHANIC_CENSUS_EXEMPTIONS: Record<string, MechanicCensusExemption>
     },
     'board.turncoat_pair': {
         generation: 265,
-        reason: 'A Turncoat is dealt at the floor transition from floor five, and the floor census builds each floor on its own without one. The whole-run soak requires one to be dealt and to turn and holds three invariants over it, and the turncoat room walks every kind of turn.'
+        reason: 'Retired from rules 108: no new run deals a Turncoat, and the whole-run soak now requires that none is ever dealt. A run begun before keeps dealing it at the floor transition from floor five; its three soak invariants still hold over any that stands, and the turncoat room walks every kind of turn.'
     },
     'findable.hourglass_pair': {
         generation: 265,
