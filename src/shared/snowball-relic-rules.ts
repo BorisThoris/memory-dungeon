@@ -56,7 +56,7 @@ export const SNOWBALL_RELICS: readonly SnowballRelicDefinition[] = [
     { id: 'bone_heart', title: 'Bone Heart', body: `Every Bone match this run adds ${pct(HEART_STEP)} to the score of every match.`, price: 9 },
     { id: 'minted_halo', title: 'Minted Halo', body: `Every gold you hold adds ${pct(HALO_STEP)} to every match's score, up to ×${1 + HALO_CAP}.`, price: 7 },
     { id: 'frenzy_dial', title: 'Frenzy Dial', body: `Every pair grabbed in a Flurry this run adds ${pct(DIAL_STEP)} to the score of every match.`, price: 8 },
-    { id: 'glass_crown', title: 'Glass Crown', body: `Every floor in a row cleared without a miss adds ${pct(CROWN_STEP)} to every match's score. The miss bank holds one fewer.`, price: 10 },
+    { id: 'glass_crown', title: 'Glass Crown', body: `Every floor in a row cleared without a miss adds ${pct(CROWN_STEP)} to every match's score. You can hold one life fewer.`, price: 10 },
     { id: 'interest_coin', title: 'Interest Coin', body: `At every stop, 1 gold for every ${INTEREST_PER} you hold, up to ${INTEREST_CAP}.`, price: 6 }
 ];
 

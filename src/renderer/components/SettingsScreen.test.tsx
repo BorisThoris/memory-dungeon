@@ -23,17 +23,17 @@ describe('SettingsScreen', () => {
         });
     });
 
-    it('remembers the immediate combo pop switch in Dev Options without changing run settings', async () => {
+    it('remembers the immediate combo pop switch in Effects without changing run settings', async () => {
         const user = userEvent.setup();
         const { unmount } = render(<SettingsScreen />);
-        await user.click(screen.getByRole('button', { name: /dev options/i }));
+        await user.click(screen.getByRole('button', { name: /^effects$/i }));
         await user.click(screen.getByRole('checkbox', { name: /combo pop effects/i }));
         expect(useDevOptions.getState().comboPopEffects).toBe(false);
         expect(localStorage.getItem('memory-dungeon.dev.combo-pop-effects')).toBe('off');
         expect(useAppStore.getState().updateSettings).not.toHaveBeenCalled();
         unmount();
         render(<SettingsScreen />);
-        await user.click(screen.getByRole('button', { name: /dev options/i }));
+        await user.click(screen.getByRole('button', { name: /^effects$/i }));
         expect(screen.getByRole('checkbox', { name: /combo pop effects/i })).not.toBeChecked();
         await user.click(screen.getByRole('checkbox', { name: /combo pop effects/i }));
         expect(localStorage.getItem('memory-dungeon.dev.combo-pop-effects')).toBe('on');
@@ -69,12 +69,12 @@ describe('SettingsScreen', () => {
         render(<SettingsScreen presentation="page" />);
 
         await user.click(screen.getByRole('button', { name: /about/i }));
-        expect(screen.getByTestId('settings-save-trust')).toHaveTextContent(/Single local profile/);
+        expect(screen.getByTestId('settings-save-trust')).toHaveTextContent(/One profile, saved on this device/);
         expect(screen.getByTestId('settings-save-trust')).toHaveTextContent(/Cloud sync/);
         expect(screen.getByTestId('settings-profile-summary')).toHaveTextContent(/Profile level/);
 
         await user.click(screen.getByRole('button', { name: /^reset$/i }));
-        expect(screen.getByText(/Save data, profile level, history, honors, and cosmetics are not deleted/)).toBeInTheDocument();
+        expect(screen.getByText(/Your saves, profile level,\s+history, honors and cosmetics are kept/)).toBeInTheDocument();
     });
 
     it('leaves unavailable settings and implementation notes out of player controls', () => {

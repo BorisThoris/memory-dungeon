@@ -159,13 +159,13 @@ describe('RunShell', () => {
         const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={calm} tools={[]} />);
 
         const par = screen.getByTestId('hud-par');
-        expect(within(par).getByRole('img')).toHaveAttribute('aria-label', '4 of 11 turns, 3 misses left');
+        expect(within(par).getByRole('img')).toHaveAttribute('aria-label', '4 of 11 turns, 3 lives left');
         expect(par).toHaveTextContent('4 of 11 turns');
         expect(par).not.toHaveAttribute('data-ceiling-near');
 
         rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...calm, turnsThisFloor: 8, missBank: [{ floor: 1, misses: 1 }] }} tools={[]} />);
         expect(screen.getByTestId('hud-par')).toHaveAttribute('data-ceiling-near', 'true');
-        expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute('aria-label', '8 of 11 turns, 1 miss left');
+        expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute('aria-label', '8 of 11 turns, 1 life left');
     });
 
     it('draws the misses the run has left, and says so when there are none', () => {
@@ -190,7 +190,7 @@ describe('RunShell', () => {
         rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBank: [] }} tools={[]} />);
         expect(left()).toHaveAccessibleName('0 lives left');
         expect(left()).toHaveAttribute('data-low', 'true');
-        expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute('aria-label', '4 of 11 turns, no misses left');
+        expect(within(screen.getByTestId('hud-par')).getByRole('img')).toHaveAttribute('aria-label', '4 of 11 turns, no lives left');
 
         // A run built without a bank shows no count at all rather than a number it does not have.
         rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...early, missBank: undefined }} tools={[]} />);

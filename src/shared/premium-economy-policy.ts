@@ -22,28 +22,28 @@ export const PREMIUM_ECONOMY_POLICY_ROWS: readonly PremiumEconomyPolicyRow[] = [
         id: 'product_stance',
         title: 'Premium offline-first',
         status: 'shipped',
-        copy: 'Windows-first Steam premium positioning; no ad, subscription, or IAP economy is assumed.',
+        copy: 'One complete game that plays offline: no ads, no subscription, nothing to buy inside it.',
         allowedInSaveData: false
     },
     {
         id: 'ads_iap',
         title: 'Ads and IAP currencies',
         status: 'forbidden',
-        copy: 'No rewarded ads, paid currency packs, subscriptions, or booster-store placeholders in v1.',
+        copy: 'No rewarded ads, paid currency, subscriptions or booster store.',
         allowedInSaveData: false
     },
     {
         id: 'continues_fairness',
         title: 'Fairness is never monetized',
         status: 'forbidden',
-        copy: 'Continues, daily fairness, and core power access remain gameplay/balance systems only.',
+        copy: 'Continues, fair runs and every core power are earned in play, never bought.',
         allowedInSaveData: false
     },
     {
         id: 'accessibility',
         title: 'Accessibility is never a sink',
         status: 'forbidden',
-        copy: 'Settings such as motion, audio, timing, readability, focus assist, and input comfort are free preferences.',
+        copy: 'Motion, audio, timing, readability, focus assist and input comfort settings are always free.',
         allowedInSaveData: false
     },
     {
@@ -59,14 +59,14 @@ export const PREMIUM_ECONOMY_POLICY_ROWS: readonly PremiumEconomyPolicyRow[] = [
         id: 'run_currency',
         title: 'Run currency is temporary',
         status: 'shipped',
-        copy: 'Power charges are local run systems; they expire or reset by design.',
+        copy: 'Gold and charges belong to the run you are in, and reset when it ends.',
         allowedInSaveData: false
     },
     {
         id: 'cosmetics',
         title: 'Cosmetics are earned',
         status: 'separate_decision_required',
-        copy: 'Cosmetic unlocks are local progression/honor rewards; paid cosmetic proposals require a separate product decision and migration plan.',
+        copy: 'Cosmetics are earned with honor marks as you play.',
         allowedInSaveData: true
     }
 ];

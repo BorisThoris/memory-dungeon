@@ -85,7 +85,7 @@ export const curioItemHint = (run: Pick<RunState, 'status' | 'crucibleCharges' |
 
 /** The Miser's Purse on offer (`misers-purse-rules.ts`). */
 export const MISERS_PURSE_TOOL_COPY = {
-    ready: (cap: number): string => `Take up the Miser's Purse: every clear pays double gold, and the miss bank holds ${cap}`,
+    ready: (cap: number): string => `Take up the Miser's Purse: every clear pays double gold, and you can hold ${cap} lives`,
     unavailable: "Miser's Purse: wait for the floor to begin"
 } as const;
 

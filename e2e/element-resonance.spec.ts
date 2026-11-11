@@ -132,7 +132,7 @@ test('cards give off their element, the strip counts the stacks, and fire meetin
     expect(impact.locks).toBe(8);
     expect(new Set(impact.contacts.map(c => c.outcome)).size).toBe(3);
     await page.evaluate(async () => (await import('/src/renderer/store/useAppStore.ts')).useAppStore.getState().openSettings('playing'));
-    await page.getByRole('button', { name: /dev options/i }).click();
+    await page.getByRole('button', { name: /^effects$/i }).click();
     const popToggle = page.getByRole('checkbox', { name: /combo pop effects/i });
     await expect(popToggle).toBeChecked();
     await page.getByText('Combo pop effects', { exact: true }).click();

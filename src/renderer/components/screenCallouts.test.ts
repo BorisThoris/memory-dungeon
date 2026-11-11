@@ -81,7 +81,7 @@ describe('the screen stamps a turn earns', () => {
         expect(derivePurchaseCallouts(undefined, undefined)).toEqual([]);
         const bought = derivePurchaseCallouts({ miss: 1 }, { miss: 3, deep_pockets: 1 });
         expect(bought.map((callout) => callout.key)).toEqual(['bought:miss:2', 'bought:miss:3', 'bought:deep_pockets:1']);
-        expect(bought[0]).toMatchObject({ kind: 'bought', size: 'minor', tone: 'gold', title: 'ANOTHER MISS', sub: 'Bought' });
+        expect(bought[0]).toMatchObject({ kind: 'bought', size: 'minor', tone: 'gold', title: 'ANOTHER LIFE', sub: 'Bought' });
         expect(bought[2]?.sub).toMatch(/^Relic/);
         // Nothing new: nothing stamped.
         expect(derivePurchaseCallouts({ miss: 3 }, { miss: 3 })).toEqual([]);

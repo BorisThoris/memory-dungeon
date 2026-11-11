@@ -30,7 +30,7 @@ export const buildObjectiveBoardRows = (save: SaveData): ObjectiveBoardRow[] => 
         {
             id: 'first_clear',
             title: 'First clear',
-            description: 'Complete any floor in any non-debug run.',
+            description: 'Clear any floor of any run.',
             status: save.achievements.ACH_FIRST_CLEAR ? 'completed' : 'active',
             progress: save.achievements.ACH_FIRST_CLEAR ? '1/1' : '0/1',
             reward: 'First Lantern achievement'
@@ -63,7 +63,7 @@ export const getObjectiveBoardItems = (save: SaveData): ObjectiveBoardItem[] => 
         {
             id: 'first_clear',
             title: 'First clear',
-            description: 'Complete any floor in any non-debug run.',
+            description: 'Clear any floor of any run.',
             status: firstClear ? 'completed' : 'active',
             progress: { current: firstClear ? 1 : 0, target: 1 },
             reward: 'First Lantern achievement'

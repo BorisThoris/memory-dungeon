@@ -2727,7 +2727,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 player comes to ask how the run is doing, and how much longer it can
                                 go wrong is half of that question. */}
                             <div>
-                                <dt>Misses left</dt>
+                                <dt>Lives</dt>
                                 <dd data-testid="pause-misses-left">
                                     {missesLeft(run) ?? '—'}
                                     {(() => {
@@ -2737,7 +2737,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                         return soonest && missesLeft(run) ? (
                                             <small data-testid="pause-misses-shelf">
                                                 {' '}
-                                                · {RUN_SHELL_PAR_COPY.soonestToGo(soonest.misses, soonest.lastFloor)}
+                                                · {RUN_SHELL_PAR_COPY.soonestToGo(soonest.misses, soonest.lastFloor, missesLeft(run) ?? 0)}
                                             </small>
                                         ) : null;
                                     })()}

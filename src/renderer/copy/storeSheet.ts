@@ -16,9 +16,9 @@ export const STORE_SHEET_COPY = {
             : row.blocked === 'owned'
             ? `${row.body} Yours for the rest of the run.`
             : row.blocked === 'full'
-            ? `${row.body} Your bank is full.`
+            ? `${row.body} You hold all the lives you can.`
             : row.blocked === 'no_bank'
-              ? `${row.body} This run has no miss bank to put one in.`
+              ? `${row.body} This run has no lives to add to.`
               : row.blocked === 'gold'
                 ? `${row.body} ${row.price} gold; you are short.`
                 : row.body,

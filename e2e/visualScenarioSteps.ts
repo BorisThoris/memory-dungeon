@@ -139,10 +139,11 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
     },
     {
         fileBase: '02-main-menu-howto',
-        name: 'main menu with How To Play',
+        name: 'main menu on a first run (Tutorial Hall offered)',
         run: async (page, capture) => {
             await openMainMenuFromSave(page, false);
-            await expect(page.getByText(/How To Play/i).first()).toBeVisible();
+            // The long How To Play panel gave way to the Tutorial Hall (MainMenu.test.tsx).
+            await expect(page.getByRole('button', { name: 'Tutorial Hall' })).toBeVisible();
             await expectNoHorizontalOverflow(page);
             await expectAppScrollportHasNoVerticalOverflow(page);
             await expectLocatorFullyInWindowViewport(page, mainMenuPlayButton(page));
@@ -158,7 +159,12 @@ export const VISUAL_SCREEN_SCENARIOS: ReadonlyArray<VisualScreenScenario> = [
                 (element as HTMLButtonElement).click();
             });
             await expect(page.getByRole('heading', { name: /^settings$/i })).toBeVisible();
-            const gameplayCategory = page.getByRole('button', { name: /gameplay/i }).first();
+            // A wide shell lists the categories as buttons; a stacked one chooses them in one <select>
+            // (`SettingsScreen.tsx`, `data-settings-layout`).
+            const gameplayCategory = page
+                .getByRole('button', { name: /gameplay/i })
+                .or(page.getByRole('combobox').filter({ has: page.getByRole('option', { name: /gameplay/i }) }))
+                .first();
             await expect(gameplayCategory).toBeVisible();
             await expectCoarsePointerTarget(page, gameplayCategory);
             await expectNoHorizontalOverflow(page);

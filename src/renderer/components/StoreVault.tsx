@@ -122,7 +122,7 @@ const StoreVault = ({ run, floor, onBuy, onDescend, onEvolve, onFuse }: StoreVau
                             </div>
                             <p id={`${titleId}-${row.id}`}>{row.body}{(run.runRulesVersion ?? 0) >= AWAKENING_FROM && isSnowballRelicId(row.id) ? ` ${awakeningDefinition(row.id).mark}` : null}</p>
                             <span className={styles.blocked}>
-                                {row.blocked === 'gold' ? `Need ${row.goldShortfall} more gold` : row.blocked === 'full' ? 'Your miss bank is full' : row.blocked === 'max_rank' ? 'Fully upgraded for this run' : row.blocked === 'no_bank' ? 'This mode has no miss bank' : row.blocked === 'owned' ? 'Already owned' : row.blocked === 'slots' ? 'Your four slots are full' : '\u00a0'}
+                                {row.blocked === 'gold' ? `Need ${row.goldShortfall} more gold` : row.blocked === 'full' ? 'You hold all the lives you can' : row.blocked === 'max_rank' ? 'Fully upgraded for this run' : row.blocked === 'no_bank' ? 'This mode has no miss bank' : row.blocked === 'owned' ? 'Already owned' : row.blocked === 'slots' ? 'Your four slots are full' : '\u00a0'}
                             </span>
                             <button aria-label={STORE_SHEET_COPY.buyAriaLabel(row)} aria-describedby={`${titleId}-${row.id}`}
                                 data-testid={`store-buy-${row.id}`} disabled={row.blocked !== null} type="button"

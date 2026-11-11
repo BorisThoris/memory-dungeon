@@ -23,7 +23,7 @@ describe('automatic camp rewards',()=>{
         const run = clearedCamp();
         // Survive buys a miss while the bank has room; on a full one it grows the bank (rules 73 size the cap by the floor).
         expect(automaticCampReward({ ...run, campPreference: 'survive', missBank: [{ floor: 3, misses: missBankCap(run) }] }).receipt).toContain('Deep Pockets');
-        expect(automaticCampReward({ ...run, campPreference: 'survive', missBank: [{ floor: 3, misses: 1 }] }).receipt).toContain('miss');
+        expect(automaticCampReward({ ...run, campPreference: 'survive', missBank: [{ floor: 3, misses: 1 }] }).receipt).toContain('Another life');
         expect(automaticCampReward({ ...run, campPreference: 'study' }).receipt).toContain('Long Look');
         expect(automaticCampReward({ ...run, campPreference: 'score' }).receipt).toContain('Gilded Chain');
         const legacy = automaticCampReward({ ...run, runRulesVersion: 63, campPreference: 'score' });
@@ -54,7 +54,7 @@ describe('automatic camp rewards',()=>{
         const reward=automaticCampReward(run);
         expect(missesLeft(reward.run)).toBe(2);expect(reward.run.gold).toBe(16);
         expect(reward.run.relics).toEqual(run.relics);
-        expect(reward.receipt).toContain('Another miss');
+        expect(reward.receipt).toContain('Another life');
     });
     it('chooses an affordable upgrade and saves gold if nothing is needed or affordable',()=>{
         const run={...clearedCamp(),gold:6};

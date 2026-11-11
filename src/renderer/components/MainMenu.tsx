@@ -91,7 +91,7 @@ const MainMenu = ({
     const lastRun = saveData.lastRunSummary;
     const entries = [
         { label: 'Tutorial Hall', note: 'Learn by playing', onClick: () => openTutorial?.() },
-        { label: 'Collection', note: 'Cards and relics', onClick: onOpenCollection },
+        { label: 'Collection', note: 'Achievements and unlocks', onClick: onOpenCollection },
         { label: 'Profile', note: 'Marks and records', onClick: onOpenProfile },
         { label: 'Inventory', note: 'What you carry', onClick: onOpenInventory },
         { label: 'Codex', note: 'How the dungeon works', onClick: onOpenCodex },

@@ -54,14 +54,14 @@ export const RUN_SHELL_PAR_COPY = {
     aria: (turnsTaken: number, parTurns: number, missesLeft: number | null): string =>
         missesLeft == null
             ? `${turnsTaken} of ${parTurns} turns`
-            : `${turnsTaken} of ${parTurns} turns, ${missesLeft === 0 ? 'no' : missesLeft} ${missesLeft === 1 ? 'miss' : 'misses'} left`,
+            : `${turnsTaken} of ${parTurns} turns, ${missesLeft === 0 ? 'no' : missesLeft} ${missesLeft === 1 ? 'life' : 'lives'} left`,
     /** The word after the count. Short, because it sits in a head that a phone also has to hold. */
-    leftWord: (missesLeft: number): string => (missesLeft === 1 ? 'miss left' : 'misses left'),
+    leftWord: (missesLeft: number): string => (missesLeft === 1 ? 'life left' : 'lives left'),
     /** On hover, where there is room to say which rule the count belongs to. */
     title: 'A miss with none left ends the run.',
-    /** The pause sheet's note under the count: the misses that go first, and the last floor they last through. */
-    soonestToGo: (misses: number, lastFloor: number): string =>
-        `${misses} ${misses === 1 ? 'lasts' : 'last'} through floor ${lastFloor}`,
+    /** The pause sheet's note under the count: the misses that go first, and the floor they expire after. */
+    soonestToGo: (misses: number, lastFloor: number, total = 0): string =>
+        `${misses === total && misses > 1 ? 'all' : misses} ${misses === 1 ? 'expires' : 'expire'} after floor ${lastFloor}`,
     /** The head's beat when a chain pays into the bank. */
     earned: (misses: number): string => `+${misses} ${misses === 1 ? 'miss' : 'misses'} earned`
 } as const;

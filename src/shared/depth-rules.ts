@@ -46,9 +46,9 @@ export interface DepthRung {
 export const DEPTH_RUNGS: readonly DepthRung[] = [
     { depth: 1, id: 'short_study', name: 'Short study', line: 'The study window is a quarter shorter.' },
     { depth: 2, id: 'no_misses_sold', name: 'No misses sold', line: 'The store sells no misses.' },
-    { depth: 3, id: 'two_to_open', name: 'Two to open', line: 'The miss bank opens with two misses, not three.' },
+    { depth: 3, id: 'two_to_open', name: 'Two to open', line: 'Runs open with two lives, not three.' },
     { depth: 4, id: 'no_calm_door', name: 'No calm door', line: 'Before an act boss, no door is calm.' },
-    { depth: 5, id: 'bank_cap_down', name: 'A smaller bank', line: 'The miss bank holds one fewer.' },
+    { depth: 5, id: 'bank_cap_down', name: 'A smaller bank', line: 'You can hold one life fewer.' },
     { depth: 6, id: 'dearer_store', name: 'Dearer camp', line: 'Everything at the store costs a quarter more.' },
     { depth: 7, id: 'wanderers_early', name: 'Early Wanderers', line: 'Wanderers walk from floor 7, not 13.' },
     { depth: 8, id: 'keeper_fast', name: 'A restless Keeper', line: 'The Keeper of Halls swaps its rooms every third turn.' },

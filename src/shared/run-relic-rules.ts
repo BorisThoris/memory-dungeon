@@ -34,7 +34,7 @@ export const RELICS: readonly RelicDefinition[] = [
     {
         id: 'deep_pockets',
         title: 'Deep Pockets',
-        body: 'The miss bank holds five instead of four.',
+        body: 'You can hold five lives instead of four.',
         price: 9
     },
     {
@@ -68,7 +68,7 @@ export const RELICS: readonly RelicDefinition[] = [
          */
         id: 'misers_purse',
         title: "Miser's Purse",
-        body: 'Every floor clear pays twice the gold. The miss bank holds one fewer.',
+        body: 'Every floor clear pays twice the gold. You can hold one life fewer.',
         price: 0,
         curio: true
     }

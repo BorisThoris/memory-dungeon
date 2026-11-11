@@ -9,6 +9,7 @@ import { ACHIEVEMENT_IDS } from '../../shared/save-data';
 import { playUiBackSfx, playUiClickSfx, resumeUiSfxContext, uiSfxGainFromSettings } from '../audio/uiSfx';
 import { FittedGrid, MetaShell, SectionRail } from '../ui';
 import { collectionStorageNote } from '../copy/collectionStorageNote';
+import { hasDesktopBridge } from '../desktop-client';
 import { useAppStore } from '../store/useAppStore';
 import styles from './CollectionScreen.module.css';
 
@@ -115,7 +116,7 @@ const CollectionScreen = () => {
                 playUiBackSfx(uiGain);
                 closeSubscreen();
             }}
-            subtitle={`${activeSection.earnedCount} of ${activeSection.entries.length} ${activeSection.label.toLowerCase()} · ${honorMarks} honor ${honorMarks === 1 ? 'mark' : 'marks'} · ${collectionStorageNote({ isAchievements: activeSection.id === 'achievements', steamConnected })}`}
+            subtitle={`${activeSection.earnedCount} of ${activeSection.entries.length} ${activeSection.label.toLowerCase()} · ${honorMarks} honor ${honorMarks === 1 ? 'mark' : 'marks'} · ${collectionStorageNote({ isAchievements: activeSection.id === 'achievements', steamConnected, desktop: hasDesktopBridge() })}`}
             testId="collection-screen"
             title="Collection"
             toolbar={

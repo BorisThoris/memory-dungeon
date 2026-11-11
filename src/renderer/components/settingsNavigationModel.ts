@@ -20,7 +20,7 @@ export const SETTINGS_CATEGORIES: ReadonlyArray<{ id: SettingsCategory; label: s
     { id: 'video', label: 'Video', note: 'Display mode and interface scale.' },
     { id: 'accessibility', label: 'Accessibility', note: 'Motion and clarity.' },
     { id: 'about', label: 'About', note: 'Build info, credits, and reset.' },
-    { id: 'dev', label: 'Dev Options', note: 'Visual experiments. Applies immediately.' }
+    { id: 'dev', label: 'Effects', note: 'Extra visual effects. Applies immediately.' }
 ];
 
 export const SETTINGS_SUBSECTIONS: Record<

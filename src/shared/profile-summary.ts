@@ -73,14 +73,14 @@ export const buildProfileSaveShellSummary = (
         runHistoryEntries: buildRunJournalRowsFromSave(save).length,
         runsFinished: runNonNegativeInteger(save.playerStats?.runsFinished),
         sharpFloors: runNonNegativeInteger(save.playerStats?.sharpFloors),
-        saveLocationCopy: 'Single local profile on this device. Steam/cloud sync is not required for v1.',
+        saveLocationCopy: 'One profile, saved on this device.',
         cloudSyncState: cloudSaveAvailable ? 'available' : 'not_available',
         cloudSyncCopy: cloudSaveAvailable
             ? 'Platform cloud sync is available for this profile.'
-            : 'Cloud sync is not available in this build; backups are local/export-only.',
-        exportCopy: 'Export/share strings contain local progress summaries only; no account or PII is required.',
-        importCopy: 'Import is reserved for compatible local save payloads and must pass schema migration gates.',
-        resetCopy: 'Reset settings is non-destructive; full profile deletion requires an explicit confirmation flow and is not enabled in this release shell.'
+            : 'Cloud sync is not available in this build, so your progress stays on this device.',
+        exportCopy: 'Sharing a run shares only that run: never an account or personal details.',
+        importCopy: 'Saves from older versions are brought up to date when the game loads them.',
+        resetCopy: 'Reset to defaults changes only settings. Deleting a whole profile would need its own confirmation, and is not offered.'
     };
 };
 
@@ -170,7 +170,7 @@ export const getSaveTrustRows = (
         },
         {
             id: 'export_import',
-            label: 'Export / import',
+            label: 'Sharing and older saves',
             status: 'manual',
             description: `${summary.exportCopy} ${summary.importCopy}`
         },
@@ -178,11 +178,11 @@ export const getSaveTrustRows = (
             id: 'backup',
             label: 'Backups',
             status: 'manual',
-            description: 'Use local/platform file backups until a first-class backup browser ships.'
+            description: 'To keep a backup, copy your save file.'
         },
         {
             id: 'reset',
-            label: 'Reset boundaries',
+            label: 'Resetting',
             status: 'manual',
             description: summary.resetCopy
         }

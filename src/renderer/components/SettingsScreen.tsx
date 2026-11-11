@@ -345,14 +345,14 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         onChange={(next) => patchSettings('boardPresentation', next)}
                                                         options={[
                                                             { label: 'Standard', value: 'standard' },
-                                                            { label: 'Spaghetti', value: 'spaghetti' },
+                                                            { label: 'Flat', value: 'spaghetti' },
                                                             { label: 'Breathing', value: 'breathing' }
                                                         ]}
                                                         value={draft.boardPresentation}
                                                     />
                                                     <SegmentedControl<CameraViewportModePreference>
                                                         hint={SETTINGS_HINTS.cameraViewportModePreference}
-                                                        label="Mobile Camera Shell"
+                                                        label="Small-Screen View"
                                                         onChange={(next) => patchSettings('cameraViewportModePreference', next)}
                                                         options={[
                                                             { label: 'Auto', value: 'auto' },
@@ -581,18 +581,10 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
 
                                         {activeCategory === 'about' && showSubsection('build') ? (
                                             <SettingsSection title="Memory Dungeon">
+                                                <p className={styles.headerCopy}>Version {packageJson.version}.</p>
                                                 <p className={styles.headerCopy}>
-                                                    Version {packageJson.version}. Windows-first Steam desktop build. For
-                                                    support and updates, use your storefront or developer channels.
-                                                </p>
-                                                <p className={styles.headerCopy}>
-                                                    Built with React, Pixi/Three render paths, and Electron for the desktop
-                                                    shell.
-                                                </p>
-                                                <p className={styles.headerCopy}>
-                                                    Analytics-style events are privacy-first: the default build does not send
-                                                    them, and the dev console hook scrubs paths and long strings before any
-                                                    optional sink runs.
+                                                    Nothing about how you play is sent anywhere. If you claim the world
+                                                    record, the name and score you enter go to the record board.
                                                 </p>
                                                 {!FEATURE_CLOUD_SAVE ? (
                                                     <p className={styles.headerCopy}>
@@ -631,7 +623,6 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     {saveTrustRows.map((row) => (
                                                         <div className={styles.profileSummaryRow} key={row.id}>
                                                             <strong>{row.label}</strong>
-                                                            <span>{row.status}</span>
                                                             <em>{row.description}</em>
                                                         </div>
                                                     ))}
@@ -640,7 +631,6 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     {premiumEconomyRows.map((row) => (
                                                         <div className={styles.profileSummaryRow} key={row.id}>
                                                             <strong>{row.title}</strong>
-                                                            <span>{row.status}</span>
                                                             <em>{row.copy}</em>
                                                         </div>
                                                     ))}
@@ -651,9 +641,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         {activeCategory === 'about' && showSubsection('reset') ? (
                                             <SettingsSection title="Reset">
                                                 <p className={styles.headerCopy}>
-                                                    Restore all settings to application defaults. Save data, profile level,
-                                                    history, honors, and cosmetics are not deleted; full profile reset/export
-                                                    is intentionally not enabled in this offline release shell.
+                                                    Puts every setting back to its default. Your saves, profile level,
+                                                    history, honors and cosmetics are kept.
                                                 </p>
                                                 <button className={styles.word} onClick={handleResetToDefaults} type="button">
                                                     Reset to defaults

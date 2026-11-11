@@ -48,8 +48,8 @@ export interface StoreItemDefinition {
 export const STORE_ITEMS: readonly StoreItemDefinition[] = [
     {
         id: 'miss',
-        title: 'Another miss',
-        body: 'One more miss before the run ends, good for three floors past this one, up to what your bank holds.',
+        title: 'Another life',
+        body: 'One more life before the run ends, good for three floors past this one, up to as many as you can hold.',
         basePrice: 4,
         priceStep: 2,
         kind: 'consumable'

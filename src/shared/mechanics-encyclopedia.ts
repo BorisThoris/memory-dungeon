@@ -42,7 +42,7 @@ import { GAME_RULES_VERSION } from './contracts';
 import { descentLengthFor, lastLevelForDescentFloor, levelForDescentFloor } from './descent-length-rules';
 
 /** Monotonic reference doc version (increment when the encyclopedia meaningfully changes). */
-export const ENCYCLOPEDIA_VERSION = 139 as const;
+export const ENCYCLOPEDIA_VERSION = 140 as const;
 
 /** A floor the rules were written for, as the run numbers it today (`descent-length-rules.ts`: forty floors from rules 93). */
 const floorOf = (descentFloor: number): number => levelForDescentFloor(descentFloor, GAME_RULES_VERSION);
@@ -451,7 +451,7 @@ export const CODEX_CORE_TOPICS: CodexCoreTopic[] = [
         id: 'miss_budget',
         title: 'Misses',
         description:
-            'A run has a small bank of **misses**, and it is earned. It opens with **three**; clearing a floor earns **one**, and **one more for every seven pairs** the floor held, and every **fifth match in a row** earns one too. Each miss you earn lasts **three floors** past the one you earned it on - the oldest go first - and the bank holds **four** at most, **one more for every six pairs** on the floor, and one more for each rank of Deep Pockets. A miss spends one (two on a Heavy card) - it still resets the chain, counts a try and a turn, and nothing else - and a miss with none left ends the run. That is the only way a run ends on its own; otherwise it ends when you stop. The run bar shows turns against par and how many misses you have left, and turns red on the last one.'
+            'A run has a small bank of **misses** - the **lives** the hearts at the top count - and it is earned. It opens with **three**; clearing a floor earns **one**, and **one more for every seven pairs** the floor held, and every **fifth match in a row** earns one too. Each miss you earn lasts **three floors** past the one you earned it on - the oldest go first - and the bank holds **four** at most, **one more for every six pairs** on the floor, and one more for each rank of Deep Pockets. A miss spends one (two on a Heavy card) - it still resets the chain, counts a try and a turn, and nothing else - and a miss with none left ends the run. That is the only way a run ends on its own; otherwise it ends when you stop. The run bar shows turns against par and how many misses you have left, and turns red on the last one.'
     },
     {
         id: 'scoring',

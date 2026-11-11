@@ -9,7 +9,7 @@
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12327
+    "relationshipCount": 12328
   },
   "inventory": [
     {
@@ -832,7 +832,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 133866,
-      "sha256": "664942072821bbe45219c13dcfe254b8c549a7e6dce125ba9f22ab9c57be2fc6"
+      "sha256": "c9f5f67f39100014b9cc39671b1748a15c2f57954a6c17529db82dd678959553"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "fd93da7f43b676bcd537de1e642e833ad8d51f487501f0f67e1169bce0c0bb5d"
+      "sha256": "0143a84693b92ba793dd7c102b713d908dd8eb7c44347b84ce8cb319c6e94dc9"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -3963,8 +3963,8 @@
     {
       "path": "e2e/element-resonance.spec.ts",
       "category": "test",
-      "bytes": 11621,
-      "sha256": "4e6fb7ce6c385e06fec49946557a6380d7eb2e4612827a78f9b9c219be177a87"
+      "bytes": 11619,
+      "sha256": "f933af325f43f6d60559217cded6b0531b3e93e4e1820dd05a042a610d907625"
     },
     {
       "path": "e2e/elemental-goals-camp.spec.ts",
@@ -4317,8 +4317,8 @@
     {
       "path": "e2e/visualScenarioSteps.ts",
       "category": "test",
-      "bytes": 10400,
-      "sha256": "28e9688500139b31b69b41bb79ac3cb5e2a35f834e1e8480947de3989a8c876c"
+      "bytes": 10842,
+      "sha256": "84fc5e5091c57ba57b78ac9002ef146579e4a089a3c0e92d9f739fc936b70a88"
     },
     {
       "path": "e2e/visualScreenHelpers.ts",
@@ -10953,8 +10953,8 @@
     {
       "path": "src/renderer/components/CollectionScreen.tsx",
       "category": "source",
-      "bytes": 7761,
-      "sha256": "0ea2c6e6fbf46c688ebc3aea7702712a356ab8a8316ed905cdc17b16fdf746a2"
+      "bytes": 7844,
+      "sha256": "67864f2fcc1449d1ab9556b12cd212dcf2d30a41106f925644be249041216fec"
     },
     {
       "path": "src/renderer/components/ColossusCard.module.css",
@@ -11301,8 +11301,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 157111,
-      "sha256": "2fea2e81cef003fb6e433e31a7cae33e3fd80a7d6897baa289c322a740fde1cd"
+      "bytes": 157127,
+      "sha256": "ef50fa2d59bd5bfb1e6583abeec22a5844029de14e5c78f32f59a80b56751622"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11487,8 +11487,8 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 13756,
-      "sha256": "f8c16d6b598685bdf0fd3f605fdef7d8542697d7462a67eeec30dbd8004fab4b"
+      "bytes": 13764,
+      "sha256": "08345a57e9c489de3a32b93d60839c41caa2917d69a8c847f170b7b206f8ef5f"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -11925,8 +11925,8 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 44813,
-      "sha256": "73010f2fff9d0cb120516280af53f92f2c592d8f9367478e70d4d09a6e76c2d0"
+      "bytes": 44811,
+      "sha256": "b69522fb415cbc795f65984a012ff42e244412e07a3510a0201a7e52f79a8632"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
@@ -12111,8 +12111,8 @@
     {
       "path": "src/renderer/components/screenCallouts.test.ts",
       "category": "test",
-      "bytes": 8902,
-      "sha256": "a7e99b5ad7ef988a16c2fefccc544c649679e614dc9418e5a421f473515fa126"
+      "bytes": 8778,
+      "sha256": "25b27c74ced607951c781ead18fb4cab5aad6785344b868306b1beac40e9d733"
     },
     {
       "path": "src/renderer/components/screenCallouts.ts",
@@ -12129,8 +12129,8 @@
     {
       "path": "src/renderer/components/settingsNavigationModel.ts",
       "category": "source",
-      "bytes": 2000,
-      "sha256": "d95135f201e55aed769f0809b7730a35a6b4d172193bb2c95d9f4d1f67215882"
+      "bytes": 1998,
+      "sha256": "ca615077646a20d8fad366b96f2022ed924c01679687120362d5f2212b8d8928"
     },
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
@@ -12142,13 +12142,13 @@
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "category": "test",
       "bytes": 7040,
-      "sha256": "c32fac2eac4e275b6b02ca36c2bf748b40ae9d3869a06b1e22fe33c2a840cd1e"
+      "sha256": "cbcd899f4209b2004fda642705d4a5f9f47c444b5ffe647df4bc68dd809a00bb"
     },
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 45982,
-      "sha256": "8170511b4e7fd683291cc7e96746e03d2e1ee37b0049ae93672e2aab3a36c35a"
+      "bytes": 44988,
+      "sha256": "da3d3e01e9c2247bb060a3a90496eadebcfb3770628b1fdcc7cbf0c4a7a3684f"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -12231,8 +12231,8 @@
     {
       "path": "src/renderer/components/StoreVault.tsx",
       "category": "source",
-      "bytes": 10168,
-      "sha256": "7d0863f425147831fa9780b2ca27b6346485077ef434765706bdef892b34250f"
+      "bytes": 10176,
+      "sha256": "ed98a275b4ca7e98bebb78fec6b4aee975a7e8c83d88346e015226eb46947795"
     },
     {
       "path": "src/renderer/components/storeWareGlyphs.tsx",
@@ -13203,8 +13203,8 @@
     {
       "path": "src/renderer/copy/boardPowerCopy.ts",
       "category": "source",
-      "bytes": 6636,
-      "sha256": "ae50bb8fa142dca4c62ddbd4b66955debb027d85af4ef8e122cd74cc9d08031d"
+      "bytes": 6635,
+      "sha256": "1746ac8e8cb7e2d19c2dfd172ad3b2bbfc7398501d55d9300f425cd65bec835f"
     },
     {
       "path": "src/renderer/copy/boardRouteCoaching.ts",
@@ -13281,14 +13281,14 @@
     {
       "path": "src/renderer/copy/collectionStorageNote.test.ts",
       "category": "test",
-      "bytes": 738,
-      "sha256": "67cc68b4ebf376996aaa08bb988cf4f42ebb3d2b9d5e6bfbffce9dc5d8e25002"
+      "bytes": 1047,
+      "sha256": "472fe9cedd602b4aac62b8fd59a0dd2f6ca9a238b0fffc2c81dfd12dd71b9686"
     },
     {
       "path": "src/renderer/copy/collectionStorageNote.ts",
       "category": "source",
-      "bytes": 793,
-      "sha256": "600f9feb9b9d161c2d1bd1598b841962e0de135d7cc30b8deb9bf4de7aea9595"
+      "bytes": 1172,
+      "sha256": "58677a6c8e2549f20a6310d0af7e9cd2e97e84e3594504a2b66bec47800bd1eb"
     },
     {
       "path": "src/renderer/copy/colossusBeat.test.ts",
@@ -13539,8 +13539,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 10806,
-      "sha256": "c98798203346c502e6c96003b08d23c86d87dc67ac7c57c0fd8f54f21d66dfd2"
+      "bytes": 10853,
+      "sha256": "d2d83c0c2548c18cfc92f8a59e48fb66eb4a17104911c2b13816e707648332ea"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -13587,8 +13587,8 @@
     {
       "path": "src/renderer/copy/storeSheet.ts",
       "category": "source",
-      "bytes": 3189,
-      "sha256": "9ed1b1d3ea6ee9abf53532ffb4ebcaeddb218f92415b757cd36da609023957b9"
+      "bytes": 3194,
+      "sha256": "37dd7409bfbc54942c0704f5ef8c554aaedca5123a1f805e4700cb697299a4ae"
     },
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -14854,7 +14854,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 134282,
-      "sha256": "191ff30d95e8244c7d8dd107b0425396d57e5bde1314f62bb58dadc403e2db21"
+      "sha256": "7fb6d128e45bb69f4cbf07927fcdb5997554098b2867e6d0eff057a14b2d326d"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -14913,8 +14913,8 @@
     {
       "path": "src/shared/automatic-camp-rules.test.ts",
       "category": "test",
-      "bytes": 4655,
-      "sha256": "f314477ead06297ad1521a3b9ccfc8ae9189c087601ecbd576e5c15802a5f3e5"
+      "bytes": 4663,
+      "sha256": "f022a635e2292b69b1299ab1eef9300e3fb320ae87fa9c93385b2b15391f5973"
     },
     {
       "path": "src/shared/automatic-camp-rules.ts",
@@ -15573,8 +15573,8 @@
     {
       "path": "src/shared/depth-rules.ts",
       "category": "source",
-      "bytes": 5792,
-      "sha256": "178c3993630e40a419084e0db1781a4813d7800b96b61a2ab4d920970c50d626"
+      "bytes": 5779,
+      "sha256": "64ce8ae623ab148b466cca20d8e4333284c22b2b06f702ffa0530e43539287c3"
     },
     {
       "path": "src/shared/descent-length-rules.test.ts",
@@ -16497,8 +16497,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 78904,
-      "sha256": "45451fc93162d75dcc468e868dfe80f32397313d6135ddaaf28afa5785ce66ba"
+      "bytes": 78949,
+      "sha256": "d35f42a39eb2136f479f13fc469b28cf83d2d695c93a67a9fa44cdd91983f435"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
@@ -16671,8 +16671,8 @@
     {
       "path": "src/shared/objective-board.ts",
       "category": "source",
-      "bytes": 5245,
-      "sha256": "d8092d692ad0933e63c8608d64cf07549776ace10ab0250e32ba12d44c5c3fb3"
+      "bytes": 5219,
+      "sha256": "28728a6883ecb2064b676ee0d23107c72197b1bacf0895de30dfef37c4122a22"
     },
     {
       "path": "src/shared/odd-card-rules.test.ts",
@@ -16851,8 +16851,8 @@
     {
       "path": "src/shared/premium-economy-policy.ts",
       "category": "source",
-      "bytes": 4506,
-      "sha256": "9e18df36e0abc0ec25ad1330bb86f943ddbc709581751ac4f52b6263f56412b8"
+      "bytes": 4374,
+      "sha256": "d1a7087687142a1085d479240c89e87194e0028db32b9a52f5faac1cf7a452d0"
     },
     {
       "path": "src/shared/profile-deepest-floor.test.ts",
@@ -16875,8 +16875,8 @@
     {
       "path": "src/shared/profile-summary.ts",
       "category": "source",
-      "bytes": 8899,
-      "sha256": "772c66529a22bf6aab139ebf939614bb62335f443395572c39e2bc200af022d4"
+      "bytes": 8777,
+      "sha256": "6b2f3628bf57746a9faef10b82969fcc528fa34bce458be4a8459313bed3eb45"
     },
     {
       "path": "src/shared/qa/regPhase5Hardening.test.ts",
@@ -17253,8 +17253,8 @@
     {
       "path": "src/shared/run-relic-rules.ts",
       "category": "source",
-      "bytes": 7485,
-      "sha256": "f3e62837422abd80e5c6901fb14913126fdc553f1ed4764afd9de208629f3d8d"
+      "bytes": 7482,
+      "sha256": "e8a3de3e1ca265c351fea333a8cf062753657ece71946c843eef6e986c78bd70"
     },
     {
       "path": "src/shared/run-settings-rules.test.ts",
@@ -17325,8 +17325,8 @@
     {
       "path": "src/shared/run-store-rules.ts",
       "category": "source",
-      "bytes": 15990,
-      "sha256": "1904283626bcca551e420996a7cf882762a8592352c022a2906bd4bc2c824c36"
+      "bytes": 15993,
+      "sha256": "f79e9adf7b2f01c290a67289881010547247f36bd4bd3a57cf99ed7d5fbd95d9"
     },
     {
       "path": "src/shared/run-summary-rules.test.ts",
@@ -17523,8 +17523,8 @@
     {
       "path": "src/shared/snowball-relic-rules.ts",
       "category": "source",
-      "bytes": 17015,
-      "sha256": "3a417f67f3428a450485ff83e7eba002b977387ad7a87df7acbb75fe0ba67d18"
+      "bytes": 17013,
+      "sha256": "763cbaad4004575a88627581805a0fa9b4d0d4175cebc2dbd4976fd87d5d776b"
     },
     {
       "path": "src/shared/social-play-scope.test.ts",
@@ -24087,10 +24087,11 @@
       "path": "src/renderer/components/CollectionScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 166,
+      "lineCount": 167,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/copy/collectionStorageNote.ts",
+        "file:src/renderer/desktop-client.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
         "file:src/shared/achievements.ts",
@@ -27461,7 +27462,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 739,
+      "lineCount": 728,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -30941,7 +30942,7 @@
       "path": "src/renderer/copy/collectionStorageNote.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 16,
+      "lineCount": 22,
       "imports": [
         "file:src/renderer/copy/collectionStorageNote.ts"
       ],
@@ -30953,7 +30954,7 @@
       "path": "src/renderer/copy/collectionStorageNote.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 22,
+      "lineCount": 31,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/collectionStorageNote.ts#collectionStorageNote"
@@ -51168,8 +51169,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/CollectionScreen.tsx",
-      "line": 165,
-      "endLine": 165
+      "line": 166,
+      "endLine": 166
     },
     {
       "id": "symbol:src/renderer/components/ColossusCard.tsx#ColossusCard",
@@ -54864,8 +54865,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 738,
-      "endLine": 738
+      "line": 727,
+      "endLine": 727
     },
     {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
@@ -58960,8 +58961,8 @@
       "name": "collectionStorageNote",
       "kind": "value",
       "file": "src/renderer/copy/collectionStorageNote.ts",
-      "line": 8,
-      "endLine": 21
+      "line": 11,
+      "endLine": 30
     },
     {
       "id": "symbol:src/renderer/copy/colossusBeat.ts#COLOSSUS_COPY",
@@ -121562,6 +121563,12 @@
       "id": "imports:src/renderer/components/CollectionScreen.tsx->src/renderer/copy/collectionStorageNote.ts",
       "source": "file:src/renderer/components/CollectionScreen.tsx",
       "target": "file:src/renderer/copy/collectionStorageNote.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/CollectionScreen.tsx->src/renderer/desktop-client.ts",
+      "source": "file:src/renderer/components/CollectionScreen.tsx",
+      "target": "file:src/renderer/desktop-client.ts",
       "kind": "imports"
     },
     {
