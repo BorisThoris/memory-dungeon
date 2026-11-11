@@ -266,7 +266,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 type="button"
                                             >
                                                 {/* The rail picks; the header describes what was picked. */}
-                                                <span aria-hidden="true" className={styles.numeral}>
+                                                <span aria-hidden="true" className={styles.numeral} translate="no">
                                                     {NUMERALS[index]}
                                                 </span>
                                                 <span className={styles.categoryLabel}>{category.label}</span>

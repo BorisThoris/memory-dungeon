@@ -22,7 +22,7 @@ export const GlobalRecordBadge = ({ onChallenge }: { onChallenge: () => void }) 
             <h2>{COPY.rank}</h2>
         </div>
         <div className={styles.champion} aria-live="polite">
-            <p className={record ? styles.holder : styles.empty}>{record?.name ?? (offline ? COPY.offline : record === null ? COPY.first : COPY.loading)}</p>
+            <p className={record ? styles.holder : styles.empty} translate={record ? 'no' : undefined}>{record?.name ?? (offline ? COPY.offline : record === null ? COPY.first : COPY.loading)}</p>
             {record && <p className={styles.recordScore}><strong>{record.score.toLocaleString()}</strong><span>{COPY.points}</span></p>}
         </div>
         <p className={styles.challengeHint}>{record ? COPY.challengeHint : offline ? COPY.offlineHint : record === null ? COPY.firstHint : COPY.loadingHint}</p>

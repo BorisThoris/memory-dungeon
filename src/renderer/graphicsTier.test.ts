@@ -21,8 +21,14 @@ describe('the graphics tier a device starts on', () => {
         expect(classifyGraphicsTier(device('Intel(R) Iris(R) Xe Graphics'))).toBe('medium');
     });
 
-    it('never starts a phone, or a device short of cores or memory, above Medium', () => {
+    it('starts a phone on Low, or Medium when its GPU is a known strong one', () => {
         expect(classifyGraphicsTier(device('Adreno (TM) 740', { coarsePointer: true }))).toBe('medium');
+        expect(classifyGraphicsTier(device('Adreno (TM) 619', { coarsePointer: true }))).toBe('low');
+        expect(classifyGraphicsTier(device('Mali-G610 MC6', { coarsePointer: true }))).toBe('low');
+        expect(classifyGraphicsTier(device('', { coarsePointer: true }))).toBe('low');
+    });
+
+    it('never starts a device short of cores or memory above Medium', () => {
         expect(classifyGraphicsTier(device('NVIDIA GeForce RTX 4060', { cores: 4 }))).toBe('medium');
         expect(classifyGraphicsTier(device('NVIDIA GeForce RTX 4060', { memoryGb: 2 }))).toBe('low');
     });

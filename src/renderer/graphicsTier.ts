@@ -9,7 +9,9 @@ import type { GraphicsQualityPreset } from '../shared/contracts';
  *
  * - the GPU's own name (WebGL's unmasked renderer): software rasterisers and old integrated or
  *   mobile parts start Low, current discrete and Apple-silicon parts start High;
- * - a phone or tablet (a coarse pointer) never starts above Medium;
+ * - a phone or tablet (a coarse pointer) starts Low, or Medium when its GPU is a known strong one:
+ *   a Mali-G57 tablet ran a floor at 18 frames a second on Medium and 36 on Low (2026-11-11), and
+ *   the mid-range mobile GPUs no list names are its peers;
  * - few cores or little memory caps it at Medium, and very little at Low.
  *
  * Only a first launch is chosen for: once a save holds a setting it is the player's (`hydrationController.ts`).
@@ -29,7 +31,7 @@ export const classifyGraphicsTier = ({ renderer, coarsePointer, cores, memoryGb 
     if (WEAK.test(renderer)) return 'low';
     if ((cores != null && cores <= 2) || (memoryGb != null && memoryGb <= 2)) return 'low';
     let tier: GraphicsQualityPreset = STRONG.test(renderer) ? 'high' : 'medium';
-    if (coarsePointer && tier === 'high') tier = 'medium';
+    if (coarsePointer) tier = tier === 'high' ? 'medium' : 'low';
     if (((cores != null && cores <= 4) || (memoryGb != null && memoryGb <= 4)) && tier === 'high') tier = 'medium';
     return tier;
 };

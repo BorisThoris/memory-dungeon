@@ -205,7 +205,7 @@ const MainMenu = ({
                                         onPlay();
                                     }}
                                 >
-                                    <span className={styles.numeral}>{NUMERALS[0]}</span>
+                                    <span className={styles.numeral} translate="no">{NUMERALS[0]}</span>
                                     <span className={styles.entryTitle}>Play</span>
                                     <span aria-hidden="true" className={styles.leader} />
                                     <span className={styles.entryNote}>
@@ -226,7 +226,7 @@ const MainMenu = ({
                                             entry.onClick();
                                         }}
                                     >
-                                        <span className={styles.numeral}>{NUMERALS[index + 1]}</span>
+                                        <span className={styles.numeral} translate="no">{NUMERALS[index + 1]}</span>
                                         <span className={styles.entryTitle}>{entry.label}</span>
                                         <span aria-hidden="true" className={styles.leader} />
                                         <span className={styles.entryNote}>{entry.note}</span>
@@ -242,7 +242,7 @@ const MainMenu = ({
                                             void desktopClient.quitApp();
                                         }}
                                     >
-                                        <span className={styles.numeral}>{NUMERALS[entries.length + 1]}</span>
+                                        <span className={styles.numeral} translate="no">{NUMERALS[entries.length + 1]}</span>
                                         <span className={styles.entryTitle}>Exit Game</span>
                                         <span aria-hidden="true" className={styles.leader} />
                                         <span className={styles.entryNote}>Close the book</span>

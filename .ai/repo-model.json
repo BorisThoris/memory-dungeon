@@ -10899,8 +10899,8 @@
     {
       "path": "src/renderer/components/ChooseYourPathScreen.tsx",
       "category": "source",
-      "bytes": 37272,
-      "sha256": "0818ca60dc04a845b43315c90614555098c4b668928e6320382873ab71c3bbfb"
+      "bytes": 37317,
+      "sha256": "9667db4b3f95b47a110ed491efc34672f99140b6581743e471599040f2c77316"
     },
     {
       "path": "src/renderer/components/chooseYourPathScreenModel.ts",
@@ -11343,8 +11343,8 @@
     {
       "path": "src/renderer/components/GlobalRecord.tsx",
       "category": "source",
-      "bytes": 5136,
-      "sha256": "666b923c7d55dd568fb006186b499db86516b456365c76f1d128cae4ceedaef0"
+      "bytes": 5174,
+      "sha256": "c01510bd97d2a73b72eedfffddc7e208bedf7bc2d1b6606e913379d4125d8d7f"
     },
     {
       "path": "src/renderer/components/goldRain.test.ts",
@@ -11487,8 +11487,8 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 13764,
-      "sha256": "08345a57e9c489de3a32b93d60839c41caa2917d69a8c847f170b7b206f8ef5f"
+      "bytes": 13809,
+      "sha256": "992550b70aad942437b855b33144cfe7191e0558823e15016ddf089c42217bc0"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -12147,8 +12147,8 @@
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 44988,
-      "sha256": "da3d3e01e9c2247bb060a3a90496eadebcfb3770628b1fdcc7cbf0c4a7a3684f"
+      "bytes": 45003,
+      "sha256": "d33bcdbf927fa1c10ae4da293a50294e72bbe522a87c477061c8e19f00039cfc"
     },
     {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
@@ -13803,14 +13803,14 @@
     {
       "path": "src/renderer/graphicsTier.test.ts",
       "category": "test",
-      "bytes": 1706,
-      "sha256": "e8f711047ed16e04898974855e4337eb9576806ae34ebe3c7555ae599878ea8f"
+      "bytes": 2077,
+      "sha256": "eee804aa814e830f048d65cd36799ab2cf283ce625bfaa1612d76a73baee624e"
     },
     {
       "path": "src/renderer/graphicsTier.ts",
       "category": "source",
-      "bytes": 3810,
-      "sha256": "3ecfac24c884cb15b8977c9c08b74bd5c7be17ebfb41555b548631bd109dac7a"
+      "bytes": 4007,
+      "sha256": "d1dfe5cc4a8158da7257a009a4e6ac465adce83771bc9501350390dd69e52863"
     },
     {
       "path": "src/renderer/hooks/useCoarsePointer.test.tsx",
@@ -32258,7 +32258,7 @@
       "path": "src/renderer/graphicsTier.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 30,
+      "lineCount": 36,
       "imports": [
         "file:src/renderer/graphicsTier.ts"
       ],
@@ -32270,7 +32270,7 @@
       "path": "src/renderer/graphicsTier.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 70,
+      "lineCount": 72,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -60505,32 +60505,32 @@
       "name": "classifyGraphicsTier",
       "kind": "value",
       "file": "src/renderer/graphicsTier.ts",
-      "line": 28,
-      "endLine": 35
+      "line": 30,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/graphicsTier.ts#detectGraphicsTier",
       "name": "detectGraphicsTier",
       "kind": "value",
       "file": "src/renderer/graphicsTier.ts",
-      "line": 69,
-      "endLine": 69
+      "line": 71,
+      "endLine": 71
     },
     {
       "id": "symbol:src/renderer/graphicsTier.ts#GraphicsDeviceProfile",
       "name": "GraphicsDeviceProfile",
       "kind": "interface",
       "file": "src/renderer/graphicsTier.ts",
-      "line": 17,
-      "endLine": 23
+      "line": 19,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/graphicsTier.ts#readGraphicsDeviceProfile",
       "name": "readGraphicsDeviceProfile",
       "kind": "value",
       "file": "src/renderer/graphicsTier.ts",
-      "line": 38,
-      "endLine": 67
+      "line": 40,
+      "endLine": 69
     },
     {
       "id": "symbol:src/renderer/hooks/useCoarsePointer.ts#useCoarsePointer",

@@ -243,7 +243,7 @@ const ChooseYourPathScreen = (): ReactElement => {
         return (
             <section aria-label="Recommended run" className={styles.launch} data-testid="choose-path-launcher">
                 <div className={styles.launchLine}>
-                    <span className={styles.numeral}>{numeral(0)}</span>
+                    <span className={styles.numeral} translate="no">{numeral(0)}</span>
                     <h2 className={styles.launchTitle}>{def.title}</h2>
                     <span aria-hidden="true" className={styles.leader} />
                     <span className={styles.launchNote}>Recommended</span>
@@ -315,7 +315,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                     data-mode-art-fallback={isModePosterFallback(def.posterKey) ? 'true' : 'false'}
                     src={resolveModePosterUrl(def.posterKey)}
                 />
-                <span className={styles.numeral}>{numeral(index)}</span>
+                <span className={styles.numeral} translate="no">{numeral(index)}</span>
                 <span className={styles.entryTitle}>{def.title}</span>
                 <span aria-hidden="true" className={styles.leader} />
                 <span className={styles.entryNote}>{locked ? 'In the full game' : modeNote(def)}</span>
@@ -496,7 +496,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                                         startSharedRun(sharedKeyText);
                                     }}
                                 >
-                                    <span className={styles.numeral}>{numeral(sharedEntryIndex)}</span>
+                                    <span className={styles.numeral} translate="no">{numeral(sharedEntryIndex)}</span>
                                     <span className={styles.entryTitle}>{CHOOSE_YOUR_PATH_COPY.sharedRunLabel}</span>
                                     <label className={styles.sharedRunField}>
                                         <span className={styles.srOnly}>{CHOOSE_YOUR_PATH_COPY.sharedRunLabel}</span>
