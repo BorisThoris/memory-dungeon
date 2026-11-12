@@ -1,4 +1,14 @@
-import { Color, Vector2, type MeshBasicMaterial, type MeshStandardMaterial } from 'three';
+import {
+    Color,
+    DataTexture,
+    Mesh,
+    MeshBasicMaterial,
+    PlaneGeometry,
+    Scene,
+    SRGBColorSpace,
+    Vector2,
+    type MeshStandardMaterial
+} from 'three';
 import type { TileSuit } from '../../shared/contracts';
 
 /**
@@ -202,6 +212,28 @@ export const installCardDissolve = (
             .replace('#include <dithering_fragment>', `#include <dithering_fragment>\n${FRAGMENT_APPLY}`);
     };
     material.needsUpdate = true;
+};
+
+/**
+ * The face illustration's dissolve program, compiled with the board (`TileBoardScene`). The
+ * illustration sits in the face-up group, which is hidden while the cards are down, and a renderer's
+ * compile skips what is hidden; so the first flip of a run compiled it mid-frame (a 118-169ms frame
+ * on a Mali-G57 tablet at Low, 2026-11-12). This stand-in carries the settings that pick the program:
+ * an sRGB map, the alpha test, no tone mapping, the dissolve key (`TileBoardEffectOverlays`). It is
+ * kept: disposing it would release the very program it compiled.
+ */
+let warmFaceOverlay: Scene | null = null;
+export const prewarmCardFaceOverlayShaders = (compile: (scene: Scene) => void): void => {
+    if (!warmFaceOverlay) {
+        const map = new DataTexture(new Uint8Array([255, 255, 255, 255]), 1, 1);
+        map.colorSpace = SRGBColorSpace;
+        map.needsUpdate = true;
+        const material = new MeshBasicMaterial({ map, alphaTest: 0.08, depthTest: false, depthWrite: false, toneMapped: false, transparent: true });
+        installCardDissolve(material, undefined);
+        warmFaceOverlay = new Scene();
+        warmFaceOverlay.add(new Mesh(new PlaneGeometry(1, 1), material));
+    }
+    compile(warmFaceOverlay);
 };
 
 /** Set how far the card has burned away, 0 (whole) to 1 (gone). */

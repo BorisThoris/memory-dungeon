@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3408,
     "codeFileCount": 1328,
-    "exportedSymbolCount": 4413,
+    "exportedSymbolCount": 4414,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12328
+    "relationshipCount": 12330
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "0143a84693b92ba793dd7c102b713d908dd8eb7c44347b84ce8cb319c6e94dc9"
+      "sha256": "5465c408fca577795e5946dda0d52e5b9ed633e4e5fa335b691e264d72a59fbd"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10797,14 +10797,14 @@
     {
       "path": "src/renderer/components/cardDissolveMaterial.test.ts",
       "category": "test",
-      "bytes": 3850,
-      "sha256": "32410372716c2abf7d0a81c479863e86206aa86f9e6fd7d1b38a555634f49771"
+      "bytes": 5029,
+      "sha256": "239de7f5c63862a58c59c9be7c118dd6a4ea07d5ae3584c7398ce86c32816893"
     },
     {
       "path": "src/renderer/components/cardDissolveMaterial.ts",
       "category": "source",
-      "bytes": 10594,
-      "sha256": "de5a48d59b8e437edc6e78da9e84fec18cbcea26aeff6f7f74dd93580fedce29"
+      "bytes": 11922,
+      "sha256": "54a04ca61cffdd06b31442ddc101826277079f4ed0d716c280de8f752c2fd02d"
     },
     {
       "path": "src/renderer/components/cardElementFx.test.ts",
@@ -12783,8 +12783,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 36679,
-      "sha256": "ac9e9af40d733f27f02ead3eb78fc09200ffaa81dc21e01f3596d7c8adf919a3"
+      "bytes": 36936,
+      "sha256": "58e1927ec2b88663d792241a1afd629ff3a5921aa7cdf513d4eb5b0b66a01000"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -23634,7 +23634,7 @@
       "path": "src/renderer/components/cardDissolveMaterial.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 73,
+      "lineCount": 99,
       "imports": [
         "file:src/renderer/components/cardDissolveMaterial.ts"
       ],
@@ -23646,7 +23646,7 @@
       "path": "src/renderer/components/cardDissolveMaterial.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 214,
+      "lineCount": 246,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -23659,6 +23659,7 @@
         "symbol:src/renderer/components/cardDissolveMaterial.ts#CardDissolveUniforms",
         "symbol:src/renderer/components/cardDissolveMaterial.ts#createCardDissolveUniforms",
         "symbol:src/renderer/components/cardDissolveMaterial.ts#installCardDissolve",
+        "symbol:src/renderer/components/cardDissolveMaterial.ts#prewarmCardFaceOverlayShaders",
         "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolve",
         "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolveLook"
       ],
@@ -29450,13 +29451,14 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 766,
+      "lineCount": 769,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
         "file:src/renderer/components/boardRuneFieldMaterial.ts",
         "file:src/renderer/components/boardTrauma.ts",
         "file:src/renderer/components/cardDepartureWorld.ts",
+        "file:src/renderer/components/cardDissolveMaterial.ts",
         "file:src/renderer/components/cardElementFx.ts",
         "file:src/renderer/components/cardFaceDetail.ts",
         "file:src/renderer/components/DistantCards.tsx",
@@ -50673,80 +50675,88 @@
       "name": "CARD_DISSOLVE_EDGE",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 23,
-      "endLine": 29
+      "line": 33,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_GLSL",
       "name": "CARD_DISSOLVE_GLSL",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 73,
-      "endLine": 118
+      "line": 83,
+      "endLine": 128
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_STYLE",
       "name": "CARD_DISSOLVE_STYLE",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 32,
-      "endLine": 38
+      "line": 42,
+      "endLine": 48
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CARD_DISSOLVE_THRESHOLD_GLSL",
       "name": "CARD_DISSOLVE_THRESHOLD_GLSL",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 121,
-      "endLine": 121
+      "line": 131,
+      "endLine": 131
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#cardDissolveUniforms",
       "name": "cardDissolveUniforms",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 168,
-      "endLine": 169
+      "line": 178,
+      "endLine": 179
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#CardDissolveUniforms",
       "name": "CardDissolveUniforms",
       "kind": "interface",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 40,
-      "endLine": 45
+      "line": 50,
+      "endLine": 55
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#createCardDissolveUniforms",
       "name": "createCardDissolveUniforms",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 50,
-      "endLine": 59
+      "line": 60,
+      "endLine": 69
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#installCardDissolve",
       "name": "installCardDissolve",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 176,
-      "endLine": 205
+      "line": 186,
+      "endLine": 215
+    },
+    {
+      "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#prewarmCardFaceOverlayShaders",
+      "name": "prewarmCardFaceOverlayShaders",
+      "kind": "value",
+      "file": "src/renderer/components/cardDissolveMaterial.ts",
+      "line": 226,
+      "endLine": 237
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolve",
       "name": "setCardDissolve",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 208,
-      "endLine": 213
+      "line": 240,
+      "endLine": 245
     },
     {
       "id": "symbol:src/renderer/components/cardDissolveMaterial.ts#setCardDissolveLook",
       "name": "setCardDissolveLook",
       "kind": "value",
       "file": "src/renderer/components/cardDissolveMaterial.ts",
-      "line": 62,
-      "endLine": 67
+      "line": 72,
+      "endLine": 77
     },
     {
       "id": "symbol:src/renderer/components/cardElementFx.ts#CARD_ELEMENT_FX_SECONDS",
@@ -57113,24 +57123,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 765,
-      "endLine": 765
+      "line": 768,
+      "endLine": 768
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 181,
-      "endLine": 181
+      "line": 182,
+      "endLine": 182
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 98,
-      "endLine": 98
+      "line": 99,
+      "endLine": 99
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -92473,6 +92483,12 @@
       "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#installCardDissolve",
       "source": "file:src/renderer/components/cardDissolveMaterial.ts",
       "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#installCardDissolve",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/cardDissolveMaterial.ts->symbol:src/renderer/components/cardDissolveMaterial.ts#prewarmCardFaceOverlayShaders",
+      "source": "file:src/renderer/components/cardDissolveMaterial.ts",
+      "target": "symbol:src/renderer/components/cardDissolveMaterial.ts#prewarmCardFaceOverlayShaders",
       "kind": "exports"
     },
     {
@@ -128679,6 +128695,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/cardDepartureWorld.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/cardDepartureWorld.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/cardDissolveMaterial.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/cardDissolveMaterial.ts",
       "kind": "imports"
     },
     {

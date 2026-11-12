@@ -1,6 +1,13 @@
-import { MeshStandardMaterial, ShaderLib, type WebGLProgramParametersWithUniforms } from 'three';
+import { MeshStandardMaterial, ShaderLib, SRGBColorSpace, type Mesh, type MeshBasicMaterial, type Scene, type WebGLProgramParametersWithUniforms } from 'three';
 import { describe, expect, it } from 'vitest';
-import { CARD_DISSOLVE_STYLE, cardDissolveUniforms, createCardDissolveUniforms, installCardDissolve, setCardDissolve } from './cardDissolveMaterial';
+import {
+    CARD_DISSOLVE_STYLE,
+    cardDissolveUniforms,
+    createCardDissolveUniforms,
+    installCardDissolve,
+    prewarmCardFaceOverlayShaders,
+    setCardDissolve
+} from './cardDissolveMaterial';
 
 const compile = (material: MeshStandardMaterial) => {
     const shader = {
@@ -68,5 +75,24 @@ describe('card dissolve', () => {
         setCardDissolve(front, 0.5);
         expect(cardDissolveUniforms(back)!.uDissolve.value).toBe(0.5);
         expect(shared.uDissolveStyle.value).toBe(CARD_DISSOLVE_STYLE.tide);
+    });
+});
+
+describe('the face illustration shader warm-up', () => {
+    it('hands the warm-up a visible stand-in with the settings that pick the illustration program, the same one every floor', () => {
+        const scenes: Scene[] = [];
+        prewarmCardFaceOverlayShaders((scene) => scenes.push(scene));
+        prewarmCardFaceOverlayShaders((scene) => scenes.push(scene));
+        expect(scenes[1]).toBe(scenes[0]);
+        const meshes = scenes[0]!.children as Mesh[];
+        expect(meshes).toHaveLength(1);
+        // A renderer's compile skips what is hidden: the real illustrations are, until the first flip.
+        expect(meshes[0]!.visible).toBe(true);
+        const material = meshes[0]!.material as MeshBasicMaterial;
+        // What `TileBoardEffectOverlays` gives the illustration, so the two share one program.
+        expect(material.customProgramCacheKey()).toBe('cardDissolve');
+        expect(material.map?.colorSpace).toBe(SRGBColorSpace);
+        expect(material.alphaTest).toBe(0.08);
+        expect(material.toneMapped).toBe(false);
     });
 });

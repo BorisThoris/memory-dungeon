@@ -7,6 +7,7 @@ import { prewarmPairProximityBadges } from './pairProximityBadges';
 import { prewarmCardBackShaders, prewarmElementCardTextures } from './ElementCardBack';
 import { prewarmCardElementFxShaders } from './cardElementFx';
 import { prewarmCardDepartureShaders } from './cardDepartureWorld';
+import { prewarmCardFaceOverlayShaders } from './cardDissolveMaterial';
 import { prewarmRealmTileMarks, realmTileMarkWarmupSteps } from './realmTileMarkTextures';
 import {
     forwardRef,
@@ -301,6 +302,8 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
             // And the shaders a match's departure draws with, so the first matches do not link them.
             prewarmCardElementFxShaders((warm) => gl.compile(warm, camera, scene));
             prewarmCardDepartureShaders((warm) => gl.compile(warm, camera, scene));
+            // And the face illustration's, which sits hidden with the faces until the first flip.
+            prewarmCardFaceOverlayShaders((warm) => gl.compile(warm, camera, scene));
         } catch {
             // Shaders still compile on first use.
         }
