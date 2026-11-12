@@ -39,6 +39,10 @@ describe('browser desktop client persistence', () => {
             persistSaveData: async (saveData) => normalizeUnknownSaveDataOrThrow(await desktopClient.saveGame(saveData))
         });
         expect(firstBoot.settings.graphicsQuality).toBe('low');
+        // And it is the chosen tier that is stored, so the next launch starts on it too.
+        await vi.waitFor(async () => {
+            expect(normalizeUnknownSaveDataOrThrow(await desktopClient.getSaveData()).settings.graphicsQuality).toBe('low');
+        });
         vi.doUnmock('./graphicsTier');
     });
 

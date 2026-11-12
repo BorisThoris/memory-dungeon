@@ -16,7 +16,8 @@ const getBrowserStorage = (): Storage | null => {
     return window.localStorage ?? null;
 };
 
-const readLocalSave = (): SaveData => {
+/** The stored save, or `null` when nothing has been stored yet. Unreadable storage rejects. */
+const readStoredSave = (): SaveData | null => {
     let rawValue: string | null = null;
     try {
         const storage = getBrowserStorage();
@@ -30,7 +31,7 @@ const readLocalSave = (): SaveData => {
     }
 
     if (!rawValue) {
-        return createDefaultSaveData();
+        return null;
     }
 
     try {
@@ -40,6 +41,8 @@ const readLocalSave = (): SaveData => {
         throw error;
     }
 };
+
+const readLocalSave = (): SaveData => readStoredSave() ?? createDefaultSaveData();
 
 const writeLocalSave = (saveData: SaveData): SaveData => {
     const normalized = normalizeSaveData(saveData);
@@ -70,18 +73,16 @@ const fallbackClient: DesktopApi = {
      * 2026-11-12).
      */
     async getSaveData(): Promise<SaveData | null> {
-        let empty = false;
-        try {
-            const storage = getBrowserStorage();
-            empty = storage !== null && storage !== undefined && !storage.getItem(STORAGE_KEY);
-        } catch {
-            // Unreadable storage is not an empty one: readLocalSave reports it and rejects.
-        }
-        return empty ? null : readLocalSave();
+        return readStoredSave();
     },
+    /**
+     * Keeps the stored settings, so a stale game snapshot cannot overwrite them. With nothing stored
+     * there are none to keep: the first launch's save carries the tier hydration chose, and keeping
+     * the default instead wrote Medium over it (the Mali-G57 tablet, 2026-11-12).
+     */
     async saveGame(data: SaveData): Promise<SaveData> {
-        const currentSave = readLocalSave();
-        return writeLocalSave({ ...data, settings: currentSave.settings });
+        const currentSave = readStoredSave();
+        return writeLocalSave(currentSave ? { ...data, settings: currentSave.settings } : data);
     },
     async recoverUnreadableSave(): Promise<SaveData> {
         // The browser fallback keeps its save in local storage, so there is no file to set aside;
