@@ -832,7 +832,7 @@
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.auto-appendix.md",
       "category": "documentation",
       "bytes": 133866,
-      "sha256": "c9f5f67f39100014b9cc39671b1748a15c2f57954a6c17529db82dd678959553"
+      "sha256": "b34fa42e87b28c6c4aff5d54a7faa66901565c2bec7829e83630620f49a34369"
     },
     {
       "path": "docs/gameplay/GAMEPLAY_MECHANICS_CATALOG.md",
@@ -14854,7 +14854,7 @@
       "path": "src/shared/__snapshots__/mechanics-catalog-appendix-builder.test.ts.snap",
       "category": "source",
       "bytes": 134282,
-      "sha256": "7fb6d128e45bb69f4cbf07927fcdb5997554098b2867e6d0eff057a14b2d326d"
+      "sha256": "191ff30d95e8244c7d8dd107b0425396d57e5bde1314f62bb58dadc403e2db21"
     },
     {
       "path": "src/shared/accessibility-targets-audit.test.ts",
@@ -15573,8 +15573,8 @@
     {
       "path": "src/shared/depth-rules.ts",
       "category": "source",
-      "bytes": 5779,
-      "sha256": "64ce8ae623ab148b466cca20d8e4333284c22b2b06f702ffa0530e43539287c3"
+      "bytes": 5792,
+      "sha256": "178c3993630e40a419084e0db1781a4813d7800b96b61a2ab4d920970c50d626"
     },
     {
       "path": "src/shared/descent-length-rules.test.ts",
@@ -16497,8 +16497,8 @@
     {
       "path": "src/shared/mechanics-encyclopedia.ts",
       "category": "source",
-      "bytes": 78949,
-      "sha256": "d35f42a39eb2136f479f13fc469b28cf83d2d695c93a67a9fa44cdd91983f435"
+      "bytes": 78904,
+      "sha256": "45451fc93162d75dcc468e868dfe80f32397313d6135ddaaf28afa5785ce66ba"
     },
     {
       "path": "src/shared/memorize-phase-rules.test.ts",
