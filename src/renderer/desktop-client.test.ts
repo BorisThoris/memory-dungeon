@@ -27,6 +27,21 @@ describe('browser desktop client persistence', () => {
         await expect(desktopClient.getSaveData()).resolves.toEqual(committed);
     });
 
+    it('reports no save on a first launch, so hydration picks the graphics tier for the device', async () => {
+        // Low, not the default Medium, so the test can tell a chosen tier from the default one.
+        vi.doMock('./graphicsTier', () => ({ detectGraphicsTier: () => 'low' }));
+        const { desktopClient } = await import('./desktop-client');
+        await expect(desktopClient.getSaveData()).resolves.toBeNull();
+
+        const { createHydratedAppStatePatch } = await import('./store/hydrationController');
+        const firstBoot = await createHydratedAppStatePatch({
+            desktop: { getSaveData: () => desktopClient.getSaveData(), isSteamConnected: async () => false },
+            persistSaveData: async (saveData) => normalizeUnknownSaveDataOrThrow(await desktopClient.saveGame(saveData))
+        });
+        expect(firstBoot.settings.graphicsQuality).toBe('low');
+        vi.doUnmock('./graphicsTier');
+    });
+
     it('rejects unavailable storage reads instead of returning a disposable default profile', async () => {
         const reportError = vi.spyOn(console, 'error').mockImplementation(() => undefined);
         vi.spyOn(window.localStorage, 'getItem').mockImplementation(() => {

@@ -63,8 +63,21 @@ const fallbackClient: DesktopApi = {
         const saveData = readLocalSave();
         return writeLocalSave({ ...saveData, settings }).settings;
     },
-    async getSaveData(): Promise<SaveData> {
-        return readLocalSave();
+    /**
+     * `null` when nothing has been stored yet. Hydration reads that as a first launch and picks the
+     * graphics tier for the device; handing back the default save instead (which carries Medium)
+     * meant no web or Play player ever had a tier chosen for them (found on a Mali-G57 tablet,
+     * 2026-11-12).
+     */
+    async getSaveData(): Promise<SaveData | null> {
+        let empty = false;
+        try {
+            const storage = getBrowserStorage();
+            empty = storage !== null && storage !== undefined && !storage.getItem(STORAGE_KEY);
+        } catch {
+            // Unreadable storage is not an empty one: readLocalSave reports it and rejects.
+        }
+        return empty ? null : readLocalSave();
     },
     async saveGame(data: SaveData): Promise<SaveData> {
         const currentSave = readLocalSave();

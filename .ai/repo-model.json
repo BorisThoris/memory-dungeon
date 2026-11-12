@@ -13629,14 +13629,14 @@
     {
       "path": "src/renderer/desktop-client.test.ts",
       "category": "test",
-      "bytes": 2482,
-      "sha256": "0bc01f17d33cdc1e37ed7f24f89c9a03b7cfcac9437a6c6ed5335a5711a32782"
+      "bytes": 3422,
+      "sha256": "63e219f182dacdf54d228a3172b7a73d8e9e7f20e703ed895fce807384e9abc2"
     },
     {
       "path": "src/renderer/desktop-client.ts",
       "category": "source",
-      "bytes": 4204,
-      "sha256": "f5ba411d9e0845e9eacf7a19cc76201712b99eb552fc6f4a757fbd0cd3fa572f"
+      "bytes": 4864,
+      "sha256": "dfd60e227243bc44fa29801f49c63e13e0959f41cfa9bdf2d1f1afa889d32e4b"
     },
     {
       "path": "src/renderer/desktop.d.ts",
@@ -31878,7 +31878,7 @@
       "path": "src/renderer/desktop-client.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 52,
+      "lineCount": 67,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
@@ -31891,7 +31891,7 @@
       "path": "src/renderer/desktop-client.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 119,
+      "lineCount": 132,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
@@ -60113,16 +60113,16 @@
       "name": "desktopClient",
       "kind": "value",
       "file": "src/renderer/desktop-client.ts",
-      "line": 112,
-      "endLine": 112
+      "line": 125,
+      "endLine": 125
     },
     {
       "id": "symbol:src/renderer/desktop-client.ts#hasDesktopBridge",
       "name": "hasDesktopBridge",
       "kind": "value",
       "file": "src/renderer/desktop-client.ts",
-      "line": 118,
-      "endLine": 118
+      "line": 131,
+      "endLine": 131
     },
     {
       "id": "symbol:src/renderer/dev/BlueprintExplorer.tsx#default",
