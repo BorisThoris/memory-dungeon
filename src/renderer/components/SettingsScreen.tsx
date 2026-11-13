@@ -38,6 +38,7 @@ import { pairProximityUiStrings } from '../ui/strings/pairProximityUi';
 import packageJson from '../../../package.json';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import OverlayModal from './OverlayModal';
+import { ABOUT_COPY, CREDIT_GROUPS, PRIVACY_POLICY_URL, SOFTWARE_LICENCES } from '../copy/aboutCopy';
 import { DIAGNOSTICS_COPY, SAVE_FILE_COPY } from '../copy/diagnosticsSettings';
 import { SETTINGS_FOOTER_HINT, SETTINGS_HINTS } from '../copy/settingsHints';
 import { SegmentedControl, SettingsSection, SliderRow, ToggleRow } from './SettingsControls';
@@ -71,6 +72,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
     const {
         clearPersistenceWriteNotice,
         closeSettings,
+        deleteAllProgress,
+        runInProgress,
         persistenceWriteNotice,
         priorCrashNotice,
         revealSaveFile,
@@ -81,6 +84,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
         useShallow((state) => ({
             clearPersistenceWriteNotice: state.clearPersistenceWriteNotice,
             closeSettings: state.closeSettings,
+            deleteAllProgress: state.deleteAllProgress,
+            runInProgress: state.run !== null,
             persistenceWriteNotice: state.persistenceWriteNotice,
             priorCrashNotice: state.priorCrashNotice,
             revealSaveFile: state.revealSaveFile,
@@ -91,6 +96,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
     );
     const [draft, setDraft] = useState<Settings>(settings);
     const [activeCategory, setActiveCategory] = useState<SettingsCategory>('gameplay');
+    const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+    const [progressDeleted, setProgressDeleted] = useState(false);
     const [activeSubsection, setActiveSubsection] = useState<SettingsSubsection>(
         DEFAULT_SUBSECTION_BY_CATEGORY.gameplay
     );
@@ -627,6 +634,18 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         </div>
                                                     ))}
                                                 </div>
+                                                <p className={styles.headerCopy}>
+                                                    <a
+                                                        className={styles.word}
+                                                        data-testid="settings-privacy-link"
+                                                        href={PRIVACY_POLICY_URL}
+                                                        rel="noopener noreferrer"
+                                                        target="_blank"
+                                                        title={ABOUT_COPY.privacyHint}
+                                                    >
+                                                        {ABOUT_COPY.privacyLink}
+                                                    </a>
+                                                </p>
                                                 <div className={styles.profileSummaryGrid} data-testid="settings-premium-economy-policy">
                                                     {premiumEconomyRows.map((row) => (
                                                         <div className={styles.profileSummaryRow} key={row.id}>
@@ -634,6 +653,36 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                             <em>{row.copy}</em>
                                                         </div>
                                                     ))}
+                                                </div>
+                                            </SettingsSection>
+                                        ) : null}
+
+                                        {activeCategory === 'about' && showSubsection('credits') ? (
+                                            <SettingsSection title={ABOUT_COPY.creditsTitle}>
+                                                <div data-testid="settings-credits">
+                                                    {CREDIT_GROUPS.map((group) => (
+                                                        <div className={styles.profileSummaryGrid} key={group.title}>
+                                                            <p className={styles.headerCopy}><strong>{group.title}</strong></p>
+                                                            {group.lines.map((line) => (
+                                                                <div className={styles.profileSummaryRow} key={line.what}>
+                                                                    <strong>{line.what}</strong>
+                                                                    <span>{line.who}</span>
+                                                                    {line.note ? <em>{line.note}</em> : null}
+                                                                </div>
+                                                            ))}
+                                                        </div>
+                                                    ))}
+                                                    <p className={styles.headerCopy}><strong>{ABOUT_COPY.licencesTitle}</strong></p>
+                                                    <p className={styles.headerCopy}>{ABOUT_COPY.licencesLead}</p>
+                                                    <div className={styles.profileSummaryGrid} data-testid="settings-licences">
+                                                        {SOFTWARE_LICENCES.map((line) => (
+                                                            <div className={styles.profileSummaryRow} key={line.what}>
+                                                                <strong>{line.what}</strong>
+                                                                <span>{line.who}</span>
+                                                                {line.note ? <em>{line.note}</em> : null}
+                                                            </div>
+                                                        ))}
+                                                    </div>
                                                 </div>
                                             </SettingsSection>
                                         ) : null}
@@ -646,6 +695,22 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 </p>
                                                 <button className={styles.word} onClick={handleResetToDefaults} type="button">
                                                     Reset to defaults
+                                                </button>
+                                            </SettingsSection>
+                                        ) : null}
+
+                                        {/* Deleting progress under a live run would let that run's end write into the fresh profile. */}
+                                        {activeCategory === 'about' && showSubsection('reset') && !runInProgress ? (
+                                            <SettingsSection title={ABOUT_COPY.deleteTitle}>
+                                                <p className={styles.headerCopy}>{progressDeleted ? ABOUT_COPY.deleteDone : ABOUT_COPY.deleteLead}</p>
+                                                <button
+                                                    className={styles.word}
+                                                    data-testid="settings-delete-progress"
+                                                    disabled={progressDeleted}
+                                                    onClick={() => setDeleteConfirmOpen(true)}
+                                                    type="button"
+                                                >
+                                                    {ABOUT_COPY.deleteAction}
                                                 </button>
                                             </SettingsSection>
                                         ) : null}
@@ -680,6 +745,35 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                 </div>
             </div>
         </section>
+            {deleteConfirmOpen ? (
+                <OverlayModal
+                    actions={[
+                        {
+                            label: ABOUT_COPY.deleteConfirm,
+                            onClick: () => {
+                                setDeleteConfirmOpen(false);
+                                runPersistenceInBackground(() => deleteAllProgress().then(() => setProgressDeleted(true)));
+                            },
+                            variant: 'danger'
+                        },
+                        {
+                            label: ABOUT_COPY.deleteCancel,
+                            onClick: () => {
+                                playUiBack();
+                                setDeleteConfirmOpen(false);
+                            },
+                            variant: 'secondary'
+                        }
+                    ]}
+                    onEscape={() => {
+                        playUiBack();
+                        setDeleteConfirmOpen(false);
+                    }}
+                    subtitle={ABOUT_COPY.deleteConfirmBody}
+                    testId="settings-delete-progress-modal"
+                    title={ABOUT_COPY.deleteConfirmTitle}
+                />
+            ) : null}
             {unsavedBackOpen ? (
                 <OverlayModal
                     actions={[

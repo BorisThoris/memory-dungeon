@@ -24,6 +24,7 @@ type AppStoreInitialState = Pick<
     | 'settingsReturnView'
     | 'steamConnected'
     | 'subscreenReturnView'
+    | 'suspendedRun'
     | 'tileSwapArmed'
     | 'tileSwapFirstTileId'
     | 'view'
@@ -42,6 +43,7 @@ export const createAppStoreInitialState = (): AppStoreInitialState => {
         settings: saveData.settings,
         run: null,
         runStartSaveData: null,
+        suspendedRun: null,
         newlyUnlockedAchievements: [],
         achievementBridgeNotice: null,
         persistenceWriteNotice: null,

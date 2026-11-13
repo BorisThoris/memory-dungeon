@@ -26,14 +26,18 @@ vi.mock('../audio/uiSfx', () => ({
 vi.mock('zustand/react/shallow', () => ({
     useShallow: <T,>(fn: T) => fn
 }));
+const menuStore = vi.hoisted(() => ({
+    state: {
+        achievementBridgeNotice: null,
+        clearAchievementBridgeNotice: () => undefined,
+        persistenceWriteNotice: null,
+        clearPersistenceWriteNotice: () => undefined,
+        suspendedRun: null as null | { floor: number; score: number; savedAt: number; passAndPlay: boolean },
+        continueSuspendedRun: (() => undefined) as () => void
+    }
+}));
 vi.mock('../store/useAppStore', () => ({
-    useAppStore: (selector: (state: unknown) => unknown) =>
-        selector({
-            achievementBridgeNotice: null,
-            clearAchievementBridgeNotice: vi.fn(),
-            persistenceWriteNotice: null,
-            clearPersistenceWriteNotice: vi.fn()
-        })
+    useAppStore: (selector: (state: unknown) => unknown) => selector(menuStore.state)
 }));
 
 describe('MainMenu REG-009 mobile landscape density', () => {
@@ -113,6 +117,28 @@ describe('MainMenu as a title page', () => {
         expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(/Memory\s*Dungeon/);
         expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Dungeon Master');
         expect(group.querySelectorAll('h1, h2, h3')).toHaveLength(0);
+    });
+
+    it('puts a run left mid-way first, as Continue, with a new run beside it', async () => {
+        const user = userEvent.setup();
+        const continueSuspendedRun = vi.fn();
+        const onPlay = vi.fn();
+        menuStore.state.suspendedRun = { floor: 7, score: 12_345, savedAt: 1, passAndPlay: false };
+        menuStore.state.continueSuspendedRun = continueSuspendedRun;
+        try {
+            render(<MainMenu {...props} onPlay={onPlay} saveData={createDefaultSaveData()} />);
+            const group = screen.getByRole('group', { name: /primary actions/i });
+            const names = [...group.querySelectorAll('button')].map((button) => button.getAttribute('aria-label'));
+            expect(names.slice(0, 3)).toEqual(['Continue', 'New run', 'Tutorial Hall']);
+            expect(screen.queryByRole('button', { name: 'Play' })).toBeNull();
+            expect(screen.getByTestId('main-menu-continue')).toHaveTextContent('Floor 7 · 12,345 score');
+            await user.click(screen.getByRole('button', { name: 'Continue' }));
+            expect(continueSuspendedRun).toHaveBeenCalledTimes(1);
+            await user.click(screen.getByRole('button', { name: 'New run' }));
+            expect(onPlay).toHaveBeenCalledTimes(1);
+        } finally {
+            menuStore.state.suspendedRun = null;
+        }
     });
 
     it('says where the profile stands in the colophon, and what the last descent reached', () => {

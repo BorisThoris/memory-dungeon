@@ -105,6 +105,59 @@ describe('SettingsScreen', () => {
     });
 });
 
+describe('About: credits, licences, the privacy policy and deleting progress', () => {
+    beforeEach(() => {
+        const saveData = createDefaultSaveData();
+        useAppStore.setState({
+            closeSettings: vi.fn(),
+            hydrated: true,
+            run: null,
+            saveData,
+            settings: saveData.settings,
+            updateSettings: vi.fn().mockResolvedValue(undefined),
+            deleteAllProgress: vi.fn().mockResolvedValue(undefined)
+        });
+    });
+
+    it('credits the people and the software the game is made with, and links the privacy policy', async () => {
+        const user = userEvent.setup();
+        render(<SettingsScreen presentation="page" />);
+        await user.click(screen.getByRole('button', { name: /about/i }));
+        const privacy = screen.getByTestId('settings-privacy-link');
+        expect(privacy).toHaveAttribute('href', 'https://memory-dungeon-git.pages.dev/privacy');
+        expect(privacy).toHaveAttribute('rel', expect.stringContaining('noopener'));
+        await user.click(screen.getByRole('button', { name: /^credits$/i }));
+        expect(screen.getByTestId('settings-credits')).toHaveTextContent('Kenney');
+        expect(screen.getByTestId('settings-credits')).toHaveTextContent('SIL Open Font License 1.1');
+        expect(screen.getByTestId('settings-licences')).toHaveTextContent('three.js');
+    });
+
+    it('deletes progress only after a second, explicit yes', async () => {
+        const user = userEvent.setup();
+        render(<SettingsScreen presentation="page" />);
+        await user.click(screen.getByRole('button', { name: /about/i }));
+        await user.click(screen.getByRole('button', { name: /^reset$/i }));
+        await user.click(screen.getByTestId('settings-delete-progress'));
+        expect(screen.getByTestId('settings-delete-progress-modal')).toBeInTheDocument();
+        await user.click(screen.getByRole('button', { name: 'Keep my progress' }));
+        expect(useAppStore.getState().deleteAllProgress).not.toHaveBeenCalled();
+        await user.click(screen.getByTestId('settings-delete-progress'));
+        await user.click(screen.getByRole('button', { name: 'Delete everything' }));
+        expect(useAppStore.getState().deleteAllProgress).toHaveBeenCalledTimes(1);
+        expect(await screen.findByText(/Progress deleted/)).toBeInTheDocument();
+    });
+
+    it('does not offer it in the middle of a run', async () => {
+        useAppStore.setState({ run: { status: 'playing' } as never });
+        const user = userEvent.setup();
+        render(<SettingsScreen presentation="page" />);
+        await user.click(screen.getByRole('button', { name: /about/i }));
+        await user.click(screen.getByRole('button', { name: /^reset$/i }));
+        expect(screen.queryByTestId('settings-delete-progress')).toBeNull();
+        useAppStore.setState({ run: null });
+    });
+});
+
 describe('the crash reports line in Settings', () => {
     beforeEach(() => {
         const saveData = createDefaultSaveData();

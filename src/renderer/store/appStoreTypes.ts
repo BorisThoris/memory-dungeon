@@ -12,6 +12,7 @@ import type {
 } from '../../shared/contracts';
 import type { MetaProgressionUnlockResult } from '../../shared/meta-progression';
 import type { MatchScorePop, MismatchScorePop } from './matchScorePop';
+import type { SuspendedRunSummary } from './suspendedRun';
 
 export interface AppState {
     hydrated: boolean;
@@ -24,6 +25,12 @@ export interface AppState {
     settings: Settings;
     run: RunState | null;
     runStartSaveData: SaveData | null;
+    /** A run put down mid-way and waiting on the menu's Continue (`suspendedRun.ts`), or null. */
+    suspendedRun: SuspendedRunSummary | null;
+    /** Picks the put-down run back up, paused where it was left. */
+    continueSuspendedRun: () => void;
+    /** A fresh profile on this device, the settings kept (Settings > About > Reset). */
+    deleteAllProgress: () => Promise<void>;
     newlyUnlockedAchievements: AchievementId[];
     /** Non-blocking copy when Steam achievement sync fails (local save still applied). */
     achievementBridgeNotice: string | null;

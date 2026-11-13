@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3411,
-    "codeFileCount": 1331,
-    "exportedSymbolCount": 4417,
+    "trackedFileCount": 3416,
+    "codeFileCount": 1335,
+    "exportedSymbolCount": 4434,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12343
+    "relationshipCount": 12374
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "9b9e9901feb533884bef664a254ec88d5a3d7ac05a2197e2353058a1d86be718"
+      "sha256": "a5d9f2ccb471d2fb20d0bcda9e76f808fba8f1ff57e6a3be0e3d52e386930030"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4135,6 +4135,12 @@
       "sha256": "6724f2eabbfddec83e96635b4a14fec7568cc23cd211f8133f248914f3fe4645"
     },
     {
+      "path": "e2e/resume-run.spec.ts",
+      "category": "test",
+      "bytes": 3092,
+      "sha256": "f4209eded7f99c8b0dfc2c91eb5bf36a5f4e6ca8d79ff532d49a2f588f18849c"
+    },
+    {
       "path": "e2e/scholar-contract.spec.ts",
       "category": "test",
       "bytes": 1091,
@@ -5223,8 +5229,8 @@
     {
       "path": "scripts/card-pipeline/steam-achievement-icons.py",
       "category": "script",
-      "bytes": 3997,
-      "sha256": "ed6d600e81ba753fafcc30aa89a7a8d2be0b3dfda86b9c3e661bf600eb6fc78e"
+      "bytes": 3919,
+      "sha256": "87eafbd6f54560e7aa556ec0015858a555855558634146dab1ef53c38161b290"
     },
     {
       "path": "scripts/card-pipeline/steam-achievements.zimage.manifest.json",
@@ -6021,8 +6027,8 @@
     {
       "path": "src/main/index.ts",
       "category": "source",
-      "bytes": 9583,
-      "sha256": "cef420d80e8a730014ae65f8670474a7c4ffa1344b1e4be2b3d8e27f71fb81b6"
+      "bytes": 9689,
+      "sha256": "8ff4b4cb44342c6e3df2025d5f1ea9037de5e174d74887098a37a43031533853"
     },
     {
       "path": "src/main/ipc.test.ts",
@@ -9447,8 +9453,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-cartographer-v1-sprites.json",
       "category": "source",
-      "bytes": 84,
-      "sha256": "527ffcd102fd89b9537d6a0722ee8028e047b07523a8a1f100652b17ab0c6faf"
+      "bytes": 76,
+      "sha256": "aaf82e52d7b6ddd1ee17a4f5e1b6451b752e81d5a1a6e86d4e2c21f00df10d8d"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprite-brazier-l.png",
@@ -9537,8 +9543,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-ember-v1-sprites.json",
       "category": "source",
-      "bytes": 2024,
-      "sha256": "23bb0f2ecfca7ddbe0b8aa32eda3003965b993e63b8370c83a10b27609d5cfaa"
+      "bytes": 1931,
+      "sha256": "bb88ab2a409b132dbd11c1ae8924360e60ec7cd21d0dbf536d652bb347280577"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprite-ice-l.png",
@@ -9579,8 +9585,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-frost-v1-sprites.json",
       "category": "source",
-      "bytes": 887,
-      "sha256": "35607f771bf3861de95e51a0e696debd8fbcbfd04ffd925e7d6fa6e9073ae3e2"
+      "bytes": 842,
+      "sha256": "adad130921f7ce95e66a5c02b566db78171eace8c54257d1c3abbf864354829f"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprite-canopy.png",
@@ -9597,14 +9603,14 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-grove-v1-sprites.json",
       "category": "source",
-      "bytes": 354,
-      "sha256": "fd9542fc7962cbe81ea98e9b5c89206c91f2dd236d158f17fb62d2d62623ea60"
+      "bytes": 333,
+      "sha256": "d3cfcb13174f7ff4d8fbf449121875e79646e617d93b9638a8bbe25ac4b8d06d"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-keeper-v1-sprites.json",
       "category": "source",
-      "bytes": 84,
-      "sha256": "527ffcd102fd89b9537d6a0722ee8028e047b07523a8a1f100652b17ab0c6faf"
+      "bytes": 76,
+      "sha256": "aaf82e52d7b6ddd1ee17a4f5e1b6451b752e81d5a1a6e86d4e2c21f00df10d8d"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprite-puddles.png",
@@ -9633,8 +9639,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-storm-v1-sprites.json",
       "category": "source",
-      "bytes": 622,
-      "sha256": "b2b367324b277dd11d8e7594cb419a5acaa251ccdd8f30cda5ba2377002bbc31"
+      "bytes": 589,
+      "sha256": "c8cf47faa174007e7e89d2012c568afe434fae8ebff66ae39c91d6d384f563bb"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprite-shaft.png",
@@ -9663,14 +9669,14 @@
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-tide-v1-sprites.json",
       "category": "source",
-      "bytes": 629,
-      "sha256": "6dac05742c4716b09f42b330a7a02ae1c7103a09c65d3532f2a98b0e72a85f6c"
+      "bytes": 596,
+      "sha256": "4c32abf73f74014acd5a9b249e4a0fb803bbc9b0b6998e2cdd7f3bd98a35be3a"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-gameplay-realm-warden-v1-sprites.json",
       "category": "source",
-      "bytes": 84,
-      "sha256": "527ffcd102fd89b9537d6a0722ee8028e047b07523a8a1f100652b17ab0c6faf"
+      "bytes": 76,
+      "sha256": "aaf82e52d7b6ddd1ee17a4f5e1b6451b752e81d5a1a6e86d4e2c21f00df10d8d"
     },
     {
       "path": "src/renderer/assets/ui/sprites/bg-main-menu-cathedral-v2-sprite-candle-00.png",
@@ -10059,8 +10065,8 @@
     {
       "path": "src/renderer/assets/ui/sprites/gold-coin-v1-sprites.json",
       "category": "source",
-      "bytes": 267,
-      "sha256": "6137a0a4ce94540182abf02c1030b62affc9758b4d27c1249829e16c3936c93f"
+      "bytes": 248,
+      "sha256": "7e0e00b306e8dac158dd56db3c3a37bb0b3fe7382879b32cad82a9f16ba9e689"
     },
     {
       "path": "src/renderer/assets/ui/sprites/index.ts",
@@ -11475,20 +11481,20 @@
     {
       "path": "src/renderer/components/MainMenu.module.css",
       "category": "source",
-      "bytes": 19510,
-      "sha256": "4d817f2cd7b49ec1e2863af52891400c702be8a47aeee3baa2f17254e3cb4e71"
+      "bytes": 19767,
+      "sha256": "6ba1ec650f9291de55e92d2fe1d6dd4721e556b42c5434ca1e9385cd8eed7708"
     },
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
       "category": "test",
-      "bytes": 6705,
-      "sha256": "a2c9caae5b75481ea62837d0e9d1db522d70499ef0205842fffb0144d6133406"
+      "bytes": 8267,
+      "sha256": "8de35eaa8d7a9f89ca5e57ab6564895b96602806650758d37bbfb45c49df6616"
     },
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 13809,
-      "sha256": "992550b70aad942437b855b33144cfe7191e0558823e15016ddf089c42217bc0"
+      "bytes": 16598,
+      "sha256": "489e75d5557c074ece9707f9238fa1b9084fffe7b948ec3548e66b6d20cb2cc1"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -12129,8 +12135,8 @@
     {
       "path": "src/renderer/components/settingsNavigationModel.ts",
       "category": "source",
-      "bytes": 1998,
-      "sha256": "ca615077646a20d8fad366b96f2022ed924c01679687120362d5f2212b8d8928"
+      "bytes": 2059,
+      "sha256": "db7af444b05cb5f77d9e58dc3430532734b92431d7e989bebeb56d5533448f75"
     },
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
@@ -12141,14 +12147,14 @@
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "category": "test",
-      "bytes": 7040,
-      "sha256": "cbcd899f4209b2004fda642705d4a5f9f47c444b5ffe647df4bc68dd809a00bb"
+      "bytes": 9929,
+      "sha256": "515771760bcab323103cc4485ef2caddc11f6b95db93127b4d23862c6bdee857"
     },
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 45003,
-      "sha256": "d33bcdbf927fa1c10ae4da293a50294e72bbe522a87c477061c8e19f00039cfc"
+      "bytes": 51393,
+      "sha256": "0cfac5fb2e39cbd2d26602da546b661e617b2b3a72e73fa064a24c6a298bfbdb"
     },
     {
       "path": "src/renderer/components/shaderFirstUse.test.ts",
@@ -13201,6 +13207,12 @@
       "sha256": "eea50648d73725279629ed2c6a21a2e7e9c6f449d5c30b726e8bff709e885e21"
     },
     {
+      "path": "src/renderer/copy/aboutCopy.ts",
+      "category": "source",
+      "bytes": 4484,
+      "sha256": "7c8cb4551c2df1ec5f9368262f5b5fc8d7bb893377d016ade5e76325cd3fdb27"
+    },
+    {
       "path": "src/renderer/copy/anchorBeat.test.ts",
       "category": "test",
       "bytes": 1218,
@@ -13587,8 +13599,8 @@
     {
       "path": "src/renderer/copy/settingsHints.ts",
       "category": "source",
-      "bytes": 2357,
-      "sha256": "a0ae159dcce858561c515b02166aecdf179c93c0a40538420fabc7d425ddc276"
+      "bytes": 2414,
+      "sha256": "1c8a40ac5ae8d295268c75b28ebed3037dfdf1989f51c44029874439eb3f01da"
     },
     {
       "path": "src/renderer/copy/skittishCardsBeat.test.ts",
@@ -13607,6 +13619,12 @@
       "category": "source",
       "bytes": 3194,
       "sha256": "37dd7409bfbc54942c0704f5ef8c554aaedca5123a1f805e4700cb697299a4ae"
+    },
+    {
+      "path": "src/renderer/copy/suspendedRunCopy.ts",
+      "category": "source",
+      "bytes": 356,
+      "sha256": "fb2353437785bd0b2431d4c6b17d3d8aec041b63890efe5d897f25618bac2425"
     },
     {
       "path": "src/renderer/copy/traitInteractionLaneMap.test.ts",
@@ -14247,14 +14265,14 @@
     {
       "path": "src/renderer/store/appStoreInitialState.ts",
       "category": "source",
-      "bytes": 1630,
-      "sha256": "3f88f3ced3c9c71ab8f8d372e2fc3dda7a36482e8b562625e32c799037eb5fc5"
+      "bytes": 1679,
+      "sha256": "825265785d2b8d0f9932dd522c5a838b61d4cdd8ed9dec512cbc78644a37fcba"
     },
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 6942,
-      "sha256": "a3c3c3369b4d5f2c8bbc967fa36b224e4c34c6fd830c4b0c62dfcd64f29ab41a"
+      "bytes": 7386,
+      "sha256": "450ed1a48ed54fa018950109c18269f12d406ca05f031199261b0130ebeeaae2"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -14569,6 +14587,18 @@
       "sha256": "f77dd73d0e35b08734e2d5a2677b5a082c3546f607dd7c5cdf6a669ae7e9202a"
     },
     {
+      "path": "src/renderer/store/suspendedRun.test.ts",
+      "category": "test",
+      "bytes": 2463,
+      "sha256": "9b0a3c37e5173eae30756c22c0f6cb6510f12c1ecdcc9a842b5939f2e68548d3"
+    },
+    {
+      "path": "src/renderer/store/suspendedRun.ts",
+      "category": "source",
+      "bytes": 4336,
+      "sha256": "bc67f77777f8a1495867e6d784b7a056e6b4eb0649bcb6bcbf5456f8dbefc712"
+    },
+    {
       "path": "src/renderer/store/tilePressAudioCues.test.ts",
       "category": "test",
       "bytes": 1612,
@@ -14595,14 +14625,14 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 40878,
-      "sha256": "3222c3d7d0519be1a44a4f679e10edbeffc00838d54b1930c04cd3d1ea3aa5b6"
+      "bytes": 43585,
+      "sha256": "4a84fcea1f02b620c2a163fb3c1adb530830b6fe351a7b57077783b3fa4d529a"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 35632,
-      "sha256": "17016fa55d2a9c65e8fa8a6520611297f012343e85b22bdf07faf1b78a158811"
+      "bytes": 39183,
+      "sha256": "f6b04a0c1a3afb280aac1c45fd73d0ba9d81b8eae30464ce1935c946a16c8e37"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -20627,7 +20657,7 @@
       "path": "src/main/index.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 259,
+      "lineCount": 260,
       "imports": [
         "file:src/main/crash-reporter.ts",
         "file:src/main/dev-server-url.ts",
@@ -25664,7 +25694,7 @@
       "path": "src/renderer/components/MainMenu.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 152,
+      "lineCount": 178,
       "imports": [
         "file:src/renderer/components/MainMenu.tsx",
         "file:src/shared/save-data.ts"
@@ -25677,7 +25707,7 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 273,
+      "lineCount": 316,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -25686,6 +25716,7 @@
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/components/tutorialHallContext.ts",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
+        "file:src/renderer/copy/suspendedRunCopy.ts",
         "file:src/renderer/desktop-client.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
         "file:src/renderer/platformTilt/usePlatformTiltField.ts",
@@ -27452,7 +27483,7 @@
       "path": "src/renderer/components/settingsNavigationModel.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 60,
+      "lineCount": 62,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/settingsNavigationModel.ts#DEFAULT_SUBSECTION_BY_CATEGORY",
@@ -27468,7 +27499,7 @@
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 146,
+      "lineCount": 199,
       "imports": [
         "file:src/renderer/components/SettingsScreen.tsx",
         "file:src/renderer/dev/useDevOptions.ts",
@@ -27483,7 +27514,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 728,
+      "lineCount": 822,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -27491,6 +27522,7 @@
         "file:src/renderer/components/OverlayModal.tsx",
         "file:src/renderer/components/SettingsControls.tsx",
         "file:src/renderer/components/settingsNavigationModel.ts",
+        "file:src/renderer/copy/aboutCopy.ts",
         "file:src/renderer/copy/diagnosticsSettings.ts",
         "file:src/renderer/copy/settingsHints.ts",
         "file:src/renderer/dev/useDevOptions.ts",
@@ -30716,6 +30748,23 @@
       ]
     },
     {
+      "id": "file:src/renderer/copy/aboutCopy.ts",
+      "path": "src/renderer/copy/aboutCopy.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 88,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/aboutCopy.ts#ABOUT_COPY",
+        "symbol:src/renderer/copy/aboutCopy.ts#CREDIT_GROUPS",
+        "symbol:src/renderer/copy/aboutCopy.ts#CreditGroup",
+        "symbol:src/renderer/copy/aboutCopy.ts#CreditLine",
+        "symbol:src/renderer/copy/aboutCopy.ts#PRIVACY_POLICY_URL",
+        "symbol:src/renderer/copy/aboutCopy.ts#SOFTWARE_LICENCES"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/copy/anchorBeat.test.ts",
       "path": "src/renderer/copy/anchorBeat.test.ts",
       "layer": "renderer",
@@ -31840,6 +31889,20 @@
       "exports": [
         "symbol:src/renderer/copy/storeSheet.ts#BOMB_TOOL_COPY",
         "symbol:src/renderer/copy/storeSheet.ts#STORE_SHEET_COPY"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/copy/suspendedRunCopy.ts",
+      "path": "src/renderer/copy/suspendedRunCopy.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 8,
+      "imports": [
+        "file:src/renderer/store/suspendedRun.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/copy/suspendedRunCopy.ts#SUSPENDED_RUN_COPY"
       ],
       "testedBy": []
     },
@@ -33386,7 +33449,7 @@
       "path": "src/renderer/store/appStoreInitialState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 59,
+      "lineCount": 61,
       "imports": [
         "file:src/renderer/store/appStoreTypes.ts",
         "file:src/renderer/store/matchScorePop.ts",
@@ -33402,9 +33465,10 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 144,
+      "lineCount": 151,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
+        "file:src/renderer/store/suspendedRun.ts",
         "file:src/shared/boss-reward-rules.ts",
         "file:src/shared/classic-run-setup.ts",
         "file:src/shared/contracts.ts",
@@ -34408,6 +34472,45 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/store/suspendedRun.test.ts",
+      "path": "src/renderer/store/suspendedRun.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 54,
+      "imports": [
+        "file:src/renderer/store/suspendedRun.ts",
+        "file:src/shared/game-core.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/store/suspendedRun.ts",
+      "path": "src/renderer/store/suspendedRun.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 115,
+      "imports": [
+        "file:src/shared/contracts.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/store/suspendedRun.ts#clearSuspendedRun",
+        "symbol:src/renderer/store/suspendedRun.ts#isSuspendableRun",
+        "symbol:src/renderer/store/suspendedRun.ts#readSuspendedRun",
+        "symbol:src/renderer/store/suspendedRun.ts#summarizeSuspendedRun",
+        "symbol:src/renderer/store/suspendedRun.ts#SUSPENDED_RUN_FORMAT",
+        "symbol:src/renderer/store/suspendedRun.ts#SUSPENDED_RUN_STORAGE_KEY",
+        "symbol:src/renderer/store/suspendedRun.ts#SuspendedRun",
+        "symbol:src/renderer/store/suspendedRun.ts#SuspendedRunSummary",
+        "symbol:src/renderer/store/suspendedRun.ts#writeSuspendedRun"
+      ],
+      "testedBy": [
+        "file:src/renderer/store/suspendedRun.test.ts",
+        "file:src/renderer/store/useAppStore.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/store/tilePressAudioCues.test.ts",
       "path": "src/renderer/store/tilePressAudioCues.test.ts",
       "layer": "renderer",
@@ -34482,9 +34585,10 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 984,
+      "lineCount": 1046,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
+        "file:src/renderer/store/suspendedRun.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/shared/board-generation.ts",
         "file:src/shared/chain-tier-rules.ts",
@@ -34507,7 +34611,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 963,
+      "lineCount": 1035,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -34536,6 +34640,7 @@
         "file:src/renderer/store/runSurfaceState.ts",
         "file:src/renderer/store/runTimerController.ts",
         "file:src/renderer/store/savePreferenceExecutor.ts",
+        "file:src/renderer/store/suspendedRun.ts",
         "file:src/renderer/store/tilePressAudioCues.ts",
         "file:src/renderer/store/tilePressController.ts",
         "file:src/shared/board-layout-rules.ts",
@@ -34569,6 +34674,7 @@
         "file:src/shared/zone-rules.ts"
       ],
       "exports": [
+        "symbol:src/renderer/store/useAppStore.ts#putTheRunDown",
         "symbol:src/renderer/store/useAppStore.ts#useAppStore"
       ],
       "testedBy": [
@@ -39574,6 +39680,7 @@
         "file:src/renderer/store/runSurfaceState.test.ts",
         "file:src/renderer/store/runTimerController.test.ts",
         "file:src/renderer/store/runTimerResumeConditions.test.ts",
+        "file:src/renderer/store/suspendedRun.test.ts",
         "file:src/renderer/store/tilePressController.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/shared/achievements.test.ts",
@@ -44588,6 +44695,7 @@
         "file:src/renderer/store/savePreferenceExecutor.test.ts",
         "file:src/renderer/store/savePreferenceSurfaceState.test.ts",
         "file:src/renderer/store/saveReadRecovery.test.ts",
+        "file:src/renderer/store/suspendedRun.test.ts",
         "file:src/renderer/store/useAppStore.test.ts",
         "file:src/renderer/testPace.test.ts",
         "file:src/renderer/uiScaleLimits.test.ts",
@@ -52565,8 +52673,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 272,
-      "endLine": 272
+      "line": 315,
+      "endLine": 315
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -54901,24 +55009,24 @@
       "name": "DEFAULT_SUBSECTION_BY_CATEGORY",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 51,
-      "endLine": 59
+      "line": 53,
+      "endLine": 61
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SETTINGS_CATEGORIES",
       "name": "SETTINGS_CATEGORIES",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 16,
-      "endLine": 24
+      "line": 17,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SETTINGS_SUBSECTIONS",
       "name": "SETTINGS_SUBSECTIONS",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 26,
-      "endLine": 49
+      "line": 27,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SettingsCategory",
@@ -54934,15 +55042,15 @@
       "kind": "type",
       "file": "src/renderer/components/settingsNavigationModel.ts",
       "line": 3,
-      "endLine": 14
+      "endLine": 15
     },
     {
       "id": "symbol:src/renderer/components/SettingsScreen.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 727,
-      "endLine": 727
+      "line": 821,
+      "endLine": 821
     },
     {
       "id": "symbol:src/renderer/components/shaderFirstUse.ts#finishShaderProgramsOffFrame",
@@ -58649,6 +58757,54 @@
       "endLine": 77
     },
     {
+      "id": "symbol:src/renderer/copy/aboutCopy.ts#ABOUT_COPY",
+      "name": "ABOUT_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/aboutCopy.ts",
+      "line": 23,
+      "endLine": 38
+    },
+    {
+      "id": "symbol:src/renderer/copy/aboutCopy.ts#CREDIT_GROUPS",
+      "name": "CREDIT_GROUPS",
+      "kind": "value",
+      "file": "src/renderer/copy/aboutCopy.ts",
+      "line": 40,
+      "endLine": 72
+    },
+    {
+      "id": "symbol:src/renderer/copy/aboutCopy.ts#CreditGroup",
+      "name": "CreditGroup",
+      "kind": "interface",
+      "file": "src/renderer/copy/aboutCopy.ts",
+      "line": 15,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/copy/aboutCopy.ts#CreditLine",
+      "name": "CreditLine",
+      "kind": "interface",
+      "file": "src/renderer/copy/aboutCopy.ts",
+      "line": 8,
+      "endLine": 13
+    },
+    {
+      "id": "symbol:src/renderer/copy/aboutCopy.ts#PRIVACY_POLICY_URL",
+      "name": "PRIVACY_POLICY_URL",
+      "kind": "value",
+      "file": "src/renderer/copy/aboutCopy.ts",
+      "line": 21,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/renderer/copy/aboutCopy.ts#SOFTWARE_LICENCES",
+      "name": "SOFTWARE_LICENCES",
+      "kind": "value",
+      "file": "src/renderer/copy/aboutCopy.ts",
+      "line": 75,
+      "endLine": 87
+    },
+    {
       "id": "symbol:src/renderer/copy/anchorBeat.ts#ANCHOR_CLAIMED_ANNOUNCEMENT",
       "name": "ANCHOR_CLAIMED_ANNOUNCEMENT",
       "kind": "value",
@@ -60065,6 +60221,14 @@
       "endLine": 37
     },
     {
+      "id": "symbol:src/renderer/copy/suspendedRunCopy.ts#SUSPENDED_RUN_COPY",
+      "name": "SUSPENDED_RUN_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/suspendedRunCopy.ts",
+      "line": 4,
+      "endLine": 7
+    },
+    {
       "id": "symbol:src/renderer/copy/traitInteractionLaneMap.ts#buildTraitInteractionLaneMap",
       "name": "buildTraitInteractionLaneMap",
       "kind": "value",
@@ -61421,16 +61585,16 @@
       "name": "createAppStoreInitialState",
       "kind": "value",
       "file": "src/renderer/store/appStoreInitialState.ts",
-      "line": 32,
-      "endLine": 58
+      "line": 33,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/store/appStoreTypes.ts#AppState",
       "name": "AppState",
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
-      "line": 16,
-      "endLine": 143
+      "line": 17,
+      "endLine": 150
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -62529,6 +62693,78 @@
       "endLine": 7
     },
     {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#clearSuspendedRun",
+      "name": "clearSuspendedRun",
+      "kind": "value",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 63,
+      "endLine": 69
+    },
+    {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#isSuspendableRun",
+      "name": "isSuspendableRun",
+      "kind": "value",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 46,
+      "endLine": 47
+    },
+    {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#readSuspendedRun",
+      "name": "readSuspendedRun",
+      "kind": "value",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 74,
+      "endLine": 104
+    },
+    {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#summarizeSuspendedRun",
+      "name": "summarizeSuspendedRun",
+      "kind": "value",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 106,
+      "endLine": 114
+    },
+    {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#SUSPENDED_RUN_FORMAT",
+      "name": "SUSPENDED_RUN_FORMAT",
+      "kind": "value",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 19,
+      "endLine": 19
+    },
+    {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#SUSPENDED_RUN_STORAGE_KEY",
+      "name": "SUSPENDED_RUN_STORAGE_KEY",
+      "kind": "value",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#SuspendedRun",
+      "name": "SuspendedRun",
+      "kind": "interface",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 21,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#SuspendedRunSummary",
+      "name": "SuspendedRunSummary",
+      "kind": "interface",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 30,
+      "endLine": 35
+    },
+    {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#writeSuspendedRun",
+      "name": "writeSuspendedRun",
+      "kind": "value",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 49,
+      "endLine": 61
+    },
+    {
       "id": "symbol:src/renderer/store/tilePressAudioCues.ts#playTilePressAudioCues",
       "name": "playTilePressAudioCues",
       "kind": "value",
@@ -62569,12 +62805,20 @@
       "endLine": 15
     },
     {
+      "id": "symbol:src/renderer/store/useAppStore.ts#putTheRunDown",
+      "name": "putTheRunDown",
+      "kind": "value",
+      "file": "src/renderer/store/useAppStore.ts",
+      "line": 1014,
+      "endLine": 1027
+    },
+    {
       "id": "symbol:src/renderer/store/useAppStore.ts#useAppStore",
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 267,
-      "endLine": 950
+      "line": 269,
+      "endLine": 972
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -98462,6 +98706,42 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/aboutCopy.ts->symbol:src/renderer/copy/aboutCopy.ts#ABOUT_COPY",
+      "source": "file:src/renderer/copy/aboutCopy.ts",
+      "target": "symbol:src/renderer/copy/aboutCopy.ts#ABOUT_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/aboutCopy.ts->symbol:src/renderer/copy/aboutCopy.ts#CREDIT_GROUPS",
+      "source": "file:src/renderer/copy/aboutCopy.ts",
+      "target": "symbol:src/renderer/copy/aboutCopy.ts#CREDIT_GROUPS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/aboutCopy.ts->symbol:src/renderer/copy/aboutCopy.ts#CreditGroup",
+      "source": "file:src/renderer/copy/aboutCopy.ts",
+      "target": "symbol:src/renderer/copy/aboutCopy.ts#CreditGroup",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/aboutCopy.ts->symbol:src/renderer/copy/aboutCopy.ts#CreditLine",
+      "source": "file:src/renderer/copy/aboutCopy.ts",
+      "target": "symbol:src/renderer/copy/aboutCopy.ts#CreditLine",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/aboutCopy.ts->symbol:src/renderer/copy/aboutCopy.ts#PRIVACY_POLICY_URL",
+      "source": "file:src/renderer/copy/aboutCopy.ts",
+      "target": "symbol:src/renderer/copy/aboutCopy.ts#PRIVACY_POLICY_URL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/aboutCopy.ts->symbol:src/renderer/copy/aboutCopy.ts#SOFTWARE_LICENCES",
+      "source": "file:src/renderer/copy/aboutCopy.ts",
+      "target": "symbol:src/renderer/copy/aboutCopy.ts#SOFTWARE_LICENCES",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/anchorBeat.ts->symbol:src/renderer/copy/anchorBeat.ts#ANCHOR_CLAIMED_ANNOUNCEMENT",
       "source": "file:src/renderer/copy/anchorBeat.ts",
       "target": "symbol:src/renderer/copy/anchorBeat.ts#ANCHOR_CLAIMED_ANNOUNCEMENT",
@@ -99521,6 +99801,12 @@
       "id": "exports:src/renderer/copy/storeSheet.ts->symbol:src/renderer/copy/storeSheet.ts#STORE_SHEET_COPY",
       "source": "file:src/renderer/copy/storeSheet.ts",
       "target": "symbol:src/renderer/copy/storeSheet.ts#STORE_SHEET_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/suspendedRunCopy.ts->symbol:src/renderer/copy/suspendedRunCopy.ts#SUSPENDED_RUN_COPY",
+      "source": "file:src/renderer/copy/suspendedRunCopy.ts",
+      "target": "symbol:src/renderer/copy/suspendedRunCopy.ts#SUSPENDED_RUN_COPY",
       "kind": "exports"
     },
     {
@@ -101372,6 +101658,60 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#clearSuspendedRun",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#clearSuspendedRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#isSuspendableRun",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#isSuspendableRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#readSuspendedRun",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#readSuspendedRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#summarizeSuspendedRun",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#summarizeSuspendedRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#SUSPENDED_RUN_FORMAT",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#SUSPENDED_RUN_FORMAT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#SUSPENDED_RUN_STORAGE_KEY",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#SUSPENDED_RUN_STORAGE_KEY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#SuspendedRun",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#SuspendedRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#SuspendedRunSummary",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#SuspendedRunSummary",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#writeSuspendedRun",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#writeSuspendedRun",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/store/tilePressAudioCues.ts->symbol:src/renderer/store/tilePressAudioCues.ts#playTilePressAudioCues",
       "source": "file:src/renderer/store/tilePressAudioCues.ts",
       "target": "symbol:src/renderer/store/tilePressAudioCues.ts#playTilePressAudioCues",
@@ -101399,6 +101739,12 @@
       "id": "exports:src/renderer/store/tilePressController.ts->symbol:src/renderer/store/tilePressController.ts#TilePressAudioCue",
       "source": "file:src/renderer/store/tilePressController.ts",
       "target": "symbol:src/renderer/store/tilePressController.ts#TilePressAudioCue",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/useAppStore.ts->symbol:src/renderer/store/useAppStore.ts#putTheRunDown",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "symbol:src/renderer/store/useAppStore.ts#putTheRunDown",
       "kind": "exports"
     },
     {
@@ -124456,6 +124802,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/copy/suspendedRunCopy.ts",
+      "source": "file:src/renderer/components/MainMenu.tsx",
+      "target": "file:src/renderer/copy/suspendedRunCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/desktop-client.ts",
       "source": "file:src/renderer/components/MainMenu.tsx",
       "target": "file:src/renderer/desktop-client.ts",
@@ -126331,6 +126683,12 @@
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/components/settingsNavigationModel.ts",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/components/settingsNavigationModel.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/copy/aboutCopy.ts",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/renderer/copy/aboutCopy.ts",
       "kind": "imports"
     },
     {
@@ -130696,6 +131054,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/copy/suspendedRunCopy.ts->src/renderer/store/suspendedRun.ts",
+      "source": "file:src/renderer/copy/suspendedRunCopy.ts",
+      "target": "file:src/renderer/store/suspendedRun.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/copy/traitInteractionLaneMap.test.ts->src/renderer/copy/traitInteractionLaneMap.ts",
       "source": "file:src/renderer/copy/traitInteractionLaneMap.test.ts",
       "target": "file:src/renderer/copy/traitInteractionLaneMap.ts",
@@ -131581,6 +131945,12 @@
       "id": "imports:src/renderer/store/appStoreTypes.ts->src/renderer/store/matchScorePop.ts",
       "source": "file:src/renderer/store/appStoreTypes.ts",
       "target": "file:src/renderer/store/matchScorePop.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/appStoreTypes.ts->src/renderer/store/suspendedRun.ts",
+      "source": "file:src/renderer/store/appStoreTypes.ts",
+      "target": "file:src/renderer/store/suspendedRun.ts",
       "kind": "imports"
     },
     {
@@ -132784,6 +133154,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/store/suspendedRun.test.ts->src/renderer/store/suspendedRun.ts",
+      "source": "file:src/renderer/store/suspendedRun.test.ts",
+      "target": "file:src/renderer/store/suspendedRun.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/suspendedRun.test.ts->src/shared/game-core.ts",
+      "source": "file:src/renderer/store/suspendedRun.test.ts",
+      "target": "file:src/shared/game-core.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/suspendedRun.test.ts->src/shared/save-data.ts",
+      "source": "file:src/renderer/store/suspendedRun.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/suspendedRun.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/store/tilePressAudioCues.test.ts->src/renderer/store/tilePressAudioCues.ts",
       "source": "file:src/renderer/store/tilePressAudioCues.test.ts",
       "target": "file:src/renderer/store/tilePressAudioCues.ts",
@@ -132871,6 +133265,12 @@
       "id": "imports:src/renderer/store/useAppStore.test.ts->src/renderer/store/matchScorePop.ts",
       "source": "file:src/renderer/store/useAppStore.test.ts",
       "target": "file:src/renderer/store/matchScorePop.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/useAppStore.test.ts->src/renderer/store/suspendedRun.ts",
+      "source": "file:src/renderer/store/useAppStore.test.ts",
+      "target": "file:src/renderer/store/suspendedRun.ts",
       "kind": "imports"
     },
     {
@@ -133111,6 +133511,12 @@
       "id": "imports:src/renderer/store/useAppStore.ts->src/renderer/store/savePreferenceExecutor.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/renderer/store/savePreferenceExecutor.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/store/useAppStore.ts->src/renderer/store/suspendedRun.ts",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/renderer/store/suspendedRun.ts",
       "kind": "imports"
     },
     {
@@ -153807,6 +154213,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/store/suspendedRun.ts->file:src/renderer/store/suspendedRun.test.ts",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "file:src/renderer/store/suspendedRun.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/store/suspendedRun.ts->file:src/renderer/store/useAppStore.test.ts",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "file:src/renderer/store/useAppStore.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/store/tilePressAudioCues.ts->file:src/renderer/store/tilePressAudioCues.test.ts",
       "source": "file:src/renderer/store/tilePressAudioCues.ts",
       "target": "file:src/renderer/store/tilePressAudioCues.test.ts",
@@ -157197,6 +157615,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/game-core.ts->file:src/renderer/store/suspendedRun.test.ts",
+      "source": "file:src/shared/game-core.ts",
+      "target": "file:src/renderer/store/suspendedRun.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/game-core.ts->file:src/renderer/store/tilePressController.test.ts",
       "source": "file:src/shared/game-core.ts",
       "target": "file:src/renderer/store/tilePressController.test.ts",
@@ -159846,6 +160270,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/renderer/store/saveReadRecovery.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/renderer/store/saveReadRecovery.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/renderer/store/suspendedRun.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/renderer/store/suspendedRun.test.ts",
       "kind": "tested_by"
     },
     {

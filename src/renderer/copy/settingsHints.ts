@@ -21,7 +21,7 @@ export const SETTINGS_HINTS = {
     masterVolume: 'Overall volume for everything.',
     musicVolume: 'Menu and ambient music.',
     dailyMusicEnabled: 'Each realm plays a piece written for you today. Off plays the recorded loops.',
-    reduceMotion: 'Reduces shake, camera motion and animated effects.',
+    reduceMotion: 'Reduces shake, camera motion and animated effects, and stops the room flashing (lightning, a break, Fever).',
     screenShakeIntensity: 'How hard bombs, meteors and big breaks shake the board.',
     resolveDelayMultiplier: 'Match, miss and study timing. Applies to new runs.',
     sfxVolume: 'Tile flips, rewards, and hit feedback.',

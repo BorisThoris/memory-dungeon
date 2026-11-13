@@ -125,8 +125,9 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
         }
     });
     window.webContents.setWindowOpenHandler(({ url }) => {
-        // The run-end wishlist link is the one outbound link; everything else stays denied.
-        if (url.startsWith('https://store.steampowered.com/')) {
+        // The outbound links: the run-end wishlist link and the privacy policy (Settings > About).
+        // Everything else stays denied.
+        if (url.startsWith('https://store.steampowered.com/') || url === 'https://memory-dungeon-git.pages.dev/privacy') {
             void shell.openExternal(url);
         }
         return { action: 'deny' };

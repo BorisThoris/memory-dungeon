@@ -353,6 +353,15 @@
     color: var(--margin-paper-dim);
 }
 
+/* Beside Continue: a new run is the second choice, a word rather than a ladder rung. */
+.playRow .entryNewRun {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    padding-inline: 1rem;
+    border-left: 1px solid var(--margin-hairline);
+}
+
 .noteAction {
     display: inline-flex;
     align-items: center;

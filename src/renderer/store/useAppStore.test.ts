@@ -13,6 +13,7 @@ import { BOARD_FLOATER_POP_CLEAR } from './matchScorePop';
 import { useAppStore } from './useAppStore';
 import { MEMORIZE_SKIP_MOMENTUM_MAX } from '../../shared/memorize-skip-reward-rules';
 import { runChainMomentumPairs, runChainTier } from '../../shared/chain-tier-rules';
+import { readSuspendedRun, summarizeSuspendedRun, writeSuspendedRun } from './suspendedRun';
 
 const gameSfxMocks = vi.hoisted(() => ({
     playDeepGameSfx: vi.fn(),
@@ -979,5 +980,66 @@ describe('useAppStore restartRun menu modes', () => {
             maxMismatches: null,
             maxPinsTotalRun: 10
         });
+    });
+});
+
+describe('a run put down and picked up again', () => {
+    beforeEach(() => {
+        vi.useFakeTimers();
+        resetStore();
+        window.localStorage.clear();
+    });
+
+    afterEach(() => {
+        vi.runOnlyPendingTimers();
+        vi.useRealTimers();
+        vi.clearAllMocks();
+    });
+
+    it('keeps the run from its start, paused when the player pauses, and forgets it on a retreat', () => {
+        useAppStore.getState().startRun();
+        const started = useAppStore.getState().run!;
+        expect(readSuspendedRun()?.run.runSeed).toBe(started.runSeed);
+        notifyCurrentBoardReady();
+        useAppStore.getState().pause();
+        expect(readSuspendedRun()?.run.status).toBe('paused');
+        useAppStore.getState().endRun();
+        expect(readSuspendedRun()).toBeNull();
+    });
+
+    it('deleting all progress starts a fresh profile, keeps the settings, and forgets the run put down', async () => {
+        const saveData = createDefaultSaveData();
+        const settings = { ...saveData.settings, reduceMotion: true };
+        useAppStore.setState({ saveData: { ...saveData, bestScore: 9001, settings }, settings });
+        writeSuspendedRun(createNewRun(0, { runSeed: 3 }), null);
+        useAppStore.setState({ suspendedRun: summarizeSuspendedRun(readSuspendedRun()) });
+
+        await useAppStore.getState().deleteAllProgress();
+        const state = useAppStore.getState();
+        expect(state.saveData.bestScore).toBe(0);
+        expect(state.saveData.runHistory ?? []).toEqual([]);
+        expect(state.settings.reduceMotion).toBe(true);
+        expect(state.suspendedRun).toBeNull();
+        expect(readSuspendedRun()).toBeNull();
+    });
+
+    it('offers the run back paused where it was left, and plays on from there', () => {
+        useAppStore.getState().startRun();
+        notifyCurrentBoardReady();
+        useAppStore.getState().pause();
+        const left = useAppStore.getState().run!;
+        // A new launch: the store starts empty, with the snapshot on disk.
+        resetStore();
+        writeSuspendedRun(left, createDefaultSaveData());
+        useAppStore.setState({ suspendedRun: summarizeSuspendedRun(readSuspendedRun()) });
+
+        useAppStore.getState().continueSuspendedRun();
+        const state = useAppStore.getState();
+        expect(state.view).toBe('playing');
+        expect(state.suspendedRun).toBeNull();
+        expect(state.run?.status).toBe('paused');
+        expect(state.run?.board?.tiles).toEqual(left.board?.tiles);
+        useAppStore.getState().resume();
+        expect(useAppStore.getState().run?.status).not.toBe('paused');
     });
 });

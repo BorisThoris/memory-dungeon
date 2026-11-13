@@ -46,7 +46,7 @@ import {
     executeMetaOverlayOpen
 } from './metaOverlayExecutor';
 import { desktopClient } from '../desktop-client';
-import { normalizeUnknownSaveDataOrThrow } from '../../shared/save-data';
+import { createDefaultSaveData, normalizeUnknownSaveDataOrThrow } from '../../shared/save-data';
 import { createRunResolutionController } from './runResolutionController';
 import { createRunTimerController } from './runTimerController';
 import {
@@ -114,6 +114,8 @@ import { runPersistenceInBackground } from './backgroundPersistence';
 import { createHydratedAppStatePatch, SAVE_RECOVERY_FAILED_NOTICE } from './hydrationController';
 import { createRunLifecycleController } from './runLifecycleController';
 import { createAppStoreInitialState } from './appStoreInitialState';
+import { createRunStartStatePatch } from './runStartState';
+import { clearSuspendedRun, isSuspendableRun, readSuspendedRun, summarizeSuspendedRun, writeSuspendedRun } from './suspendedRun';
 import { enqueueItemDrops, itemDropsBetween } from './itemDropFeed';
 import type { AppState } from './appStoreTypes';
 import { publishItemEffects, verbItemEffect, type ItemEffect } from '../components/itemEffects';
@@ -294,6 +296,14 @@ export const useAppStore = create<AppState>((set, get) => ({
             set({ saveReadFailureNotice: SAVE_RECOVERY_FAILED_NOTICE });
         }
     },
+    deleteAllProgress: async () => {
+        // A fresh profile on this device: records, history, unlocks and the run put down are gone;
+        // the settings are the player's preferences about the device, not progress, so they stay.
+        const fresh = { ...createDefaultSaveData(), settings: get().settings };
+        clearSuspendedRun();
+        const committed = normalizeUnknownSaveDataOrThrow(await persistSaveDataSafely(fresh));
+        set({ saveData: committed, settings: committed.settings, suspendedRun: null });
+    },
     dismissMatchScorePop: () => {
         set({ matchScorePop: null });
     },
@@ -309,7 +319,7 @@ export const useAppStore = create<AppState>((set, get) => ({
         set({ hydrating: true });
 
         const patch = await createHydratedAppStatePatch({ desktop: desktopClient, persistSaveData: persistSaveDataSafely });
-        set(patch);
+        set({ ...patch, suspendedRun: summarizeSuspendedRun(readSuspendedRun()) });
         runPersistenceInBackground(() =>
             syncPersistedAchievements(patch.saveData, patch.steamConnected).then(({ failures }) => {
                 if (failures.length > 0) {
@@ -317,6 +327,18 @@ export const useAppStore = create<AppState>((set, get) => ({
                 }
             })
         );
+    },
+
+    continueSuspendedRun: () => {
+        const suspended = readSuspendedRun();
+        if (!suspended) {
+            set({ suspendedRun: null });
+            return;
+        }
+        clearAllTimers();
+        // A snapshot is frozen (paused, or between floors), so the board waits behind the pause
+        // menu and Resume restarts its clocks with the time they had left.
+        set({ ...createRunStartStatePatch(suspended.run, suspended.runStartSaveData ?? get().saveData), suspendedRun: null });
     },
 
     startRun: (setup) => {
@@ -960,3 +982,53 @@ registerPersistenceWriteFailureHandler(({ consecutive }) => {
 useAppStore.subscribe((state, previous) => {
     if (state.run !== previous.run) enqueueItemDrops(itemDropsBetween(previous.run, state.run));
 });
+
+// A run put down and picked up again (`suspendedRun.ts`): a frozen snapshot is kept at the run's
+// safe moments, and dropped once the run is over, so closing the game mid-run loses nothing.
+const isSuspendMoment = (previous: RunState | null, next: RunState): boolean =>
+    previous === null ||
+    previous.runSeed !== next.runSeed ||
+    (next.status !== previous.status && (next.status === 'paused' || next.status === 'levelComplete')) ||
+    next.board?.level !== previous.board?.level;
+
+useAppStore.subscribe((state, previous) => {
+    if (state.run === previous.run) return;
+    if (previous.run && (!state.run || state.run.status === 'gameOver')) {
+        clearSuspendedRun();
+        return;
+    }
+    if (isSuspendableRun(state.run) && isSuspendMoment(previous.run, state.run)) {
+        try {
+            writeSuspendedRun(freezeRunSnapshotForPlayingMetaOverlay(state.run), state.runStartSaveData);
+        } catch (error) {
+            // Keeping the run for later must never cost the run now.
+            console.warn('[suspended-run] could not snapshot the run', error);
+        }
+    }
+});
+
+/**
+ * Leaving the game - another app, a minimised window, a closed tab - pauses the run and keeps it,
+ * as a phone game must: the board is not played while nobody is looking at it.
+ */
+export const putTheRunDown = (): void => {
+    const { run, view, runStartSaveData } = useAppStore.getState();
+    if (view !== 'playing' || !isSuspendableRun(run)) return;
+    if (run.status === 'paused' || run.status === 'levelComplete') {
+        writeSuspendedRun(run, runStartSaveData);
+        return;
+    }
+    useAppStore.getState().pause();
+    const after = useAppStore.getState().run;
+    // A run that would not pause (a beat between states) is still kept, frozen where it stands.
+    if (after && after.status !== 'paused' && isSuspendableRun(after)) {
+        writeSuspendedRun(freezeRunSnapshotForPlayingMetaOverlay(after), runStartSaveData);
+    }
+};
+
+if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'hidden') putTheRunDown();
+    });
+    window.addEventListener('pagehide', putTheRunDown);
+}

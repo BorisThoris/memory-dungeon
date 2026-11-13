@@ -19,6 +19,7 @@ import { useTutorialHall } from './tutorialHallContext';
 import { useAppStore } from '../store/useAppStore';
 import styles from './MainMenu.module.css';
 import { GlobalRecordBadge } from './GlobalRecord';
+import { SUSPENDED_RUN_COPY } from '../copy/suspendedRunCopy';
 
 interface MainMenuProps {
     saveData: SaveData;
@@ -65,9 +66,13 @@ const MainMenu = ({
         clearPersistenceWriteNotice,
         recoverUnreadableSave,
         saveReadFailureNotice,
-        saveWritesBlockedByReadFailure
+        saveWritesBlockedByReadFailure,
+        suspendedRun,
+        continueSuspendedRun
     } = useAppStore(
         useShallow((state) => ({
+            suspendedRun: state.suspendedRun,
+            continueSuspendedRun: state.continueSuspendedRun,
             achievementBridgeNotice: state.achievementBridgeNotice,
             clearAchievementBridgeNotice: state.clearAchievementBridgeNotice,
             persistenceWriteNotice: state.persistenceWriteNotice,
@@ -191,6 +196,43 @@ const MainMenu = ({
                     <main className={styles.contents} data-testid="main-menu-primary-meta-frame">
                         <p className={styles.contentsHead}>Contents</p>
                         <div aria-label="Primary actions" className={styles.ladder} role="group">
+                            {suspendedRun ? (
+                                // A run put down mid-way (`suspendedRun.ts`) is the first thing on the page: it picks
+                                // up paused where it was left. A new run beside it starts over, and replaces it.
+                                <div className={styles.playRow} data-testid="main-menu-continue-row">
+                                    <button
+                                        aria-label="Continue"
+                                        className={`${styles.entry} ${styles.entryPlay}`}
+                                        data-testid="main-menu-continue"
+                                        type="button"
+                                        onBlur={() => setPlayWarm(false)}
+                                        onFocus={() => setPlayWarm(true)}
+                                        onPointerEnter={() => setPlayWarm(true)}
+                                        onPointerLeave={() => setPlayWarm(false)}
+                                        onClick={() => {
+                                            playMenuOpen();
+                                            continueSuspendedRun();
+                                        }}
+                                    >
+                                        <span className={styles.numeral} translate="no">{NUMERALS[0]}</span>
+                                        <span className={styles.entryTitle}>Continue</span>
+                                        <span aria-hidden="true" className={styles.leader} />
+                                        <span className={styles.entryNote}>{SUSPENDED_RUN_COPY.note(suspendedRun)}</span>
+                                    </button>
+                                    <button
+                                        aria-label="New run"
+                                        className={`${styles.entry} ${styles.entryQuiet} ${styles.entryNewRun}`}
+                                        type="button"
+                                        onClick={() => {
+                                            playMenuOpen();
+                                            onPlay();
+                                        }}
+                                    >
+                                        <span className={styles.entryTitle}>New run</span>
+                                    </button>
+                                </div>
+                            ) : null}
+                            {suspendedRun ? null : (
                             <div className={styles.playRow}>
                                 <button
                                     aria-label="Play"
@@ -213,6 +255,7 @@ const MainMenu = ({
                                     </span>
                                 </button>
                             </div>
+                            )}
                             <div className={styles.entries} data-testid="main-menu-secondary-actions">
                                 {entries.map((entry, index) => (
                                     <button
