@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3410,
-    "codeFileCount": 1330,
-    "exportedSymbolCount": 4416,
+    "trackedFileCount": 3411,
+    "codeFileCount": 1331,
+    "exportedSymbolCount": 4417,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12335
+    "relationshipCount": 12343
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "e27f5827232d13ea56bd9c3be62584670e65cd7f5af782fe84c1cadf7465cf30"
+      "sha256": "9b9e9901feb533884bef664a254ec88d5a3d7ac05a2197e2353058a1d86be718"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -11427,8 +11427,8 @@
     {
       "path": "src/renderer/components/ItemDropPopup.test.tsx",
       "category": "test",
-      "bytes": 5653,
-      "sha256": "93d0172c3ec08a30d47e7e9f015216b88884dfea868ff0b07d6d7b639df40703"
+      "bytes": 6210,
+      "sha256": "0c496fa819336907471a161b1ad034e9f5b484d798850df52af4b1967655e53f"
     },
     {
       "path": "src/renderer/components/ItemDropPopup.tsx",
@@ -11439,8 +11439,8 @@
     {
       "path": "src/renderer/components/itemDrops.ts",
       "category": "source",
-      "bytes": 4476,
-      "sha256": "43c08ad5a618cfc57320af40c26f40f3e04a9847f268b47d149ac5196ede00a9"
+      "bytes": 4569,
+      "sha256": "36faa8d5f3ca4122187d078563aa1daed6cb4bb5796f25df0e73c6e4a8f5a8b5"
     },
     {
       "path": "src/renderer/components/itemEffects.test.ts",
@@ -11841,14 +11841,14 @@
     {
       "path": "src/renderer/components/RealmTravel.test.tsx",
       "category": "test",
-      "bytes": 1346,
-      "sha256": "b76bf1260739e3830b0bfbe7f5798462bccb65f297b2920e2958d87cda5d061c"
+      "bytes": 1509,
+      "sha256": "b227b71d0396be68fb02f8c63af300ddb57e68c028d0514771983bca0606822b"
     },
     {
       "path": "src/renderer/components/RealmTravel.tsx",
       "category": "source",
-      "bytes": 8115,
-      "sha256": "14b7789a9ba975d740d0716ccfe8b56d129ec5a6cfefef75d420adbe05222dcf"
+      "bytes": 8274,
+      "sha256": "1061f78161e62c58d843433c93975d349d1ccd583b6fdf75990576284e05c062"
     },
     {
       "path": "src/renderer/components/roomSpill.test.ts",
@@ -11919,20 +11919,20 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 68527,
-      "sha256": "fe6abdf60c50d29a71b2783c011dae929e7abace2016fa70453ac4e71c8a6c36"
+      "bytes": 68568,
+      "sha256": "7f5f027f77abad2c397bc79ada3dd4b375569ee1e007ea65ab3380d4f1d4a277"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 44811,
-      "sha256": "b69522fb415cbc795f65984a012ff42e244412e07a3510a0201a7e52f79a8632"
+      "bytes": 46164,
+      "sha256": "c20b95068d7e0622e0cfd17d2836c42d872dae8afe65f3b2ed3ba7739f81c6ef"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 64552,
-      "sha256": "76fa3b4726a9d0f77711f4777af6efd991775b31f5ae875c93ee1b8c2445f6e8"
+      "bytes": 65168,
+      "sha256": "94d1a00eca20844271a7d4d6dd539b85c1a880d28c02f6bd992b3f8b96a74b0e"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -12117,8 +12117,8 @@
     {
       "path": "src/renderer/components/screenCallouts.ts",
       "category": "source",
-      "bytes": 19998,
-      "sha256": "df30b5c95162862d37b115405b4556455a9fca8e0564afc2998ef891c45832fd"
+      "bytes": 20155,
+      "sha256": "877c73a857355c6e9370698f5324fbb498f02681278879eb935a06cf750ea86b"
     },
     {
       "path": "src/renderer/components/SettingsControls.tsx",
@@ -12247,10 +12247,16 @@
       "sha256": "ed98a275b4ca7e98bebb78fec6b4aee975a7e8c83d88346e015226eb46947795"
     },
     {
+      "path": "src/renderer/components/storeWareGlyphs.test.tsx",
+      "category": "test",
+      "bytes": 557,
+      "sha256": "1b0f3655319b943c05729ebd8b481879d516f90c03aa95e2b5e2214a3413b698"
+    },
+    {
       "path": "src/renderer/components/storeWareGlyphs.tsx",
       "category": "source",
-      "bytes": 4703,
-      "sha256": "e2ebd3020834ccc25a30643a20d055e0626c51b9f4cba2d89a70c2168f94eaba"
+      "bytes": 8403,
+      "sha256": "8560715d0e0aba7e54c165c3b2867dbf783fdccd676533dd5473b4b6a18947f3"
     },
     {
       "path": "src/renderer/components/stormBolts.test.ts",
@@ -17337,8 +17343,8 @@
     {
       "path": "src/shared/run-store-rules.ts",
       "category": "source",
-      "bytes": 15993,
-      "sha256": "f79e9adf7b2f01c290a67289881010547247f36bd4bd3a57cf99ed7d5fbd95d9"
+      "bytes": 16000,
+      "sha256": "4856e0be4ddcea81013052d1d78b18afb248229ebde6649fc66665245395b1d5"
     },
     {
       "path": "src/shared/run-summary-rules.test.ts",
@@ -25486,14 +25492,15 @@
       "path": "src/renderer/components/ItemDropPopup.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 104,
+      "lineCount": 111,
       "imports": [
         "file:src/renderer/components/ItemDropPopup.tsx",
         "file:src/renderer/components/itemDrops.ts",
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/renderer/store/itemDropFeed.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/game.ts"
+        "file:src/shared/game.ts",
+        "file:src/shared/run-relic-rules.ts"
       ],
       "exports": [],
       "testedBy": []
@@ -25524,11 +25531,12 @@
       "path": "src/renderer/components/itemDrops.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 118,
+      "lineCount": 120,
       "imports": [
         "file:src/renderer/components/screenCallouts.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/curio-rules.ts",
+        "file:src/shared/run-relic-rules.ts",
         "file:src/shared/run-store-rules.ts"
       ],
       "exports": [
@@ -26625,7 +26633,7 @@
       "path": "src/renderer/components/RealmTravel.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 24,
+      "lineCount": 26,
       "imports": [
         "file:src/renderer/components/RealmTravel.tsx"
       ],
@@ -26637,7 +26645,7 @@
       "path": "src/renderer/components/RealmTravel.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 144,
+      "lineCount": 145,
       "imports": [
         "file:src/renderer/a11y/toolbarRoving.ts",
         "file:src/renderer/copy/elementClarity.ts",
@@ -26804,7 +26812,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 808,
+      "lineCount": 836,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
@@ -26824,7 +26832,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1100,
+      "lineCount": 1105,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -27390,7 +27398,7 @@
       "path": "src/renderer/components/screenCallouts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 336,
+      "lineCount": 337,
       "imports": [
         "file:src/renderer/components/itemDrops.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -27772,18 +27780,33 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/storeWareGlyphs.test.tsx",
+      "path": "src/renderer/components/storeWareGlyphs.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 13,
+      "imports": [
+        "file:src/renderer/components/storeWareGlyphs.tsx",
+        "file:src/shared/run-relic-rules.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/components/storeWareGlyphs.tsx",
       "path": "src/renderer/components/storeWareGlyphs.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 91,
+      "lineCount": 152,
       "imports": [
         "file:src/shared/run-store-rules.ts"
       ],
       "exports": [
         "symbol:src/renderer/components/storeWareGlyphs.tsx#storeWareGlyph"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/components/storeWareGlyphs.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/components/stormBolts.test.ts",
@@ -44080,6 +44103,8 @@
         "symbol:src/shared/run-relic-rules.ts#usesCampUpgrades"
       ],
       "testedBy": [
+        "file:src/renderer/components/ItemDropPopup.test.tsx",
+        "file:src/renderer/components/storeWareGlyphs.test.tsx",
         "file:src/shared/automatic-camp-rules.test.ts",
         "file:src/shared/camp-upgrades.test.ts",
         "file:src/shared/misers-purse.test.ts",
@@ -44376,6 +44401,7 @@
         "symbol:src/shared/run-store-rules.ts#isStoreStopFloor",
         "symbol:src/shared/run-store-rules.ts#rollStoreStock",
         "symbol:src/shared/run-store-rules.ts#runGold",
+        "symbol:src/shared/run-store-rules.ts#SNOWBALL_STORE_ITEMS",
         "symbol:src/shared/run-store-rules.ts#STOP_RELIC_OFFER",
         "symbol:src/shared/run-store-rules.ts#STORE_ITEMS",
         "symbol:src/shared/run-store-rules.ts#STORE_STOP_EVERY_FLOORS",
@@ -52283,80 +52309,80 @@
       "name": "ITEM_DROP_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 41,
-      "endLine": 47
+      "line": 42,
+      "endLine": 48
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ITEM_DROP_RARITY_COLOR",
       "name": "ITEM_DROP_RARITY_COLOR",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 24,
-      "endLine": 30
+      "line": 25,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ITEM_DROP_RARITY_LABEL",
       "name": "ITEM_DROP_RARITY_LABEL",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 32,
-      "endLine": 38
+      "line": 33,
+      "endLine": 39
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDrop",
       "name": "ItemDrop",
       "kind": "interface",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 93,
-      "endLine": 102
+      "line": 95,
+      "endLine": 104
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#itemDropFromCallout",
       "name": "itemDropFromCallout",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 105,
-      "endLine": 117
+      "line": 107,
+      "endLine": 119
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#itemDropGlyph",
       "name": "itemDropGlyph",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 60,
-      "endLine": 91
+      "line": 62,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDropGlyph",
       "name": "ItemDropGlyph",
       "kind": "type",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 22,
-      "endLine": 22
+      "line": 23,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDropId",
       "name": "ItemDropId",
       "kind": "type",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 20,
-      "endLine": 20
+      "line": 21,
+      "endLine": 21
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#itemDropRarity",
       "name": "itemDropRarity",
       "kind": "value",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 51,
-      "endLine": 58
+      "line": 53,
+      "endLine": 60
     },
     {
       "id": "symbol:src/renderer/components/itemDrops.ts#ItemDropRarity",
       "name": "ItemDropRarity",
       "kind": "type",
       "file": "src/renderer/components/itemDrops.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/renderer/components/itemEffects.ts#ITEM_EFFECT_MAX_CARDS",
@@ -53731,8 +53757,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RealmTravel.tsx",
-      "line": 143,
-      "endLine": 143
+      "line": 144,
+      "endLine": 144
     },
     {
       "id": "symbol:src/renderer/components/roomSpill.ts#emitRoomSpill",
@@ -53883,16 +53909,16 @@
       "name": "COMBO_LOST_MS",
       "kind": "value",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 165,
-      "endLine": 165
+      "line": 181,
+      "endLine": 181
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 1099,
-      "endLine": 1099
+      "line": 1104,
+      "endLine": 1104
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
@@ -54740,7 +54766,7 @@
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
       "line": 309,
-      "endLine": 330
+      "endLine": 331
     },
     {
       "id": "symbol:src/renderer/components/screenCallouts.ts#deriveRealmCallouts",
@@ -54827,8 +54853,8 @@
       "name": "stageTone",
       "kind": "value",
       "file": "src/renderer/components/screenCallouts.ts",
-      "line": 333,
-      "endLine": 333
+      "line": 334,
+      "endLine": 334
     },
     {
       "id": "symbol:src/renderer/components/SettingsControls.tsx#PlaceholderControl",
@@ -55179,8 +55205,8 @@
       "name": "storeWareGlyph",
       "kind": "value",
       "file": "src/renderer/components/storeWareGlyphs.tsx",
-      "line": 90,
-      "endLine": 90
+      "line": 151,
+      "endLine": 151
     },
     {
       "id": "symbol:src/renderer/components/stormBolts.ts#buildStormBolts",
@@ -78175,6 +78201,14 @@
       "endLine": 168
     },
     {
+      "id": "symbol:src/shared/run-store-rules.ts#SNOWBALL_STORE_ITEMS",
+      "name": "SNOWBALL_STORE_ITEMS",
+      "kind": "value",
+      "file": "src/shared/run-store-rules.ts",
+      "line": 117,
+      "endLine": 117
+    },
+    {
       "id": "symbol:src/shared/run-store-rules.ts#STOP_RELIC_OFFER",
       "name": "STOP_RELIC_OFFER",
       "kind": "value",
@@ -84050,7 +84084,7 @@
         },
         {
           "path": "src/renderer/components/ItemDropPopup.test.tsx",
-          "line": 10
+          "line": 11
         }
       ],
       "enables": [
@@ -86308,7 +86342,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 324
+          "line": 352
         }
       ],
       "enables": [],
@@ -86642,7 +86676,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 495
+          "line": 499
         }
       ],
       "tests": [
@@ -86681,7 +86715,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 495
+          "line": 499
         }
       ],
       "tests": [
@@ -86715,7 +86749,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 495
+          "line": 499
         }
       ],
       "tests": [
@@ -86749,7 +86783,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 495
+          "line": 499
         }
       ],
       "tests": [
@@ -113092,6 +113126,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/shared/run-store-rules.ts->symbol:src/shared/run-store-rules.ts#SNOWBALL_STORE_ITEMS",
+      "source": "file:src/shared/run-store-rules.ts",
+      "target": "symbol:src/shared/run-store-rules.ts#SNOWBALL_STORE_ITEMS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/shared/run-store-rules.ts->symbol:src/shared/run-store-rules.ts#STOP_RELIC_OFFER",
       "source": "file:src/shared/run-store-rules.ts",
       "target": "symbol:src/shared/run-store-rules.ts#STOP_RELIC_OFFER",
@@ -124194,6 +124234,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/ItemDropPopup.test.tsx->src/shared/run-relic-rules.ts",
+      "source": "file:src/renderer/components/ItemDropPopup.test.tsx",
+      "target": "file:src/shared/run-relic-rules.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/ItemDropPopup.tsx->src/renderer/components/itemDrops.ts",
       "source": "file:src/renderer/components/ItemDropPopup.tsx",
       "target": "file:src/renderer/components/itemDrops.ts",
@@ -124227,6 +124273,12 @@
       "id": "imports:src/renderer/components/itemDrops.ts->src/shared/curio-rules.ts",
       "source": "file:src/renderer/components/itemDrops.ts",
       "target": "file:src/shared/curio-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/itemDrops.ts->src/shared/run-relic-rules.ts",
+      "source": "file:src/renderer/components/itemDrops.ts",
+      "target": "file:src/shared/run-relic-rules.ts",
       "kind": "imports"
     },
     {
@@ -126657,6 +126709,18 @@
       "id": "imports:src/renderer/components/StoreVault.tsx->src/shared/snowball-relic-rules.ts",
       "source": "file:src/renderer/components/StoreVault.tsx",
       "target": "file:src/shared/snowball-relic-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/storeWareGlyphs.test.tsx->src/renderer/components/storeWareGlyphs.tsx",
+      "source": "file:src/renderer/components/storeWareGlyphs.test.tsx",
+      "target": "file:src/renderer/components/storeWareGlyphs.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/storeWareGlyphs.test.tsx->src/shared/run-relic-rules.ts",
+      "source": "file:src/renderer/components/storeWareGlyphs.test.tsx",
+      "target": "file:src/shared/run-relic-rules.ts",
       "kind": "imports"
     },
     {
@@ -152417,6 +152481,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/storeWareGlyphs.tsx->file:src/renderer/components/storeWareGlyphs.test.tsx",
+      "source": "file:src/renderer/components/storeWareGlyphs.tsx",
+      "target": "file:src/renderer/components/storeWareGlyphs.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/stormBolts.ts->file:src/renderer/components/stormBolts.test.ts",
       "source": "file:src/renderer/components/stormBolts.ts",
       "target": "file:src/renderer/components/stormBolts.test.ts",
@@ -159410,6 +159480,18 @@
       "id": "tested_by:src/shared/run-record-guards.ts->file:src/shared/run-record-guards.test.ts",
       "source": "file:src/shared/run-record-guards.ts",
       "target": "file:src/shared/run-record-guards.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-relic-rules.ts->file:src/renderer/components/ItemDropPopup.test.tsx",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "file:src/renderer/components/ItemDropPopup.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/run-relic-rules.ts->file:src/renderer/components/storeWareGlyphs.test.tsx",
+      "source": "file:src/shared/run-relic-rules.ts",
+      "target": "file:src/renderer/components/storeWareGlyphs.test.tsx",
       "kind": "tested_by"
     },
     {

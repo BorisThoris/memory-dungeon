@@ -15,6 +15,8 @@ describe('arena decisions', () => {
         const second = screen.getByTestId('realm-door-1');
         expect(within(second).getByText('Wet ground · Fire makes steam')).toBeInTheDocument();
         expect(within(second).getByText('Hot ground · Water makes steam')).toBeInTheDocument();
+        // A door not yet visited still has the line, so its Enter lines up with the others.
+        expect(second).toHaveTextContent('Not visited yet this run');
         fireEvent.keyDown(document, { key: 'Escape' });
         expect(choose).not.toHaveBeenCalled();
         fireEvent.click(second);

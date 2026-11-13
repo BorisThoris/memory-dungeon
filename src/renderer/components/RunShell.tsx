@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactElement } from 'react';
+import { memo, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactElement } from 'react';
 import { rememberToolCharges, risenToolCharges, toolChargeBaseline, TOOL_FRESH_MS } from './runShellFreshTools';
 import { getMemorizeClock, subscribeMemorizeClock } from '../store/memorizeClock';
 import type { GameShellLayout } from '../gameShellLayout';
@@ -138,12 +138,32 @@ const MEMORIZE_TICK_MS = 250;
 const compactStat = new Intl.NumberFormat('en', { notation: 'compact', maximumFractionDigits: 1 });
 
 /**
+ * A HUD beat: shown on the next tick, hidden `ms` later. The hide timer belongs to the beat, not to
+ * the effect that fired it, so the HUD changing again inside the beat (the next match) cannot cancel
+ * the hide and leave the beat up for good - which is how a stale "Lost 8" sat under a combo of 43
+ * for twenty floors (the playtest's shots, 2026-11-13). Returns the show timer for the effect to
+ * cancel, since a show overtaken before it lands should not land.
+ */
+const useBeat = <T,>(idle: T): [T, (shown: T, ms: number) => number] => {
+    const [value, setValue] = useState<T>(idle);
+    const idleRef = useRef(idle);
+    const hideRef = useRef<number | undefined>(undefined);
+    useEffect(() => () => window.clearTimeout(hideRef.current), []);
+    const fire = useCallback((shown: T, ms: number): number => {
+        window.clearTimeout(hideRef.current);
+        hideRef.current = window.setTimeout(() => setValue(idleRef.current), ms);
+        return window.setTimeout(() => setValue(shown), 0);
+    }, []);
+    return [value, fire];
+};
+
+/**
  * The chain-drop beat on the ladder. When momentum falls from Clean or better to nothing, the
  * fill drains red for a beat instead of snapping empty: the loss is half of the loop, and a
  * meter that vanished silently taught nothing. Timer-set so the render never sets state.
  */
 const useChainMeterDrop = (momentum: number, cleanRung: number): boolean => {
-    const [dropping, setDropping] = useState(false);
+    const [dropping, fire] = useBeat(false);
     const previousRef = useRef(momentum);
     useEffect(() => {
         const previous = previousRef.current;
@@ -151,13 +171,9 @@ const useChainMeterDrop = (momentum: number, cleanRung: number): boolean => {
         if (!(previous >= cleanRung && momentum === 0)) {
             return undefined;
         }
-        const start = window.setTimeout(() => setDropping(true), 0);
-        const end = window.setTimeout(() => setDropping(false), CHAIN_METER_DROP_MS);
-        return () => {
-            window.clearTimeout(start);
-            window.clearTimeout(end);
-        };
-    }, [momentum, cleanRung]);
+        const start = fire(true, CHAIN_METER_DROP_MS);
+        return () => window.clearTimeout(start);
+    }, [momentum, cleanRung, fire]);
     return dropping;
 };
 
@@ -174,7 +190,7 @@ export const COMBO_LOST_MS = 1800;
  * win, not a loss: it is skipped. A miss there takes the pot too, so the line says so.
  */
 const useComboLost = (chain: number, multiplier: number, cashIns = 0, pot = 0): { links: number; multiplier: number; pot: number } | null => {
-    const [lost, setLost] = useState<{ links: number; multiplier: number; pot: number } | null>(null);
+    const [lost, fire] = useBeat<{ links: number; multiplier: number; pot: number } | null>(null);
     const previousRef = useRef({ chain, multiplier, cashIns, pot });
     useEffect(() => {
         const previous = previousRef.current;
@@ -182,13 +198,9 @@ const useComboLost = (chain: number, multiplier: number, cashIns = 0, pot = 0): 
         if (!(previous.chain >= 3 && chain < previous.chain) || cashIns > previous.cashIns) {
             return undefined;
         }
-        const start = window.setTimeout(() => setLost({ links: previous.chain, multiplier: previous.multiplier, pot: previous.pot }), 0);
-        const end = window.setTimeout(() => setLost(null), COMBO_LOST_MS);
-        return () => {
-            window.clearTimeout(start);
-            window.clearTimeout(end);
-        };
-    }, [chain, multiplier, cashIns, pot]);
+        const start = fire({ links: previous.chain, multiplier: previous.multiplier, pot: previous.pot }, COMBO_LOST_MS);
+        return () => window.clearTimeout(start);
+    }, [chain, multiplier, cashIns, pot, fire]);
     return lost;
 };
 
@@ -198,18 +210,14 @@ const useComboLost = (chain: number, multiplier: number, cashIns = 0, pot = 0): 
  * so a mount never replays one.
  */
 const useComboBanked = (last: RunState['lastComboCashIn']): NonNullable<RunState['lastComboCashIn']> | null => {
-    const [shown, setShown] = useState<NonNullable<RunState['lastComboCashIn']> | null>(null);
+    const [shown, fire] = useBeat<NonNullable<RunState['lastComboCashIn']> | null>(null);
     const seenRef = useRef(last?.key ?? null);
     useEffect(() => {
         if (!last || last.key === seenRef.current) return undefined;
         seenRef.current = last.key;
-        const start = window.setTimeout(() => setShown(last), 0);
-        const end = window.setTimeout(() => setShown(null), COMBO_LOST_MS);
-        return () => {
-            window.clearTimeout(start);
-            window.clearTimeout(end);
-        };
-    }, [last]);
+        const start = fire(last, COMBO_LOST_MS);
+        return () => window.clearTimeout(start);
+    }, [last, fire]);
     return shown;
 };
 
@@ -254,7 +262,7 @@ const useMissEarned = (missesRemaining: number | null): number => {
 };
 
 const useChainMeterFeverArrival = (full: boolean): boolean => {
-    const [arriving, setArriving] = useState(false);
+    const [arriving, fire] = useBeat(false);
     const previousRef = useRef(full);
     useEffect(() => {
         const previous = previousRef.current;
@@ -262,13 +270,9 @@ const useChainMeterFeverArrival = (full: boolean): boolean => {
         if (!full || previous) {
             return undefined;
         }
-        const start = window.setTimeout(() => setArriving(true), 0);
-        const end = window.setTimeout(() => setArriving(false), CHAIN_METER_FEVER_MS);
-        return () => {
-            window.clearTimeout(start);
-            window.clearTimeout(end);
-        };
-    }, [full]);
+        const start = fire(true, CHAIN_METER_FEVER_MS);
+        return () => window.clearTimeout(start);
+    }, [full, fire]);
     return arriving;
 };
 
@@ -917,7 +921,8 @@ const RunShell = ({
                                 </span>
                                 <span className={styles.comboLabel}>
                                     <span data-testid="hud-combo-stage">
-                                        {stageWords[heat.stage] ? `Combo · ${comboStageLabel(stageWords, chain)}` : 'Combo'}
+                                        {/* The stage and its numeral wrap as one: "Legendary" then a lone "II" read as two things. */}
+                                        {stageWords[heat.stage] ? <>Combo · <span className={styles.comboStageWord}>{comboStageLabel(stageWords, chain)}</span></> : 'Combo'}
                                     </span>
                                     {isZoneActive(run) ? (
                                         <span className={styles.comboPerks} data-perks-active="true" data-testid="hud-zone">

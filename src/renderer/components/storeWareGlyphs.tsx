@@ -83,8 +83,69 @@ const glyphs: Partial<Record<StoreItemId, ReactElement>> = {
             <path d="M20 8 C21.5 10 21.5 12 20 13 C18.5 12 18.5 10 20 8 Z" fill="#fff1c2" />
             <ellipse cx="20" cy="33" fill={GOLD_DARK} rx="9" ry="2.4" />
         </g>
+    ),
+    misers_purse: (
+        <g>
+            <ellipse cx="20" cy="34" fill={GOLD_DARK} rx="11" ry="2.2" />
+            <path d="M14 12 Q8 18 9 26 Q10 33 20 33 Q30 33 31 26 Q32 18 26 12 Z" fill="#6b3f1e" stroke={GOLD_DARK} strokeWidth="1" />
+            <path d="M13 12 Q20 15 27 12" fill="none" stroke={GOLD} strokeWidth="1.6" />
+            <ellipse cx="20" cy="9" fill={GOLD} rx="4.5" ry="3" stroke={GOLD_DARK} strokeWidth="1" />
+            <path d="M14 22 Q15 18 18 17" fill="none" stroke="#ffffff" strokeOpacity="0.3" strokeWidth="1.2" />
+        </g>
+    ),
+    // The relics that grow (`snowball-relic-rules.ts`): a Heart in its element's ink, and five trinkets.
+    cinder_heart: heartGlyph('#ff8a2a', <path d="M20 4 C24 8 23 11 20 13 C17 11 16 8 20 4 Z" fill="#ffd278" />),
+    tide_heart: heartGlyph('#5fd8ff', <path d="M12 21 Q16 18 20 21 Q24 24 28 21" fill="none" stroke="#c8f5ff" strokeWidth="1.6" />),
+    moss_heart: heartGlyph('#8ef05a', <path d="M20 13 C20 8 24 5 28 5 C28 9 25 12 20 13 Z" fill="#3f7a2a" />),
+    bone_heart: heartGlyph('#e8e2d0', <path d="M17 15 L19 20 L16 24 M24 17 L22 22" fill="none" stroke="#8c8470" strokeWidth="1.2" />),
+    minted_halo: (
+        <g>
+            <ellipse cx="20" cy="34" fill={GOLD_DARK} rx="9" ry="2" />
+            <ellipse cx="20" cy="10" fill="none" rx="10" ry="3.5" stroke={GOLD} strokeWidth="2.2" />
+            <circle cx="20" cy="24" fill={GOLD} r="8" stroke={GOLD_DARK} strokeWidth="1" />
+            <circle cx="20" cy="24" fill="none" r="5" stroke={GOLD_DARK} strokeOpacity="0.6" strokeWidth="1" />
+            <circle cx="17" cy="21" fill="#fff1c2" r="1.4" />
+        </g>
+    ),
+    frenzy_dial: (
+        <g>
+            <rect fill={GOLD_DARK} height="3" rx="1" width="18" x="11" y="32" />
+            <circle cx="20" cy="20" fill={INK} r="12" stroke={GOLD} strokeWidth="2" />
+            <path d="M11 20 L13 20 M13.6 13.6 L15 15 M20 11 L20 13 M26.4 13.6 L25 15 M29 20 L27 20" stroke={PARCHMENT} strokeWidth="1.2" />
+            <path d="M20 20 L28 15" stroke="#ff8a2a" strokeLinecap="round" strokeWidth="2" />
+            <circle cx="20" cy="20" fill={GOLD} r="1.8" />
+        </g>
+    ),
+    glass_crown: (
+        <g>
+            <ellipse cx="20" cy="33" fill={GOLD_DARK} rx="11" ry="2.2" />
+            <path d="M8 30 L8 14 L14 21 L20 9 L26 21 L32 14 L32 30 Z" fill="#bfe9ff" fillOpacity="0.8" stroke="#ffffff" strokeLinejoin="round" strokeWidth="1" />
+            <path d="M8 26 L32 26" stroke="#ffffff" strokeOpacity="0.7" strokeWidth="1" />
+            <path d="M20 13 L20 24" stroke="#ffffff" strokeOpacity="0.6" strokeWidth="1" />
+        </g>
+    ),
+    interest_coin: (
+        <g>
+            <ellipse cx="20" cy="31" fill={GOLD_DARK} rx="11" ry="4" />
+            <ellipse cx="20" cy="28" fill={GOLD} rx="11" ry="4" stroke={GOLD_DARK} strokeWidth="1" />
+            <ellipse cx="20" cy="22" fill={GOLD} rx="11" ry="4" stroke={GOLD_DARK} strokeWidth="1" />
+            <path d="M20 16 L20 5 M15 10 L20 5 L25 10" fill="none" stroke={CYAN} strokeLinecap="round" strokeWidth="2" />
+            <ellipse cx="20" cy="20.5" fill="#fff1c2" rx="4" ry="1.3" />
+        </g>
     )
 };
+
+/** A Heart relic: a heart-cut gem in its element's ink, with the element's mark on it. */
+function heartGlyph(ink: string, mark: ReactElement): ReactElement {
+    return (
+        <g>
+            <ellipse cx="20" cy="35" fill={GOLD_DARK} rx="9" ry="2" />
+            <path d="M20 33 C8 25 6 17 10 13 C14 9 19 11 20 15 C21 11 26 9 30 13 C34 17 32 25 20 33 Z" fill={ink} stroke={INK} strokeOpacity="0.6" strokeWidth="1" />
+            {mark}
+            <circle cx="14" cy="16" fill="#ffffff" fillOpacity="0.5" r="1.6" />
+        </g>
+    );
+}
 
 /** The drawing for a ware, in a 40x40 viewBox. */
 export const storeWareGlyph = (id: StoreItemId): ReactElement => glyphs[id] ?? <circle cx="20" cy="20" r="12" fill={CYAN} />;

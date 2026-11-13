@@ -1961,6 +1961,7 @@
 .shell[data-layout='desktop'] .combo { flex-wrap: wrap; align-items: baseline; gap: 0.25rem 0.5rem; }
 .shell[data-layout='desktop'] .comboCount { font-size: clamp(2.5rem, calc(2.5rem * (1 + 0.12 * var(--combo-surge, 0))), 3.5rem); }
 .shell[data-layout='desktop'] .comboLabel { min-width: 0; overflow-wrap: anywhere; }
+.comboStageWord { white-space: nowrap; }
 
 /* Dread (`dread-rules.ts`): the tier on the run bar, a thin bar filling toward the next tier's name.
    The bar hangs under the tier like the lives' earned note, so the run bar is no taller for it,

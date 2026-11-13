@@ -14,7 +14,7 @@ import {
     type ComboHeatTheme
 } from '../../shared/combo-heat-rules';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
-import { ELEMENTAL_STORE_ITEMS, STORE_ITEMS, type StoreItemId } from '../../shared/run-store-rules';
+import { ELEMENTAL_STORE_ITEMS, SNOWBALL_STORE_ITEMS, STORE_ITEMS, type StoreItemId } from '../../shared/run-store-rules';
 import type { BoardTurnResolvedEvent } from '../store/gameplayFeedbackAdapter';
 import type { RealmEvent, RealmId, RealmSeverity } from '../../shared/contracts';
 import type { ItemDropId } from './itemDrops';
@@ -311,7 +311,8 @@ export const derivePurchaseCallouts = (
     next: RunState['storePurchases'] | undefined
 ): ScreenCallout[] => {
     const callouts: ScreenCallout[] = [];
-    for (const item of [...STORE_ITEMS, ...ELEMENTAL_STORE_ITEMS]) {
+    // The relics that grow are on the stop's shelf from rules 100; buying one said nothing until 2026-11-13.
+    for (const item of [...STORE_ITEMS, ...ELEMENTAL_STORE_ITEMS, ...SNOWBALL_STORE_ITEMS]) {
         const was = previous?.[item.id as StoreItemId] ?? 0;
         const now = next?.[item.id as StoreItemId] ?? 0;
         for (let count = was + 1; count <= now; count += 1) {

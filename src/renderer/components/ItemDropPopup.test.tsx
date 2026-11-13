@@ -5,6 +5,7 @@ import { ITEM_DROP_HOLD_MS, itemDropFromCallout, itemDropGlyph, itemDropRarity, 
 import { derivePurchaseCallouts } from './screenCallouts';
 import { clearItemDrops, enqueueItemDrops, itemDropsBetween } from '../store/itemDropFeed';
 import { createNewRun } from '../../shared/game';
+import { RELIC_IDS } from '../../shared/run-relic-rules';
 import type { GameplayEventJournalEntry } from '../../shared/contracts';
 
 const drop = (key: string, extra: Partial<ItemDrop> = {}): ItemDrop => ({ key, id: 'meteor_shard', rarity: 'rare', glyph: 'comet', name: 'Meteor shard', line: '+1 meteor', ...extra });
@@ -22,12 +23,18 @@ describe('item drops', () => {
         expect(itemDropRarity('bomb')).toBe('uncommon');
         expect(itemDropRarity('meteor_shard')).toBe('rare');
         expect(itemDropRarity('deep_pockets')).toBe('epic');
+        // The relics that grow too: they dropped as a Common star until 2026-11-13.
+        for (const id of RELIC_IDS) expect(itemDropRarity(id), id).toBe('epic');
+        expect(itemDropGlyph('cinder_heart')).toBe('gem');
     });
 
     it('a purchase is a drop, carried on the stamp that used to show it', () => {
         const [callout] = derivePurchaseCallouts({}, { deep_pockets: 1 });
         const fromStamp = itemDropFromCallout(callout!);
         expect(fromStamp).toMatchObject({ id: 'deep_pockets', rarity: 'epic', glyph: 'gem', name: 'Deep pockets' });
+        // A relic that grows is a purchase too: buying one used to say nothing at all.
+        const [heart] = derivePurchaseCallouts({}, { cinder_heart: 1 });
+        expect(itemDropFromCallout(heart!)).toMatchObject({ id: 'cinder_heart', rarity: 'epic', glyph: 'gem' });
     });
 
     it('a camp upgrade bought as the next floor builds is a drop; a new run or a restore is not', () => {

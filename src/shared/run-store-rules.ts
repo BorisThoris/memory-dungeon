@@ -114,7 +114,7 @@ export const campItemsFor = (rulesVersion: number | undefined): readonly StoreIt
 const ALL_STORE_ITEMS = [...STORE_ITEMS, ...ELEMENTAL_STORE_ITEMS];
 
 /** The relics that grow (`snowball-relic-rules.ts`), on the stop's shelf from rules 100: bought once, each. */
-const SNOWBALL_STORE_ITEMS: readonly StoreItemDefinition[] = SNOWBALL_RELICS.map((relic) => ({ id: relic.id, title: relic.title, body: relic.body, basePrice: relic.price, priceStep: 0, kind: 'relic' as const }));
+export const SNOWBALL_STORE_ITEMS: readonly StoreItemDefinition[] = SNOWBALL_RELICS.map((relic) => ({ id: relic.id, title: relic.title, body: relic.body, basePrice: relic.price, priceStep: 0, kind: 'relic' as const }));
 /** How many relics a stop puts on its shelf from rules 100, drawn from the seed. */
 export const STOP_RELIC_OFFER = 3;
 const onStopChoice = (rulesVersion: number | undefined): boolean => (rulesVersion ?? 0) >= SNOWBALL_RELICS_FROM;

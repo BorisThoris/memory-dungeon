@@ -292,6 +292,34 @@ describe('RunShell', () => {
         }
     });
 
+    it('lets the lost line fall away even when the next match comes before it has', () => {
+        // The playtest's shots (2026-11-13): "Lost 8" stayed under a combo of 43 for twenty floors,
+        // because the match after the miss cancelled the timer that hides the line.
+        vi.useFakeTimers();
+        try {
+            const base = playingRun();
+            const at = (streak: number): RunState => ({
+                ...base,
+                runRulesVersion: COMBO_PAYS_FROM,
+                board: { ...base.board!, pairCount: 8 },
+                stats: { ...base.stats, currentStreak: streak }
+            });
+            const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={at(5)} tools={[]} />);
+            rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={at(0)} tools={[]} />);
+            act(() => {
+                vi.advanceTimersByTime(1);
+            });
+            expect(screen.getByTestId('hud-combo-lost')).toBeInTheDocument();
+            rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={at(1)} tools={[]} />);
+            act(() => {
+                vi.advanceTimersByTime(COMBO_LOST_MS);
+            });
+            expect(screen.queryByTestId('hud-combo-lost')).toBeNull();
+        } finally {
+            vi.useRealTimers();
+        }
+    });
+
     it('fills the Fever meter and keeps it full past the rung', () => {
         const base = playingRun();
         const run: RunState = {

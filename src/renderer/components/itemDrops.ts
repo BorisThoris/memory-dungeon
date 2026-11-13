@@ -1,6 +1,7 @@
 import type { FindableKind } from '../../shared/contracts';
 import type { StoreItemId } from '../../shared/run-store-rules';
 import type { CurioItemId } from '../../shared/curio-rules';
+import { RELIC_IDS } from '../../shared/run-relic-rules';
 import type { ScreenCallout } from './screenCallouts';
 
 /**
@@ -46,7 +47,8 @@ export const ITEM_DROP_HOLD_MS: Readonly<Record<ItemDropRarity, number>> = {
     legendary: 3000
 };
 
-const RELICS: ReadonlySet<string> = new Set(['deep_pockets', 'gilded_chain', 'long_look', 'tallow_candle', 'misers_purse']);
+// Every relic, the ones that grow included: a hand list here left a bought Cinder Heart a Common star.
+const RELICS: ReadonlySet<string> = new Set(RELIC_IDS);
 
 export const itemDropRarity = (id: ItemDropId): ItemDropRarity => {
     if (RELICS.has(id)) return 'epic';

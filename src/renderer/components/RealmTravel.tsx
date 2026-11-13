@@ -131,7 +131,8 @@ const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose, summary, 
                                 {REALM_TRAVEL_COPY.risk(door, attunement[door.realmId] ?? 0) ? <span className={styles.rule}>{REALM_TRAVEL_COPY.risk(door, attunement[door.realmId] ?? 0)}</span> : null}
                             </span>
                             <span className={styles.enter}>Enter {realm.title} <span aria-hidden="true">→</span></span>
-                            {been > 0 ? <span className={styles.been}>{`${been} ${been === 1 ? 'floor' : 'floors'} here this run`}</span> : null}
+                            {/* Always a line, so every door's Enter sits at the same height (the playtest's travel shot, 2026-11-13). */}
+                            <span className={styles.been}>{been > 0 ? `${been} ${been === 1 ? 'floor' : 'floors'} here this run` : 'Not visited yet this run'}</span>
                         </button>
                     );
                 })}
