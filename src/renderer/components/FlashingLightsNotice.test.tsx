@@ -3,7 +3,8 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { useAppStore } from '../store/useAppStore';
-import FlashingLightsNotice, { FLASHING_NOTICE_STORAGE_KEY } from './FlashingLightsNotice';
+import FlashingLightsNotice from './FlashingLightsNotice';
+import { FLASHING_NOTICE_STORAGE_KEY } from '../copy/flashingLightsCopy';
 
 const newPlayer = (reduceMotion: boolean, onboardingDismissed = false): void => {
     const saveData = createDefaultSaveData();

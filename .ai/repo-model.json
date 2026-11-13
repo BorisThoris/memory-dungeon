@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3421,
-    "codeFileCount": 1340,
+    "trackedFileCount": 3422,
+    "codeFileCount": 1341,
     "exportedSymbolCount": 4445,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12405
+    "relationshipCount": 12408
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "78d6e598cfa95b60c4defd8690ca00fe482ede9d7efe226166029da895c27e94"
+      "sha256": "65ac943196fbead962688c03bb54c3c09e08d1c7b23054fedb8677551f56beb2"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -11151,14 +11151,14 @@
     {
       "path": "src/renderer/components/FlashingLightsNotice.test.tsx",
       "category": "test",
-      "bytes": 2164,
-      "sha256": "46a20a5c4db36b3a2fca67991ae74edcddfe7c42ed1dbb5e94e37cd6f292c59f"
+      "bytes": 2205,
+      "sha256": "c506b510ad4124a59ba3fb17e028ad3eec5d8eff697969b7c0f5d1fc32ec1cd2"
     },
     {
       "path": "src/renderer/components/FlashingLightsNotice.tsx",
       "category": "source",
-      "bytes": 2773,
-      "sha256": "2aaf3c3b9ceeace89b084cfa3695da500eb9cdcd42faef1366d8f6fb95d984b7"
+      "bytes": 2492,
+      "sha256": "207924291306c4a467d0aa91110f0e188deaa108806e558e4707d82cb64c3e08"
     },
     {
       "path": "src/renderer/components/flipFlameTrail.test.ts",
@@ -13373,6 +13373,12 @@
       "category": "source",
       "bytes": 964,
       "sha256": "8d7b96ef049dbd8ab5754d5f4c85229e6380c486d9f13a777c02b5159c09142e"
+    },
+    {
+      "path": "src/renderer/copy/flashingLightsCopy.ts",
+      "category": "source",
+      "bytes": 459,
+      "sha256": "b4e58c0f0803511e7d402422714b9e8d8f48340cc0eca8e1a7ef0735eaa42bcf"
     },
     {
       "path": "src/renderer/copy/floorClearChain.ts",
@@ -24688,9 +24694,10 @@
       "path": "src/renderer/components/FlashingLightsNotice.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 42,
+      "lineCount": 43,
       "imports": [
         "file:src/renderer/components/FlashingLightsNotice.tsx",
+        "file:src/renderer/copy/flashingLightsCopy.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/shared/save-data.ts"
       ],
@@ -24702,14 +24709,13 @@
       "path": "src/renderer/components/FlashingLightsNotice.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 72,
+      "lineCount": 64,
       "imports": [
+        "file:src/renderer/copy/flashingLightsCopy.ts",
         "file:src/renderer/store/useAppStore.ts"
       ],
       "exports": [
-        "symbol:src/renderer/components/FlashingLightsNotice.tsx#default",
-        "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_COPY",
-        "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_STORAGE_KEY"
+        "symbol:src/renderer/components/FlashingLightsNotice.tsx#default"
       ],
       "testedBy": [
         "file:src/renderer/components/FlashingLightsNotice.test.tsx"
@@ -31248,6 +31254,21 @@
         "symbol:src/renderer/copy/elementClarity.ts#focusSummary"
       ],
       "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/copy/flashingLightsCopy.ts",
+      "path": "src/renderer/copy/flashingLightsCopy.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 10,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/flashingLightsCopy.ts#FLASHING_NOTICE_COPY",
+        "symbol:src/renderer/copy/flashingLightsCopy.ts#FLASHING_NOTICE_STORAGE_KEY"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/FlashingLightsNotice.test.tsx"
+      ]
     },
     {
       "id": "file:src/renderer/copy/floorClearChain.ts",
@@ -51809,24 +51830,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/FlashingLightsNotice.tsx",
-      "line": 71,
-      "endLine": 71
-    },
-    {
-      "id": "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_COPY",
-      "name": "FLASHING_NOTICE_COPY",
-      "kind": "value",
-      "file": "src/renderer/components/FlashingLightsNotice.tsx",
-      "line": 16,
-      "endLine": 21
-    },
-    {
-      "id": "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_STORAGE_KEY",
-      "name": "FLASHING_NOTICE_STORAGE_KEY",
-      "kind": "value",
-      "file": "src/renderer/components/FlashingLightsNotice.tsx",
-      "line": 14,
-      "endLine": 14
+      "line": 63,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_BASE",
@@ -59467,6 +59472,22 @@
       "file": "src/renderer/copy/elementClarity.ts",
       "line": 14,
       "endLine": 17
+    },
+    {
+      "id": "symbol:src/renderer/copy/flashingLightsCopy.ts#FLASHING_NOTICE_COPY",
+      "name": "FLASHING_NOTICE_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/flashingLightsCopy.ts",
+      "line": 4,
+      "endLine": 9
+    },
+    {
+      "id": "symbol:src/renderer/copy/flashingLightsCopy.ts#FLASHING_NOTICE_STORAGE_KEY",
+      "name": "FLASHING_NOTICE_STORAGE_KEY",
+      "kind": "value",
+      "file": "src/renderer/copy/flashingLightsCopy.ts",
+      "line": 2,
+      "endLine": 2
     },
     {
       "id": "symbol:src/renderer/copy/floorClearChain.ts#FLOOR_CLEAR_COPY",
@@ -93616,18 +93637,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/components/FlashingLightsNotice.tsx->symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_COPY",
-      "source": "file:src/renderer/components/FlashingLightsNotice.tsx",
-      "target": "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_COPY",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/FlashingLightsNotice.tsx->symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_STORAGE_KEY",
-      "source": "file:src/renderer/components/FlashingLightsNotice.tsx",
-      "target": "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_STORAGE_KEY",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/components/flipFlameTrail.ts->symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_BASE",
       "source": "file:src/renderer/components/flipFlameTrail.ts",
       "target": "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_BASE",
@@ -99355,6 +99364,18 @@
       "id": "exports:src/renderer/copy/elementClarity.ts->symbol:src/renderer/copy/elementClarity.ts#focusSummary",
       "source": "file:src/renderer/copy/elementClarity.ts",
       "target": "symbol:src/renderer/copy/elementClarity.ts#focusSummary",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/flashingLightsCopy.ts->symbol:src/renderer/copy/flashingLightsCopy.ts#FLASHING_NOTICE_COPY",
+      "source": "file:src/renderer/copy/flashingLightsCopy.ts",
+      "target": "symbol:src/renderer/copy/flashingLightsCopy.ts#FLASHING_NOTICE_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/flashingLightsCopy.ts->symbol:src/renderer/copy/flashingLightsCopy.ts#FLASHING_NOTICE_STORAGE_KEY",
+      "source": "file:src/renderer/copy/flashingLightsCopy.ts",
+      "target": "symbol:src/renderer/copy/flashingLightsCopy.ts#FLASHING_NOTICE_STORAGE_KEY",
       "kind": "exports"
     },
     {
@@ -123000,6 +123021,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/FlashingLightsNotice.test.tsx->src/renderer/copy/flashingLightsCopy.ts",
+      "source": "file:src/renderer/components/FlashingLightsNotice.test.tsx",
+      "target": "file:src/renderer/copy/flashingLightsCopy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/FlashingLightsNotice.test.tsx->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/FlashingLightsNotice.test.tsx",
       "target": "file:src/renderer/store/useAppStore.ts",
@@ -123009,6 +123036,12 @@
       "id": "imports:src/renderer/components/FlashingLightsNotice.test.tsx->src/shared/save-data.ts",
       "source": "file:src/renderer/components/FlashingLightsNotice.test.tsx",
       "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FlashingLightsNotice.tsx->src/renderer/copy/flashingLightsCopy.ts",
+      "source": "file:src/renderer/components/FlashingLightsNotice.tsx",
+      "target": "file:src/renderer/copy/flashingLightsCopy.ts",
       "kind": "imports"
     },
     {
@@ -153860,6 +153893,12 @@
       "id": "tested_by:src/renderer/copy/comboHeatPerksCopy.ts->file:src/shared/combo-heat-perks.test.ts",
       "source": "file:src/renderer/copy/comboHeatPerksCopy.ts",
       "target": "file:src/shared/combo-heat-perks.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/copy/flashingLightsCopy.ts->file:src/renderer/components/FlashingLightsNotice.test.tsx",
+      "source": "file:src/renderer/copy/flashingLightsCopy.ts",
+      "target": "file:src/renderer/components/FlashingLightsNotice.test.tsx",
       "kind": "tested_by"
     },
     {

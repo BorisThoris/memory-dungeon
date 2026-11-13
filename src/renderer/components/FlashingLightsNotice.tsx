@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { useAppStore } from '../store/useAppStore';
 import styles from './MainMenu.module.css';
+import { FLASHING_NOTICE_COPY, FLASHING_NOTICE_STORAGE_KEY } from '../copy/flashingLightsCopy';
 
 /**
  * A word about flashing light before the first run (2026-11-13).
@@ -11,15 +12,6 @@ import styles from './MainMenu.module.css';
  * with the switch itself on the note; "Got it" or the switch puts it away for good on this device.
  * It shows to a new player only, and never while Reduce Motion is already on.
  */
-export const FLASHING_NOTICE_STORAGE_KEY = 'memory-dungeon.flashing-notice-seen';
-
-export const FLASHING_NOTICE_COPY = {
-    title: 'Flashing light',
-    body: 'Storms flash, and so do the big moments of a run. Reduce Motion stops the flashing and the movement; it is in Settings › Accessibility too.',
-    reduce: 'Turn on Reduce Motion',
-    dismiss: 'Got it'
-} as const;
-
 const seen = (): boolean => {
     try {
         return window.localStorage.getItem(FLASHING_NOTICE_STORAGE_KEY) === 'yes';
