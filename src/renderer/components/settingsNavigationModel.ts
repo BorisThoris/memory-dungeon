@@ -5,6 +5,8 @@ export type SettingsSubsection =
     | 'timing'
     | 'assist'
     | 'input'
+    | 'keys'
+    | 'whatsNew'
     | 'volume'
     | 'display'
     | 'graphics'
@@ -17,11 +19,11 @@ export type SettingsSubsection =
 
 export const SETTINGS_CATEGORIES: ReadonlyArray<{ id: SettingsCategory; label: string; note: string }> = [
     { id: 'gameplay', label: 'Gameplay', note: 'Run rules, board flow, and helper systems.' },
-    { id: 'controls', label: 'Controls', note: 'Pointer, touch and keyboard.' },
+    { id: 'controls', label: 'Controls', note: 'Pointer, touch, and keys.' },
     { id: 'audio', label: 'Audio', note: 'Master, music, and effect mix.' },
     { id: 'video', label: 'Video', note: 'Display mode and interface scale.' },
     { id: 'accessibility', label: 'Accessibility', note: 'Motion and clarity.' },
-    { id: 'about', label: 'About', note: 'Build info, credits, and reset.' },
+    { id: 'about', label: 'About', note: 'Build info, what’s new, credits, and reset.' },
     { id: 'dev', label: 'Effects', note: 'Extra visual effects. Applies immediately.' }
 ];
 
@@ -35,7 +37,8 @@ export const SETTINGS_SUBSECTIONS: Record<
         { id: 'assist', label: 'Assist' }
     ],
     controls: [
-        { id: 'input', label: 'Input' }
+        { id: 'input', label: 'Input' },
+        { id: 'keys', label: 'Keys' }
     ],
     audio: [{ id: 'volume', label: 'Volume' }],
     video: [
@@ -46,6 +49,7 @@ export const SETTINGS_SUBSECTIONS: Record<
     dev: [{ id: 'effects', label: 'Effects' }],
     about: [
         { id: 'build', label: 'Build' },
+        { id: 'whatsNew', label: 'What’s new' },
         { id: 'credits', label: 'Credits' },
         { id: 'transfer', label: 'Move progress' },
         { id: 'reset', label: 'Reset' }

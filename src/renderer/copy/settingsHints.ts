@@ -23,6 +23,7 @@ export const SETTINGS_HINTS = {
     dailyMusicEnabled: 'Each realm plays a piece written for you today. Off plays the recorded loops.',
     colourVision:
         'Colour vision: every element carries its own symbol on the back of its cards, and the card trait colours are tested to stay distinct with protanopia, deuteranopia and tritanopia.',
+    highContrast: 'Sets the menus’ and the run’s secondary text at full strength and draws the rules and panel edges heavier. The card art is unchanged.',
     reduceMotion: 'Reduces shake, camera motion and animated effects, and stops the room flashing (lightning, a break, Fever).',
     screenShakeIntensity: 'How hard bombs, meteors and big breaks shake the board.',
     resolveDelayMultiplier: 'Match, miss and study timing. Applies to new runs.',

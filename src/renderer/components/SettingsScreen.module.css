@@ -776,6 +776,20 @@
     color: var(--margin-paper-dim);
 }
 
+/* What's new: a week's changes under its date, across the row. */
+.patchNoteList {
+    grid-area: note;
+    margin: 0.2rem 0 0;
+    padding-left: 1.1rem;
+    font-size: 0.86rem;
+    line-height: 1.45;
+    color: var(--margin-paper-soft);
+}
+
+.patchNoteList li + li {
+    margin-top: 0.15rem;
+}
+
 /* An action inside the page: an outlined word, as in the dialogs. */
 .word {
     display: inline-flex;

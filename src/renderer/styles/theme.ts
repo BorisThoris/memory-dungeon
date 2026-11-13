@@ -444,12 +444,44 @@ export const forEachRendererThemeCssVar = (
     }
 };
 
+/**
+ * High Contrast (2026-11-13): secondary text at full strength, heavier rules and panel edges, the
+ * darker scrim. Set inline, because the theme already sits inline on `<html>` and the app root,
+ * where a stylesheet rule could not override it. The WebGL board's art is not drawn from these.
+ */
+export const HIGH_CONTRAST_CSS_VARS: Readonly<Record<string, string>> = {
+    '--theme-text-muted': '#f4ecdc',
+    '--theme-text-subtle': 'rgba(244, 236, 220, 0.9)',
+    '--theme-divider-hairline': 'rgba(242, 211, 157, 0.45)',
+    '--theme-modal-scrim-bg': 'var(--theme-scrim-heavy)',
+    '--margin-paper-soft': '#f8f4f4',
+    '--margin-paper-dim': '#ebe7e7',
+    '--margin-hairline': 'color-mix(in srgb, var(--margin-paper) 45%, transparent)',
+    '--margin-hairline-soft': 'color-mix(in srgb, var(--margin-paper) 30%, transparent)'
+};
+
+/**
+ * Put High Contrast on `<html>` (for dialogs portaled to `document.body`) or take it off again: a
+ * theme token returns to its theme value, a stylesheet-only token (`--margin-*`) to the stylesheet.
+ */
+export const applyHighContrastToDocument = (on: boolean, html: HTMLElement = document.documentElement): void => {
+    const themeVars = RENDERER_THEME.cssVars as Readonly<Record<string, string>>;
+    for (const [key, value] of Object.entries(HIGH_CONTRAST_CSS_VARS)) {
+        if (on) html.style.setProperty(key, value);
+        else if (key in themeVars) html.style.setProperty(key, themeVars[key]);
+        else html.style.removeProperty(key);
+    }
+    if (on) html.dataset.contrast = 'high';
+    else delete html.dataset.contrast;
+};
+
 export type RendererThemeDensity = 'compact' | 'roomy';
 
 export const buildRendererThemeStyle = (
     uiScale: number,
     density: RendererThemeDensity = 'roomy',
-    reduceMotion = false
+    reduceMotion = false,
+    highContrast = false
 ): CSSProperties =>
     ({
         ...RENDERER_THEME.cssVars,
@@ -464,5 +496,6 @@ export const buildRendererThemeStyle = (
                   ['--theme-modal-scrim-backdrop-filter' as string]: 'none'
               }
             : {}),
+        ...(highContrast ? HIGH_CONTRAST_CSS_VARS : {}),
         ['--ui-scale' as string]: uiScale
     }) as CSSProperties;

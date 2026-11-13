@@ -121,7 +121,9 @@ import {
     runChainTier,
     type ChainTier
 } from '../../shared/chain-tier-rules';
-import { GAMEPAD_SHORTCUT_ROWS, GAMEPLAY_SHORTCUT_ROWS } from '../keyboard/gameplayShortcuts';
+import { GAMEPAD_SHORTCUT_ROWS, gameplayShortcutRows } from '../keyboard/gameplayShortcuts';
+import { currentKeyBindings, useKeyBindings } from '../keyboard/keyBindingsLive';
+import { keyMatchesAction } from '../../shared/key-bindings';
 import { useGamepadConnected } from '../hooks/useGamepadNavigation';
 import { usePlatformTiltField } from '../platformTilt/usePlatformTiltField';
 import { useAppStore } from '../store/useAppStore';
@@ -552,6 +554,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         }
     }), []);
     const gamepadConnected = useGamepadConnected();
+    const keyBindings = useKeyBindings();
     useEffect(() => {
         if (!compactTouchChrome) {
             return;
@@ -970,7 +973,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             if (event.altKey || event.ctrlKey || event.metaKey) {
                 return;
             }
-            if (event.code !== 'KeyP' && event.key !== 'Escape') {
+            if (!keyMatchesAction(currentKeyBindings(), 'pause', event.code) && event.key !== 'Escape') {
                 return;
             }
             // The native cast guide owns Escape. Preventing its default would pause the game
@@ -1054,7 +1057,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             if (state.shortcutsHelpOpen) {
                 return;
             }
-            if (event.code === 'F1' || event.key === '?') {
+            if (keyMatchesAction(currentKeyBindings(), 'help', event.code) || event.key === '?') {
                 event.preventDefault();
                 state.openShortcutsHelp();
             }
@@ -2782,7 +2785,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             aria-label={gamepadConnected ? 'Gameplay controller shortcuts' : 'Gameplay keyboard shortcuts'}
                             className={styles.shortcutsHelpList}
                         >
-                            {(gamepadConnected ? GAMEPAD_SHORTCUT_ROWS : GAMEPLAY_SHORTCUT_ROWS).map((row) => (
+                            {(gamepadConnected ? GAMEPAD_SHORTCUT_ROWS : gameplayShortcutRows(keyBindings)).map((row) => (
                                 <li key={row.id}>
                                     <span className={styles.shortcutsHelpKeys}>{row.keys}</span>
                                     {' — '}

@@ -7,6 +7,7 @@
  * with TypeScript `exactOptionalPropertyTypes` when feasible.
  */
 import type { BoardFold } from './board-fold-rules';
+import type { KeyBindings } from './key-bindings';
 import type { ElementalPouch, ElementalStoreId } from './elemental-loot-rules';
 
 /** 10 (2026-10-20, DGE-031): `playerStats.descent` and the `descent:endless` unlock, the deep-game pack's one migration. */
@@ -412,6 +413,13 @@ export interface Settings {
      * (helps on larger boards).
      */
     pairProximityHintsEnabled: boolean;
+    /**
+     * Stronger text and rules across the interface (2026-11-13): muted and subtle text at full
+     * strength, heavier hairlines and scrims. The card art on the WebGL board is unchanged.
+     */
+    highContrast?: boolean;
+    /** The keyboard's rebindable actions (`key-bindings.ts`); missing reads as the defaults. */
+    keyBindings?: KeyBindings;
 }
 
 export interface Tile {

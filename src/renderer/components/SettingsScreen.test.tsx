@@ -218,3 +218,50 @@ describe('the crash reports line in Settings', () => {
         expect(screen.getByTestId('settings-crash-reports')).toHaveTextContent('No crash reports');
     });
 });
+
+describe('Keys, High Contrast and What’s new', () => {
+    beforeEach(() => {
+        const saveData = createDefaultSaveData();
+        useAppStore.setState({
+            closeSettings: vi.fn(),
+            hydrated: true,
+            run: null,
+            saveData,
+            settings: saveData.settings,
+            updateSettings: vi.fn().mockResolvedValue(undefined)
+        });
+    });
+
+    it('saves a rebound key with the rest of the settings, and the Input line follows it', async () => {
+        const user = userEvent.setup();
+        render(<SettingsScreen presentation="page" />);
+        await user.click(screen.getByRole('button', { name: /^controls/i }));
+        expect(screen.getByText(/P pauses\./)).toBeInTheDocument();
+        await user.click(screen.getByRole('button', { name: /^keys$/i }));
+        await user.click(screen.getByRole('button', { name: 'Change Pause key' }));
+        await user.keyboard('o');
+        await user.click(screen.getByRole('button', { name: 'Save' }));
+        expect(useAppStore.getState().updateSettings).toHaveBeenCalledWith(
+            expect.objectContaining({ keyBindings: expect.objectContaining({ pause: 'KeyO' }) })
+        );
+    });
+
+    it('offers High Contrast beside Reduce Motion and saves it', async () => {
+        const user = userEvent.setup();
+        render(<SettingsScreen presentation="page" />);
+        await user.click(screen.getByRole('button', { name: /accessibility/i }));
+        await user.click(screen.getByRole('checkbox', { name: /high contrast/i }));
+        await user.click(screen.getByRole('button', { name: 'Save' }));
+        expect(useAppStore.getState().updateSettings).toHaveBeenCalledWith(expect.objectContaining({ highContrast: true }));
+    });
+
+    it('lists what changed, newest week first', async () => {
+        const user = userEvent.setup();
+        render(<SettingsScreen presentation="page" />);
+        await user.click(screen.getByRole('button', { name: /about/i }));
+        await user.click(screen.getByRole('button', { name: /what’s new/i }));
+        const notes = screen.getByTestId('settings-patch-notes');
+        expect(notes.firstElementChild).toHaveTextContent('Week of 2026-11-09');
+        expect(notes).toHaveTextContent('Continue');
+    });
+});

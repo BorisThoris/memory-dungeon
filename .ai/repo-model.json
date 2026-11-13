@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3422,
-    "codeFileCount": 1341,
-    "exportedSymbolCount": 4445,
+    "trackedFileCount": 3430,
+    "codeFileCount": 1348,
+    "exportedSymbolCount": 4467,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12408
+    "relationshipCount": 12455
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "65ac943196fbead962688c03bb54c3c09e08d1c7b23054fedb8677551f56beb2"
+      "sha256": "18e7f93d17e81ffe473bf413923b8b82bf11f0b0e370f4bba49f9eec472f4088"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4013,6 +4013,12 @@
       "category": "test",
       "bytes": 4200,
       "sha256": "6edafe8cb5b8808ec9cb46bc27c002cbfa2dae364ae13af67c0fec95610f7efc"
+    },
+    {
+      "path": "e2e/key-bindings-contrast.spec.ts",
+      "category": "test",
+      "bytes": 3321,
+      "sha256": "b47cd2386c5aab0620db6dfdaf3d35a502eba59e447a1611c8877860ba6529e8"
     },
     {
       "path": "e2e/living-elements.spec.ts",
@@ -6231,8 +6237,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 28173,
-      "sha256": "6e2bf09e3d692e89f3b377b57631cecfd42bcf25e0ba84fe607849e5f0fd97bf"
+      "bytes": 28476,
+      "sha256": "12eef9e8ec13540fcb356d16ffb7f89406cfb8a637b48a77e7ca013496f327b4"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -11319,8 +11325,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 157127,
-      "sha256": "ef50fa2d59bd5bfb1e6583abeec22a5844029de14e5c78f32f59a80b56751622"
+      "bytes": 157400,
+      "sha256": "d0d065a8cc4da2a77b5dd4f0818a524e975c0eb1ef7899b98ca1ba3b9efa3368"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -11471,6 +11477,18 @@
       "category": "source",
       "bytes": 24998,
       "sha256": "bde98e255f51c17c5a56a7ca87e590c625a17b4a645b75d5bb6fa5714e018102"
+    },
+    {
+      "path": "src/renderer/components/KeyBindingsEditor.test.tsx",
+      "category": "test",
+      "bytes": 3076,
+      "sha256": "5235283f042866c5789a85f062c63705ed138b2d680a1eb3bb31a43b91dfc663"
+    },
+    {
+      "path": "src/renderer/components/KeyBindingsEditor.tsx",
+      "category": "source",
+      "bytes": 4027,
+      "sha256": "709983837f48df1bc6f7d34d9347e7ea01ea46100697ccff6073195ef4985490"
     },
     {
       "path": "src/renderer/components/LayerEdges.tsx",
@@ -11949,8 +11967,8 @@
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 66925,
-      "sha256": "9562cb73a24f5d662d8a04890ef54053fab8f8b3fded5bb0eabe2b689fa9aef8"
+      "bytes": 67131,
+      "sha256": "cdbb6b5af2e08cf204b2ff100a4ea3c46fa4d8af65e1d12b51712106bd34e4e9"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -11987,12 +12005,6 @@
       "category": "source",
       "bytes": 5369,
       "sha256": "d3853b9735908c376b2566354d7a952c958728cbd149640a2107271ad34c9236"
-    },
-    {
-      "path": "src/renderer/components/runShellToolKeys.ts",
-      "category": "source",
-      "bytes": 304,
-      "sha256": "da7db82d35c8c7bf7e3fdec2f3cb05470706f4a97750c9cae3467744c167cbb6"
     },
     {
       "path": "src/renderer/components/sceneAmbient.test.ts",
@@ -12153,26 +12165,26 @@
     {
       "path": "src/renderer/components/settingsNavigationModel.ts",
       "category": "source",
-      "bytes": 2128,
-      "sha256": "11311c0f9bb5eeb7956e5d6b0f8e5e3881a713a71536d0458e19ebb16bd857ed"
+      "bytes": 2259,
+      "sha256": "2940620f8bf391f7242316da36317afc05a4de244a1985b473a98f7da6f57190"
     },
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 31193,
-      "sha256": "91f1d0e397d83621e1ebf66716b23b68174439b3f63aadba375398333764be18"
+      "bytes": 31488,
+      "sha256": "a84f6e40e23c0bf9e49900c29d72c2950ff2c337b1c8686ddf7793b02f37b450"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "category": "test",
-      "bytes": 11537,
-      "sha256": "5599dc1045fedbe3f9d98605a34cc4c0996e8a514edfe552f3e7f20ce3f49f92"
+      "bytes": 13812,
+      "sha256": "e0e59ddef7c84e751b95197ce9ac113349443fc0c1dd727073c8b19d59580b60"
     },
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 56844,
-      "sha256": "2308785e32c8f6be9c0757f42dfa47fe0d02d00220bd292e0030454a7ded8d86"
+      "bytes": 59773,
+      "sha256": "0133da88aeca81a5a41530af2e7a078b6598525732353d58e2c20515839d21b9"
     },
     {
       "path": "src/renderer/components/shaderFirstUse.test.ts",
@@ -13465,6 +13477,12 @@
       "sha256": "0b05347c3b5e38c58c8be681fe2199f3dfa2fcae3af7688da59773aae12a8aad"
     },
     {
+      "path": "src/renderer/copy/keyBindingsCopy.ts",
+      "category": "source",
+      "bytes": 1137,
+      "sha256": "c84c4f6872982ae43dc82246c80e3490c187bd3166ce3cdd2e7548a9a1c1bffa"
+    },
+    {
       "path": "src/renderer/copy/lanternLightBeat.test.ts",
       "category": "test",
       "bytes": 1461,
@@ -13549,6 +13567,12 @@
       "sha256": "21d0c735d92120bec44aad1832aa1368c6baa86225d41cb7efeeb88e4bd1cf66"
     },
     {
+      "path": "src/renderer/copy/patchNotesCopy.ts",
+      "category": "source",
+      "bytes": 2854,
+      "sha256": "8641e856b8a4153496e6a37381a2e1cd6003f6bad71a73eca6934d8b4744d442"
+    },
+    {
       "path": "src/renderer/copy/profileProgress.ts",
       "category": "source",
       "bytes": 1116,
@@ -13623,8 +13647,8 @@
     {
       "path": "src/renderer/copy/settingsHints.ts",
       "category": "source",
-      "bytes": 2622,
-      "sha256": "78354687490aa9593191225a4e7adfbf65ada5a7441b7346ac6d28a3adb51c16"
+      "bytes": 2781,
+      "sha256": "84390015e2e2a18e1d8dde62116a2ba1c0cea47bb87c4666e8815a94fb31aeda"
     },
     {
       "path": "src/renderer/copy/skittishCardsBeat.test.ts",
@@ -14145,8 +14169,14 @@
     {
       "path": "src/renderer/keyboard/gameplayShortcuts.ts",
       "category": "source",
-      "bytes": 1761,
-      "sha256": "920951337f875ddd594509f656eea57c1c9707349664451f643650e57e2df05c"
+      "bytes": 2557,
+      "sha256": "f042b61b0eea39179985428e795c2a3952a1d60c9c067f7a96e66e3c9aedfa7c"
+    },
+    {
+      "path": "src/renderer/keyboard/keyBindingsLive.ts",
+      "category": "source",
+      "bytes": 553,
+      "sha256": "7d0636c36781c2b20b46d12a61c2b9f58103bd5b0afc13eb7d83416fbe344846"
     },
     {
       "path": "src/renderer/main.tsx",
@@ -14683,6 +14713,12 @@
       "sha256": "95367bf68a4504492ffe8a5dbaddea5c46485060800ae65441acfcfb874fab45"
     },
     {
+      "path": "src/renderer/styles/highContrast.test.ts",
+      "category": "test",
+      "bytes": 1744,
+      "sha256": "9c8e89894fc8ed30d2e2403ee008a407384300852c0341f89dac555a10aa68ac"
+    },
+    {
       "path": "src/renderer/styles/notificationsGame.css",
       "category": "source",
       "bytes": 5539,
@@ -14703,8 +14739,8 @@
     {
       "path": "src/renderer/styles/theme.ts",
       "category": "source",
-      "bytes": 27992,
-      "sha256": "7b2dbc728c2a216c6789c12227355f98b0235f7300b8caab01b520c86eb94016"
+      "bytes": 29661,
+      "sha256": "cf406b52127cc96f1a7514b49af7ee51eac7aafd9dc95eb36bbe63f3417076f9"
     },
     {
       "path": "src/renderer/styles/theme.wcag.test.ts",
@@ -15531,8 +15567,8 @@
     {
       "path": "src/shared/contracts.ts",
       "category": "source",
-      "bytes": 68959,
-      "sha256": "d53c28a9eae9ee17176df0fc9f0d730d7db4c2e1649fb543da7d7f41ec8f6a5d"
+      "bytes": 69371,
+      "sha256": "97470eaf9e3a9624918839149f8851cc1ecdf1c65e31c44da562a74684290487"
     },
     {
       "path": "src/shared/control-label-ambiguity.test.ts",
@@ -16391,6 +16427,18 @@
       "category": "source",
       "bytes": 3631,
       "sha256": "c2cf0566d854ed33847779b8cb77b76a1ad094ef80d987648870569ba9d5329e"
+    },
+    {
+      "path": "src/shared/key-bindings.test.ts",
+      "category": "test",
+      "bytes": 3867,
+      "sha256": "d9a9f48566d1434d9f6e57a7c9ad0c780c24db47910c8bb2ea6669988ccf01de"
+    },
+    {
+      "path": "src/shared/key-bindings.ts",
+      "category": "source",
+      "bytes": 5121,
+      "sha256": "4dc5c3f7f1dd7c9797022e70023721f93461c325159ac916be28b8144be823be"
     },
     {
       "path": "src/shared/lantern-light-rules.test.ts",
@@ -17445,8 +17493,8 @@
     {
       "path": "src/shared/save-data.ts",
       "category": "source",
-      "bytes": 29333,
-      "sha256": "2cdbde47a3d358a872d3bfabbd31121d4c968a7404470227310557dc646285b4"
+      "bytes": 29714,
+      "sha256": "8163163b016b98588a72e1a321f9b22f4305e1e1ce8b3b46be3bcf0adbd18ff7"
     },
     {
       "path": "src/shared/save-field-policy.test.ts",
@@ -21236,7 +21284,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 560,
+      "lineCount": 564,
       "imports": [
         "file:src/renderer/assets/preloadRunAssets.ts",
         "file:src/renderer/audio/feverDuck.ts",
@@ -25161,7 +25209,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2930,
+      "lineCount": 2933,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -25237,6 +25285,7 @@
         "file:src/renderer/input/carveSwipe.ts",
         "file:src/renderer/input/gamepadRumble.ts",
         "file:src/renderer/keyboard/gameplayShortcuts.ts",
+        "file:src/renderer/keyboard/keyBindingsLive.ts",
         "file:src/renderer/platformTilt/usePlatformTiltField.ts",
         "file:src/renderer/store/backgroundPersistence.ts",
         "file:src/renderer/store/gameplayFeedbackAdapter.ts",
@@ -25263,6 +25312,7 @@
         "file:src/shared/held-pair-rules.ts",
         "file:src/shared/hold-rules.ts",
         "file:src/shared/keeper-rules.ts",
+        "file:src/shared/key-bindings.ts",
         "file:src/shared/looking-glass-rules.ts",
         "file:src/shared/match-rule-rules.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
@@ -25700,6 +25750,36 @@
       "testedBy": [
         "file:src/renderer/components/itemEffects.test.ts",
         "file:src/renderer/components/meteorImpactMotion.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/renderer/components/KeyBindingsEditor.test.tsx",
+      "path": "src/renderer/components/KeyBindingsEditor.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 55,
+      "imports": [
+        "file:src/renderer/components/KeyBindingsEditor.tsx",
+        "file:src/shared/key-bindings.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/KeyBindingsEditor.tsx",
+      "path": "src/renderer/components/KeyBindingsEditor.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 94,
+      "imports": [
+        "file:src/renderer/copy/keyBindingsCopy.ts",
+        "file:src/shared/key-bindings.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/KeyBindingsEditor.tsx#default"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/KeyBindingsEditor.test.tsx"
       ]
     },
     {
@@ -26932,7 +27012,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1134,
+      "lineCount": 1136,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -26942,7 +27022,6 @@
         "file:src/renderer/components/memorizeUrgency.ts",
         "file:src/renderer/components/PlasmaRail.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
-        "file:src/renderer/components/runShellToolKeys.ts",
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/lookingGlassBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
@@ -26951,6 +27030,7 @@
         "file:src/renderer/gameShellLayout.ts",
         "file:src/renderer/hooks/useCountUp.ts",
         "file:src/renderer/input/touchHaptics.ts",
+        "file:src/renderer/keyboard/keyBindingsLive.ts",
         "file:src/renderer/store/memorizeClock.ts",
         "file:src/renderer/ui/gameplayIcons.tsx",
         "file:src/shared/chain-rung-value-rules.ts",
@@ -26963,6 +27043,7 @@
         "file:src/shared/element-alchemy-rules.ts",
         "file:src/shared/endless-rent-rules.ts",
         "file:src/shared/floor-par.ts",
+        "file:src/shared/key-bindings.ts",
         "file:src/shared/looking-glass-rules.ts",
         "file:src/shared/mechanics-encyclopedia.ts",
         "file:src/shared/milestone-rules.ts",
@@ -27083,19 +27164,6 @@
         "file:src/renderer/components/runShellToolCatalog.test.ts",
         "file:src/shared/release-checklist.test.ts"
       ]
-    },
-    {
-      "id": "file:src/renderer/components/runShellToolKeys.ts",
-      "path": "src/renderer/components/runShellToolKeys.ts",
-      "layer": "renderer",
-      "role": "production",
-      "lineCount": 6,
-      "imports": [],
-      "exports": [
-        "symbol:src/renderer/components/runShellToolKeys.ts#TOOL_KEY_COUNT",
-        "symbol:src/renderer/components/runShellToolKeys.ts#toolKeySlot"
-      ],
-      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/sceneAmbient.test.ts",
@@ -27566,7 +27634,7 @@
       "path": "src/renderer/components/settingsNavigationModel.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 64,
+      "lineCount": 68,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/settingsNavigationModel.ts#DEFAULT_SUBSECTION_BY_CATEGORY",
@@ -27582,7 +27650,7 @@
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 221,
+      "lineCount": 268,
       "imports": [
         "file:src/renderer/components/SettingsScreen.tsx",
         "file:src/renderer/dev/useDevOptions.ts",
@@ -27598,16 +27666,19 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 904,
+      "lineCount": 942,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
         "file:src/renderer/components/gameplayVisualConfig.ts",
+        "file:src/renderer/components/KeyBindingsEditor.tsx",
         "file:src/renderer/components/OverlayModal.tsx",
         "file:src/renderer/components/SettingsControls.tsx",
         "file:src/renderer/components/settingsNavigationModel.ts",
         "file:src/renderer/copy/aboutCopy.ts",
         "file:src/renderer/copy/diagnosticsSettings.ts",
+        "file:src/renderer/copy/keyBindingsCopy.ts",
+        "file:src/renderer/copy/patchNotesCopy.ts",
         "file:src/renderer/copy/settingsHints.ts",
         "file:src/renderer/dev/useDevOptions.ts",
         "file:src/renderer/hooks/useEscapeLeaves.ts",
@@ -27620,6 +27691,7 @@
         "file:src/renderer/ui/strings/pairProximityUi.ts",
         "file:src/shared/contracts.ts",
         "file:src/shared/feature-flags.ts",
+        "file:src/shared/key-bindings.ts",
         "file:src/shared/premium-economy-policy.ts",
         "file:src/shared/profile-summary.ts",
         "file:src/shared/save-data.ts"
@@ -31495,6 +31567,21 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/copy/keyBindingsCopy.ts",
+      "path": "src/renderer/copy/keyBindingsCopy.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 29,
+      "imports": [
+        "file:src/shared/key-bindings.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/copy/keyBindingsCopy.ts#KEY_ACTION_LABELS",
+        "symbol:src/renderer/copy/keyBindingsCopy.ts#KEY_BINDINGS_COPY"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/copy/lanternLightBeat.test.ts",
       "path": "src/renderer/copy/lanternLightBeat.test.ts",
       "layer": "renderer",
@@ -31721,6 +31808,20 @@
       ]
     },
     {
+      "id": "file:src/renderer/copy/patchNotesCopy.ts",
+      "path": "src/renderer/copy/patchNotesCopy.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 61,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/copy/patchNotesCopy.ts#PATCH_NOTES",
+        "symbol:src/renderer/copy/patchNotesCopy.ts#PATCH_NOTES_COPY",
+        "symbol:src/renderer/copy/patchNotesCopy.ts#PatchNote"
+      ],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/copy/profileProgress.ts",
       "path": "src/renderer/copy/profileProgress.ts",
       "layer": "renderer",
@@ -31938,7 +32039,7 @@
       "path": "src/renderer/copy/settingsHints.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 41,
+      "lineCount": 42,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
@@ -33194,11 +33295,29 @@
       "path": "src/renderer/keyboard/gameplayShortcuts.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 25,
-      "imports": [],
+      "lineCount": 41,
+      "imports": [
+        "file:src/shared/key-bindings.ts"
+      ],
       "exports": [
         "symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPAD_SHORTCUT_ROWS",
-        "symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPLAY_SHORTCUT_ROWS"
+        "symbol:src/renderer/keyboard/gameplayShortcuts.ts#gameplayShortcutRows"
+      ],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/keyboard/keyBindingsLive.ts",
+      "path": "src/renderer/keyboard/keyBindingsLive.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 9,
+      "imports": [
+        "file:src/renderer/store/useAppStore.ts",
+        "file:src/shared/key-bindings.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/keyboard/keyBindingsLive.ts#currentKeyBindings",
+        "symbol:src/renderer/keyboard/keyBindingsLive.ts#useKeyBindings"
       ],
       "testedBy": []
     },
@@ -34824,6 +34943,18 @@
       ]
     },
     {
+      "id": "file:src/renderer/styles/highContrast.test.ts",
+      "path": "src/renderer/styles/highContrast.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 27,
+      "imports": [
+        "file:src/renderer/styles/theme.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/styles/theme.parity.test.ts",
       "path": "src/renderer/styles/theme.parity.test.ts",
       "layer": "renderer",
@@ -34852,11 +34983,13 @@
       "path": "src/renderer/styles/theme.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 469,
+      "lineCount": 502,
       "imports": [],
       "exports": [
+        "symbol:src/renderer/styles/theme.ts#applyHighContrastToDocument",
         "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
         "symbol:src/renderer/styles/theme.ts#forEachRendererThemeCssVar",
+        "symbol:src/renderer/styles/theme.ts#HIGH_CONTRAST_CSS_VARS",
         "symbol:src/renderer/styles/theme.ts#RENDERER_THEME",
         "symbol:src/renderer/styles/theme.ts#RendererThemeDensity",
         "symbol:src/renderer/styles/theme.ts#RendererThemeVars"
@@ -34867,6 +35000,7 @@
         "file:src/renderer/components/tileBoardRimVisualState.test.ts",
         "file:src/renderer/components/tileBoardSceneLighting.test.ts",
         "file:src/renderer/initRendererShell.test.tsx",
+        "file:src/renderer/styles/highContrast.test.ts",
         "file:src/renderer/styles/theme.parity.test.ts",
         "file:src/renderer/styles/theme.test.ts",
         "file:src/renderer/styles/theme.wcag.test.ts"
@@ -37443,10 +37577,11 @@
       "path": "src/shared/contracts.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 1400,
+      "lineCount": 1408,
       "imports": [
         "file:src/shared/board-fold-rules.ts",
-        "file:src/shared/elemental-loot-rules.ts"
+        "file:src/shared/elemental-loot-rules.ts",
+        "file:src/shared/key-bindings.ts"
       ],
       "exports": [
         "symbol:src/shared/contracts.ts#AchievementId",
@@ -41044,6 +41179,47 @@
       "testedBy": [
         "file:src/shared/depth-rules.test.ts",
         "file:src/shared/keeper-rules.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/shared/key-bindings.test.ts",
+      "path": "src/shared/key-bindings.test.ts",
+      "layer": "shared",
+      "role": "test",
+      "lineCount": 69,
+      "imports": [
+        "file:src/shared/key-bindings.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/shared/key-bindings.ts",
+      "path": "src/shared/key-bindings.ts",
+      "layer": "shared",
+      "role": "production",
+      "lineCount": 130,
+      "imports": [],
+      "exports": [
+        "symbol:src/shared/key-bindings.ts#DEFAULT_KEY_BINDINGS",
+        "symbol:src/shared/key-bindings.ts#isBindableKeyCode",
+        "symbol:src/shared/key-bindings.ts#KEY_ACTION_IDS",
+        "symbol:src/shared/key-bindings.ts#keyActionForCode",
+        "symbol:src/shared/key-bindings.ts#KeyActionId",
+        "symbol:src/shared/key-bindings.ts#KeyBindings",
+        "symbol:src/shared/key-bindings.ts#keyCodeLabel",
+        "symbol:src/shared/key-bindings.ts#keyMatchesAction",
+        "symbol:src/shared/key-bindings.ts#normalizeKeyBindings",
+        "symbol:src/shared/key-bindings.ts#rebindKey",
+        "symbol:src/shared/key-bindings.ts#RebindResult",
+        "symbol:src/shared/key-bindings.ts#RESERVED_KEY_CODES",
+        "symbol:src/shared/key-bindings.ts#TOOL_KEY_ACTIONS",
+        "symbol:src/shared/key-bindings.ts#toolSlotForCode"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/KeyBindingsEditor.test.tsx",
+        "file:src/shared/key-bindings.test.ts"
       ]
     },
     {
@@ -44773,7 +44949,7 @@
       "path": "src/shared/save-data.ts",
       "layer": "shared",
       "role": "production",
-      "lineCount": 685,
+      "lineCount": 692,
       "imports": [
         "file:src/shared/chain-tier-rules.ts",
         "file:src/shared/contracts.ts",
@@ -44782,6 +44958,7 @@
         "file:src/shared/feat-unlocks.ts",
         "file:src/shared/gameplay-journal.ts",
         "file:src/shared/honor-unlock-ids.ts",
+        "file:src/shared/key-bindings.ts",
         "file:src/shared/run-array-guards.ts",
         "file:src/shared/run-history-log.ts",
         "file:src/shared/run-number-guards.ts",
@@ -44851,6 +45028,7 @@
         "file:src/shared/first-run-help-center.test.ts",
         "file:src/shared/game-over-next-run.test.ts",
         "file:src/shared/honorUnlocks.test.ts",
+        "file:src/shared/key-bindings.test.ts",
         "file:src/shared/local-progress-registry.test.ts",
         "file:src/shared/main-menu-hub-quality.test.ts",
         "file:src/shared/meta-progression-delta.test.ts",
@@ -47878,8 +48056,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 559,
-      "endLine": 559
+      "line": 563,
+      "endLine": 563
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -52142,40 +52320,40 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2929,
-      "endLine": 2929
+      "line": 2932,
+      "endLine": 2932
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 305,
-      "endLine": 305
+      "line": 307,
+      "endLine": 307
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_MS",
       "name": "FLOOR_CLEAR_BEAT_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 303,
-      "endLine": 303
+      "line": 305,
+      "endLine": 305
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "name": "FLOOR_CLEAR_BEAT_STALL_CAP_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 307,
-      "endLine": 307
+      "line": 309,
+      "endLine": 309
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#LAST_PAIR_HOLD_MS",
       "name": "LAST_PAIR_HOLD_MS",
       "kind": "value",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 297,
-      "endLine": 297
+      "line": 299,
+      "endLine": 299
     },
     {
       "id": "symbol:src/renderer/components/gameScreenFeedback.ts#getStackCashoutLaneCount",
@@ -52736,6 +52914,14 @@
       "file": "src/renderer/components/itemEffects.ts",
       "line": 190,
       "endLine": 218
+    },
+    {
+      "id": "symbol:src/renderer/components/KeyBindingsEditor.tsx#default",
+      "name": "default",
+      "kind": "ExportAssignment",
+      "file": "src/renderer/components/KeyBindingsEditor.tsx",
+      "line": 93,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/components/LayerEdges.tsx#LayerEdges",
@@ -54166,32 +54352,32 @@
       "name": "COMBO_LOST_MS",
       "kind": "value",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 182,
-      "endLine": 182
+      "line": 183,
+      "endLine": 183
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 1133,
-      "endLine": 1133
+      "line": 1135,
+      "endLine": 1135
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 94,
-      "endLine": 129
+      "line": 95,
+      "endLine": 130
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 81,
-      "endLine": 92
+      "line": 82,
+      "endLine": 93
     },
     {
       "id": "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
@@ -54280,22 +54466,6 @@
       "file": "src/renderer/components/runShellToolCatalog.ts",
       "line": 52,
       "endLine": 59
-    },
-    {
-      "id": "symbol:src/renderer/components/runShellToolKeys.ts#TOOL_KEY_COUNT",
-      "name": "TOOL_KEY_COUNT",
-      "kind": "value",
-      "file": "src/renderer/components/runShellToolKeys.ts",
-      "line": 2,
-      "endLine": 2
-    },
-    {
-      "id": "symbol:src/renderer/components/runShellToolKeys.ts#toolKeySlot",
-      "name": "toolKeySlot",
-      "kind": "value",
-      "file": "src/renderer/components/runShellToolKeys.ts",
-      "line": 5,
-      "endLine": 5
     },
     {
       "id": "symbol:src/renderer/components/sceneAmbient.ts#ambientSprite",
@@ -55174,24 +55344,24 @@
       "name": "DEFAULT_SUBSECTION_BY_CATEGORY",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 55,
-      "endLine": 63
+      "line": 59,
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SETTINGS_CATEGORIES",
       "name": "SETTINGS_CATEGORIES",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 18,
-      "endLine": 26
+      "line": 20,
+      "endLine": 28
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SETTINGS_SUBSECTIONS",
       "name": "SETTINGS_SUBSECTIONS",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 28,
-      "endLine": 53
+      "line": 30,
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SettingsCategory",
@@ -55207,15 +55377,15 @@
       "kind": "type",
       "file": "src/renderer/components/settingsNavigationModel.ts",
       "line": 3,
-      "endLine": 16
+      "endLine": 18
     },
     {
       "id": "symbol:src/renderer/components/SettingsScreen.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 903,
-      "endLine": 903
+      "line": 941,
+      "endLine": 941
     },
     {
       "id": "symbol:src/renderer/components/shaderFirstUse.ts#finishShaderProgramsOffFrame",
@@ -59730,6 +59900,22 @@
       "endLine": 5
     },
     {
+      "id": "symbol:src/renderer/copy/keyBindingsCopy.ts#KEY_ACTION_LABELS",
+      "name": "KEY_ACTION_LABELS",
+      "kind": "value",
+      "file": "src/renderer/copy/keyBindingsCopy.ts",
+      "line": 4,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/renderer/copy/keyBindingsCopy.ts#KEY_BINDINGS_COPY",
+      "name": "KEY_BINDINGS_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/keyBindingsCopy.ts",
+      "line": 18,
+      "endLine": 28
+    },
+    {
       "id": "symbol:src/renderer/copy/lanternLightBeat.ts#lanternLitAnnouncement",
       "name": "lanternLitAnnouncement",
       "kind": "value",
@@ -59936,6 +60122,30 @@
       "file": "src/renderer/copy/passAndPlay.ts",
       "line": 8,
       "endLine": 46
+    },
+    {
+      "id": "symbol:src/renderer/copy/patchNotesCopy.ts#PATCH_NOTES",
+      "name": "PATCH_NOTES",
+      "kind": "value",
+      "file": "src/renderer/copy/patchNotesCopy.ts",
+      "line": 12,
+      "endLine": 55
+    },
+    {
+      "id": "symbol:src/renderer/copy/patchNotesCopy.ts#PATCH_NOTES_COPY",
+      "name": "PATCH_NOTES_COPY",
+      "kind": "value",
+      "file": "src/renderer/copy/patchNotesCopy.ts",
+      "line": 57,
+      "endLine": 60
+    },
+    {
+      "id": "symbol:src/renderer/copy/patchNotesCopy.ts#PatchNote",
+      "name": "PatchNote",
+      "kind": "interface",
+      "file": "src/renderer/copy/patchNotesCopy.ts",
+      "line": 6,
+      "endLine": 10
     },
     {
       "id": "symbol:src/renderer/copy/profileProgress.ts#PROFILE_PROGRESS_COPY",
@@ -60358,8 +60568,8 @@
       "name": "SETTINGS_FOOTER_HINT",
       "kind": "value",
       "file": "src/renderer/copy/settingsHints.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_HINTS",
@@ -60367,7 +60577,7 @@
       "kind": "value",
       "file": "src/renderer/copy/settingsHints.ts",
       "line": 8,
-      "endLine": 37
+      "endLine": 38
     },
     {
       "id": "symbol:src/renderer/copy/skittishCardsBeat.ts#SKITTISH_FLINCH_ANNOUNCEMENT",
@@ -61406,16 +61616,32 @@
       "name": "GAMEPAD_SHORTCUT_ROWS",
       "kind": "value",
       "file": "src/renderer/keyboard/gameplayShortcuts.ts",
-      "line": 17,
-      "endLine": 24
+      "line": 33,
+      "endLine": 40
     },
     {
-      "id": "symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPLAY_SHORTCUT_ROWS",
-      "name": "GAMEPLAY_SHORTCUT_ROWS",
+      "id": "symbol:src/renderer/keyboard/gameplayShortcuts.ts#gameplayShortcutRows",
+      "name": "gameplayShortcutRows",
       "kind": "value",
       "file": "src/renderer/keyboard/gameplayShortcuts.ts",
-      "line": 4,
-      "endLine": 11
+      "line": 14,
+      "endLine": 27
+    },
+    {
+      "id": "symbol:src/renderer/keyboard/keyBindingsLive.ts#currentKeyBindings",
+      "name": "currentKeyBindings",
+      "kind": "value",
+      "file": "src/renderer/keyboard/keyBindingsLive.ts",
+      "line": 5,
+      "endLine": 5
+    },
+    {
+      "id": "symbol:src/renderer/keyboard/keyBindingsLive.ts#useKeyBindings",
+      "name": "useKeyBindings",
+      "kind": "value",
+      "file": "src/renderer/keyboard/keyBindingsLive.ts",
+      "line": 8,
+      "endLine": 8
     },
     {
       "id": "symbol:src/renderer/platformTilt/PlatformTiltContext.ts#PlatformTiltContext",
@@ -63050,12 +63276,20 @@
       "endLine": 981
     },
     {
+      "id": "symbol:src/renderer/styles/theme.ts#applyHighContrastToDocument",
+      "name": "applyHighContrastToDocument",
+      "kind": "value",
+      "file": "src/renderer/styles/theme.ts",
+      "line": 467,
+      "endLine": 476
+    },
+    {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
       "name": "buildRendererThemeStyle",
       "kind": "value",
       "file": "src/renderer/styles/theme.ts",
-      "line": 449,
-      "endLine": 468
+      "line": 480,
+      "endLine": 501
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#forEachRendererThemeCssVar",
@@ -63064,6 +63298,14 @@
       "file": "src/renderer/styles/theme.ts",
       "line": 438,
       "endLine": 445
+    },
+    {
+      "id": "symbol:src/renderer/styles/theme.ts#HIGH_CONTRAST_CSS_VARS",
+      "name": "HIGH_CONTRAST_CSS_VARS",
+      "kind": "value",
+      "file": "src/renderer/styles/theme.ts",
+      "line": 452,
+      "endLine": 461
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#RENDERER_THEME",
@@ -63078,8 +63320,8 @@
       "name": "RendererThemeDensity",
       "kind": "type",
       "file": "src/renderer/styles/theme.ts",
-      "line": 447,
-      "endLine": 447
+      "line": 478,
+      "endLine": 478
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#RendererThemeVars",
@@ -67230,864 +67472,864 @@
       "name": "AchievementId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 297,
-      "endLine": 342
+      "line": 298,
+      "endLine": 343
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementState",
       "name": "AchievementState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1258,
-      "endLine": 1258
+      "line": 1266,
+      "endLine": 1266
     },
     {
       "id": "symbol:src/shared/contracts.ts#AchievementUnlockResult",
       "name": "AchievementUnlockResult",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1347,
-      "endLine": 1349
+      "line": 1355,
+      "endLine": 1357
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardPresentationMode",
       "name": "BoardPresentationMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 351,
-      "endLine": 351
+      "line": 352,
+      "endLine": 352
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardScreenSpaceAA",
       "name": "BoardScreenSpaceAA",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 365,
-      "endLine": 365
+      "line": 366,
+      "endLine": 366
     },
     {
       "id": "symbol:src/shared/contracts.ts#BoardState",
       "name": "BoardState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 552,
-      "endLine": 606
+      "line": 560,
+      "endLine": 614
     },
     {
       "id": "symbol:src/shared/contracts.ts#BOSS_FLOOR_SCORE_MULTIPLIER",
       "name": "BOSS_FLOOR_SCORE_MULTIPLIER",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 63,
-      "endLine": 63
+      "line": 64,
+      "endLine": 64
     },
     {
       "id": "symbol:src/shared/contracts.ts#BossReward",
       "name": "BossReward",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 112,
-      "endLine": 112
+      "line": 113,
+      "endLine": 113
     },
     {
       "id": "symbol:src/shared/contracts.ts#BuiltinPuzzleDefinition",
       "name": "BuiltinPuzzleDefinition",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 231,
-      "endLine": 242
+      "line": 232,
+      "endLine": 243
     },
     {
       "id": "symbol:src/shared/contracts.ts#CameraViewportModePreference",
       "name": "CameraViewportModePreference",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 358,
-      "endLine": 358
+      "line": 359,
+      "endLine": 359
     },
     {
       "id": "symbol:src/shared/contracts.ts#CarveDirection",
       "name": "CarveDirection",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 109,
-      "endLine": 109
+      "line": 110,
+      "endLine": 110
     },
     {
       "id": "symbol:src/shared/contracts.ts#ColossusEvent",
       "name": "ColossusEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 647,
-      "endLine": 658
+      "line": 655,
+      "endLine": 666
     },
     {
       "id": "symbol:src/shared/contracts.ts#ColossusState",
       "name": "ColossusState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 613,
-      "endLine": 635
+      "line": 621,
+      "endLine": 643
     },
     {
       "id": "symbol:src/shared/contracts.ts#ContractFlags",
       "name": "ContractFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 288,
-      "endLine": 293
+      "line": 289,
+      "endLine": 294
     },
     {
       "id": "symbol:src/shared/contracts.ts#CrashReportSummary",
       "name": "CrashReportSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1355,
-      "endLine": 1360
+      "line": 1363,
+      "endLine": 1368
     },
     {
       "id": "symbol:src/shared/contracts.ts#CURSED_LAST_BONUS_SCORE",
       "name": "CURSED_LAST_BONUS_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 56,
-      "endLine": 56
+      "line": 57,
+      "endLine": 57
     },
     {
       "id": "symbol:src/shared/contracts.ts#DEBUG_REVEAL_MS",
       "name": "DEBUG_REVEAL_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 29,
-      "endLine": 29
+      "line": 30,
+      "endLine": 30
     },
     {
       "id": "symbol:src/shared/contracts.ts#DebugFlags",
       "name": "DebugFlags",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 344,
-      "endLine": 348
+      "line": 345,
+      "endLine": 349
     },
     {
       "id": "symbol:src/shared/contracts.ts#DescentRecordPersisted",
       "name": "DescentRecordPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1261,
-      "endLine": 1270
+      "line": 1269,
+      "endLine": 1278
     },
     {
       "id": "symbol:src/shared/contracts.ts#DesktopApi",
       "name": "DesktopApi",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1373,
-      "endLine": 1399
+      "line": 1381,
+      "endLine": 1407
     },
     {
       "id": "symbol:src/shared/contracts.ts#DisplayMode",
       "name": "DisplayMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 65,
-      "endLine": 65
+      "line": 66,
+      "endLine": 66
     },
     {
       "id": "symbol:src/shared/contracts.ts#ElementCastImpact",
       "name": "ElementCastImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 538,
-      "endLine": 550
+      "line": 546,
+      "endLine": 558
     },
     {
       "id": "symbol:src/shared/contracts.ts#ElementReactionImpact",
       "name": "ElementReactionImpact",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 525,
-      "endLine": 536
+      "line": 533,
+      "endLine": 544
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
       "name": "FEATURED_OBJECTIVE_STREAK_BONUS_MAX",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 25,
-      "endLine": 25
+      "line": 26,
+      "endLine": 26
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP",
       "name": "FEATURED_OBJECTIVE_STREAK_BONUS_PER_STEP",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 24,
-      "endLine": 24
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/shared/contracts.ts#FEATURED_OBJECTIVE_STREAK_MISS_DECAY",
       "name": "FEATURED_OBJECTIVE_STREAK_MISS_DECAY",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 26,
-      "endLine": 26
+      "line": 27,
+      "endLine": 27
     },
     {
       "id": "symbol:src/shared/contracts.ts#FeaturedObjectiveId",
       "name": "FeaturedObjectiveId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 185,
-      "endLine": 185
+      "line": 186,
+      "endLine": 186
     },
     {
       "id": "symbol:src/shared/contracts.ts#FINDABLE_KIND_SPAWN_WEIGHTS",
       "name": "FINDABLE_KIND_SPAWN_WEIGHTS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 278,
-      "endLine": 283
+      "line": 279,
+      "endLine": 284
     },
     {
       "id": "symbol:src/shared/contracts.ts#FINDABLE_MATCH_SCORE",
       "name": "FINDABLE_MATCH_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 272,
-      "endLine": 276
+      "line": 273,
+      "endLine": 277
     },
     {
       "id": "symbol:src/shared/contracts.ts#FindableKind",
       "name": "FindableKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 269,
-      "endLine": 269
+      "line": 270,
+      "endLine": 270
     },
     {
       "id": "symbol:src/shared/contracts.ts#FLIP_PAR_BONUS_SCORE",
       "name": "FLIP_PAR_BONUS_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 58,
-      "endLine": 58
+      "line": 59,
+      "endLine": 59
     },
     {
       "id": "symbol:src/shared/contracts.ts#FLOOR_ARCHETYPE_IDS",
       "name": "FLOOR_ARCHETYPE_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 503,
-      "endLine": 521
+      "line": 511,
+      "endLine": 529
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorArchetypeId",
       "name": "FloorArchetypeId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 522,
-      "endLine": 522
+      "line": 530,
+      "endLine": 530
     },
     {
       "id": "symbol:src/shared/contracts.ts#FloorTag",
       "name": "FloorTag",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 494,
-      "endLine": 494
+      "line": 502,
+      "endLine": 502
     },
     {
       "id": "symbol:src/shared/contracts.ts#FusionId",
       "name": "FusionId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 184,
-      "endLine": 184
+      "line": 185,
+      "endLine": 185
     },
     {
       "id": "symbol:src/shared/contracts.ts#GAME_RULES_VERSION",
       "name": "GAME_RULES_VERSION",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 21,
-      "endLine": 21
+      "line": 22,
+      "endLine": 22
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameMode",
       "name": "GameMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 225,
-      "endLine": 225
+      "line": 226,
+      "endLine": 226
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayCommandJournalEntry",
       "name": "GameplayCommandJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 783,
-      "endLine": 787
+      "line": 791,
+      "endLine": 795
     },
     {
       "id": "symbol:src/shared/contracts.ts#GameplayEventJournalEntry",
       "name": "GameplayEventJournalEntry",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 789,
-      "endLine": 799
+      "line": 797,
+      "endLine": 807
     },
     {
       "id": "symbol:src/shared/contracts.ts#GateOmen",
       "name": "GateOmen",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 842,
-      "endLine": 842
+      "line": 850,
+      "endLine": 850
     },
     {
       "id": "symbol:src/shared/contracts.ts#GraphicsQualityPreset",
       "name": "GraphicsQualityPreset",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 368,
-      "endLine": 368
+      "line": 369,
+      "endLine": 369
     },
     {
       "id": "symbol:src/shared/contracts.ts#HourglassEvent",
       "name": "HourglassEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 639,
-      "endLine": 645
+      "line": 647,
+      "endLine": 653
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_RECALL_FOCUS",
       "name": "INITIAL_RECALL_FOCUS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 48,
-      "endLine": 48
+      "line": 49,
+      "endLine": 49
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_REGION_SHUFFLE_CHARGES",
       "name": "INITIAL_REGION_SHUFFLE_CHARGES",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 45,
-      "endLine": 45
+      "line": 46,
+      "endLine": 46
     },
     {
       "id": "symbol:src/shared/contracts.ts#INITIAL_SHUFFLE_CHARGES",
       "name": "INITIAL_SHUFFLE_CHARGES",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 44,
-      "endLine": 44
+      "line": 45,
+      "endLine": 45
     },
     {
       "id": "symbol:src/shared/contracts.ts#LearnedRule",
       "name": "LearnedRule",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 94,
-      "endLine": 97
+      "line": 95,
+      "endLine": 98
     },
     {
       "id": "symbol:src/shared/contracts.ts#LearnedRuleId",
       "name": "LearnedRuleId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 93,
-      "endLine": 93
+      "line": 94,
+      "endLine": 94
     },
     {
       "id": "symbol:src/shared/contracts.ts#LevelResult",
       "name": "LevelResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 678,
-      "endLine": 727
+      "line": 686,
+      "endLine": 735
     },
     {
       "id": "symbol:src/shared/contracts.ts#MATCH_DELAY_MS",
       "name": "MATCH_DELAY_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 23,
-      "endLine": 23
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/shared/contracts.ts#MAX_PINNED_TILES",
       "name": "MAX_PINNED_TILES",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 46,
-      "endLine": 46
+      "line": 47,
+      "endLine": 47
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_BASE_MS",
       "name": "MEMORIZE_BASE_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 30,
-      "endLine": 30
+      "line": 31,
+      "endLine": 31
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_DECAY_EVERY_N_LEVELS",
       "name": "MEMORIZE_DECAY_EVERY_N_LEVELS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 43,
-      "endLine": 43
+      "line": 44,
+      "endLine": 44
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_MAX_MS",
       "name": "MEMORIZE_MAX_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 41,
-      "endLine": 41
+      "line": 42,
+      "endLine": 42
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_MIN_MS",
       "name": "MEMORIZE_MIN_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 32,
-      "endLine": 32
+      "line": 33,
+      "endLine": 33
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_PER_TILE_BASE_MS",
       "name": "MEMORIZE_PER_TILE_BASE_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 38,
-      "endLine": 38
+      "line": 39,
+      "endLine": 39
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_PER_TILE_MIN_MS",
       "name": "MEMORIZE_PER_TILE_MIN_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 40,
-      "endLine": 40
+      "line": 41,
+      "endLine": 41
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_PER_TILE_STEP_MS",
       "name": "MEMORIZE_PER_TILE_STEP_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 39,
-      "endLine": 39
+      "line": 40,
+      "endLine": 40
     },
     {
       "id": "symbol:src/shared/contracts.ts#MEMORIZE_STEP_MS",
       "name": "MEMORIZE_STEP_MS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 31,
-      "endLine": 31
+      "line": 32,
+      "endLine": 32
     },
     {
       "id": "symbol:src/shared/contracts.ts#MissBankGrant",
       "name": "MissBankGrant",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 16,
-      "endLine": 19
+      "line": 17,
+      "endLine": 20
     },
     {
       "id": "symbol:src/shared/contracts.ts#MUTATOR_IDS",
       "name": "MUTATOR_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 244,
-      "endLine": 258
+      "line": 245,
+      "endLine": 259
     },
     {
       "id": "symbol:src/shared/contracts.ts#MutatorId",
       "name": "MutatorId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 259,
-      "endLine": 259
+      "line": 260,
+      "endLine": 260
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlaySeat",
       "name": "PassAndPlaySeat",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 812,
-      "endLine": 824
+      "line": 820,
+      "endLine": 832
     },
     {
       "id": "symbol:src/shared/contracts.ts#PassAndPlayState",
       "name": "PassAndPlayState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 826,
-      "endLine": 839
+      "line": 834,
+      "endLine": 847
     },
     {
       "id": "symbol:src/shared/contracts.ts#PlayerStatsPersisted",
       "name": "PlayerStatsPersisted",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1272,
-      "endLine": 1287
+      "line": 1280,
+      "endLine": 1295
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleDifficulty",
       "name": "PuzzleDifficulty",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 227,
-      "endLine": 227
+      "line": 228,
+      "endLine": 228
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzleGoal",
       "name": "PuzzleGoal",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 228,
-      "endLine": 228
+      "line": 229,
+      "endLine": 229
     },
     {
       "id": "symbol:src/shared/contracts.ts#PuzzlePackId",
       "name": "PuzzlePackId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 229,
-      "endLine": 229
+      "line": 230,
+      "endLine": 230
     },
     {
       "id": "symbol:src/shared/contracts.ts#Rating",
       "name": "Rating",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 72,
-      "endLine": 72
+      "line": 73,
+      "endLine": 73
     },
     {
       "id": "symbol:src/shared/contracts.ts#REALM_IDS",
       "name": "REALM_IDS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 88,
-      "endLine": 88
+      "line": 89,
+      "endLine": 89
     },
     {
       "id": "symbol:src/shared/contracts.ts#RealmDoor",
       "name": "RealmDoor",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 114,
-      "endLine": 119
+      "line": 115,
+      "endLine": 120
     },
     {
       "id": "symbol:src/shared/contracts.ts#RealmEvent",
       "name": "RealmEvent",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 121,
-      "endLine": 178
+      "line": 122,
+      "endLine": 179
     },
     {
       "id": "symbol:src/shared/contracts.ts#RealmId",
       "name": "RealmId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 89,
-      "endLine": 89
+      "line": 90,
+      "endLine": 90
     },
     {
       "id": "symbol:src/shared/contracts.ts#RealmSeverity",
       "name": "RealmSeverity",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 91,
-      "endLine": 91
+      "line": 92,
+      "endLine": 92
     },
     {
       "id": "symbol:src/shared/contracts.ts#RECALL_CLUE_MATCH_SCORE",
       "name": "RECALL_CLUE_MATCH_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 50,
-      "endLine": 50
+      "line": 51,
+      "endLine": 51
     },
     {
       "id": "symbol:src/shared/contracts.ts#RECALL_FOCUS_MATCH_SCORE",
       "name": "RECALL_FOCUS_MATCH_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 49,
-      "endLine": 49
+      "line": 50,
+      "endLine": 50
     },
     {
       "id": "symbol:src/shared/contracts.ts#RECALL_FOCUS_MAX",
       "name": "RECALL_FOCUS_MAX",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 47,
-      "endLine": 47
+      "line": 48,
+      "endLine": 48
     },
     {
       "id": "symbol:src/shared/contracts.ts#RelicId",
       "name": "RelicId",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 180,
-      "endLine": 182
+      "line": 181,
+      "endLine": 183
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorKind",
       "name": "RendererErrorKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1363,
-      "endLine": 1363
+      "line": 1371,
+      "endLine": 1371
     },
     {
       "id": "symbol:src/shared/contracts.ts#RendererErrorReport",
       "name": "RendererErrorReport",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1366,
-      "endLine": 1371
+      "line": 1374,
+      "endLine": 1379
     },
     {
       "id": "symbol:src/shared/contracts.ts#RepriseTurn",
       "name": "RepriseTurn",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 104,
-      "endLine": 107
+      "line": 105,
+      "endLine": 108
     },
     {
       "id": "symbol:src/shared/contracts.ts#RESOLVE_DELAY_MULTIPLIER_MIN",
       "name": "RESOLVE_DELAY_MULTIPLIER_MIN",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 28,
-      "endLine": 28
+      "line": 29,
+      "endLine": 29
     },
     {
       "id": "symbol:src/shared/contracts.ts#ResumableRunStatus",
       "name": "ResumableRunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 294,
-      "endLine": 294
+      "line": 295,
+      "endLine": 295
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceState",
       "name": "RichPresenceState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1340,
-      "endLine": 1344
+      "line": 1348,
+      "endLine": 1352
     },
     {
       "id": "symbol:src/shared/contracts.ts#RichPresenceToken",
       "name": "RichPresenceToken",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 1338,
-      "endLine": 1338
+      "line": 1346,
+      "endLine": 1346
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunEndReason",
       "name": "RunEndReason",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 82,
-      "endLine": 82
+      "line": 83,
+      "endLine": 83
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunHistoryRecord",
       "name": "RunHistoryRecord",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1294,
-      "endLine": 1311
+      "line": 1302,
+      "endLine": 1319
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunState",
       "name": "RunState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 844,
-      "endLine": 1256
+      "line": 852,
+      "endLine": 1264
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunStatus",
       "name": "RunStatus",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 295,
-      "endLine": 295
+      "line": 296,
+      "endLine": 296
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunSummary",
       "name": "RunSummary",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 744,
-      "endLine": 781
+      "line": 752,
+      "endLine": 789
     },
     {
       "id": "symbol:src/shared/contracts.ts#RunTimerState",
       "name": "RunTimerState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 801,
-      "endLine": 806
+      "line": 809,
+      "endLine": 814
     },
     {
       "id": "symbol:src/shared/contracts.ts#SAVE_SCHEMA_VERSION",
       "name": "SAVE_SCHEMA_VERSION",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 13,
-      "endLine": 13
+      "line": 14,
+      "endLine": 14
     },
     {
       "id": "symbol:src/shared/contracts.ts#SaveData",
       "name": "SaveData",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 1313,
-      "endLine": 1332
+      "line": 1321,
+      "endLine": 1340
     },
     {
       "id": "symbol:src/shared/contracts.ts#SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
       "name": "SCHOLAR_STYLE_FLOOR_BONUS_SCORE",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 54,
-      "endLine": 54
+      "line": 55,
+      "endLine": 55
     },
     {
       "id": "symbol:src/shared/contracts.ts#SessionStats",
       "name": "SessionStats",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 660,
-      "endLine": 676
+      "line": 668,
+      "endLine": 684
     },
     {
       "id": "symbol:src/shared/contracts.ts#Settings",
       "name": "Settings",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 370,
-      "endLine": 415
+      "line": 371,
+      "endLine": 423
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_BOUNTY_MATCH_BONUS",
       "name": "SHIFTING_BOUNTY_MATCH_BONUS",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 60,
-      "endLine": 60
+      "line": 61,
+      "endLine": 61
     },
     {
       "id": "symbol:src/shared/contracts.ts#SHIFTING_WARD_MATCH_PENALTY",
       "name": "SHIFTING_WARD_MATCH_PENALTY",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 62,
-      "endLine": 62
+      "line": 63,
+      "endLine": 63
     },
     {
       "id": "symbol:src/shared/contracts.ts#SleepingPair",
       "name": "SleepingPair",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 99,
-      "endLine": 102
+      "line": 100,
+      "endLine": 103
     },
     {
       "id": "symbol:src/shared/contracts.ts#SubscreenReturnView",
       "name": "SubscreenReturnView",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 210,
-      "endLine": 210
+      "line": 211,
+      "endLine": 211
     },
     {
       "id": "symbol:src/shared/contracts.ts#Tile",
       "name": "Tile",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 417,
-      "endLine": 492
+      "line": 425,
+      "endLine": 500
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileState",
       "name": "TileState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 66,
-      "endLine": 66
+      "line": 67,
+      "endLine": 67
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileSuit",
       "name": "TileSuit",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 71,
-      "endLine": 71
+      "line": 72,
+      "endLine": 72
     },
     {
       "id": "symbol:src/shared/contracts.ts#TileTraitKind",
       "name": "TileTraitKind",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 743,
-      "endLine": 743
+      "line": 751,
+      "endLine": 751
     },
     {
       "id": "symbol:src/shared/contracts.ts#VIEW_STATES",
       "name": "VIEW_STATES",
       "kind": "value",
       "file": "src/shared/contracts.ts",
-      "line": 194,
-      "endLine": 205
+      "line": 195,
+      "endLine": 206
     },
     {
       "id": "symbol:src/shared/contracts.ts#ViewState",
       "name": "ViewState",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 207,
-      "endLine": 207
+      "line": 208,
+      "endLine": 208
     },
     {
       "id": "symbol:src/shared/contracts.ts#WeakerShuffleMode",
       "name": "WeakerShuffleMode",
       "kind": "type",
       "file": "src/shared/contracts.ts",
-      "line": 286,
-      "endLine": 286
+      "line": 287,
+      "endLine": 287
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneResult",
       "name": "ZoneResult",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 734,
-      "endLine": 741
+      "line": 742,
+      "endLine": 749
     },
     {
       "id": "symbol:src/shared/contracts.ts#ZoneState",
       "name": "ZoneState",
       "kind": "interface",
       "file": "src/shared/contracts.ts",
-      "line": 729,
-      "endLine": 732
+      "line": 737,
+      "endLine": 740
     },
     {
       "id": "symbol:src/shared/controller-back-contract.ts#CONTROLLER_BACK_CONTRACT",
@@ -73112,6 +73354,118 @@
       "file": "src/shared/keeper-rules.ts",
       "line": 36,
       "endLine": 46
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#DEFAULT_KEY_BINDINGS",
+      "name": "DEFAULT_KEY_BINDINGS",
+      "kind": "value",
+      "file": "src/shared/key-bindings.ts",
+      "line": 18,
+      "endLine": 30
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#isBindableKeyCode",
+      "name": "isBindableKeyCode",
+      "kind": "value",
+      "file": "src/shared/key-bindings.ts",
+      "line": 57,
+      "endLine": 57
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#KEY_ACTION_IDS",
+      "name": "KEY_ACTION_IDS",
+      "kind": "value",
+      "file": "src/shared/key-bindings.ts",
+      "line": 10,
+      "endLine": 10
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#keyActionForCode",
+      "name": "keyActionForCode",
+      "kind": "value",
+      "file": "src/shared/key-bindings.ts",
+      "line": 88,
+      "endLine": 89
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#KeyActionId",
+      "name": "KeyActionId",
+      "kind": "type",
+      "file": "src/shared/key-bindings.ts",
+      "line": 12,
+      "endLine": 12
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#KeyBindings",
+      "name": "KeyBindings",
+      "kind": "type",
+      "file": "src/shared/key-bindings.ts",
+      "line": 14,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#keyCodeLabel",
+      "name": "keyCodeLabel",
+      "kind": "value",
+      "file": "src/shared/key-bindings.ts",
+      "line": 120,
+      "endLine": 129
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#keyMatchesAction",
+      "name": "keyMatchesAction",
+      "kind": "value",
+      "file": "src/shared/key-bindings.ts",
+      "line": 105,
+      "endLine": 111
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#normalizeKeyBindings",
+      "name": "normalizeKeyBindings",
+      "kind": "value",
+      "file": "src/shared/key-bindings.ts",
+      "line": 64,
+      "endLine": 85
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#rebindKey",
+      "name": "rebindKey",
+      "kind": "value",
+      "file": "src/shared/key-bindings.ts",
+      "line": 94,
+      "endLine": 99
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#RebindResult",
+      "name": "RebindResult",
+      "kind": "type",
+      "file": "src/shared/key-bindings.ts",
+      "line": 91,
+      "endLine": 91
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#RESERVED_KEY_CODES",
+      "name": "RESERVED_KEY_CODES",
+      "kind": "value",
+      "file": "src/shared/key-bindings.ts",
+      "line": 33,
+      "endLine": 53
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#TOOL_KEY_ACTIONS",
+      "name": "TOOL_KEY_ACTIONS",
+      "kind": "value",
+      "file": "src/shared/key-bindings.ts",
+      "line": 16,
+      "endLine": 16
+    },
+    {
+      "id": "symbol:src/shared/key-bindings.ts#toolSlotForCode",
+      "name": "toolSlotForCode",
+      "kind": "value",
+      "file": "src/shared/key-bindings.ts",
+      "line": 114,
+      "endLine": 117
     },
     {
       "id": "symbol:src/shared/lantern-light-rules.ts#LANTERN_MAX_LIT",
@@ -78846,144 +79200,144 @@
       "name": "ACHIEVEMENT_IDS",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 96,
-      "endLine": 128
+      "line": 99,
+      "endLine": 131
     },
     {
       "id": "symbol:src/shared/save-data.ts#createAchievementState",
       "name": "createAchievementState",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 130,
-      "endLine": 137
+      "line": 133,
+      "endLine": 140
     },
     {
       "id": "symbol:src/shared/save-data.ts#createDefaultSaveData",
       "name": "createDefaultSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 373,
-      "endLine": 385
+      "line": 376,
+      "endLine": 388
     },
     {
       "id": "symbol:src/shared/save-data.ts#DEFAULT_SETTINGS",
       "name": "DEFAULT_SETTINGS",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 29,
-      "endLine": 55
+      "line": 30,
+      "endLine": 58
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeBestFloorNoPowers",
       "name": "mergeBestFloorNoPowers",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 664,
-      "endLine": 675
+      "line": 671,
+      "endLine": 682
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeChainFloorStats",
       "name": "mergeChainFloorStats",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 637,
-      "endLine": 650
+      "line": 644,
+      "endLine": 657
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeEncoreFromRun",
       "name": "mergeEncoreFromRun",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 677,
-      "endLine": 684
+      "line": 684,
+      "endLine": 691
     },
     {
       "id": "symbol:src/shared/save-data.ts#mergeRunsFinished",
       "name": "mergeRunsFinished",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 656,
-      "endLine": 662
+      "line": 663,
+      "endLine": 669
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeRunSummary",
       "name": "normalizeRunSummary",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 270,
-      "endLine": 371
+      "line": 273,
+      "endLine": 374
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeSaveData",
       "name": "normalizeSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 577,
-      "endLine": 630
+      "line": 584,
+      "endLine": 637
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveData",
       "name": "normalizeUnknownSaveData",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 545,
-      "endLine": 548
+      "line": 552,
+      "endLine": 555
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSaveDataOrThrow",
       "name": "normalizeUnknownSaveDataOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 550,
-      "endLine": 562
+      "line": 557,
+      "endLine": 569
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettings",
       "name": "normalizeUnknownSettings",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 564,
-      "endLine": 567
+      "line": 571,
+      "endLine": 574
     },
     {
       "id": "symbol:src/shared/save-data.ts#normalizeUnknownSettingsOrThrow",
       "name": "normalizeUnknownSettingsOrThrow",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 569,
-      "endLine": 575
+      "line": 576,
+      "endLine": 582
     },
     {
       "id": "symbol:src/shared/save-data.ts#RUN_HISTORY_SEED_CAP",
       "name": "RUN_HISTORY_SEED_CAP",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 153,
-      "endLine": 153
+      "line": 156,
+      "endLine": 156
     },
     {
       "id": "symbol:src/shared/save-data.ts#saveDataBoundarySchema",
       "name": "saveDataBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 419,
-      "endLine": 434
+      "line": 424,
+      "endLine": 439
     },
     {
       "id": "symbol:src/shared/save-data.ts#SETTINGS_NUMERIC_RANGES",
       "name": "SETTINGS_NUMERIC_RANGES",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 87,
-      "endLine": 94
+      "line": 90,
+      "endLine": 97
     },
     {
       "id": "symbol:src/shared/save-data.ts#settingsBoundarySchema",
       "name": "settingsBoundarySchema",
       "kind": "value",
       "file": "src/shared/save-data.ts",
-      "line": 393,
-      "endLine": 415
+      "line": 396,
+      "endLine": 420
     },
     {
       "id": "symbol:src/shared/save-field-policy.ts#getSaveFieldPolicies",
@@ -83038,7 +83392,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 134
+          "line": 135
         }
       ],
       "tests": [
@@ -83149,7 +83503,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 8
+          "line": 9
         }
       ],
       "tests": [
@@ -83581,7 +83935,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1741
+          "line": 1744
         }
       ],
       "tests": [
@@ -84381,7 +84735,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 19
+          "line": 20
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -84743,7 +85097,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 26
+          "line": 4
         }
       ],
       "tests": [
@@ -85102,7 +85456,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 6
+          "line": 7
         }
       ],
       "tests": [
@@ -85338,7 +85692,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 16
+          "line": 17
         }
       ],
       "tests": [
@@ -85919,7 +86273,7 @@
         },
         {
           "path": "src/shared/save-data.ts",
-          "line": 27
+          "line": 28
         },
         {
           "path": "src/main/persistence.ts",
@@ -86755,7 +87109,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1743
+          "line": 1746
         }
       ],
       "tests": [
@@ -86793,7 +87147,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 23
+          "line": 24
         },
         {
           "path": "src/renderer/components/GameOverScreen.tsx",
@@ -87149,7 +87503,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 500
+          "line": 501
         }
       ],
       "tests": [
@@ -87188,7 +87542,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 500
+          "line": 501
         }
       ],
       "tests": [
@@ -87222,7 +87576,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 500
+          "line": 501
         }
       ],
       "tests": [
@@ -87256,7 +87610,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 500
+          "line": 501
         }
       ],
       "tests": [
@@ -94315,6 +94669,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/KeyBindingsEditor.tsx->symbol:src/renderer/components/KeyBindingsEditor.tsx#default",
+      "source": "file:src/renderer/components/KeyBindingsEditor.tsx",
+      "target": "symbol:src/renderer/components/KeyBindingsEditor.tsx#default",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/LayerEdges.tsx->symbol:src/renderer/components/LayerEdges.tsx#LayerEdges",
       "source": "file:src/renderer/components/LayerEdges.tsx",
       "target": "symbol:src/renderer/components/LayerEdges.tsx#LayerEdges",
@@ -95470,18 +95830,6 @@
       "id": "exports:src/renderer/components/runShellToolCatalog.ts->symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
       "source": "file:src/renderer/components/runShellToolCatalog.ts",
       "target": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/runShellToolKeys.ts->symbol:src/renderer/components/runShellToolKeys.ts#TOOL_KEY_COUNT",
-      "source": "file:src/renderer/components/runShellToolKeys.ts",
-      "target": "symbol:src/renderer/components/runShellToolKeys.ts#TOOL_KEY_COUNT",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/components/runShellToolKeys.ts->symbol:src/renderer/components/runShellToolKeys.ts#toolKeySlot",
-      "source": "file:src/renderer/components/runShellToolKeys.ts",
-      "target": "symbol:src/renderer/components/runShellToolKeys.ts#toolKeySlot",
       "kind": "exports"
     },
     {
@@ -99559,6 +99907,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/copy/keyBindingsCopy.ts->symbol:src/renderer/copy/keyBindingsCopy.ts#KEY_ACTION_LABELS",
+      "source": "file:src/renderer/copy/keyBindingsCopy.ts",
+      "target": "symbol:src/renderer/copy/keyBindingsCopy.ts#KEY_ACTION_LABELS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/keyBindingsCopy.ts->symbol:src/renderer/copy/keyBindingsCopy.ts#KEY_BINDINGS_COPY",
+      "source": "file:src/renderer/copy/keyBindingsCopy.ts",
+      "target": "symbol:src/renderer/copy/keyBindingsCopy.ts#KEY_BINDINGS_COPY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/copy/lanternLightBeat.ts->symbol:src/renderer/copy/lanternLightBeat.ts#lanternLitAnnouncement",
       "source": "file:src/renderer/copy/lanternLightBeat.ts",
       "target": "symbol:src/renderer/copy/lanternLightBeat.ts#lanternLitAnnouncement",
@@ -99712,6 +100072,24 @@
       "id": "exports:src/renderer/copy/passAndPlay.ts->symbol:src/renderer/copy/passAndPlay.ts#PASS_AND_PLAY_COPY",
       "source": "file:src/renderer/copy/passAndPlay.ts",
       "target": "symbol:src/renderer/copy/passAndPlay.ts#PASS_AND_PLAY_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/patchNotesCopy.ts->symbol:src/renderer/copy/patchNotesCopy.ts#PATCH_NOTES",
+      "source": "file:src/renderer/copy/patchNotesCopy.ts",
+      "target": "symbol:src/renderer/copy/patchNotesCopy.ts#PATCH_NOTES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/patchNotesCopy.ts->symbol:src/renderer/copy/patchNotesCopy.ts#PATCH_NOTES_COPY",
+      "source": "file:src/renderer/copy/patchNotesCopy.ts",
+      "target": "symbol:src/renderer/copy/patchNotesCopy.ts#PATCH_NOTES_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/copy/patchNotesCopy.ts->symbol:src/renderer/copy/patchNotesCopy.ts#PatchNote",
+      "source": "file:src/renderer/copy/patchNotesCopy.ts",
+      "target": "symbol:src/renderer/copy/patchNotesCopy.ts#PatchNote",
       "kind": "exports"
     },
     {
@@ -100819,9 +101197,21 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/keyboard/gameplayShortcuts.ts->symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPLAY_SHORTCUT_ROWS",
+      "id": "exports:src/renderer/keyboard/gameplayShortcuts.ts->symbol:src/renderer/keyboard/gameplayShortcuts.ts#gameplayShortcutRows",
       "source": "file:src/renderer/keyboard/gameplayShortcuts.ts",
-      "target": "symbol:src/renderer/keyboard/gameplayShortcuts.ts#GAMEPLAY_SHORTCUT_ROWS",
+      "target": "symbol:src/renderer/keyboard/gameplayShortcuts.ts#gameplayShortcutRows",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/keyboard/keyBindingsLive.ts->symbol:src/renderer/keyboard/keyBindingsLive.ts#currentKeyBindings",
+      "source": "file:src/renderer/keyboard/keyBindingsLive.ts",
+      "target": "symbol:src/renderer/keyboard/keyBindingsLive.ts#currentKeyBindings",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/keyboard/keyBindingsLive.ts->symbol:src/renderer/keyboard/keyBindingsLive.ts#useKeyBindings",
+      "source": "file:src/renderer/keyboard/keyBindingsLive.ts",
+      "target": "symbol:src/renderer/keyboard/keyBindingsLive.ts#useKeyBindings",
       "kind": "exports"
     },
     {
@@ -102049,6 +102439,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/styles/theme.ts->symbol:src/renderer/styles/theme.ts#applyHighContrastToDocument",
+      "source": "file:src/renderer/styles/theme.ts",
+      "target": "symbol:src/renderer/styles/theme.ts#applyHighContrastToDocument",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/styles/theme.ts->symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
       "source": "file:src/renderer/styles/theme.ts",
       "target": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -102058,6 +102454,12 @@
       "id": "exports:src/renderer/styles/theme.ts->symbol:src/renderer/styles/theme.ts#forEachRendererThemeCssVar",
       "source": "file:src/renderer/styles/theme.ts",
       "target": "symbol:src/renderer/styles/theme.ts#forEachRendererThemeCssVar",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/styles/theme.ts->symbol:src/renderer/styles/theme.ts#HIGH_CONTRAST_CSS_VARS",
+      "source": "file:src/renderer/styles/theme.ts",
+      "target": "symbol:src/renderer/styles/theme.ts#HIGH_CONTRAST_CSS_VARS",
       "kind": "exports"
     },
     {
@@ -109594,6 +109996,90 @@
       "id": "exports:src/shared/keeper-rules.ts->symbol:src/shared/keeper-rules.ts#swapRooms",
       "source": "file:src/shared/keeper-rules.ts",
       "target": "symbol:src/shared/keeper-rules.ts#swapRooms",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#DEFAULT_KEY_BINDINGS",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#DEFAULT_KEY_BINDINGS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#isBindableKeyCode",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#isBindableKeyCode",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#KEY_ACTION_IDS",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#KEY_ACTION_IDS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#keyActionForCode",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#keyActionForCode",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#KeyActionId",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#KeyActionId",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#KeyBindings",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#KeyBindings",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#keyCodeLabel",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#keyCodeLabel",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#keyMatchesAction",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#keyMatchesAction",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#normalizeKeyBindings",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#normalizeKeyBindings",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#rebindKey",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#rebindKey",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#RebindResult",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#RebindResult",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#RESERVED_KEY_CODES",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#RESERVED_KEY_CODES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#TOOL_KEY_ACTIONS",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#TOOL_KEY_ACTIONS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/shared/key-bindings.ts->symbol:src/shared/key-bindings.ts#toolSlotForCode",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "symbol:src/shared/key-bindings.ts#toolSlotForCode",
       "kind": "exports"
     },
     {
@@ -124305,6 +124791,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/keyboard/keyBindingsLive.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/renderer/keyboard/keyBindingsLive.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/GameScreen.tsx->src/renderer/platformTilt/usePlatformTiltField.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/renderer/platformTilt/usePlatformTiltField.ts",
@@ -124458,6 +124950,12 @@
       "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/keeper-rules.ts",
       "source": "file:src/renderer/components/GameScreen.tsx",
       "target": "file:src/shared/keeper-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/GameScreen.tsx->src/shared/key-bindings.ts",
+      "source": "file:src/renderer/components/GameScreen.tsx",
+      "target": "file:src/shared/key-bindings.ts",
       "kind": "imports"
     },
     {
@@ -125028,6 +125526,30 @@
       "id": "imports:src/renderer/components/itemEffects.ts->src/shared/rng.ts",
       "source": "file:src/renderer/components/itemEffects.ts",
       "target": "file:src/shared/rng.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/KeyBindingsEditor.test.tsx->src/renderer/components/KeyBindingsEditor.tsx",
+      "source": "file:src/renderer/components/KeyBindingsEditor.test.tsx",
+      "target": "file:src/renderer/components/KeyBindingsEditor.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/KeyBindingsEditor.test.tsx->src/shared/key-bindings.ts",
+      "source": "file:src/renderer/components/KeyBindingsEditor.test.tsx",
+      "target": "file:src/shared/key-bindings.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/KeyBindingsEditor.tsx->src/renderer/copy/keyBindingsCopy.ts",
+      "source": "file:src/renderer/components/KeyBindingsEditor.tsx",
+      "target": "file:src/renderer/copy/keyBindingsCopy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/KeyBindingsEditor.tsx->src/shared/key-bindings.ts",
+      "source": "file:src/renderer/components/KeyBindingsEditor.tsx",
+      "target": "file:src/shared/key-bindings.ts",
       "kind": "imports"
     },
     {
@@ -126381,12 +126903,6 @@
       "kind": "imports"
     },
     {
-      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/components/runShellToolKeys.ts",
-      "source": "file:src/renderer/components/RunShell.tsx",
-      "target": "file:src/renderer/components/runShellToolKeys.ts",
-      "kind": "imports"
-    },
-    {
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/copy/chainBeat.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/copy/chainBeat.ts",
@@ -126432,6 +126948,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/input/touchHaptics.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/input/touchHaptics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/keyboard/keyBindingsLive.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/keyboard/keyBindingsLive.ts",
       "kind": "imports"
     },
     {
@@ -126504,6 +127026,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/shared/floor-par.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/shared/floor-par.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/shared/key-bindings.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/shared/key-bindings.ts",
       "kind": "imports"
     },
     {
@@ -127017,6 +127545,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/components/KeyBindingsEditor.tsx",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/renderer/components/KeyBindingsEditor.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/components/OverlayModal.tsx",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/components/OverlayModal.tsx",
@@ -127044,6 +127578,18 @@
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/copy/diagnosticsSettings.ts",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/copy/diagnosticsSettings.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/copy/keyBindingsCopy.ts",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/renderer/copy/keyBindingsCopy.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/copy/patchNotesCopy.ts",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/renderer/copy/patchNotesCopy.ts",
       "kind": "imports"
     },
     {
@@ -127116,6 +127662,12 @@
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/shared/feature-flags.ts",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/shared/feature-flags.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/shared/key-bindings.ts",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/shared/key-bindings.ts",
       "kind": "imports"
     },
     {
@@ -131145,6 +131697,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/copy/keyBindingsCopy.ts->src/shared/key-bindings.ts",
+      "source": "file:src/renderer/copy/keyBindingsCopy.ts",
+      "target": "file:src/shared/key-bindings.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/copy/lanternLightBeat.test.ts->src/renderer/copy/boardTurnAnnouncement.ts",
       "source": "file:src/renderer/copy/lanternLightBeat.test.ts",
       "target": "file:src/renderer/copy/boardTurnAnnouncement.ts",
@@ -132072,6 +132630,24 @@
       "id": "imports:src/renderer/input/touchHaptics.test.ts->src/renderer/input/touchHaptics.ts",
       "source": "file:src/renderer/input/touchHaptics.test.ts",
       "target": "file:src/renderer/input/touchHaptics.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/keyboard/gameplayShortcuts.ts->src/shared/key-bindings.ts",
+      "source": "file:src/renderer/keyboard/gameplayShortcuts.ts",
+      "target": "file:src/shared/key-bindings.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/keyboard/keyBindingsLive.ts->src/renderer/store/useAppStore.ts",
+      "source": "file:src/renderer/keyboard/keyBindingsLive.ts",
+      "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/keyboard/keyBindingsLive.ts->src/shared/key-bindings.ts",
+      "source": "file:src/renderer/keyboard/keyBindingsLive.ts",
+      "target": "file:src/shared/key-bindings.ts",
       "kind": "imports"
     },
     {
@@ -134088,6 +134664,12 @@
       "id": "imports:src/renderer/store/useAppStore.ts->src/shared/zone-rules.ts",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/shared/zone-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/styles/highContrast.test.ts->src/renderer/styles/theme.ts",
+      "source": "file:src/renderer/styles/highContrast.test.ts",
+      "target": "file:src/renderer/styles/theme.ts",
       "kind": "imports"
     },
     {
@@ -136824,6 +137406,12 @@
       "id": "imports:src/shared/contracts.ts->src/shared/elemental-loot-rules.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/shared/elemental-loot-rules.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/contracts.ts->src/shared/key-bindings.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/shared/key-bindings.ts",
       "kind": "imports"
     },
     {
@@ -140472,6 +141060,18 @@
       "id": "imports:src/shared/keeper-rules.ts->src/shared/run-number-guards.ts",
       "source": "file:src/shared/keeper-rules.ts",
       "target": "file:src/shared/run-number-guards.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/key-bindings.test.ts->src/shared/key-bindings.ts",
+      "source": "file:src/shared/key-bindings.test.ts",
+      "target": "file:src/shared/key-bindings.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/key-bindings.test.ts->src/shared/save-data.ts",
+      "source": "file:src/shared/key-bindings.test.ts",
+      "target": "file:src/shared/save-data.ts",
       "kind": "imports"
     },
     {
@@ -144612,6 +145212,12 @@
       "id": "imports:src/shared/save-data.ts->src/shared/honor-unlock-ids.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/honor-unlock-ids.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/shared/save-data.ts->src/shared/key-bindings.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/shared/key-bindings.ts",
       "kind": "imports"
     },
     {
@@ -152822,6 +153428,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/KeyBindingsEditor.tsx->file:src/renderer/components/KeyBindingsEditor.test.tsx",
+      "source": "file:src/renderer/components/KeyBindingsEditor.tsx",
+      "target": "file:src/renderer/components/KeyBindingsEditor.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/legendaryPushIn.ts->file:src/renderer/components/legendaryPushIn.test.ts",
       "source": "file:src/renderer/components/legendaryPushIn.ts",
       "target": "file:src/renderer/components/legendaryPushIn.test.ts",
@@ -154715,6 +155327,12 @@
       "id": "tested_by:src/renderer/styles/theme.ts->file:src/renderer/initRendererShell.test.tsx",
       "source": "file:src/renderer/styles/theme.ts",
       "target": "file:src/renderer/initRendererShell.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/styles/theme.ts->file:src/renderer/styles/highContrast.test.ts",
+      "source": "file:src/renderer/styles/theme.ts",
+      "target": "file:src/renderer/styles/highContrast.test.ts",
       "kind": "tested_by"
     },
     {
@@ -159080,6 +159698,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/key-bindings.ts->file:src/renderer/components/KeyBindingsEditor.test.tsx",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "file:src/renderer/components/KeyBindingsEditor.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/key-bindings.ts->file:src/shared/key-bindings.test.ts",
+      "source": "file:src/shared/key-bindings.ts",
+      "target": "file:src/shared/key-bindings.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/lantern-light-rules.ts->file:src/shared/combo-heat-perks.test.ts",
       "source": "file:src/shared/lantern-light-rules.ts",
       "target": "file:src/shared/combo-heat-perks.test.ts",
@@ -160793,6 +161423,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/shared/honorUnlocks.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/shared/honorUnlocks.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/shared/key-bindings.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/shared/key-bindings.test.ts",
       "kind": "tested_by"
     },
     {

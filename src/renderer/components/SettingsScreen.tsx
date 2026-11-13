@@ -40,6 +40,10 @@ import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import OverlayModal from './OverlayModal';
 import { ABOUT_COPY, CREDIT_GROUPS, PRIVACY_POLICY_URL, SOFTWARE_LICENCES } from '../copy/aboutCopy';
 import { downloadSaveExport, parseSaveExport } from '../saveTransfer';
+import { DEFAULT_KEY_BINDINGS, keyCodeLabel } from '../../shared/key-bindings';
+import { KEY_BINDINGS_COPY } from '../copy/keyBindingsCopy';
+import { PATCH_NOTES, PATCH_NOTES_COPY } from '../copy/patchNotesCopy';
+import KeyBindingsEditor from './KeyBindingsEditor';
 import type { SaveData } from '../../shared/contracts';
 import { DIAGNOSTICS_COPY, SAVE_FILE_COPY } from '../copy/diagnosticsSettings';
 import { SETTINGS_FOOTER_HINT, SETTINGS_HINTS } from '../copy/settingsHints';
@@ -118,6 +122,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
     const premiumEconomyRows = getPremiumEconomyPolicyRows();
 
     const isDirty = JSON.stringify(draft) !== JSON.stringify(settings);
+    const draftKeyBindings = draft.keyBindings ?? DEFAULT_KEY_BINDINGS;
     const [unsavedBackOpen, setUnsavedBackOpen] = useState(false);
     const lastCounterTickAtRef = useRef(0);
     const isPhoneViewport = viewportWidth <= VIEWPORT_MOBILE_MAX;
@@ -443,8 +448,18 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         {activeCategory === 'controls' && showSubsection('input') ? (
                                             <SettingsSection title="Input">
                                                 <p className={styles.headerCopy}>
-                                                    Tap two cards to match. Arrow keys move focus; Enter flips. P pauses.
+                                                    Tap two cards to match. Arrow keys move focus; Enter flips.{' '}
+                                                    {draftKeyBindings.pause ? `${keyCodeLabel(draftKeyBindings.pause)} pauses.` : 'Escape pauses.'}
                                                 </p>
+                                            </SettingsSection>
+                                        ) : null}
+
+                                        {activeCategory === 'controls' && showSubsection('keys') ? (
+                                            <SettingsSection title={KEY_BINDINGS_COPY.title}>
+                                                <KeyBindingsEditor
+                                                    bindings={draftKeyBindings}
+                                                    onChange={(next) => patchSettings('keyBindings', next)}
+                                                />
                                             </SettingsSection>
                                         ) : null}
 
@@ -576,6 +591,12 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         valueLabel={draft.reduceMotion ? 'Off' : `${Math.round(draft.screenShakeIntensity * 100)}%`}
                                                     />
                                                     <ToggleRow
+                                                        checked={draft.highContrast ?? false}
+                                                        hint={SETTINGS_HINTS.highContrast}
+                                                        label="High Contrast"
+                                                        onChange={(next) => patchSettings('highContrast', next)}
+                                                    />
+                                                    <ToggleRow
                                                         checked={draft.tileFocusAssist}
                                                         hint={SETTINGS_HINTS.tileFocusAssistRepeat}
                                                         label="Board Focus Assist"
@@ -661,6 +682,23 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         <div className={styles.profileSummaryRow} key={row.id}>
                                                             <strong>{row.title}</strong>
                                                             <em>{row.copy}</em>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            </SettingsSection>
+                                        ) : null}
+
+                                        {activeCategory === 'about' && showSubsection('whatsNew') ? (
+                                            <SettingsSection title={PATCH_NOTES_COPY.title}>
+                                                <div className={styles.profileSummaryGrid} data-testid="settings-patch-notes">
+                                                    {PATCH_NOTES.map((note) => (
+                                                        <div className={styles.profileSummaryRow} key={note.week}>
+                                                            <strong>{PATCH_NOTES_COPY.weekOf(note.week)}</strong>
+                                                            <ul className={styles.patchNoteList}>
+                                                                {note.items.map((item) => (
+                                                                    <li key={item}>{item}</li>
+                                                                ))}
+                                                            </ul>
                                                         </div>
                                                     ))}
                                                 </div>

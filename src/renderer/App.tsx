@@ -24,7 +24,7 @@ import { TutorialHallContext } from './components/tutorialHallContext';
 import { useGamepadNavigation } from './hooks/useGamepadNavigation';
 import { useRichPresence } from './hooks/useRichPresence';
 import styles from './styles/App.module.css';
-import { buildRendererThemeStyle } from './styles/theme';
+import { applyHighContrastToDocument, buildRendererThemeStyle } from './styles/theme';
 import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMusic';
 import { useFeverDuck } from './audio/feverDuck';
 import { resolutionGapDuckMultiplier } from './audio/resolutionGapDuck';
@@ -147,11 +147,15 @@ const App = () => {
     const isCompactViewport = isCompactUiViewport({ height, width });
     const safeUiScale = safeUiScaleFor(settings.uiScale, { height, width });
     const reduceMotion = useEffectiveReducedMotion(settings.reduceMotion);
+    const highContrast = settings.highContrast === true;
     const themeStyle = buildRendererThemeStyle(
         safeUiScale,
         isCompactViewport ? 'compact' : 'roomy',
-        reduceMotion
+        reduceMotion,
+        highContrast
     );
+    // Dialogs portal to `document.body`, outside the app root's inline theme: High Contrast goes on `<html>` too.
+    useEffect(() => applyHighContrastToDocument(highContrast), [highContrast]);
     const activeView = hydrated ? view : 'boot';
     const [introPlayback, setIntroPlayback] = useState<Exclude<IntroPlaybackState, 'playing'>>('pending');
     const shellChromeContract = getNavigationShellChromeContract({

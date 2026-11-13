@@ -1,6 +1,7 @@
 import { memo, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactElement } from 'react';
 import { rememberToolCharges, risenToolCharges, toolChargeBaseline, TOOL_FRESH_MS } from './runShellFreshTools';
-import { TOOL_KEY_COUNT, toolKeySlot } from './runShellToolKeys';
+import { keyCodeLabel, TOOL_KEY_ACTIONS, toolSlotForCode } from '../../shared/key-bindings';
+import { currentKeyBindings, useKeyBindings } from '../keyboard/keyBindingsLive';
 import { getMemorizeClock, subscribeMemorizeClock } from '../store/memorizeClock';
 import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
@@ -528,6 +529,7 @@ const RunShell = ({
     // Number keys 1-9 use the dock's tools, left to right (2026-11-13): a keyboard player could
     // reach a tool only by tabbing to the dock, where Slay the Spire puts its cards on the numbers.
     const toolKeyRef = useRef({ tools: visibleTools, choose: chooseTool, live: false });
+    const keyBindings = useKeyBindings();
     const toolKeysLive = run.status === 'playing' || run.status === 'memorize' || run.status === 'resolving';
     useEffect(() => {
         toolKeyRef.current = { tools: visibleTools, choose: chooseTool, live: toolKeysLive };
@@ -535,7 +537,7 @@ const RunShell = ({
     useEffect(() => {
         const onKeyDown = (event: KeyboardEvent): void => {
             if (event.defaultPrevented || event.repeat || event.altKey || event.ctrlKey || event.metaKey) return;
-            const slot = toolKeySlot(event.key);
+            const slot = toolSlotForCode(currentKeyBindings(), event.code);
             if (slot === null) return;
             const target = event.target;
             if (target instanceof HTMLElement && (target.closest('input, textarea, select, [role="dialog"]') || target.isContentEditable)) return;
@@ -549,8 +551,8 @@ const RunShell = ({
         return () => window.removeEventListener('keydown', onKeyDown);
     }, []);
     const toolKey = (tool: RunShellTool): string | undefined => {
-        const index = visibleTools.indexOf(tool);
-        return index >= 0 && index < TOOL_KEY_COUNT ? String(index + 1) : undefined;
+        const action = TOOL_KEY_ACTIONS[visibleTools.indexOf(tool)];
+        return action && keyBindings[action] ? keyCodeLabel(keyBindings[action]) : undefined;
     };
     const toolButton = (tool: RunShellTool): ReactElement => (
         <button

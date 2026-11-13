@@ -16,6 +16,7 @@ import {
     type Settings
 } from './contracts';
 import { z } from 'zod';
+import { DEFAULT_KEY_BINDINGS, normalizeKeyBindings } from './key-bindings';
 import type { ChainTier } from './chain-tier-rules';
 import { COSMETIC_IDS } from './cosmetic-ids';
 import { HONOR_UNLOCK_IDS } from './honor-unlock-ids';
@@ -51,7 +52,9 @@ export const DEFAULT_SETTINGS: Settings = {
     echoFeedbackEnabled: true,
     distractionChannelEnabled: false,
     shuffleScoreTaxEnabled: false,
-    pairProximityHintsEnabled: true
+    pairProximityHintsEnabled: true,
+    highContrast: false,
+    keyBindings: DEFAULT_KEY_BINDINGS
 };
 
 /** Every way a run can end (`RunEndReason`); anything else in a save reads as unknown. */
@@ -411,7 +414,9 @@ export const settingsBoundarySchema = z.object({
     tileFocusAssist: z.unknown().optional(),
     uiScale: z.unknown().optional(),
     screenShakeIntensity: z.unknown().optional(),
-    weakerShuffleMode: z.unknown().optional()
+    weakerShuffleMode: z.unknown().optional(),
+    highContrast: z.unknown().optional(),
+    keyBindings: z.unknown().optional()
 });
 
 type SettingsBoundary = z.output<typeof settingsBoundarySchema>;
@@ -538,7 +543,9 @@ const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settin
         pairProximityHintsEnabled:
             typeof source.pairProximityHintsEnabled === 'boolean'
                 ? source.pairProximityHintsEnabled
-                : DEFAULT_SETTINGS.pairProximityHintsEnabled
+                : DEFAULT_SETTINGS.pairProximityHintsEnabled,
+        highContrast: typeof source.highContrast === 'boolean' ? source.highContrast : false,
+        keyBindings: normalizeKeyBindings(source.keyBindings)
     };
 };
 
