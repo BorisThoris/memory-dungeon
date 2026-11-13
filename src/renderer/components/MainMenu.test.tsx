@@ -32,6 +32,9 @@ const menuStore = vi.hoisted(() => ({
         clearAchievementBridgeNotice: () => undefined,
         persistenceWriteNotice: null,
         clearPersistenceWriteNotice: () => undefined,
+        saveData: { onboardingDismissed: true },
+        settings: { reduceMotion: true },
+        updateSettings: (() => Promise.resolve()) as (settings: unknown) => Promise<void>,
         suspendedRun: null as null | { floor: number; score: number; savedAt: number; passAndPlay: boolean },
         continueSuspendedRun: (() => undefined) as () => void
     }

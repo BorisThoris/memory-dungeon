@@ -1203,3 +1203,13 @@
 @media (pointer: coarse) {
     .shell :is(button, select, [role='switch']) { min-height: 44px; touch-action: manipulation; }
 }
+
+/* The import picker: the label is the control, the native file input is kept for its dialog only. */
+.visuallyHiddenFile {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}

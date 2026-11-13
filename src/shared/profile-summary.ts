@@ -80,7 +80,7 @@ export const buildProfileSaveShellSummary = (
             : 'Cloud sync is not available in this build, so your progress stays on this device.',
         exportCopy: 'Sharing a run shares only that run: never an account or personal details.',
         importCopy: 'Saves from older versions are brought up to date when the game loads them.',
-        resetCopy: 'Reset to defaults changes only settings. Deleting a whole profile would need its own confirmation, and is not offered.'
+        resetCopy: 'Reset to defaults changes only settings. Delete all progress, beside it, erases the profile after its own confirmation.'
     };
 };
 
@@ -178,7 +178,7 @@ export const getSaveTrustRows = (
             id: 'backup',
             label: 'Backups',
             status: 'manual',
-            description: 'To keep a backup, copy your save file.'
+            description: 'To keep a backup, or to play on another device, export your progress under About › Move progress.'
         },
         {
             id: 'reset',

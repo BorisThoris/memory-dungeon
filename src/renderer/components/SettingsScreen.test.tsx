@@ -5,6 +5,7 @@ import { createDefaultSaveData } from '../../shared/save-data';
 import { useAppStore } from '../store/useAppStore';
 import SettingsScreen from './SettingsScreen';
 import { useDevOptions } from '../dev/useDevOptions';
+import { serializeSaveExport } from '../saveTransfer';
 
 vi.mock('../hooks/useViewportSize', () => ({
     useViewportSize: () => ({ width: 1280, height: 800 })
@@ -145,6 +146,27 @@ describe('About: credits, licences, the privacy policy and deleting progress', (
         await user.click(screen.getByRole('button', { name: 'Delete everything' }));
         expect(useAppStore.getState().deleteAllProgress).toHaveBeenCalledTimes(1);
         expect(await screen.findByText(/Progress deleted/)).toBeInTheDocument();
+    });
+
+    it('imports progress from another device only after a yes, and refuses a file that is not a save', async () => {
+        useAppStore.setState({ importSaveData: vi.fn().mockResolvedValue(undefined) });
+        const user = userEvent.setup();
+        render(<SettingsScreen presentation="page" />);
+        await user.click(screen.getByRole('button', { name: /about/i }));
+        await user.click(screen.getByRole('button', { name: /^move progress$/i }));
+        expect(screen.getByTestId('settings-export-progress')).toBeInTheDocument();
+        const picker = screen.getByTestId('settings-import-progress').querySelector('input[type="file"]')!;
+
+        await user.upload(picker as HTMLInputElement, new File(['not a save'], 'notes.json', { type: 'application/json' }));
+        expect(await screen.findByTestId('settings-transfer-note')).toHaveTextContent('not a Memory Dungeon save');
+
+        const exported = serializeSaveExport({ ...createDefaultSaveData(), bestScore: 777 }, new Date());
+        await user.upload(picker as HTMLInputElement, new File([exported], 'save.json', { type: 'application/json' }));
+        const modal = await screen.findByTestId('settings-import-progress-modal');
+        expect(modal).toHaveTextContent('best score 777');
+        await user.click(screen.getByRole('button', { name: 'Replace it' }));
+        expect(useAppStore.getState().importSaveData).toHaveBeenCalledWith(expect.objectContaining({ bestScore: 777 }));
+        expect(await screen.findByText('Progress imported.')).toBeInTheDocument();
     });
 
     it('does not offer it in the middle of a run', async () => {

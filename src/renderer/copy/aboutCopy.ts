@@ -34,7 +34,18 @@ export const ABOUT_COPY = {
     deleteConfirmBody: 'This cannot be undone. Everything on this device starts again from nothing.',
     deleteConfirm: 'Delete everything',
     deleteCancel: 'Keep my progress',
-    deleteDone: 'Progress deleted. A fresh profile starts with your next run.'
+    deleteDone: 'Progress deleted. A fresh profile starts with your next run.',
+    transferTitle: 'Move your progress',
+    transferLead:
+        'There is no cloud sync, so to play on another device, export your progress here and import the file there. Settings stay with each device.',
+    exportAction: 'Export progress',
+    importAction: 'Import progress',
+    importConfirmTitle: 'Replace your progress?',
+    importConfirmBody: (bestScore: number): string =>
+        `The imported profile (best score ${bestScore.toLocaleString('en')}) replaces everything on this device, and any run in progress here is dropped. This cannot be undone.`,
+    importConfirm: 'Replace it',
+    importCancel: 'Keep mine',
+    importDone: 'Progress imported.'
 } as const;
 
 export const CREDIT_GROUPS: readonly CreditGroup[] = [

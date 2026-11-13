@@ -35,7 +35,10 @@ vi.mock('../store/useAppStore', () => ({
             persistenceWriteNotice: null,
             recoverUnreadableSave: storeMocks.recoverUnreadableSave,
             saveReadFailureNotice: storeMocks.saveReadFailureNotice,
-            saveWritesBlockedByReadFailure: storeMocks.saveWritesBlockedByReadFailure
+            saveWritesBlockedByReadFailure: storeMocks.saveWritesBlockedByReadFailure,
+            saveData: { onboardingDismissed: true },
+            settings: { reduceMotion: true },
+            suspendedRun: null
         })
 }));
 

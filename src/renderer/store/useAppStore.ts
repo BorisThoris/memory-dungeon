@@ -296,6 +296,15 @@ export const useAppStore = create<AppState>((set, get) => ({
             set({ saveReadFailureNotice: SAVE_RECOVERY_FAILED_NOTICE });
         }
     },
+    importSaveData: async (incoming) => {
+        // A profile carried over from another device: its progress, this device's settings. The run
+        // put down here belongs to the profile being replaced, so it goes with it.
+        const replacing = { ...normalizeUnknownSaveDataOrThrow(incoming), settings: get().settings };
+        clearSuspendedRun();
+        const committed = normalizeUnknownSaveDataOrThrow(await persistSaveDataSafely(replacing));
+        set({ saveData: committed, settings: committed.settings, suspendedRun: null });
+    },
+
     deleteAllProgress: async () => {
         // A fresh profile on this device: records, history, unlocks and the run put down are gone;
         // the settings are the player's preferences about the device, not progress, so they stay.

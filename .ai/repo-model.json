@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3417,
-    "codeFileCount": 1336,
-    "exportedSymbolCount": 4436,
+    "trackedFileCount": 3421,
+    "codeFileCount": 1340,
+    "exportedSymbolCount": 4445,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12377
+    "relationshipCount": 12405
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "55072dfc275a23bc0482827fe26d554567aa8f637bb475bd6464e4999f90f9b4"
+      "sha256": "78d6e598cfa95b60c4defd8690ca00fe482ede9d7efe226166029da895c27e94"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4137,8 +4137,8 @@
     {
       "path": "e2e/resume-run.spec.ts",
       "category": "test",
-      "bytes": 3092,
-      "sha256": "f4209eded7f99c8b0dfc2c91eb5bf36a5f4e6ca8d79ff532d49a2f588f18849c"
+      "bytes": 3808,
+      "sha256": "9dfa5642b71af06a410a1277dbbe763f6f0f9919dc4200bddb5314f44b6fc1fd"
     },
     {
       "path": "e2e/scholar-contract.spec.ts",
@@ -11149,6 +11149,18 @@
       "sha256": "821b27a930c24c4f7ec5e73f45075b19e3e1678ead4f8852b536488d193ba427"
     },
     {
+      "path": "src/renderer/components/FlashingLightsNotice.test.tsx",
+      "category": "test",
+      "bytes": 2164,
+      "sha256": "46a20a5c4db36b3a2fca67991ae74edcddfe7c42ed1dbb5e94e37cd6f292c59f"
+    },
+    {
+      "path": "src/renderer/components/FlashingLightsNotice.tsx",
+      "category": "source",
+      "bytes": 2773,
+      "sha256": "2aaf3c3b9ceeace89b084cfa3695da500eb9cdcd42faef1366d8f6fb95d984b7"
+    },
+    {
       "path": "src/renderer/components/flipFlameTrail.test.ts",
       "category": "test",
       "bytes": 1710,
@@ -11487,14 +11499,14 @@
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
       "category": "test",
-      "bytes": 8267,
-      "sha256": "8de35eaa8d7a9f89ca5e57ab6564895b96602806650758d37bbfb45c49df6616"
+      "bytes": 8449,
+      "sha256": "b5223e726a6637efce3ec02934401588afb54ddc92b854931dbbfcd91676b94d"
     },
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 16598,
-      "sha256": "489e75d5557c074ece9707f9238fa1b9084fffe7b948ec3548e66b6d20cb2cc1"
+      "bytes": 16699,
+      "sha256": "299eb3771b22f47722bb1c8cc24bf77cdba5416fe2afce44e2a4f1f7e11c6a9d"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -11517,8 +11529,8 @@
     {
       "path": "src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
       "category": "test",
-      "bytes": 3976,
-      "sha256": "7f1c75f83fd93e614f18213c64d13711baabc4071894200cf5d4a9cf158c1fd6"
+      "bytes": 4107,
+      "sha256": "bc946d9d0b03ea823c7ffa9d93cf986f1429d3eb0f0e00d87692132199703206"
     },
     {
       "path": "src/renderer/components/matchedCardRimFireMaterial.ts",
@@ -12141,26 +12153,26 @@
     {
       "path": "src/renderer/components/settingsNavigationModel.ts",
       "category": "source",
-      "bytes": 2059,
-      "sha256": "db7af444b05cb5f77d9e58dc3430532734b92431d7e989bebeb56d5533448f75"
+      "bytes": 2128,
+      "sha256": "11311c0f9bb5eeb7956e5d6b0f8e5e3881a713a71536d0458e19ebb16bd857ed"
     },
     {
       "path": "src/renderer/components/SettingsScreen.module.css",
       "category": "source",
-      "bytes": 30935,
-      "sha256": "c9ff76d3c39b138c5d80776ba2af0e8bc532f8fd277c6caa36db9b73d9783012"
+      "bytes": 31193,
+      "sha256": "91f1d0e397d83621e1ebf66716b23b68174439b3f63aadba375398333764be18"
     },
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "category": "test",
-      "bytes": 9929,
-      "sha256": "515771760bcab323103cc4485ef2caddc11f6b95db93127b4d23862c6bdee857"
+      "bytes": 11537,
+      "sha256": "5599dc1045fedbe3f9d98605a34cc4c0996e8a514edfe552f3e7f20ce3f49f92"
     },
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 51393,
-      "sha256": "0cfac5fb2e39cbd2d26602da546b661e617b2b3a72e73fa064a24c6a298bfbdb"
+      "bytes": 56844,
+      "sha256": "2308785e32c8f6be9c0757f42dfa47fe0d02d00220bd292e0030454a7ded8d86"
     },
     {
       "path": "src/renderer/components/shaderFirstUse.test.ts",
@@ -13215,8 +13227,8 @@
     {
       "path": "src/renderer/copy/aboutCopy.ts",
       "category": "source",
-      "bytes": 4484,
-      "sha256": "7c8cb4551c2df1ec5f9368262f5b5fc8d7bb893377d016ade5e76325cd3fdb27"
+      "bytes": 5152,
+      "sha256": "7b7c732be57684078b931b6cdf21c824bb01b398bb468d981c69fb30c3bf1afe"
     },
     {
       "path": "src/renderer/copy/anchorBeat.test.ts",
@@ -13605,8 +13617,8 @@
     {
       "path": "src/renderer/copy/settingsHints.ts",
       "category": "source",
-      "bytes": 2414,
-      "sha256": "1c8a40ac5ae8d295268c75b28ebed3037dfdf1989f51c44029874439eb3f01da"
+      "bytes": 2622,
+      "sha256": "78354687490aa9593191225a4e7adfbf65ada5a7441b7346ac6d28a3adb51c16"
     },
     {
       "path": "src/renderer/copy/skittishCardsBeat.test.ts",
@@ -14239,6 +14251,18 @@
       "sha256": "21a091168ecb7a13967fd9fd504c898a712578e109d4bfa97fa7f251b21cde62"
     },
     {
+      "path": "src/renderer/saveTransfer.test.ts",
+      "category": "test",
+      "bytes": 1543,
+      "sha256": "ddb01fe1ec37ed3c47e397e216df1c01df6136b126b0920e38ec241755d93de0"
+    },
+    {
+      "path": "src/renderer/saveTransfer.ts",
+      "category": "source",
+      "bytes": 3143,
+      "sha256": "ea9b4fb2d7bbb442f44c7cc67ac0393f1d882dd09b780b4a43108b9ae7bc2784"
+    },
+    {
       "path": "src/renderer/steamStorePage.ts",
       "category": "source",
       "bytes": 401,
@@ -14277,8 +14301,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 7386,
-      "sha256": "450ed1a48ed54fa018950109c18269f12d406ca05f031199261b0130ebeeaae2"
+      "bytes": 7546,
+      "sha256": "3c776bf2f47406b17f884306357101ce2e2b1c175f4d858935ab7a6ab77032b0"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -14631,14 +14655,14 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 43585,
-      "sha256": "4a84fcea1f02b620c2a163fb3c1adb530830b6fe351a7b57077783b3fa4d529a"
+      "bytes": 44300,
+      "sha256": "b08eb7b09fdb3801c39d7613a11569f8bccea65806ed660db788ad939e9a11e5"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 39183,
-      "sha256": "f6b04a0c1a3afb280aac1c45fd73d0ba9d81b8eae30464ce1935c946a16c8e37"
+      "bytes": 39736,
+      "sha256": "9623e0d2fd7d731faaa3620aec56bc222bbfc7168f0fc6c95ba04a97d219ab69"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -16929,8 +16953,8 @@
     {
       "path": "src/shared/profile-summary.ts",
       "category": "source",
-      "bytes": 8777,
-      "sha256": "6b2f3628bf57746a9faef10b82969fcc528fa34bce458be4a8459313bed3eb45"
+      "bytes": 8839,
+      "sha256": "1fc388b42513ad47b4e338e7b729c466e76c56bd90e378ea96d243999bda92be"
     },
     {
       "path": "src/shared/qa/regPhase5Hardening.test.ts",
@@ -24660,6 +24684,38 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/components/FlashingLightsNotice.test.tsx",
+      "path": "src/renderer/components/FlashingLightsNotice.test.tsx",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 42,
+      "imports": [
+        "file:src/renderer/components/FlashingLightsNotice.tsx",
+        "file:src/renderer/store/useAppStore.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/FlashingLightsNotice.tsx",
+      "path": "src/renderer/components/FlashingLightsNotice.tsx",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 72,
+      "imports": [
+        "file:src/renderer/store/useAppStore.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/components/FlashingLightsNotice.tsx#default",
+        "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_COPY",
+        "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_STORAGE_KEY"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/FlashingLightsNotice.test.tsx"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/flipFlameTrail.test.ts",
       "path": "src/renderer/components/flipFlameTrail.test.ts",
       "layer": "renderer",
@@ -25700,7 +25756,7 @@
       "path": "src/renderer/components/MainMenu.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 178,
+      "lineCount": 181,
       "imports": [
         "file:src/renderer/components/MainMenu.tsx",
         "file:src/shared/save-data.ts"
@@ -25713,11 +25769,12 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 316,
+      "lineCount": 319,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/components/CathedralScene.tsx",
+        "file:src/renderer/components/FlashingLightsNotice.tsx",
         "file:src/renderer/components/GlobalRecord.tsx",
         "file:src/renderer/components/MainMenuBackground.tsx",
         "file:src/renderer/components/tutorialHallContext.ts",
@@ -25778,7 +25835,7 @@
       "path": "src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 94,
+      "lineCount": 97,
       "imports": [
         "file:src/renderer/components/MainMenu.tsx",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
@@ -27503,7 +27560,7 @@
       "path": "src/renderer/components/settingsNavigationModel.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 62,
+      "lineCount": 64,
       "imports": [],
       "exports": [
         "symbol:src/renderer/components/settingsNavigationModel.ts#DEFAULT_SUBSECTION_BY_CATEGORY",
@@ -27519,10 +27576,11 @@
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 199,
+      "lineCount": 221,
       "imports": [
         "file:src/renderer/components/SettingsScreen.tsx",
         "file:src/renderer/dev/useDevOptions.ts",
+        "file:src/renderer/saveTransfer.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/shared/save-data.ts"
       ],
@@ -27534,7 +27592,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 822,
+      "lineCount": 904,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -27549,6 +27607,7 @@
         "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
         "file:src/renderer/hooks/useViewportSize.ts",
+        "file:src/renderer/saveTransfer.ts",
         "file:src/renderer/store/backgroundPersistence.ts",
         "file:src/renderer/store/useAppStore.ts",
         "file:src/renderer/ui/index.ts",
@@ -30772,7 +30831,7 @@
       "path": "src/renderer/copy/aboutCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 88,
+      "lineCount": 99,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/aboutCopy.ts#ABOUT_COPY",
@@ -31858,7 +31917,7 @@
       "path": "src/renderer/copy/settingsHints.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 39,
+      "lineCount": 41,
       "imports": [],
       "exports": [
         "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_FOOTER_HINT",
@@ -33386,6 +33445,43 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/saveTransfer.test.ts",
+      "path": "src/renderer/saveTransfer.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 26,
+      "imports": [
+        "file:src/renderer/saveTransfer.ts",
+        "file:src/shared/contracts.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/saveTransfer.ts",
+      "path": "src/renderer/saveTransfer.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 64,
+      "imports": [
+        "file:src/shared/contracts.ts",
+        "file:src/shared/save-data.ts"
+      ],
+      "exports": [
+        "symbol:src/renderer/saveTransfer.ts#downloadSaveExport",
+        "symbol:src/renderer/saveTransfer.ts#ImportedSave",
+        "symbol:src/renderer/saveTransfer.ts#parseSaveExport",
+        "symbol:src/renderer/saveTransfer.ts#SAVE_EXPORT_KIND",
+        "symbol:src/renderer/saveTransfer.ts#saveExportFileName",
+        "symbol:src/renderer/saveTransfer.ts#serializeSaveExport"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/SettingsScreen.test.tsx",
+        "file:src/renderer/saveTransfer.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/steamStorePage.ts",
       "path": "src/renderer/steamStorePage.ts",
       "layer": "renderer",
@@ -33485,7 +33581,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 151,
+      "lineCount": 153,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/suspendedRun.ts",
@@ -34605,7 +34701,7 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1046,
+      "lineCount": 1059,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/suspendedRun.ts",
@@ -34631,7 +34727,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1035,
+      "lineCount": 1044,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -34699,6 +34795,7 @@
       ],
       "testedBy": [
         "file:src/renderer/App.test.tsx",
+        "file:src/renderer/components/FlashingLightsNotice.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/SettingsScreen.test.tsx",
         "file:src/renderer/store/saveReadRecovery.test.ts",
@@ -37507,6 +37604,7 @@
         "file:src/renderer/desktop-client.test.ts",
         "file:src/renderer/hooks/useDistractionChannelTick.integration.test.tsx",
         "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+        "file:src/renderer/saveTransfer.test.ts",
         "file:src/renderer/store/hydrationController.test.ts",
         "file:src/renderer/store/levelCompleteContinuationExecutor.test.ts",
         "file:src/renderer/store/matchScorePop.test.ts",
@@ -44696,6 +44794,7 @@
         "file:src/renderer/App.test.tsx",
         "file:src/renderer/components/CodexScreen.test.tsx",
         "file:src/renderer/components/CollectionScreen.test.tsx",
+        "file:src/renderer/components/FlashingLightsNotice.test.tsx",
         "file:src/renderer/components/GameOverScreen.test.tsx",
         "file:src/renderer/components/GameScreen.test.tsx",
         "file:src/renderer/components/MainMenu.test.tsx",
@@ -44704,6 +44803,7 @@
         "file:src/renderer/components/ProfileScreen.test.tsx",
         "file:src/renderer/components/SettingsScreen.test.tsx",
         "file:src/renderer/desktop-client.test.ts",
+        "file:src/renderer/saveTransfer.test.ts",
         "file:src/renderer/store/achievementPersistence.test.ts",
         "file:src/renderer/store/crashSummaryHydration.test.ts",
         "file:src/renderer/store/hydrationController.test.ts",
@@ -51705,6 +51805,30 @@
       "endLine": 23
     },
     {
+      "id": "symbol:src/renderer/components/FlashingLightsNotice.tsx#default",
+      "name": "default",
+      "kind": "ExportAssignment",
+      "file": "src/renderer/components/FlashingLightsNotice.tsx",
+      "line": 71,
+      "endLine": 71
+    },
+    {
+      "id": "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_COPY",
+      "name": "FLASHING_NOTICE_COPY",
+      "kind": "value",
+      "file": "src/renderer/components/FlashingLightsNotice.tsx",
+      "line": 16,
+      "endLine": 21
+    },
+    {
+      "id": "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_STORAGE_KEY",
+      "name": "FLASHING_NOTICE_STORAGE_KEY",
+      "kind": "value",
+      "file": "src/renderer/components/FlashingLightsNotice.tsx",
+      "line": 14,
+      "endLine": 14
+    },
+    {
       "id": "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_BASE",
       "name": "FLIP_FLAME_BASE",
       "kind": "value",
@@ -52693,8 +52817,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 315,
-      "endLine": 315
+      "line": 318,
+      "endLine": 318
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -55045,24 +55169,24 @@
       "name": "DEFAULT_SUBSECTION_BY_CATEGORY",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 53,
-      "endLine": 61
+      "line": 55,
+      "endLine": 63
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SETTINGS_CATEGORIES",
       "name": "SETTINGS_CATEGORIES",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 17,
-      "endLine": 25
+      "line": 18,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SETTINGS_SUBSECTIONS",
       "name": "SETTINGS_SUBSECTIONS",
       "kind": "value",
       "file": "src/renderer/components/settingsNavigationModel.ts",
-      "line": 27,
-      "endLine": 51
+      "line": 28,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/components/settingsNavigationModel.ts#SettingsCategory",
@@ -55078,15 +55202,15 @@
       "kind": "type",
       "file": "src/renderer/components/settingsNavigationModel.ts",
       "line": 3,
-      "endLine": 15
+      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/components/SettingsScreen.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 821,
-      "endLine": 821
+      "line": 903,
+      "endLine": 903
     },
     {
       "id": "symbol:src/renderer/components/shaderFirstUse.ts#finishShaderProgramsOffFrame",
@@ -58798,15 +58922,15 @@
       "kind": "value",
       "file": "src/renderer/copy/aboutCopy.ts",
       "line": 23,
-      "endLine": 38
+      "endLine": 49
     },
     {
       "id": "symbol:src/renderer/copy/aboutCopy.ts#CREDIT_GROUPS",
       "name": "CREDIT_GROUPS",
       "kind": "value",
       "file": "src/renderer/copy/aboutCopy.ts",
-      "line": 40,
-      "endLine": 72
+      "line": 51,
+      "endLine": 83
     },
     {
       "id": "symbol:src/renderer/copy/aboutCopy.ts#CreditGroup",
@@ -58837,8 +58961,8 @@
       "name": "SOFTWARE_LICENCES",
       "kind": "value",
       "file": "src/renderer/copy/aboutCopy.ts",
-      "line": 75,
-      "endLine": 87
+      "line": 86,
+      "endLine": 98
     },
     {
       "id": "symbol:src/renderer/copy/anchorBeat.ts#ANCHOR_CLAIMED_ANNOUNCEMENT",
@@ -60213,8 +60337,8 @@
       "name": "SETTINGS_FOOTER_HINT",
       "kind": "value",
       "file": "src/renderer/copy/settingsHints.ts",
-      "line": 38,
-      "endLine": 38
+      "line": 40,
+      "endLine": 40
     },
     {
       "id": "symbol:src/renderer/copy/settingsHints.ts#SETTINGS_HINTS",
@@ -60222,7 +60346,7 @@
       "kind": "value",
       "file": "src/renderer/copy/settingsHints.ts",
       "line": 8,
-      "endLine": 35
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/copy/skittishCardsBeat.ts#SKITTISH_FLINCH_ANNOUNCEMENT",
@@ -61553,6 +61677,54 @@
       "endLine": 39
     },
     {
+      "id": "symbol:src/renderer/saveTransfer.ts#downloadSaveExport",
+      "name": "downloadSaveExport",
+      "kind": "value",
+      "file": "src/renderer/saveTransfer.ts",
+      "line": 53,
+      "endLine": 63
+    },
+    {
+      "id": "symbol:src/renderer/saveTransfer.ts#ImportedSave",
+      "name": "ImportedSave",
+      "kind": "type",
+      "file": "src/renderer/saveTransfer.ts",
+      "line": 18,
+      "endLine": 18
+    },
+    {
+      "id": "symbol:src/renderer/saveTransfer.ts#parseSaveExport",
+      "name": "parseSaveExport",
+      "kind": "value",
+      "file": "src/renderer/saveTransfer.ts",
+      "line": 21,
+      "endLine": 50
+    },
+    {
+      "id": "symbol:src/renderer/saveTransfer.ts#SAVE_EXPORT_KIND",
+      "name": "SAVE_EXPORT_KIND",
+      "kind": "value",
+      "file": "src/renderer/saveTransfer.ts",
+      "line": 11,
+      "endLine": 11
+    },
+    {
+      "id": "symbol:src/renderer/saveTransfer.ts#saveExportFileName",
+      "name": "saveExportFileName",
+      "kind": "value",
+      "file": "src/renderer/saveTransfer.ts",
+      "line": 13,
+      "endLine": 13
+    },
+    {
+      "id": "symbol:src/renderer/saveTransfer.ts#serializeSaveExport",
+      "name": "serializeSaveExport",
+      "kind": "value",
+      "file": "src/renderer/saveTransfer.ts",
+      "line": 15,
+      "endLine": 16
+    },
+    {
       "id": "symbol:src/renderer/steamStorePage.ts#getSteamStorePageUrl",
       "name": "getSteamStorePageUrl",
       "kind": "value",
@@ -61630,7 +61802,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 17,
-      "endLine": 150
+      "endLine": 152
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -62845,8 +63017,8 @@
       "name": "putTheRunDown",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 1014,
-      "endLine": 1027
+      "line": 1023,
+      "endLine": 1036
     },
     {
       "id": "symbol:src/renderer/store/useAppStore.ts#useAppStore",
@@ -62854,7 +63026,7 @@
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
       "line": 269,
-      "endLine": 972
+      "endLine": 981
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#buildRendererThemeStyle",
@@ -93438,6 +93610,24 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/FlashingLightsNotice.tsx->symbol:src/renderer/components/FlashingLightsNotice.tsx#default",
+      "source": "file:src/renderer/components/FlashingLightsNotice.tsx",
+      "target": "symbol:src/renderer/components/FlashingLightsNotice.tsx#default",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/FlashingLightsNotice.tsx->symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_COPY",
+      "source": "file:src/renderer/components/FlashingLightsNotice.tsx",
+      "target": "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_COPY",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/FlashingLightsNotice.tsx->symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_STORAGE_KEY",
+      "source": "file:src/renderer/components/FlashingLightsNotice.tsx",
+      "target": "symbol:src/renderer/components/FlashingLightsNotice.tsx#FLASHING_NOTICE_STORAGE_KEY",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/flipFlameTrail.ts->symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_BASE",
       "source": "file:src/renderer/components/flipFlameTrail.ts",
       "target": "symbol:src/renderer/components/flipFlameTrail.ts#FLIP_FLAME_BASE",
@@ -100821,6 +101011,42 @@
       "id": "exports:src/renderer/records/globalRecord.ts->symbol:src/renderer/records/globalRecord.ts#submitGlobalRecord",
       "source": "file:src/renderer/records/globalRecord.ts",
       "target": "symbol:src/renderer/records/globalRecord.ts#submitGlobalRecord",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/saveTransfer.ts->symbol:src/renderer/saveTransfer.ts#downloadSaveExport",
+      "source": "file:src/renderer/saveTransfer.ts",
+      "target": "symbol:src/renderer/saveTransfer.ts#downloadSaveExport",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/saveTransfer.ts->symbol:src/renderer/saveTransfer.ts#ImportedSave",
+      "source": "file:src/renderer/saveTransfer.ts",
+      "target": "symbol:src/renderer/saveTransfer.ts#ImportedSave",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/saveTransfer.ts->symbol:src/renderer/saveTransfer.ts#parseSaveExport",
+      "source": "file:src/renderer/saveTransfer.ts",
+      "target": "symbol:src/renderer/saveTransfer.ts#parseSaveExport",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/saveTransfer.ts->symbol:src/renderer/saveTransfer.ts#SAVE_EXPORT_KIND",
+      "source": "file:src/renderer/saveTransfer.ts",
+      "target": "symbol:src/renderer/saveTransfer.ts#SAVE_EXPORT_KIND",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/saveTransfer.ts->symbol:src/renderer/saveTransfer.ts#saveExportFileName",
+      "source": "file:src/renderer/saveTransfer.ts",
+      "target": "symbol:src/renderer/saveTransfer.ts#saveExportFileName",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/saveTransfer.ts->symbol:src/renderer/saveTransfer.ts#serializeSaveExport",
+      "source": "file:src/renderer/saveTransfer.ts",
+      "target": "symbol:src/renderer/saveTransfer.ts#serializeSaveExport",
       "kind": "exports"
     },
     {
@@ -122768,6 +122994,30 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/FlashingLightsNotice.test.tsx->src/renderer/components/FlashingLightsNotice.tsx",
+      "source": "file:src/renderer/components/FlashingLightsNotice.test.tsx",
+      "target": "file:src/renderer/components/FlashingLightsNotice.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FlashingLightsNotice.test.tsx->src/renderer/store/useAppStore.ts",
+      "source": "file:src/renderer/components/FlashingLightsNotice.test.tsx",
+      "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FlashingLightsNotice.test.tsx->src/shared/save-data.ts",
+      "source": "file:src/renderer/components/FlashingLightsNotice.test.tsx",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/FlashingLightsNotice.tsx->src/renderer/store/useAppStore.ts",
+      "source": "file:src/renderer/components/FlashingLightsNotice.tsx",
+      "target": "file:src/renderer/store/useAppStore.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/flipFlameTrail.test.ts->src/renderer/components/flipFlameTrail.ts",
       "source": "file:src/renderer/components/flipFlameTrail.test.ts",
       "target": "file:src/renderer/components/flipFlameTrail.ts",
@@ -124826,6 +125076,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/components/FlashingLightsNotice.tsx",
+      "source": "file:src/renderer/components/MainMenu.tsx",
+      "target": "file:src/renderer/components/FlashingLightsNotice.tsx",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/MainMenu.tsx->src/renderer/components/GlobalRecord.tsx",
       "source": "file:src/renderer/components/MainMenu.tsx",
       "target": "file:src/renderer/components/GlobalRecord.tsx",
@@ -126692,6 +126948,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/SettingsScreen.test.tsx->src/renderer/saveTransfer.ts",
+      "source": "file:src/renderer/components/SettingsScreen.test.tsx",
+      "target": "file:src/renderer/saveTransfer.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/SettingsScreen.test.tsx->src/renderer/store/useAppStore.ts",
       "source": "file:src/renderer/components/SettingsScreen.test.tsx",
       "target": "file:src/renderer/store/useAppStore.ts",
@@ -126779,6 +127041,12 @@
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/hooks/useViewportSize.ts",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/hooks/useViewportSize.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/saveTransfer.ts",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/renderer/saveTransfer.ts",
       "kind": "imports"
     },
     {
@@ -131915,6 +132183,36 @@
       "id": "imports:src/renderer/records/globalRecord.ts->src/shared/global-record-config.ts",
       "source": "file:src/renderer/records/globalRecord.ts",
       "target": "file:src/shared/global-record-config.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/saveTransfer.test.ts->src/renderer/saveTransfer.ts",
+      "source": "file:src/renderer/saveTransfer.test.ts",
+      "target": "file:src/renderer/saveTransfer.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/saveTransfer.test.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/saveTransfer.test.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/saveTransfer.test.ts->src/shared/save-data.ts",
+      "source": "file:src/renderer/saveTransfer.test.ts",
+      "target": "file:src/shared/save-data.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/saveTransfer.ts->src/shared/contracts.ts",
+      "source": "file:src/renderer/saveTransfer.ts",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/saveTransfer.ts->src/shared/save-data.ts",
+      "source": "file:src/renderer/saveTransfer.ts",
+      "target": "file:src/shared/save-data.ts",
       "kind": "imports"
     },
     {
@@ -152281,6 +152579,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/components/FlashingLightsNotice.tsx->file:src/renderer/components/FlashingLightsNotice.test.tsx",
+      "source": "file:src/renderer/components/FlashingLightsNotice.tsx",
+      "target": "file:src/renderer/components/FlashingLightsNotice.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/components/flipFlameTrail.ts->file:src/renderer/components/flipFlameTrail.test.ts",
       "source": "file:src/renderer/components/flipFlameTrail.ts",
       "target": "file:src/renderer/components/flipFlameTrail.test.ts",
@@ -154015,6 +154319,18 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/renderer/saveTransfer.ts->file:src/renderer/components/SettingsScreen.test.tsx",
+      "source": "file:src/renderer/saveTransfer.ts",
+      "target": "file:src/renderer/components/SettingsScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/saveTransfer.ts->file:src/renderer/saveTransfer.test.ts",
+      "source": "file:src/renderer/saveTransfer.ts",
+      "target": "file:src/renderer/saveTransfer.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/renderer/store/achievementPersistence.ts->file:src/renderer/store/achievementPersistence.test.ts",
       "source": "file:src/renderer/store/achievementPersistence.ts",
       "target": "file:src/renderer/store/achievementPersistence.test.ts",
@@ -154300,6 +154616,12 @@
       "id": "tested_by:src/renderer/store/useAppStore.ts->file:src/renderer/App.test.tsx",
       "source": "file:src/renderer/store/useAppStore.ts",
       "target": "file:src/renderer/App.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/store/useAppStore.ts->file:src/renderer/components/FlashingLightsNotice.test.tsx",
+      "source": "file:src/renderer/store/useAppStore.ts",
+      "target": "file:src/renderer/components/FlashingLightsNotice.test.tsx",
       "kind": "tested_by"
     },
     {
@@ -155698,6 +156020,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/saveTransfer.test.ts",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/saveTransfer.test.ts",
       "kind": "tested_by"
     },
     {
@@ -160213,6 +160541,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/shared/save-data.ts->file:src/renderer/components/FlashingLightsNotice.test.tsx",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/renderer/components/FlashingLightsNotice.test.tsx",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/shared/save-data.ts->file:src/renderer/components/GameOverScreen.test.tsx",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/renderer/components/GameOverScreen.test.tsx",
@@ -160258,6 +160592,12 @@
       "id": "tested_by:src/shared/save-data.ts->file:src/renderer/desktop-client.test.ts",
       "source": "file:src/shared/save-data.ts",
       "target": "file:src/renderer/desktop-client.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/save-data.ts->file:src/renderer/saveTransfer.test.ts",
+      "source": "file:src/shared/save-data.ts",
+      "target": "file:src/renderer/saveTransfer.test.ts",
       "kind": "tested_by"
     },
     {

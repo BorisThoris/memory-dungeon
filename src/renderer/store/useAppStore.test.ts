@@ -1023,6 +1023,19 @@ describe('a run put down and picked up again', () => {
         expect(readSuspendedRun()).toBeNull();
     });
 
+    it('importing a profile takes its progress, keeps the settings of this device, and drops the run put down here', async () => {
+        const saveData = createDefaultSaveData();
+        const settings = { ...saveData.settings, reduceMotion: true };
+        useAppStore.setState({ saveData: { ...saveData, settings }, settings });
+        writeSuspendedRun(createNewRun(0, { runSeed: 4 }), null);
+
+        await useAppStore.getState().importSaveData({ ...createDefaultSaveData(), bestScore: 5_150 });
+        const state = useAppStore.getState();
+        expect(state.saveData.bestScore).toBe(5_150);
+        expect(state.settings.reduceMotion).toBe(true);
+        expect(readSuspendedRun()).toBeNull();
+    });
+
     it('offers the run back paused where it was left, and plays on from there', () => {
         useAppStore.getState().startRun();
         notifyCurrentBoardReady();

@@ -11,6 +11,7 @@ export type SettingsSubsection =
     | 'accessibility'
     | 'build'
     | 'credits'
+    | 'transfer'
     | 'reset'
     | 'effects';
 
@@ -46,6 +47,7 @@ export const SETTINGS_SUBSECTIONS: Record<
     about: [
         { id: 'build', label: 'Build' },
         { id: 'credits', label: 'Credits' },
+        { id: 'transfer', label: 'Move progress' },
         { id: 'reset', label: 'Reset' }
     ]
 };

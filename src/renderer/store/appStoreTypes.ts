@@ -31,6 +31,8 @@ export interface AppState {
     continueSuspendedRun: () => void;
     /** A fresh profile on this device, the settings kept (Settings > About > Reset). */
     deleteAllProgress: () => Promise<void>;
+    /** Replaces the profile with one exported from another device (validated), the settings kept. */
+    importSaveData: (incoming: unknown) => Promise<void>;
     newlyUnlockedAchievements: AchievementId[];
     /** Non-blocking copy when Steam achievement sync fails (local save still applied). */
     achievementBridgeNotice: string | null;

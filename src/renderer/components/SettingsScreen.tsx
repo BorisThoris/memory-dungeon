@@ -39,6 +39,8 @@ import packageJson from '../../../package.json';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import OverlayModal from './OverlayModal';
 import { ABOUT_COPY, CREDIT_GROUPS, PRIVACY_POLICY_URL, SOFTWARE_LICENCES } from '../copy/aboutCopy';
+import { downloadSaveExport, parseSaveExport } from '../saveTransfer';
+import type { SaveData } from '../../shared/contracts';
 import { DIAGNOSTICS_COPY, SAVE_FILE_COPY } from '../copy/diagnosticsSettings';
 import { SETTINGS_FOOTER_HINT, SETTINGS_HINTS } from '../copy/settingsHints';
 import { SegmentedControl, SettingsSection, SliderRow, ToggleRow } from './SettingsControls';
@@ -73,6 +75,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
         clearPersistenceWriteNotice,
         closeSettings,
         deleteAllProgress,
+        importSaveData,
         runInProgress,
         persistenceWriteNotice,
         priorCrashNotice,
@@ -85,6 +88,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
             clearPersistenceWriteNotice: state.clearPersistenceWriteNotice,
             closeSettings: state.closeSettings,
             deleteAllProgress: state.deleteAllProgress,
+            importSaveData: state.importSaveData,
             runInProgress: state.run !== null,
             persistenceWriteNotice: state.persistenceWriteNotice,
             priorCrashNotice: state.priorCrashNotice,
@@ -98,6 +102,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
     const [activeCategory, setActiveCategory] = useState<SettingsCategory>('gameplay');
     const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
     const [progressDeleted, setProgressDeleted] = useState(false);
+    const [importCandidate, setImportCandidate] = useState<SaveData | null>(null);
+    const [transferNote, setTransferNote] = useState<string | null>(null);
     const [activeSubsection, setActiveSubsection] = useState<SettingsSubsection>(
         DEFAULT_SUBSECTION_BY_CATEGORY.gameplay
     );
@@ -547,6 +553,10 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
 
                                         {activeCategory === 'accessibility' && showSubsection('accessibility') ? (
                                             <SettingsSection title="Accessibility">
+                                                {/* Every market leader names its colour-blind support; this game's is built in, so it is said, not switched. */}
+                                                <p className={styles.headerCopy} data-testid="settings-colour-vision">
+                                                    {SETTINGS_HINTS.colourVision}
+                                                </p>
                                                 <div className={styles.toggleStack}>
                                                     <ToggleRow
                                                         checked={draft.reduceMotion}
@@ -687,6 +697,48 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                             </SettingsSection>
                                         ) : null}
 
+                                        {/* Moving progress under a live run would let that run's end write over the import. */}
+                                        {activeCategory === 'about' && showSubsection('transfer') && !runInProgress ? (
+                                            <SettingsSection title={ABOUT_COPY.transferTitle}>
+                                                <p className={styles.headerCopy}>{ABOUT_COPY.transferLead}</p>
+                                                <button
+                                                    className={styles.word}
+                                                    data-testid="settings-export-progress"
+                                                    onClick={() => downloadSaveExport(saveData)}
+                                                    type="button"
+                                                >
+                                                    {ABOUT_COPY.exportAction}
+                                                </button>
+                                                <label className={styles.word} data-testid="settings-import-progress">
+                                                    {ABOUT_COPY.importAction}
+                                                    <input
+                                                        accept="application/json,.json"
+                                                        className={styles.visuallyHiddenFile}
+                                                        onChange={(event) => {
+                                                            const file = event.target.files?.[0];
+                                                            event.target.value = '';
+                                                            if (!file) return;
+                                                            void file.text().then((text) => {
+                                                                const parsed = parseSaveExport(text);
+                                                                if (parsed.ok) {
+                                                                    setTransferNote(null);
+                                                                    setImportCandidate(parsed.save);
+                                                                } else {
+                                                                    setTransferNote(parsed.reason);
+                                                                }
+                                                            });
+                                                        }}
+                                                        type="file"
+                                                    />
+                                                </label>
+                                                {transferNote ? (
+                                                    <p className={styles.headerCopy} data-testid="settings-transfer-note" role="status">
+                                                        {transferNote}
+                                                    </p>
+                                                ) : null}
+                                            </SettingsSection>
+                                        ) : null}
+
                                         {activeCategory === 'about' && showSubsection('reset') ? (
                                             <SettingsSection title="Reset">
                                                 <p className={styles.headerCopy}>
@@ -745,6 +797,36 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                 </div>
             </div>
         </section>
+            {importCandidate ? (
+                <OverlayModal
+                    actions={[
+                        {
+                            label: ABOUT_COPY.importConfirm,
+                            onClick: () => {
+                                const incoming = importCandidate;
+                                setImportCandidate(null);
+                                runPersistenceInBackground(() => importSaveData(incoming).then(() => setTransferNote(ABOUT_COPY.importDone)));
+                            },
+                            variant: 'danger'
+                        },
+                        {
+                            label: ABOUT_COPY.importCancel,
+                            onClick: () => {
+                                playUiBack();
+                                setImportCandidate(null);
+                            },
+                            variant: 'secondary'
+                        }
+                    ]}
+                    onEscape={() => {
+                        playUiBack();
+                        setImportCandidate(null);
+                    }}
+                    subtitle={ABOUT_COPY.importConfirmBody(importCandidate.bestScore)}
+                    testId="settings-import-progress-modal"
+                    title={ABOUT_COPY.importConfirmTitle}
+                />
+            ) : null}
             {deleteConfirmOpen ? (
                 <OverlayModal
                     actions={[

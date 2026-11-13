@@ -14,8 +14,23 @@ const runSnapshot = (page: Page): Promise<{ seed: number; floor: number; status:
         return run ? { seed: run.runSeed, floor: run.board?.level ?? 0, status: run.status, tiles: run.board?.tiles.length ?? 0 } : null;
     });
 
+/** The startup intro, skipped, with a run waiting: the menu leads with Continue, not Play. */
+const skipIntroToContinue = async (page: Page): Promise<void> => {
+    const intro = page.getByRole('dialog', { name: /startup relic intro/i });
+    await expect
+        .poll(
+            async () => {
+                if (await intro.isVisible().catch(() => false)) await intro.press('Escape', { timeout: 2_000 }).catch(() => {});
+                return page.getByRole('button', { name: 'Continue', exact: true }).isVisible().catch(() => false);
+            },
+            { timeout: 90_000, intervals: [100, 300, 500, 1_000] }
+        )
+        .toBe(true);
+    await expect(page.locator('[data-e2e-menu-pointer="interactive"]')).toBeAttached({ timeout: 25_000 });
+};
+
 test.describe('a run put down and picked up again', () => {
-    test.setTimeout(240_000);
+    test.describe.configure({ timeout: 300_000 });
 
     test('closing mid-floor and coming back continues the same run, paused', async ({ page }) => {
         await openLevel1Play(page);
@@ -25,9 +40,8 @@ test.describe('a run put down and picked up again', () => {
 
         // The tab is closed and opened again: the store starts empty, the snapshot is on disk.
         await page.reload({ waitUntil: 'domcontentloaded', timeout: 180_000 });
-        await dismissStartupIntro(page);
+        await skipIntroToContinue(page);
         const continueButton = page.getByRole('button', { name: 'Continue', exact: true });
-        await expect(continueButton).toBeVisible({ timeout: 60_000 });
         await expect(continueButton).toContainText(`Floor ${before!.floor}`);
         await expect(mainMenuPlayButton(page)).toHaveCount(0);
 

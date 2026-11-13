@@ -20,6 +20,7 @@ import { useAppStore } from '../store/useAppStore';
 import styles from './MainMenu.module.css';
 import { GlobalRecordBadge } from './GlobalRecord';
 import { SUSPENDED_RUN_COPY } from '../copy/suspendedRunCopy';
+import FlashingLightsNotice from './FlashingLightsNotice';
 
 interface MainMenuProps {
     saveData: SaveData;
@@ -159,6 +160,8 @@ const MainMenu = ({
                         ) : null}
                     </div>
                 ) : null}
+
+                <FlashingLightsNotice />
 
                 {achievementBridgeNotice ? (
                     <div className={styles.note} role="status">
