@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3408,
-    "codeFileCount": 1328,
-    "exportedSymbolCount": 4414,
+    "trackedFileCount": 3410,
+    "codeFileCount": 1330,
+    "exportedSymbolCount": 4416,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12330
+    "relationshipCount": 12335
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "5465c408fca577795e5946dda0d52e5b9ed633e4e5fa335b691e264d72a59fbd"
+      "sha256": "e27f5827232d13ea56bd9c3be62584670e65cd7f5af782fe84c1cadf7465cf30"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -12151,6 +12151,18 @@
       "sha256": "d33bcdbf927fa1c10ae4da293a50294e72bbe522a87c477061c8e19f00039cfc"
     },
     {
+      "path": "src/renderer/components/shaderFirstUse.test.ts",
+      "category": "test",
+      "bytes": 2390,
+      "sha256": "5f1d14392351d75440ad553fcc34fe82c6fc03d86675f60ebd810ed87d613f83"
+    },
+    {
+      "path": "src/renderer/components/shaderFirstUse.ts",
+      "category": "source",
+      "bytes": 2190,
+      "sha256": "ac549b22a1c3be39e1ca9d5e8010e4204f1488214f55494054c1cdad2b45e856"
+    },
+    {
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
       "category": "test",
       "bytes": 5846,
@@ -12783,8 +12795,8 @@
     {
       "path": "src/renderer/components/TileBoardScene.tsx",
       "category": "source",
-      "bytes": 36936,
-      "sha256": "58e1927ec2b88663d792241a1afd629ff3a5921aa7cdf513d4eb5b0b66a01000"
+      "bytes": 37224,
+      "sha256": "ef77c9d70edbe48dd1966d9532affb5e10ac1268d8aefd3797886983bce96720"
     },
     {
       "path": "src/renderer/components/TileBoardSceneBoardGroup.tsx",
@@ -27495,6 +27507,33 @@
       ]
     },
     {
+      "id": "file:src/renderer/components/shaderFirstUse.test.ts",
+      "path": "src/renderer/components/shaderFirstUse.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 57,
+      "imports": [
+        "file:src/renderer/components/shaderFirstUse.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/renderer/components/shaderFirstUse.ts",
+      "path": "src/renderer/components/shaderFirstUse.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 50,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/shaderFirstUse.ts#finishShaderProgramsOffFrame",
+        "symbol:src/renderer/components/shaderFirstUse.ts#SHADER_FIRST_USE_MAX_LOOKS"
+      ],
+      "testedBy": [
+        "file:src/renderer/components/shaderFirstUse.test.ts"
+      ]
+    },
+    {
       "id": "file:src/renderer/components/shuffleFlipAnimation.test.ts",
       "path": "src/renderer/components/shuffleFlipAnimation.test.ts",
       "layer": "renderer",
@@ -29451,7 +29490,7 @@
       "path": "src/renderer/components/TileBoardScene.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 769,
+      "lineCount": 776,
       "imports": [
         "file:src/renderer/cardFace/cardIllustrationImages.ts",
         "file:src/renderer/cardFace/cardIllustrationRegistry.ts",
@@ -29470,6 +29509,7 @@
         "file:src/renderer/components/nextFloorWarmupState.ts",
         "file:src/renderer/components/pairProximityBadges.ts",
         "file:src/renderer/components/realmTileMarkTextures.ts",
+        "file:src/renderer/components/shaderFirstUse.ts",
         "file:src/renderer/components/TileBezel.tsx",
         "file:src/renderer/components/tileBoardCardWindow.ts",
         "file:src/renderer/components/tileBoardFrameAdvance.ts",
@@ -54879,6 +54919,22 @@
       "endLine": 727
     },
     {
+      "id": "symbol:src/renderer/components/shaderFirstUse.ts#finishShaderProgramsOffFrame",
+      "name": "finishShaderProgramsOffFrame",
+      "kind": "value",
+      "file": "src/renderer/components/shaderFirstUse.ts",
+      "line": 23,
+      "endLine": 49
+    },
+    {
+      "id": "symbol:src/renderer/components/shaderFirstUse.ts#SHADER_FIRST_USE_MAX_LOOKS",
+      "name": "SHADER_FIRST_USE_MAX_LOOKS",
+      "kind": "value",
+      "file": "src/renderer/components/shaderFirstUse.ts",
+      "line": 21,
+      "endLine": 21
+    },
+    {
       "id": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
       "name": "computeBoardEntranceMotionBudgetMs",
       "kind": "function",
@@ -57123,24 +57179,24 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 768,
-      "endLine": 768
+      "line": 775,
+      "endLine": 775
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileBoardSceneHandle",
       "name": "TileBoardSceneHandle",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 182,
-      "endLine": 182
+      "line": 184,
+      "endLine": 184
     },
     {
       "id": "symbol:src/renderer/components/TileBoardScene.tsx#TileHoverTiltState",
       "name": "TileHoverTiltState",
       "kind": "ExportSpecifier",
       "file": "src/renderer/components/TileBoardScene.tsx",
-      "line": 99,
-      "endLine": 99
+      "line": 101,
+      "endLine": 101
     },
     {
       "id": "symbol:src/renderer/components/TileBoardSceneBoardGroup.tsx#TileBoardSceneBoardGroup",
@@ -95594,6 +95650,18 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/components/shaderFirstUse.ts->symbol:src/renderer/components/shaderFirstUse.ts#finishShaderProgramsOffFrame",
+      "source": "file:src/renderer/components/shaderFirstUse.ts",
+      "target": "symbol:src/renderer/components/shaderFirstUse.ts#finishShaderProgramsOffFrame",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/shaderFirstUse.ts->symbol:src/renderer/components/shaderFirstUse.ts#SHADER_FIRST_USE_MAX_LOOKS",
+      "source": "file:src/renderer/components/shaderFirstUse.ts",
+      "target": "symbol:src/renderer/components/shaderFirstUse.ts#SHADER_FIRST_USE_MAX_LOOKS",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/components/shuffleFlipAnimation.ts->symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
       "source": "file:src/renderer/components/shuffleFlipAnimation.ts",
       "target": "symbol:src/renderer/components/shuffleFlipAnimation.ts#computeBoardEntranceMotionBudgetMs",
@@ -126304,6 +126372,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/shaderFirstUse.test.ts->src/renderer/components/shaderFirstUse.ts",
+      "source": "file:src/renderer/components/shaderFirstUse.test.ts",
+      "target": "file:src/renderer/components/shaderFirstUse.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/shuffleFlipAnimation.test.ts->src/renderer/components/shuffleFlipAnimation.ts",
       "source": "file:src/renderer/components/shuffleFlipAnimation.test.ts",
       "target": "file:src/renderer/components/shuffleFlipAnimation.ts",
@@ -128767,6 +128841,12 @@
       "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/realmTileMarkTextures.ts",
       "source": "file:src/renderer/components/TileBoardScene.tsx",
       "target": "file:src/renderer/components/realmTileMarkTextures.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/TileBoardScene.tsx->src/renderer/components/shaderFirstUse.ts",
+      "source": "file:src/renderer/components/TileBoardScene.tsx",
+      "target": "file:src/renderer/components/shaderFirstUse.ts",
       "kind": "imports"
     },
     {
@@ -152286,6 +152366,12 @@
       "id": "tested_by:src/renderer/components/SettingsScreen.tsx->file:src/renderer/components/SettingsScreen.test.tsx",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/components/SettingsScreen.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/components/shaderFirstUse.ts->file:src/renderer/components/shaderFirstUse.test.ts",
+      "source": "file:src/renderer/components/shaderFirstUse.ts",
+      "target": "file:src/renderer/components/shaderFirstUse.test.ts",
       "kind": "tested_by"
     },
     {

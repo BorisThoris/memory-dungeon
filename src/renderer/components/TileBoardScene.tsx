@@ -8,6 +8,7 @@ import { prewarmCardBackShaders, prewarmElementCardTextures } from './ElementCar
 import { prewarmCardElementFxShaders } from './cardElementFx';
 import { prewarmCardDepartureShaders } from './cardDepartureWorld';
 import { prewarmCardFaceOverlayShaders } from './cardDissolveMaterial';
+import { finishShaderProgramsOffFrame } from './shaderFirstUse';
 import { prewarmRealmTileMarks, realmTileMarkWarmupSteps } from './realmTileMarkTextures';
 import {
     forwardRef,
@@ -20,6 +21,7 @@ import {
 import {
     type Group,
     type Mesh,
+    type Scene,
     type Texture
 } from 'three';
 import type { BoardState, GraphicsQualityPreset, RunStatus } from '../../shared/contracts';
@@ -296,14 +298,19 @@ const TileBoardScene = forwardRef<TileBoardSceneHandle, TileBoardSceneProps>(({
         prewarmElementCardTextures((texture) => gl.initTexture(texture));
         prewarmRealmTileMarks(board.tiles, (texture) => gl.initTexture(texture));
         try {
-            gl.compile(scene, camera);
+            const compiled = new Set(gl.compile(scene, camera));
+            const warm = (stand: Scene): void => {
+                for (const material of gl.compile(stand, camera, scene)) compiled.add(material);
+            };
             // Card backs join the scene only once the faces go down: compile theirs now too.
-            prewarmCardBackShaders((warm) => gl.compile(warm, camera, scene));
+            prewarmCardBackShaders(warm);
             // And the shaders a match's departure draws with, so the first matches do not link them.
-            prewarmCardElementFxShaders((warm) => gl.compile(warm, camera, scene));
-            prewarmCardDepartureShaders((warm) => gl.compile(warm, camera, scene));
+            prewarmCardElementFxShaders(warm);
+            prewarmCardDepartureShaders(warm);
             // And the face illustration's, which sits hidden with the faces until the first flip.
-            prewarmCardFaceOverlayShaders((warm) => gl.compile(warm, camera, scene));
+            prewarmCardFaceOverlayShaders(warm);
+            // Compiled is not linked: read each program once it is, before the first flip or match draws it.
+            finishShaderProgramsOffFrame(gl, compiled);
         } catch {
             // Shaders still compile on first use.
         }
