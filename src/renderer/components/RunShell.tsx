@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactElement } from 'react';
 import { rememberToolCharges, risenToolCharges, toolChargeBaseline, TOOL_FRESH_MS } from './runShellFreshTools';
+import { TOOL_KEY_COUNT, toolKeySlot } from './runShellToolKeys';
 import { getMemorizeClock, subscribeMemorizeClock } from '../store/memorizeClock';
 import type { GameShellLayout } from '../gameShellLayout';
 import type { RunState } from '../../shared/contracts';
@@ -524,8 +525,36 @@ const RunShell = ({
         tapToolPress(reduceMotion);
         tool.onClick();
     };
+    // Number keys 1-9 use the dock's tools, left to right (2026-11-13): a keyboard player could
+    // reach a tool only by tabbing to the dock, where Slay the Spire puts its cards on the numbers.
+    const toolKeyRef = useRef({ tools: visibleTools, choose: chooseTool, live: false });
+    const toolKeysLive = run.status === 'playing' || run.status === 'memorize' || run.status === 'resolving';
+    useEffect(() => {
+        toolKeyRef.current = { tools: visibleTools, choose: chooseTool, live: toolKeysLive };
+    });
+    useEffect(() => {
+        const onKeyDown = (event: KeyboardEvent): void => {
+            if (event.defaultPrevented || event.repeat || event.altKey || event.ctrlKey || event.metaKey) return;
+            const slot = toolKeySlot(event.key);
+            if (slot === null) return;
+            const target = event.target;
+            if (target instanceof HTMLElement && (target.closest('input, textarea, select, [role="dialog"]') || target.isContentEditable)) return;
+            const { tools: keyed, choose, live } = toolKeyRef.current;
+            const tool = keyed[slot];
+            if (!live || !tool || tool.disabled) return;
+            event.preventDefault();
+            choose(tool);
+        };
+        window.addEventListener('keydown', onKeyDown);
+        return () => window.removeEventListener('keydown', onKeyDown);
+    }, []);
+    const toolKey = (tool: RunShellTool): string | undefined => {
+        const index = visibleTools.indexOf(tool);
+        return index >= 0 && index < TOOL_KEY_COUNT ? String(index + 1) : undefined;
+    };
     const toolButton = (tool: RunShellTool): ReactElement => (
         <button
+            aria-keyshortcuts={toolKey(tool)}
             aria-label={tool.name ?? tool.title ?? tool.label}
             aria-pressed={tool.armed !== undefined ? tool.armed : undefined}
             className={`${styles.tool} ${tool.armed ? styles.toolArmed : ''}`.trim()}
@@ -534,7 +563,7 @@ const RunShell = ({
             disabled={tool.disabled}
             key={tool.id}
             onClick={() => chooseTool(tool)}
-            title={compactDock ? undefined : tool.title}
+            title={compactDock ? undefined : toolKey(tool) && tool.title ? `${tool.title} (${toolKey(tool)})` : tool.title}
             type="button"
         >
             <span className={styles.toolGlyph}>{tool.glyph}</span>

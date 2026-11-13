@@ -5,7 +5,7 @@ export const GAMEPLAY_SHORTCUT_ROWS: ReadonlyArray<{ id: string; keys: string; d
     { id: 'boardNav', keys: 'Arrow keys', description: 'Move focus between tiles on the board (when board focus is active)' },
     { id: 'boardFlip', keys: 'Enter / Space', description: 'Flip the focused tile' },
     { id: 'pause', keys: 'P / Escape', description: 'Pause or resume the run; Escape closes the current dialog first' },
-    { id: 'powers', keys: 'Tool dock', description: 'Choose a tool below the board; select an armed tool again to cancel it' },
+    { id: 'powers', keys: '1–9', description: 'Use the tools below the board, left to right; press an armed tool again to cancel it' },
     { id: 'help', keys: '? or F1', description: 'Open this keyboard shortcuts list' },
     { id: 'closeShortcuts', keys: 'Escape', description: 'Close Controls and return to the paused run' }
 ];

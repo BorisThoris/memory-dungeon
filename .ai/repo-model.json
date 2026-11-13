@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3416,
-    "codeFileCount": 1335,
-    "exportedSymbolCount": 4434,
+    "trackedFileCount": 3417,
+    "codeFileCount": 1336,
+    "exportedSymbolCount": 4436,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12374
+    "relationshipCount": 12377
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "a5d9f2ccb471d2fb20d0bcda9e76f808fba8f1ff57e6a3be0e3d52e386930030"
+      "sha256": "55072dfc275a23bc0482827fe26d554567aa8f637bb475bd6464e4999f90f9b4"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -11931,14 +11931,14 @@
     {
       "path": "src/renderer/components/RunShell.test.tsx",
       "category": "test",
-      "bytes": 46164,
-      "sha256": "c20b95068d7e0622e0cfd17d2836c42d872dae8afe65f3b2ed3ba7739f81c6ef"
+      "bytes": 47547,
+      "sha256": "a06263ea2ef3d44710adcdaec5775e032e04a3b37a5e95daf6851d30f146387f"
     },
     {
       "path": "src/renderer/components/RunShell.tsx",
       "category": "source",
-      "bytes": 65168,
-      "sha256": "94d1a00eca20844271a7d4d6dd539b85c1a880d28c02f6bd992b3f8b96a74b0e"
+      "bytes": 66925,
+      "sha256": "9562cb73a24f5d662d8a04890ef54053fab8f8b3fded5bb0eabe2b689fa9aef8"
     },
     {
       "path": "src/renderer/components/RunShellFeaturedGoal.test.tsx",
@@ -11975,6 +11975,12 @@
       "category": "source",
       "bytes": 5369,
       "sha256": "d3853b9735908c376b2566354d7a952c958728cbd149640a2107271ad34c9236"
+    },
+    {
+      "path": "src/renderer/components/runShellToolKeys.ts",
+      "category": "source",
+      "bytes": 304,
+      "sha256": "da7db82d35c8c7bf7e3fdec2f3cb05470706f4a97750c9cae3467744c167cbb6"
     },
     {
       "path": "src/renderer/components/sceneAmbient.test.ts",
@@ -14121,8 +14127,8 @@
     {
       "path": "src/renderer/keyboard/gameplayShortcuts.ts",
       "category": "source",
-      "bytes": 1751,
-      "sha256": "bfa6eb527770140609e8eb5957f67a1aa2515a9d82c15a9a0be9d9dc5d9fb2c2"
+      "bytes": 1761,
+      "sha256": "920951337f875ddd594509f656eea57c1c9707349664451f643650e57e2df05c"
     },
     {
       "path": "src/renderer/main.tsx",
@@ -26843,7 +26849,7 @@
       "path": "src/renderer/components/RunShell.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 836,
+      "lineCount": 860,
       "imports": [
         "file:src/renderer/components/RunShell.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
@@ -26863,7 +26869,7 @@
       "path": "src/renderer/components/RunShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1105,
+      "lineCount": 1134,
       "imports": [
         "file:src/renderer/a11y/focusLossRecovery.ts",
         "file:src/renderer/a11y/toolbarRoving.ts",
@@ -26873,6 +26879,7 @@
         "file:src/renderer/components/memorizeUrgency.ts",
         "file:src/renderer/components/PlasmaRail.tsx",
         "file:src/renderer/components/runShellFreshTools.ts",
+        "file:src/renderer/components/runShellToolKeys.ts",
         "file:src/renderer/copy/chainBeat.ts",
         "file:src/renderer/copy/lookingGlassBeat.ts",
         "file:src/renderer/copy/passAndPlay.ts",
@@ -27013,6 +27020,19 @@
         "file:src/renderer/components/runShellToolCatalog.test.ts",
         "file:src/shared/release-checklist.test.ts"
       ]
+    },
+    {
+      "id": "file:src/renderer/components/runShellToolKeys.ts",
+      "path": "src/renderer/components/runShellToolKeys.ts",
+      "layer": "renderer",
+      "role": "production",
+      "lineCount": 6,
+      "imports": [],
+      "exports": [
+        "symbol:src/renderer/components/runShellToolKeys.ts#TOOL_KEY_COUNT",
+        "symbol:src/renderer/components/runShellToolKeys.ts#toolKeySlot"
+      ],
+      "testedBy": []
     },
     {
       "id": "file:src/renderer/components/sceneAmbient.test.ts",
@@ -54017,32 +54037,32 @@
       "name": "COMBO_LOST_MS",
       "kind": "value",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 181,
-      "endLine": 181
+      "line": 182,
+      "endLine": 182
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#default",
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 1104,
-      "endLine": 1104
+      "line": 1133,
+      "endLine": 1133
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellProps",
       "name": "RunShellProps",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 93,
-      "endLine": 128
+      "line": 94,
+      "endLine": 129
     },
     {
       "id": "symbol:src/renderer/components/RunShell.tsx#RunShellTool",
       "name": "RunShellTool",
       "kind": "interface",
       "file": "src/renderer/components/RunShell.tsx",
-      "line": 80,
-      "endLine": 91
+      "line": 81,
+      "endLine": 92
     },
     {
       "id": "symbol:src/renderer/components/runShellFreshTools.ts#rememberToolCharges",
@@ -54131,6 +54151,22 @@
       "file": "src/renderer/components/runShellToolCatalog.ts",
       "line": 52,
       "endLine": 59
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellToolKeys.ts#TOOL_KEY_COUNT",
+      "name": "TOOL_KEY_COUNT",
+      "kind": "value",
+      "file": "src/renderer/components/runShellToolKeys.ts",
+      "line": 2,
+      "endLine": 2
+    },
+    {
+      "id": "symbol:src/renderer/components/runShellToolKeys.ts#toolKeySlot",
+      "name": "toolKeySlot",
+      "kind": "value",
+      "file": "src/renderer/components/runShellToolKeys.ts",
+      "line": 5,
+      "endLine": 5
     },
     {
       "id": "symbol:src/renderer/components/sceneAmbient.ts#ambientSprite",
@@ -82809,7 +82845,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 133
+          "line": 134
         }
       ],
       "tests": [
@@ -82835,7 +82871,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 116
+          "line": 140
         },
         {
           "path": "src/renderer/components/tileBoardBreakWave.test.ts",
@@ -82920,7 +82956,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 7
+          "line": 8
         }
       ],
       "tests": [
@@ -84152,7 +84188,7 @@
       "evidence": [
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 18
+          "line": 19
         },
         {
           "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -84514,7 +84550,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 25
+          "line": 26
         }
       ],
       "tests": [
@@ -84873,7 +84909,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 5
+          "line": 6
         }
       ],
       "tests": [
@@ -85109,7 +85145,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 15
+          "line": 16
         }
       ],
       "tests": [
@@ -86564,7 +86600,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 22
+          "line": 23
         },
         {
           "path": "src/renderer/components/GameOverScreen.tsx",
@@ -86586,7 +86622,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.test.tsx",
-          "line": 352
+          "line": 376
         }
       ],
       "enables": [],
@@ -86920,7 +86956,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 499
+          "line": 500
         }
       ],
       "tests": [
@@ -86959,7 +86995,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 499
+          "line": 500
         }
       ],
       "tests": [
@@ -86993,7 +87029,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 499
+          "line": 500
         }
       ],
       "tests": [
@@ -87027,7 +87063,7 @@
         },
         {
           "path": "src/renderer/components/RunShell.tsx",
-          "line": 499
+          "line": 500
         }
       ],
       "tests": [
@@ -95235,6 +95271,18 @@
       "id": "exports:src/renderer/components/runShellToolCatalog.ts->symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
       "source": "file:src/renderer/components/runShellToolCatalog.ts",
       "target": "symbol:src/renderer/components/runShellToolCatalog.ts#RunShellToolSpec",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellToolKeys.ts->symbol:src/renderer/components/runShellToolKeys.ts#TOOL_KEY_COUNT",
+      "source": "file:src/renderer/components/runShellToolKeys.ts",
+      "target": "symbol:src/renderer/components/runShellToolKeys.ts#TOOL_KEY_COUNT",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/runShellToolKeys.ts->symbol:src/renderer/components/runShellToolKeys.ts#toolKeySlot",
+      "source": "file:src/renderer/components/runShellToolKeys.ts",
+      "target": "symbol:src/renderer/components/runShellToolKeys.ts#toolKeySlot",
       "kind": "exports"
     },
     {
@@ -126041,6 +126089,12 @@
       "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/components/runShellFreshTools.ts",
       "source": "file:src/renderer/components/RunShell.tsx",
       "target": "file:src/renderer/components/runShellFreshTools.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/RunShell.tsx->src/renderer/components/runShellToolKeys.ts",
+      "source": "file:src/renderer/components/RunShell.tsx",
+      "target": "file:src/renderer/components/runShellToolKeys.ts",
       "kind": "imports"
     },
     {

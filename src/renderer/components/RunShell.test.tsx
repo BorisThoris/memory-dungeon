@@ -68,6 +68,30 @@ const tool = (overrides: Partial<RunShellTool> & { id: string }): RunShellTool =
     ...overrides
 });
 
+describe('the number keys use the dock', () => {
+    it('uses the tools left to right, skips a spent or disabled one, and does nothing while paused', async () => {
+        const user = userEvent.setup();
+        const peek = tool({ id: 'peek', charges: 2 });
+        const spent = tool({ id: 'bomb', charges: 0 });
+        const swap = tool({ id: 'swap', disabled: true });
+        const pin = tool({ id: 'pin' });
+        const { rerender } = render(<RunShell personalBestDepth={false} onPause={vi.fn()} run={playingRun()} tools={[peek, spent, swap, pin]} />);
+        // The spent bomb is not on the dock, so the visible order is peek, swap, pin.
+        expect(screen.getByTestId('tool-peek')).toHaveAttribute('aria-keyshortcuts', '1');
+        expect(screen.getByTestId('tool-pin')).toHaveAttribute('aria-keyshortcuts', '3');
+        await user.keyboard('1');
+        expect(peek.onClick).toHaveBeenCalledTimes(1);
+        await user.keyboard('2');
+        expect(swap.onClick).not.toHaveBeenCalled();
+        await user.keyboard('3');
+        expect(pin.onClick).toHaveBeenCalledTimes(1);
+        await user.keyboard('9');
+        rerender(<RunShell personalBestDepth={false} onPause={vi.fn()} run={{ ...playingRun(), status: 'paused' }} tools={[peek, spent, swap, pin]} />);
+        await user.keyboard('1');
+        expect(peek.onClick).toHaveBeenCalledTimes(1);
+    });
+});
+
 describe('RunShell', () => {
     it('keeps lives prominent beside the floor and score', () => {
         const run = playingRun();
