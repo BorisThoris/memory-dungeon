@@ -4329,8 +4329,8 @@
     {
       "path": "e2e/visualScreenHelpers.ts",
       "category": "test",
-      "bytes": 35480,
-      "sha256": "0b41748798d4d3f31cac165ee2abc0be97b2c85e966b43555297578cea724228"
+      "bytes": 36475,
+      "sha256": "422fd1127005213f5d5f208130544a1aeee3123f3b32a051e6d6080a4c85a7e5"
     },
     {
       "path": "e2e/visualScreenScenarios.ts",
@@ -11313,8 +11313,8 @@
     {
       "path": "src/renderer/components/GameScreen.test.tsx",
       "category": "test",
-      "bytes": 80837,
-      "sha256": "e0c092ecb4b5f1688c47bb56c5458713a4df6276dc47170608093311c5ab7cff"
+      "bytes": 80901,
+      "sha256": "55f893d32bcb0b4385f2efeefa52c2b715c870b7bd31c7bc722c3aefd9b6b1ea"
     },
     {
       "path": "src/renderer/components/GameScreen.tsx",

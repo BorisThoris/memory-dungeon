@@ -1407,13 +1407,13 @@ describe('GameScreen (OVR-014)', () => {
         const fit = screen.getByRole('button', { name: /^fit board$/i });
         expect(fit).toHaveAttribute('data-testid', 'tool-fit');
         expect(fit).toBeDisabled();
-        expect(fit).toHaveAttribute('title', 'The board already fits the screen');
+        expect(fit).toHaveAttribute('title', expect.stringMatching(/^The board already fits the screen \(\d\)$/));
 
         act(() => {
             fireEvent.click(screen.getByTestId('tile-board-stub-move-camera'));
         });
         expect(fit).toBeEnabled();
-        expect(fit).toHaveAttribute('title', 'Bring the whole board back on screen');
+        expect(fit).toHaveAttribute('title', expect.stringMatching(/^Bring the whole board back on screen \(\d\)$/));
 
         const stub = screen.getByTestId('tile-board-stub');
         expect(stub).toHaveAttribute('data-viewport-reset-token', '0');

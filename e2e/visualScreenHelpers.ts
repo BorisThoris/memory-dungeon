@@ -2,6 +2,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { expect, type Locator, type Page } from '@playwright/test';
 import { SAVE_SCHEMA_VERSION } from '../src/shared/contracts';
+import { SUSPENDED_RUN_STORAGE_KEY } from '../src/renderer/store/suspendedRun';
 import {
     flipTileAtGridCellViaDevHook,
     readFrameHiddenTileCount,
@@ -393,6 +394,25 @@ export async function ensureModeLibraryVisible(page: Page): Promise<void> {
     await expect(library).toBeVisible();
 }
 
+/**
+ * A seeded save is a fresh profile, so the run a page put down before (it suspends on `pagehide`)
+ * must not turn the menu's Play into Continue on the next seeded navigation. Each call clears it on
+ * its own first document only: a later `page.reload()` keeps the run, which is what the resume
+ * spec tests.
+ */
+async function forgetPutDownRunOnArrival(page: Page): Promise<void> {
+    const arrival = `${Date.now()}-${Math.random()}`;
+    await page.addInitScript(
+        ([key, id]) => {
+            const seen = (sessionStorage.getItem('e2e.fresh-arrivals') ?? '').split(' ');
+            if (seen.includes(id)) return;
+            localStorage.removeItem(key);
+            sessionStorage.setItem('e2e.fresh-arrivals', [...seen, id].join(' ').trim());
+        },
+        [SUSPENDED_RUN_STORAGE_KEY, arrival]
+    );
+}
+
 export async function gotoWithSave(page: Page, saveJson: string): Promise<void> {
     await page.addInitScript(
         ([key, json]) => {
@@ -400,6 +420,7 @@ export async function gotoWithSave(page: Page, saveJson: string): Promise<void> 
         },
         [STORAGE_KEY, saveJson]
     );
+    await forgetPutDownRunOnArrival(page);
     await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 90_000 });
 }
 
@@ -412,6 +433,7 @@ export async function gotoWithSaveAndQuery(page: Page, saveJson: string, querySt
         },
         [STORAGE_KEY, saveJson]
     );
+    await forgetPutDownRunOnArrival(page);
     await page.goto(`/?${qs}`, { waitUntil: 'domcontentloaded', timeout: 90_000 });
 }
 
