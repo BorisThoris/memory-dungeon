@@ -126,7 +126,6 @@ export interface AppState {
     openSettings: (returnView?: SubscreenReturnView) => void;
     closeSettings: () => void;
     updateSettings: (settings: Settings) => Promise<void>;
-    dismissHowToPlay: () => Promise<void>;
     claimMetaProgressionReward: (rowId: string) => MetaProgressionUnlockResult;
     pressTile: (tileId: string) => void;
     togglePeekMode: () => void;

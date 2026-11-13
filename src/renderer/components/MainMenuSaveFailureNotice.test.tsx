@@ -45,7 +45,6 @@ vi.mock('../store/useAppStore', () => ({
 const renderMenu = () =>
     render(
         <MainMenu
-            onDismissHowToPlay={async () => undefined}
             onOpenCodex={vi.fn()}
             onOpenCollection={vi.fn()}
             onOpenInventory={vi.fn()}
@@ -54,7 +53,6 @@ const renderMenu = () =>
             onPlay={vi.fn()}
             reduceMotion
             saveData={createDefaultSaveData()}
-            showHowToPlay={false}
         />
     );
 

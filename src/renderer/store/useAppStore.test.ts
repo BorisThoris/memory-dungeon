@@ -288,9 +288,9 @@ describe('useAppStore timers', () => {
         expect(useAppStore.getState().saveWritesBlockedByReadFailure).toBe(true);
         expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe('{not-valid-json');
 
-        await useAppStore.getState().dismissHowToPlay();
+        await useAppStore.getState().dismissPowersFtue();
 
-        expect(useAppStore.getState().saveData.firstRunHelpDismissed).toBe(true);
+        expect(useAppStore.getState().saveData.powersFtueSeen).toBe(true);
         expect(useAppStore.getState().saveData.onboardingDismissed).toBe(false);
         expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe('{not-valid-json');
     });

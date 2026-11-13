@@ -17,15 +17,3 @@ export const createPowersFtueDismissPatch = (saveData: SaveData): SavePreference
         settings: nextSave.settings
     };
 };
-
-export const createHowToPlayDismissPatch = (saveData: SaveData): SavePreferencePatch => {
-    const nextSave = normalizeSaveData({
-        ...saveData,
-        firstRunHelpDismissed: true
-    });
-
-    return {
-        saveData: nextSave,
-        settings: nextSave.settings
-    };
-};

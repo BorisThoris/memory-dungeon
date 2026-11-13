@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3430,
     "codeFileCount": 1348,
-    "exportedSymbolCount": 4467,
+    "exportedSymbolCount": 4465,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12455
+    "relationshipCount": 12452
   },
   "inventory": [
     {
@@ -2494,7 +2494,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "18e7f93d17e81ffe473bf413923b8b82bf11f0b0e370f4bba49f9eec472f4088"
+      "sha256": "96c30d96930feaaa4dfb10198441b6b96c63bfe180e4876c0ae50dbad080d754"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -6045,8 +6045,8 @@
     {
       "path": "src/main/ipc.ts",
       "category": "source",
-      "bytes": 8010,
-      "sha256": "5ab0f609876911ad040e7f4def5da816d37d55cff92776ff72098c4b028b37ba"
+      "bytes": 8022,
+      "sha256": "47f4cae47c469497c118d4db10997c95c046abe31c44b4a0c3bc6de59cd7b42e"
     },
     {
       "path": "src/main/persistence-write-error.test.ts",
@@ -6057,14 +6057,14 @@
     {
       "path": "src/main/persistence.test.ts",
       "category": "test",
-      "bytes": 10274,
-      "sha256": "57669b0c42f9bd6a81452aaf3978272f799a64a21bb78a1c0b0805b278858acf"
+      "bytes": 11197,
+      "sha256": "66e04efbe1df6f03de5652d72f990a34d8475bca426d4a93c21993feb5da4f38"
     },
     {
       "path": "src/main/persistence.ts",
       "category": "source",
-      "bytes": 5462,
-      "sha256": "66cfa36a48a8a3cf537a7334263bc2e9d38f891a928d02bb6a22bcbbeabf257d"
+      "bytes": 6342,
+      "sha256": "118d094a4dd11b44a25413443c6b3f69435a8f213da965244898b3335849d6cf"
     },
     {
       "path": "src/main/renderer-csp.test.ts",
@@ -6117,8 +6117,8 @@
     {
       "path": "src/main/saveRepository.ts",
       "category": "source",
-      "bytes": 1614,
-      "sha256": "0312746eb72d6df6423133e4e5adadde7eb8ec447703d39dae507d78319e4af6"
+      "bytes": 1922,
+      "sha256": "a61df6d499558447df94b09de6a4f5b08284fa6490efc7d575423491a51fff04"
     },
     {
       "path": "src/main/startup-display-mode.test.ts",
@@ -6237,8 +6237,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 28476,
-      "sha256": "12eef9e8ec13540fcb356d16ffb7f89406cfb8a637b48a77e7ca013496f327b4"
+      "bytes": 28197,
+      "sha256": "f8e23712fe4eeeecc5fbac2f6b8d0368f3416c3e83f772dbb4d385b159310ebd"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -11517,14 +11517,14 @@
     {
       "path": "src/renderer/components/MainMenu.test.tsx",
       "category": "test",
-      "bytes": 8449,
-      "sha256": "b5223e726a6637efce3ec02934401588afb54ddc92b854931dbbfcd91676b94d"
+      "bytes": 8182,
+      "sha256": "69fae5a398c8aa62c5dfe7649c7f91d196297737458d14d4b87f1571c9d6c54e"
     },
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 16699,
-      "sha256": "299eb3771b22f47722bb1c8cc24bf77cdba5416fe2afce44e2a4f1f7e11c6a9d"
+      "bytes": 16626,
+      "sha256": "cb91c06693c16adca4cac6793ff73c87828d004c3b01108843b80fb6450d9cd6"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -11547,8 +11547,8 @@
     {
       "path": "src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
       "category": "test",
-      "bytes": 4107,
-      "sha256": "bc946d9d0b03ea823c7ffa9d93cf986f1429d3eb0f0e00d87692132199703206"
+      "bytes": 4018,
+      "sha256": "7b570ba063e964834e69e88bcc83b1bddee48c23c2ecb252c825b1cc26f623f2"
     },
     {
       "path": "src/renderer/components/matchedCardRimFireMaterial.ts",
@@ -14337,8 +14337,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 7546,
-      "sha256": "3c776bf2f47406b17f884306357101ce2e2b1c175f4d858935ab7a6ab77032b0"
+      "bytes": 7503,
+      "sha256": "1302e68cf75fd41775a5c75beb0517d774fdc90d42710949f1aad590b2a26a25"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -14619,26 +14619,26 @@
     {
       "path": "src/renderer/store/savePreferenceExecutor.test.ts",
       "category": "test",
-      "bytes": 6247,
-      "sha256": "ae9050279870f7d5f196874755ad7e16513d87236d743fd17182720ff0aa13de"
+      "bytes": 5694,
+      "sha256": "dc844655ebb5051432b137cd8e82afc2aabb6825764c366a8a6f67056ff529e0"
     },
     {
       "path": "src/renderer/store/savePreferenceExecutor.ts",
       "category": "source",
-      "bytes": 2796,
-      "sha256": "328fd1b5e34389f91cb2312cb9c827a0d9ef61045181fec071bc2e224dffe766"
+      "bytes": 2512,
+      "sha256": "d705ccb3e21dcf9a97151e460e71da103cc7e7e61a4fe5b3ac3c0c1e2fe8135f"
     },
     {
       "path": "src/renderer/store/savePreferenceSurfaceState.test.ts",
       "category": "test",
-      "bytes": 1067,
-      "sha256": "4407c84643e64757d7e9cf55a9654b1ad86a8c4ef5869101aa5d489685426ab3"
+      "bytes": 635,
+      "sha256": "051878228aeeb778b89d88c4ccd77c1a5e683d6972936edd19c6c0685b03f556"
     },
     {
       "path": "src/renderer/store/savePreferenceSurfaceState.ts",
       "category": "source",
-      "bytes": 780,
-      "sha256": "c0fe2f9feee50a9ed181274853d833eb8d29f1c5a97c71e2bb189069e7435c06"
+      "bytes": 495,
+      "sha256": "aecc8caa43a9f36498e601a369a09023f81867425296139dd98a57c0aa676439"
     },
     {
       "path": "src/renderer/store/saveReadRecovery.test.ts",
@@ -14691,14 +14691,14 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 44300,
-      "sha256": "b08eb7b09fdb3801c39d7613a11569f8bccea65806ed660db788ad939e9a11e5"
+      "bytes": 44294,
+      "sha256": "3fa183779d67a91a0c88265c0fbf7903b533442fdefa4626ea0da21bb3051fa7"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 39736,
-      "sha256": "9623e0d2fd7d731faaa3620aec56bc222bbfc7168f0fc6c95ba04a97d219ab69"
+      "bytes": 39474,
+      "sha256": "ed5f3541ab94585e3995f7dc46933e62fe7b0205c19221d080fe4b855fe2d0c9"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -20815,7 +20815,7 @@
       "path": "src/main/persistence.test.ts",
       "layer": "main",
       "role": "test",
-      "lineCount": 249,
+      "lineCount": 263,
       "imports": [
         "file:src/main/persistence.ts",
         "file:src/main/save-recovery.ts",
@@ -20831,7 +20831,7 @@
       "path": "src/main/persistence.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 152,
+      "lineCount": 168,
       "imports": [
         "file:src/main/save-recovery-fs.ts",
         "file:src/main/save-recovery.ts",
@@ -20970,11 +20970,10 @@
       "path": "src/main/saveRepository.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 52,
+      "lineCount": 56,
       "imports": [
         "file:src/main/window-bounds.ts",
         "file:src/shared/contracts.ts",
-        "file:src/shared/save-data.ts",
         "file:src/shared/save-location.ts"
       ],
       "exports": [
@@ -21284,7 +21283,7 @@
       "path": "src/renderer/App.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 564,
+      "lineCount": 560,
       "imports": [
         "file:src/renderer/assets/preloadRunAssets.ts",
         "file:src/renderer/audio/feverDuck.ts",
@@ -25842,7 +25841,7 @@
       "path": "src/renderer/components/MainMenu.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 181,
+      "lineCount": 175,
       "imports": [
         "file:src/renderer/components/MainMenu.tsx",
         "file:src/shared/save-data.ts"
@@ -25855,7 +25854,7 @@
       "path": "src/renderer/components/MainMenu.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 319,
+      "lineCount": 317,
       "imports": [
         "file:src/renderer/assets/ui/index.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -25921,7 +25920,7 @@
       "path": "src/renderer/components/MainMenuSaveFailureNotice.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 97,
+      "lineCount": 95,
       "imports": [
         "file:src/renderer/components/MainMenu.tsx",
         "file:src/renderer/copy/saveRecoveryNotice.ts",
@@ -33721,7 +33720,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 153,
+      "lineCount": 152,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/suspendedRun.ts",
@@ -34637,7 +34636,7 @@
       "path": "src/renderer/store/savePreferenceExecutor.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 159,
+      "lineCount": 145,
       "imports": [
         "file:src/renderer/store/savePreferenceExecutor.ts",
         "file:src/shared/contracts.ts",
@@ -34651,7 +34650,7 @@
       "path": "src/renderer/store/savePreferenceExecutor.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 84,
+      "lineCount": 77,
       "imports": [
         "file:src/renderer/store/backgroundPersistence.ts",
         "file:src/renderer/store/savePreferenceSurfaceState.ts",
@@ -34660,7 +34659,6 @@
         "file:src/shared/save-data.ts"
       ],
       "exports": [
-        "symbol:src/renderer/store/savePreferenceExecutor.ts#executeHowToPlayDismiss",
         "symbol:src/renderer/store/savePreferenceExecutor.ts#executeMetaProgressionRewardClaim",
         "symbol:src/renderer/store/savePreferenceExecutor.ts#executePowersFtueDismiss",
         "symbol:src/renderer/store/savePreferenceExecutor.ts#executeSettingsUpdate",
@@ -34676,7 +34674,7 @@
       "path": "src/renderer/store/savePreferenceSurfaceState.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 27,
+      "lineCount": 15,
       "imports": [
         "file:src/renderer/store/savePreferenceSurfaceState.ts",
         "file:src/shared/save-data.ts"
@@ -34689,13 +34687,12 @@
       "path": "src/renderer/store/savePreferenceSurfaceState.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 32,
+      "lineCount": 20,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
       ],
       "exports": [
-        "symbol:src/renderer/store/savePreferenceSurfaceState.ts#createHowToPlayDismissPatch",
         "symbol:src/renderer/store/savePreferenceSurfaceState.ts#createPowersFtueDismissPatch",
         "symbol:src/renderer/store/savePreferenceSurfaceState.ts#SavePreferencePatch"
       ],
@@ -34867,7 +34864,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1044,
+      "lineCount": 1035,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -47649,7 +47646,7 @@
       "kind": "class",
       "file": "src/main/persistence.ts",
       "line": 48,
-      "endLine": 151
+      "endLine": 167
     },
     {
       "id": "symbol:src/main/persistence.ts#PersistenceWriteError",
@@ -47768,16 +47765,16 @@
       "name": "ElectronStoreSaveRepository",
       "kind": "class",
       "file": "src/main/saveRepository.ts",
-      "line": 22,
-      "endLine": 51
+      "line": 21,
+      "endLine": 55
     },
     {
       "id": "symbol:src/main/saveRepository.ts#SaveRepository",
       "name": "SaveRepository",
       "kind": "interface",
       "file": "src/main/saveRepository.ts",
-      "line": 12,
-      "endLine": 20
+      "line": 11,
+      "endLine": 19
     },
     {
       "id": "symbol:src/main/startup-display-mode.ts#resolveStartupDisplayMode",
@@ -48056,8 +48053,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/App.tsx",
-      "line": 563,
-      "endLine": 563
+      "line": 559,
+      "endLine": 559
     },
     {
       "id": "symbol:src/renderer/assets/assetDropInReadiness.ts#ASSET_DROP_IN_CATEGORIES",
@@ -53008,8 +53005,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/MainMenu.tsx",
-      "line": 318,
-      "endLine": 318
+      "line": 316,
+      "endLine": 316
     },
     {
       "id": "symbol:src/renderer/components/MainMenuBackground.tsx#default",
@@ -62049,7 +62046,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 17,
-      "endLine": 152
+      "endLine": 151
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -63076,60 +63073,44 @@
       "endLine": 8
     },
     {
-      "id": "symbol:src/renderer/store/savePreferenceExecutor.ts#executeHowToPlayDismiss",
-      "name": "executeHowToPlayDismiss",
-      "kind": "value",
-      "file": "src/renderer/store/savePreferenceExecutor.ts",
-      "line": 62,
-      "endLine": 66
-    },
-    {
       "id": "symbol:src/renderer/store/savePreferenceExecutor.ts#executeMetaProgressionRewardClaim",
       "name": "executeMetaProgressionRewardClaim",
       "kind": "value",
       "file": "src/renderer/store/savePreferenceExecutor.ts",
-      "line": 68,
-      "endLine": 83
+      "line": 61,
+      "endLine": 76
     },
     {
       "id": "symbol:src/renderer/store/savePreferenceExecutor.ts#executePowersFtueDismiss",
       "name": "executePowersFtueDismiss",
       "kind": "value",
       "file": "src/renderer/store/savePreferenceExecutor.ts",
-      "line": 56,
-      "endLine": 60
+      "line": 55,
+      "endLine": 59
     },
     {
       "id": "symbol:src/renderer/store/savePreferenceExecutor.ts#executeSettingsUpdate",
       "name": "executeSettingsUpdate",
       "kind": "value",
       "file": "src/renderer/store/savePreferenceExecutor.ts",
-      "line": 26,
-      "endLine": 54
+      "line": 25,
+      "endLine": 53
     },
     {
       "id": "symbol:src/renderer/store/savePreferenceExecutor.ts#SavePreferenceExecutorDeps",
       "name": "SavePreferenceExecutorDeps",
       "kind": "interface",
       "file": "src/renderer/store/savePreferenceExecutor.ts",
-      "line": 19,
-      "endLine": 24
+      "line": 18,
+      "endLine": 23
     },
     {
       "id": "symbol:src/renderer/store/savePreferenceExecutor.ts#SavePreferenceExecutorState",
       "name": "SavePreferenceExecutorState",
       "kind": "interface",
       "file": "src/renderer/store/savePreferenceExecutor.ts",
-      "line": 14,
-      "endLine": 17
-    },
-    {
-      "id": "symbol:src/renderer/store/savePreferenceSurfaceState.ts#createHowToPlayDismissPatch",
-      "name": "createHowToPlayDismissPatch",
-      "kind": "value",
-      "file": "src/renderer/store/savePreferenceSurfaceState.ts",
-      "line": 21,
-      "endLine": 31
+      "line": 13,
+      "endLine": 16
     },
     {
       "id": "symbol:src/renderer/store/savePreferenceSurfaceState.ts#createPowersFtueDismissPatch",
@@ -63264,16 +63245,16 @@
       "name": "putTheRunDown",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 1023,
-      "endLine": 1036
+      "line": 1014,
+      "endLine": 1027
     },
     {
       "id": "symbol:src/renderer/store/useAppStore.ts#useAppStore",
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 269,
-      "endLine": 981
+      "line": 268,
+      "endLine": 972
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#applyHighContrastToDocument",
@@ -102289,12 +102270,6 @@
       "kind": "exports"
     },
     {
-      "id": "exports:src/renderer/store/savePreferenceExecutor.ts->symbol:src/renderer/store/savePreferenceExecutor.ts#executeHowToPlayDismiss",
-      "source": "file:src/renderer/store/savePreferenceExecutor.ts",
-      "target": "symbol:src/renderer/store/savePreferenceExecutor.ts#executeHowToPlayDismiss",
-      "kind": "exports"
-    },
-    {
       "id": "exports:src/renderer/store/savePreferenceExecutor.ts->symbol:src/renderer/store/savePreferenceExecutor.ts#executeMetaProgressionRewardClaim",
       "source": "file:src/renderer/store/savePreferenceExecutor.ts",
       "target": "symbol:src/renderer/store/savePreferenceExecutor.ts#executeMetaProgressionRewardClaim",
@@ -102322,12 +102297,6 @@
       "id": "exports:src/renderer/store/savePreferenceExecutor.ts->symbol:src/renderer/store/savePreferenceExecutor.ts#SavePreferenceExecutorState",
       "source": "file:src/renderer/store/savePreferenceExecutor.ts",
       "target": "symbol:src/renderer/store/savePreferenceExecutor.ts#SavePreferenceExecutorState",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/store/savePreferenceSurfaceState.ts->symbol:src/renderer/store/savePreferenceSurfaceState.ts#createHowToPlayDismissPatch",
-      "source": "file:src/renderer/store/savePreferenceSurfaceState.ts",
-      "target": "symbol:src/renderer/store/savePreferenceSurfaceState.ts#createHowToPlayDismissPatch",
       "kind": "exports"
     },
     {
@@ -120066,12 +120035,6 @@
       "id": "imports:src/main/saveRepository.ts->src/shared/contracts.ts",
       "source": "file:src/main/saveRepository.ts",
       "target": "file:src/shared/contracts.ts",
-      "kind": "imports"
-    },
-    {
-      "id": "imports:src/main/saveRepository.ts->src/shared/save-data.ts",
-      "source": "file:src/main/saveRepository.ts",
-      "target": "file:src/shared/save-data.ts",
       "kind": "imports"
     },
     {

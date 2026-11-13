@@ -2,7 +2,6 @@ import { describe, expect, it, vi } from 'vitest';
 import type { SaveData, Settings } from '../../shared/contracts';
 import { createDefaultSaveData } from '../../shared/save-data';
 import {
-    executeHowToPlayDismiss,
     executeMetaProgressionRewardClaim,
     executePowersFtueDismiss,
     executeSettingsUpdate,
@@ -131,19 +130,6 @@ describe('save preference executor', () => {
         expect(deps.persistSaveData).toHaveBeenCalledWith(expect.objectContaining({ powersFtueSeen: true }));
     });
 
-    it('dismisses how-to-play without dismissing onboarding', async () => {
-        const deps = createDeps();
-
-        await executeHowToPlayDismiss(deps);
-
-        expect(deps.setState).toHaveBeenCalledWith(expect.objectContaining({
-            saveData: expect.objectContaining({
-                firstRunHelpDismissed: true,
-                onboardingDismissed: false
-            })
-        }));
-        expect(deps.persistSaveData).toHaveBeenCalledWith(expect.objectContaining({ firstRunHelpDismissed: true }));
-    });
 
 
     it('returns locked meta reward results without mutating state', () => {

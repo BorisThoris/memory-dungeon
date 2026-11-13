@@ -49,7 +49,6 @@ describe('MainMenu REG-009 mobile landscape density', () => {
         const onOpenProfile = vi.fn();
         render(
             <MainMenu
-                onDismissHowToPlay={async () => undefined}
                 onOpenCodex={vi.fn()}
                 onOpenCollection={vi.fn()}
                 onOpenInventory={vi.fn()}
@@ -58,7 +57,6 @@ describe('MainMenu REG-009 mobile landscape density', () => {
                 onPlay={vi.fn()}
                 reduceMotion
                 saveData={createDefaultSaveData()}
-                showHowToPlay={false}
             />
         );
 
@@ -78,7 +76,6 @@ describe('MainMenu REG-009 mobile landscape density', () => {
     it('offers the Tutorial Hall instead of a long first-run help panel', () => {
         render(
             <MainMenu
-                onDismissHowToPlay={async () => undefined}
                 onOpenCodex={vi.fn()}
                 onOpenCollection={vi.fn()}
                 onOpenInventory={vi.fn()}
@@ -87,7 +84,6 @@ describe('MainMenu REG-009 mobile landscape density', () => {
                 onPlay={vi.fn()}
                 reduceMotion
                 saveData={createDefaultSaveData()}
-                showHowToPlay
             />
         );
 
@@ -98,15 +94,13 @@ describe('MainMenu REG-009 mobile landscape density', () => {
 
 describe('MainMenu as a title page', () => {
     const props = {
-        onDismissHowToPlay: async () => undefined,
         onOpenCodex: vi.fn(),
         onOpenCollection: vi.fn(),
         onOpenInventory: vi.fn(),
         onOpenProfile: vi.fn(),
         onOpenSettings: vi.fn(),
         onPlay: vi.fn(),
-        reduceMotion: true,
-        showHowToPlay: false
+        reduceMotion: true
     };
 
     it('lists the contents as a numbered ladder, Play first, in reading order', () => {

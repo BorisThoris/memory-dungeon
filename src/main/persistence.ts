@@ -62,7 +62,17 @@ export class PersistenceService {
     }
 
     getSaveData(): SaveData {
-        return normalizeUnknownSaveDataOrThrow(this.repository.getSaveData());
+        return this.getStoredSaveData() ?? normalizeSaveData();
+    }
+
+    /**
+     * The save as the renderer is handed it: null when this machine has never saved, which
+     * hydration reads as a first launch and so picks the device's graphics tier (as the web client
+     * does since 2026-11-12). Every write path keeps using `getSaveData`, defaults included.
+     */
+    getStoredSaveData(): SaveData | null {
+        const raw = this.repository.getSaveData();
+        return raw === undefined || raw === null ? null : normalizeUnknownSaveDataOrThrow(raw);
     }
 
     getSettings(): Settings {
@@ -97,11 +107,17 @@ export class PersistenceService {
         return nextSave;
     }
 
+    /**
+     * Keeps the stored settings, so a stale game snapshot cannot overwrite them. With nothing stored
+     * there are none to keep: the first launch's save carries the tier hydration chose, and keeping
+     * the default instead would write Medium over it (as the web client did until 2026-11-12).
+     */
     saveGame(saveData: unknown): SaveData {
         const normalizedSave = normalizeUnknownSaveDataOrThrow(saveData);
+        const stored = this.getStoredSaveData();
         const nextSave = normalizeSaveData({
             ...normalizedSave,
-            settings: this.getSettings()
+            settings: stored ? stored.settings : normalizedSave.settings
         });
         this.commitSaveData(nextSave);
         return nextSave;

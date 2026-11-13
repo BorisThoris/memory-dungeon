@@ -46,9 +46,9 @@ export const registerIpcHandlers = (
     };
 
 
-    const getSaveData = (): ReturnType<PersistenceService['getSaveData']> => {
+    const getSaveData = (): ReturnType<PersistenceService['getStoredSaveData']> => {
         try {
-            return persistence.getSaveData();
+            return persistence.getStoredSaveData();
         } catch (error) {
             console.error('[ipc] get-save-data failed', error);
             throw error;

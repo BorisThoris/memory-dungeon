@@ -103,7 +103,6 @@ const App = () => {
     useGamepadNavigation();
     const { height, width } = useViewportSize();
     const {
-        dismissHowToPlay,
         hydrated,
         hydrate,
         newlyUnlockedAchievements,
@@ -121,7 +120,6 @@ const App = () => {
         view
     } = useAppStore(
         useShallow((state) => ({
-            dismissHowToPlay: state.dismissHowToPlay,
             hydrated: state.hydrated,
             hydrate: state.hydrate,
             newlyUnlockedAchievements: state.newlyUnlockedAchievements,
@@ -458,14 +456,12 @@ const App = () => {
                                         saveData={saveData}
                                         reduceMotion={reduceMotion}
                                         suppressMenuBackgroundFallback={introOverlayVisible}
-                                        onDismissHowToPlay={dismissHowToPlay}
                                         onOpenSettings={() => openSettings('menu')}
                                         onOpenProfile={openProfile}
                                         onOpenCollection={openCollection}
                                         onOpenCodex={openCodexFromMenu}
                                         onOpenInventory={openInventoryFromMenu}
                                         onPlay={openModeSelect}
-                                        showHowToPlay={!saveData.firstRunHelpDismissed && !saveData.onboardingDismissed}
                                     />
                                 ) : null}
                             </div>

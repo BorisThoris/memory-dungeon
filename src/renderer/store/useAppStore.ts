@@ -83,7 +83,6 @@ import {
     executeResumeRun
 } from './pauseResumeExecutor';
 import {
-    executeHowToPlayDismiss,
     executeMetaProgressionRewardClaim,
     executePowersFtueDismiss,
     executeSettingsUpdate
@@ -446,14 +445,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         });
     },
 
-    dismissHowToPlay: async () => {
-        await executeHowToPlayDismiss({
-            getState: get,
-            persistSaveData: persistSaveDataSafely,
-            persistSaveSettings,
-            setState: set
-        });
-    },
 
     claimMetaProgressionReward: (rowId) => {
         return executeMetaProgressionRewardClaim(rowId, {

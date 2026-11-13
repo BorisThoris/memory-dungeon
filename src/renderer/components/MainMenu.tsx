@@ -25,9 +25,7 @@ import FlashingLightsNotice from './FlashingLightsNotice';
 interface MainMenuProps {
     saveData: SaveData;
     reduceMotion: boolean;
-    showHowToPlay: boolean;
     suppressMenuBackgroundFallback?: boolean;
-    onDismissHowToPlay: () => Promise<void>;
     onPlay: () => void;
     onOpenCollection: () => void;
     onOpenProfile: () => void;

@@ -126,6 +126,20 @@ describe('PersistenceService', () => {
         expect(p.getSaveData()).toEqual(committed);
     });
 
+    it('tells the renderer a first launch has no save, and keeps the tier that launch chose', () => {
+        const repository = new MemorySaveRepository(null);
+        const p = new PersistenceService(repository);
+        // Null is hydration's first-launch signal: it picks the device's graphics tier.
+        expect(p.getStoredSaveData()).toBeNull();
+        expect(p.getSaveData()).toEqual(normalizeSaveData());
+        const firstSave = createDefaultSaveData();
+        const lowTier = { ...firstSave, settings: { ...firstSave.settings, graphicsQuality: 'low' as const } };
+        expect(p.saveGame(lowTier).settings.graphicsQuality).toBe('low');
+        // From then on the stored settings stand against a stale snapshot, as before.
+        expect(p.saveGame({ ...firstSave, bestScore: 5 }).settings.graphicsQuality).toBe('low');
+        expect(p.getStoredSaveData()?.settings.graphicsQuality).toBe('low');
+    });
+
     it('rejects invalid persistence roots without replacing stored save data', () => {
         const repository = new MemorySaveRepository({ ...createDefaultSaveData(), bestScore: 77 });
         const p = new PersistenceService(repository);

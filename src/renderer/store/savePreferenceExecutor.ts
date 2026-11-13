@@ -6,7 +6,6 @@ import type { SaveData, Settings } from '../../shared/contracts';
 import { normalizeSaveData, normalizeUnknownSettings } from '../../shared/save-data';
 import { runPersistenceInBackground } from './backgroundPersistence';
 import {
-    createHowToPlayDismissPatch,
     createPowersFtueDismissPatch,
     type SavePreferencePatch
 } from './savePreferenceSurfaceState';
@@ -55,12 +54,6 @@ export const executeSettingsUpdate = async (
 
 export const executePowersFtueDismiss = async (deps: SavePreferenceExecutorDeps): Promise<void> => {
     const patch = createPowersFtueDismissPatch(deps.getState().saveData);
-    deps.setState(patch);
-    await deps.persistSaveData(patch.saveData);
-};
-
-export const executeHowToPlayDismiss = async (deps: SavePreferenceExecutorDeps): Promise<void> => {
-    const patch = createHowToPlayDismissPatch(deps.getState().saveData);
     deps.setState(patch);
     await deps.persistSaveData(patch.saveData);
 };
