@@ -59,7 +59,7 @@ in this review, with the commit), **different** (a deliberate choice, with the r
 
 | Flow | Leaders | Memory Dungeon | Status |
 |---|---|---|---|
-| Cloud saves | Steam Cloud | Off; Export/Import under Settings › About moves a profile | owner default, 2026-11-14 |
+| Cloud saves | Steam Cloud | Auto-Cloud ready; the owner turns it on in Steamworks (`STEAM_CLOUD_SETUP.md`); Export/Import also moves a profile | owner, 2026-11-14 |
 | Move progress | Through the cloud | Export to a file, import on another device (`saveTransfer.ts`) | added, 7db8a11e |
 | Delete progress | A reset in settings | Delete all progress, with a second explicit yes | added, 1249b15c |
 | Credits and licences | A credits screen | Credits, AI-assistance note, CC0 sounds, OFL fonts, MIT software | added, 1249b15c |
@@ -72,4 +72,5 @@ in this review, with the commit), **different** (a deliberate choice, with the r
 A match on a Mali-G57 tablet at Low cost about 15 frames over 70 ms. The cost was the painted room
 behind the board at the phone's scale cap; on Low it is now painted at its own size (5ca3493a):
 7-12 frames on the live build. A room repainted at half pace measured no gain and was not shipped.
-Going lower would take motion out of the room itself, which the owner's art rules forbid.
+Going lower would take motion out of the room itself, which the owner's art rules forbid; asked
+again on 2026-11-14, the owner left it to the agent, and the room stays alive: 7-12 is accepted.

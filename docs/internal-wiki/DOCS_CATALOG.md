@@ -23,6 +23,7 @@
 | [BLUEPRINT_FRAMEWORK.md](../BLUEPRINT_FRAMEWORK.md) | Dev import graph + glossary blueprint codegen (`yarn graph:project`, `yarn blueprint:codegen`) |
 | [COLLECTIBLE_SYSTEM.md](../COLLECTIBLE_SYSTEM.md) | Collectibles design |
 | [GOOGLE_PLAY.md](../GOOGLE_PLAY.md) | Google Play: the TWA shell, its ids, the upload key, the AAB build and what a personal account allows |
+| [STEAM_CLOUD_SETUP.md](../STEAM_CLOUD_SETUP.md) | The owner's three steps to turn on Steam Cloud: the Auto-Cloud rows, the packaging flag, one round trip (2026-11-14) |
 | [MARKET_FLOW_REVIEW.md](../MARKET_FLOW_REVIEW.md) | Every player flow of the leading roguelikes against Memory Dungeon's, with what was added, kept different, or left to the owner (2026-11-14) |
 | [DOC_CHECKBOX_INVENTORY.md](../DOC_CHECKBOX_INVENTORY.md) | Doc checkbox audit counts (maintenance) |
 | [FINDABLES.md](../FINDABLES.md) | Findables mechanic |

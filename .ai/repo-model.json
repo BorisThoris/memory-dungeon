@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3431,
+    "trackedFileCount": 3432,
     "codeFileCount": 1348,
     "exportedSymbolCount": 4466,
     "contentItemCount": 16,
@@ -915,8 +915,8 @@
     {
       "path": "docs/internal-wiki/DOCS_CATALOG.md",
       "category": "documentation",
-      "bytes": 20300,
-      "sha256": "e5dd0afb706ea70f70e8af50d7801e8304e8211551cae518afc03f5907fc6e6c"
+      "bytes": 20471,
+      "sha256": "73728f67df0a18edc565c33cbd9370fbdd53667abcb01ed205fbf10128bf363f"
     },
     {
       "path": "docs/internal-wiki/E2E_AND_QA.md",
@@ -963,8 +963,8 @@
     {
       "path": "docs/MARKET_FLOW_REVIEW.md",
       "category": "documentation",
-      "bytes": 5773,
-      "sha256": "3ca580e998e1b50b36f2d5ae2568b8f8255998e7dc791708ac9e4f73acb28d6e"
+      "bytes": 5923,
+      "sha256": "c7de4421ce6563c9729284b4968e7f7f5d8e295e15e140defd5340ca858d7f5c"
     },
     {
       "path": "docs/MARKET_SIMILAR_GAMES_RESEARCH.md",
@@ -2465,6 +2465,12 @@
       "category": "documentation",
       "bytes": 6244,
       "sha256": "b993f51e6e18b0a9662f4939865693e69ae3fd10cb23f117c4ee4be8d8966cc2"
+    },
+    {
+      "path": "docs/STEAM_CLOUD_SETUP.md",
+      "category": "documentation",
+      "bytes": 2029,
+      "sha256": "bc015bd8ce4af7d2356e0a7f32427a7aa66c9494cb5ba3f40cc1b78e9703a9f6"
     },
     {
       "path": "docs/STEAM_DEMO_CYCLE.md",
