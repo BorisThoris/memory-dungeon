@@ -57,6 +57,16 @@ export const SCENE_CANVAS_MAX_SCALE = 2;
  */
 export const SCENE_CANVAS_PHONE_MAX_SCALE = 2.6;
 
+/**
+ * The gameplay room's scale cap (2026-11-14). On Low the room is painted at the painting's own size,
+ * as the menu's scenes already are on the lean tier: on a Mali-G57 tablet (600x792 at DPR 2) the
+ * room's canvas at the phone cap was most of what a match cost, 13-19 frames over 70 ms in the
+ * 3.3 s after the second card against 5-10 at its own size, measured round-robin on the device
+ * with the room still moving. A phone on Medium or High keeps the screen's own sharpness.
+ */
+export const gameplaySceneMaxScale = (tier: 'full' | 'lean' | 'still', quality: 'low' | 'medium' | 'high'): number =>
+    quality === 'low' ? 1 : tier === 'lean' ? SCENE_CANVAS_PHONE_MAX_SCALE : SCENE_CANVAS_MAX_SCALE;
+
 /** The most pixels a scene canvas paints: about a 1440p screen's worth of window. */
 export const SCENE_CANVAS_PIXEL_BUDGET = 3_700_000;
 

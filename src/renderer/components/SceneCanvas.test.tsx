@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, it } from 'vitest';
 import { SceneCanvas } from './SceneCanvas';
-import { SCENE_CANVAS_MAX_SCALE, SCENE_FPS_FULL, SCENE_FPS_LEAN, sceneCanvasScale, visiblePlateRect, sceneCanvasWindow } from './sceneCanvasLayout';
+import { gameplaySceneMaxScale, SCENE_CANVAS_MAX_SCALE, SCENE_CANVAS_PHONE_MAX_SCALE, SCENE_FPS_FULL, SCENE_FPS_LEAN, sceneCanvasScale, visiblePlateRect, sceneCanvasWindow } from './sceneCanvasLayout';
 import plate from './scenePlate.module.css';
 
 describe('SceneCanvas', () => {
@@ -77,5 +77,16 @@ describe('sceneCanvasScale', () => {
         expect(sceneCanvasScale(0, 2, 1376, SCENE_CANVAS_MAX_SCALE)).toBe(1);
         // The drift's few percent does not resize the surface.
         expect(sceneCanvasScale(1935 * 1.03, 1, 1376, SCENE_CANVAS_MAX_SCALE)).toBe(1.4);
+    });
+});
+
+describe('gameplaySceneMaxScale', () => {
+    it('paints the room at its own size on Low, and keeps a phone sharp above it', () => {
+        expect(gameplaySceneMaxScale('lean', 'low')).toBe(1);
+        expect(gameplaySceneMaxScale('full', 'low')).toBe(1);
+        expect(gameplaySceneMaxScale('lean', 'medium')).toBe(SCENE_CANVAS_PHONE_MAX_SCALE);
+        expect(gameplaySceneMaxScale('full', 'high')).toBe(SCENE_CANVAS_MAX_SCALE);
+        // At its own size the canvas never grows past the painting, whatever the screen.
+        expect(sceneCanvasScale(1419, 2, 1376, gameplaySceneMaxScale('lean', 'low'))).toBe(1);
     });
 });

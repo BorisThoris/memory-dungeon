@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3430,
     "codeFileCount": 1348,
-    "exportedSymbolCount": 4465,
+    "exportedSymbolCount": 4466,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12452
+    "relationshipCount": 12453
   },
   "inventory": [
     {
@@ -11277,8 +11277,8 @@
     {
       "path": "src/renderer/components/GameplayScene.tsx",
       "category": "source",
-      "bytes": 15828,
-      "sha256": "f543bcfbf6b18123e3c85cda8529fcb5e49a1593c6805bba1ceadfd343d9d581"
+      "bytes": 15762,
+      "sha256": "d8ce4dc7dd28346dfd6938c4694175836d5e7d6a6b17021e991de911eebcf8ef"
     },
     {
       "path": "src/renderer/components/gameplaySceneFrame.test.ts",
@@ -12033,8 +12033,8 @@
     {
       "path": "src/renderer/components/SceneCanvas.test.tsx",
       "category": "test",
-      "bytes": 4775,
-      "sha256": "dfc4244260615a83985d425994e4bd073f54ae66e9c322abccf44e1b029f9aa2"
+      "bytes": 5459,
+      "sha256": "ca8a25b8d91c98dc8e643024bcdeeab35ccdd8554b36a54d9f2ed903b2ec480b"
     },
     {
       "path": "src/renderer/components/SceneCanvas.tsx",
@@ -12045,8 +12045,8 @@
     {
       "path": "src/renderer/components/sceneCanvasLayout.ts",
       "category": "source",
-      "bytes": 3341,
-      "sha256": "6b299374c644535255a9d1bc50233a8c4741e55c5e324f21951b7b81b01b5420"
+      "bytes": 4052,
+      "sha256": "773fef4fb0190c833c90a46f6fe3e0b8bee21301447cfadbb231a04e19cf9702"
     },
     {
       "path": "src/renderer/components/sceneClock.test.ts",
@@ -27250,7 +27250,7 @@
       "path": "src/renderer/components/SceneCanvas.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 82,
+      "lineCount": 93,
       "imports": [
         "file:src/renderer/components/SceneCanvas.tsx",
         "file:src/renderer/components/sceneCanvasLayout.ts"
@@ -27283,11 +27283,12 @@
       "path": "src/renderer/components/sceneCanvasLayout.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 69,
+      "lineCount": 79,
       "imports": [
         "file:src/renderer/components/scenePaint.ts"
       ],
       "exports": [
+        "symbol:src/renderer/components/sceneCanvasLayout.ts#gameplaySceneMaxScale",
         "symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_CANVAS_MAX_SCALE",
         "symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_CANVAS_PHONE_MAX_SCALE",
         "symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_CANVAS_PIXEL_BUDGET",
@@ -54649,6 +54650,14 @@
       "endLine": 26
     },
     {
+      "id": "symbol:src/renderer/components/sceneCanvasLayout.ts#gameplaySceneMaxScale",
+      "name": "gameplaySceneMaxScale",
+      "kind": "value",
+      "file": "src/renderer/components/sceneCanvasLayout.ts",
+      "line": 67,
+      "endLine": 68
+    },
+    {
       "id": "symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_CANVAS_MAX_SCALE",
       "name": "SCENE_CANVAS_MAX_SCALE",
       "kind": "value",
@@ -54669,8 +54678,8 @@
       "name": "SCENE_CANVAS_PIXEL_BUDGET",
       "kind": "value",
       "file": "src/renderer/components/sceneCanvasLayout.ts",
-      "line": 61,
-      "endLine": 61
+      "line": 71,
+      "endLine": 71
     },
     {
       "id": "symbol:src/renderer/components/sceneCanvasLayout.ts#SCENE_FPS_FULL",
@@ -54701,8 +54710,8 @@
       "name": "sceneCanvasWindow",
       "kind": "value",
       "file": "src/renderer/components/sceneCanvasLayout.ts",
-      "line": 67,
-      "endLine": 68
+      "line": 77,
+      "endLine": 78
     },
     {
       "id": "symbol:src/renderer/components/sceneCanvasLayout.ts#visiblePlateRect",
@@ -95949,6 +95958,12 @@
       "id": "exports:src/renderer/components/SceneCanvas.tsx->symbol:src/renderer/components/SceneCanvas.tsx#SceneLevels",
       "source": "file:src/renderer/components/SceneCanvas.tsx",
       "target": "symbol:src/renderer/components/SceneCanvas.tsx#SceneLevels",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/components/sceneCanvasLayout.ts->symbol:src/renderer/components/sceneCanvasLayout.ts#gameplaySceneMaxScale",
+      "source": "file:src/renderer/components/sceneCanvasLayout.ts",
+      "target": "symbol:src/renderer/components/sceneCanvasLayout.ts#gameplaySceneMaxScale",
       "kind": "exports"
     },
     {
