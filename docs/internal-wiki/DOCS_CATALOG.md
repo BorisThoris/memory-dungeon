@@ -23,6 +23,7 @@
 | [BLUEPRINT_FRAMEWORK.md](../BLUEPRINT_FRAMEWORK.md) | Dev import graph + glossary blueprint codegen (`yarn graph:project`, `yarn blueprint:codegen`) |
 | [COLLECTIBLE_SYSTEM.md](../COLLECTIBLE_SYSTEM.md) | Collectibles design |
 | [GOOGLE_PLAY.md](../GOOGLE_PLAY.md) | Google Play: the TWA shell, its ids, the upload key, the AAB build and what a personal account allows |
+| [MARKET_FLOW_REVIEW.md](../MARKET_FLOW_REVIEW.md) | Every player flow of the leading roguelikes against Memory Dungeon's, with what was added, kept different, or left to the owner (2026-11-14) |
 | [DOC_CHECKBOX_INVENTORY.md](../DOC_CHECKBOX_INVENTORY.md) | Doc checkbox audit counts (maintenance) |
 | [FINDABLES.md](../FINDABLES.md) | Findables mechanic |
 | [GAMEPLAY_SYSTEMS_ANALYSIS.md](../GAMEPLAY_SYSTEMS_ANALYSIS.md) | **Desktop** systems map: who owns what |

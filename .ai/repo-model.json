@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3430,
+    "trackedFileCount": 3431,
     "codeFileCount": 1348,
     "exportedSymbolCount": 4466,
     "contentItemCount": 16,
@@ -915,8 +915,8 @@
     {
       "path": "docs/internal-wiki/DOCS_CATALOG.md",
       "category": "documentation",
-      "bytes": 20103,
-      "sha256": "cb44b994785db23cbb525ed5c6b9bde98fdb6ea266174a2f474888a414854542"
+      "bytes": 20300,
+      "sha256": "e5dd0afb706ea70f70e8af50d7801e8304e8211551cae518afc03f5907fc6e6c"
     },
     {
       "path": "docs/internal-wiki/E2E_AND_QA.md",
@@ -959,6 +959,12 @@
       "category": "documentation",
       "bytes": 858,
       "sha256": "4e1aab0a120c5217f692ae5bc8c0e19261195299fab63a46c76decb8313981f1"
+    },
+    {
+      "path": "docs/MARKET_FLOW_REVIEW.md",
+      "category": "documentation",
+      "bytes": 5773,
+      "sha256": "3ca580e998e1b50b36f2d5ae2568b8f8255998e7dc791708ac9e4f73acb28d6e"
     },
     {
       "path": "docs/MARKET_SIMILAR_GAMES_RESEARCH.md",
