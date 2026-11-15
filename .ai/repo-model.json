@@ -16281,8 +16281,8 @@
     {
       "path": "src/shared/gameplay-journal-cost.test.ts",
       "category": "test",
-      "bytes": 2168,
-      "sha256": "7c2506f8a2c60a749f9b48f4563581d4f2a4a65633fc7fb9b76d6600d55bd6ab"
+      "bytes": 2535,
+      "sha256": "6073946b058b2ef237f9376e417d681a6860d78c93d74f9045a78820128eee91"
     },
     {
       "path": "src/shared/gameplay-journal-trust.test.ts",
@@ -40729,7 +40729,7 @@
       "path": "src/shared/gameplay-journal-cost.test.ts",
       "layer": "shared",
       "role": "test",
-      "lineCount": 41,
+      "lineCount": 47,
       "imports": [
         "file:src/shared/game.ts",
         "file:src/shared/gameplay-core-contracts.ts",

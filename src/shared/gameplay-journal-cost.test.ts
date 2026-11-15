@@ -14,7 +14,8 @@ import { appendGameplayJournal, GAMEPLAY_COMMAND_JOURNAL_LIMIT } from './gamepla
  * re-parsing the whole journal, which is an order of magnitude, not a few percent.
  */
 const APPEND_BUDGET_US = 60;
-const SAMPLE_SIZE = 2000;
+const SAMPLE_SIZE = 500;
+const BATCHES = 6;
 
 describe('the cost of journalling a command', () => {
     it('does not scale with what the journal already holds', () => {
@@ -25,11 +26,16 @@ describe('the cost of journalling a command', () => {
         }
         expect(run.gameplayCommandJournal).toHaveLength(GAMEPLAY_COMMAND_JOURNAL_LIMIT);
 
-        const startedAt = performance.now();
-        for (let index = 0; index < SAMPLE_SIZE; index += 1) {
-            run = appendGameplayJournal(run, [createGameplayRegionShuffleCommand(`cmd:${index}`, 0)], []);
+        // The fastest of several batches: another job stealing the CPU slows some batches, never all of
+        // them, while a cost in the code slows every batch alike.
+        let microsecondsEach = Number.POSITIVE_INFINITY;
+        for (let batch = 0; batch < BATCHES; batch += 1) {
+            const startedAt = performance.now();
+            for (let index = 0; index < SAMPLE_SIZE; index += 1) {
+                run = appendGameplayJournal(run, [createGameplayRegionShuffleCommand(`cmd:${batch}:${index}`, 0)], []);
+            }
+            microsecondsEach = Math.min(microsecondsEach, ((performance.now() - startedAt) / SAMPLE_SIZE) * 1000);
         }
-        const microsecondsEach = ((performance.now() - startedAt) / SAMPLE_SIZE) * 1000;
 
         expect(
             microsecondsEach,
