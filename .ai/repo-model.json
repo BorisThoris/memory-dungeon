@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3432,
-    "codeFileCount": 1348,
-    "exportedSymbolCount": 4466,
+    "trackedFileCount": 3434,
+    "codeFileCount": 1350,
+    "exportedSymbolCount": 4471,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12453
+    "relationshipCount": 12463
   },
   "inventory": [
     {
@@ -2506,7 +2506,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "96c30d96930feaaa4dfb10198441b6b96c63bfe180e4876c0ae50dbad080d754"
+      "sha256": "35297823d4164e7c31384b91ba37f12eea4da82347e72523ee89b2f6fe1a3769"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4383,8 +4383,8 @@
     {
       "path": "leaderboard/check-api.mjs",
       "category": "other",
-      "bytes": 1915,
-      "sha256": "fe54178b70a99dc1ab0cc6a00505c97556ab8b581bb7b8f0ebfb49fac8bde01e"
+      "bytes": 2002,
+      "sha256": "43c1c35ce658a9ae7014139198287c2b8f2b540c9faaea9222b029b9bd5be78d"
     },
     {
       "path": "leaderboard/README.md",
@@ -4395,8 +4395,8 @@
     {
       "path": "leaderboard/worker.mjs",
       "category": "other",
-      "bytes": 4708,
-      "sha256": "d2eef7daa456960f9083fa94a7e3d97a401f925c3988ca5052500363e6868f77"
+      "bytes": 4837,
+      "sha256": "08e302eefea112514a42e54ac5d3052301c4baf94484aa62d5e50b6c8c050cf6"
     },
     {
       "path": "leaderboard/wrangler.toml",
@@ -4461,8 +4461,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 34317,
-      "sha256": "74d7a092c29b3f447002a2e2d19f183b3d66e4be787b603c8f57d422bc25ebb9"
+      "bytes": 34318,
+      "sha256": "034d1b527d7ca5fb4209da3fc026c90f76b1ee842cff8411a9569596bd1f78f0"
     },
     {
       "path": "packages/notifications/package.json",
@@ -5995,6 +5995,18 @@
       "sha256": "5168d7a9b1191f06283138ce04bbda2b9c1c6d7524eb2e8c14cc983a47a0f339"
     },
     {
+      "path": "src/main/app-protocol.test.ts",
+      "category": "test",
+      "bytes": 2551,
+      "sha256": "12e69a0561295af1d0618bd1bcf1c915bb67c55704489b5f6c08b7867743262f"
+    },
+    {
+      "path": "src/main/app-protocol.ts",
+      "category": "source",
+      "bytes": 2014,
+      "sha256": "0f16a7a72ba210c6ced20dba838b0f24555a24dd7e91fc412cba7ebe88815d4d"
+    },
+    {
       "path": "src/main/crash-log.test.ts",
       "category": "test",
       "bytes": 7862,
@@ -6045,8 +6057,8 @@
     {
       "path": "src/main/index.ts",
       "category": "source",
-      "bytes": 9689,
-      "sha256": "8ff4b4cb44342c6e3df2025d5f1ea9037de5e174d74887098a37a43031533853"
+      "bytes": 10356,
+      "sha256": "a960f8c5f6c59ede9d02a4ac4b34f505a299bceee257d4c7128cd2f0459d8e29"
     },
     {
       "path": "src/main/ipc.test.ts",
@@ -6105,8 +6117,8 @@
     {
       "path": "src/main/renderer-security-policy.ts",
       "category": "source",
-      "bytes": 576,
-      "sha256": "0d67802ad5b022ae8313fd9040078b6c6fcbac4bfa2610dff51e1d8f854472ae"
+      "bytes": 924,
+      "sha256": "6e12fdfd5f06d1982f6bfeb823aad1c13d6ffc85e7cc9aeb5b036041726d9aba"
     },
     {
       "path": "src/main/save-recovery-fs.ts",
@@ -20601,8 +20613,8 @@
     {
       "path": "yarn.lock",
       "category": "other",
-      "bytes": 298946,
-      "sha256": "6776ef471f73ba109456bca3ec4448b7d5b2153557139f3c50b75ad66615f6bf"
+      "bytes": 298949,
+      "sha256": "3792ea96a5e5bd52f98291b3ebf0abe07914b829e5785834b2a8b3a1f77d6192"
     }
   ],
   "files": [
@@ -20616,6 +20628,37 @@
       "exports": [],
       "testedBy": [
         "file:src/shared/blueprintGlossaryGen.test.ts"
+      ]
+    },
+    {
+      "id": "file:src/main/app-protocol.test.ts",
+      "path": "src/main/app-protocol.test.ts",
+      "layer": "main",
+      "role": "test",
+      "lineCount": 38,
+      "imports": [
+        "file:src/main/app-protocol.ts",
+        "file:src/main/renderer-security-policy.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
+      "id": "file:src/main/app-protocol.ts",
+      "path": "src/main/app-protocol.ts",
+      "layer": "main",
+      "role": "production",
+      "lineCount": 57,
+      "imports": [],
+      "exports": [
+        "symbol:src/main/app-protocol.ts#APP_ENTRY_URL",
+        "symbol:src/main/app-protocol.ts#APP_HOST",
+        "symbol:src/main/app-protocol.ts#APP_SCHEME",
+        "symbol:src/main/app-protocol.ts#APP_SCHEME_PRIVILEGES",
+        "symbol:src/main/app-protocol.ts#resolveAppRequestPath"
+      ],
+      "testedBy": [
+        "file:src/main/app-protocol.test.ts"
       ]
     },
     {
@@ -20753,8 +20796,9 @@
       "path": "src/main/index.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 260,
+      "lineCount": 275,
       "imports": [
+        "file:src/main/app-protocol.ts",
         "file:src/main/crash-reporter.ts",
         "file:src/main/dev-server-url.ts",
         "file:src/main/fatal-startup.ts",
@@ -20919,13 +20963,14 @@
       "path": "src/main/renderer-security-policy.ts",
       "layer": "main",
       "role": "production",
-      "lineCount": 20,
+      "lineCount": 23,
       "imports": [],
       "exports": [
         "symbol:src/main/renderer-security-policy.ts#RENDERER_SECURITY_WEB_PREFERENCES",
         "symbol:src/main/renderer-security-policy.ts#rendererNavigationIsAllowed"
       ],
       "testedBy": [
+        "file:src/main/app-protocol.test.ts",
         "file:src/main/renderer-security-policy.test.ts"
       ]
     },
@@ -47446,6 +47491,46 @@
   ],
   "symbols": [
     {
+      "id": "symbol:src/main/app-protocol.ts#APP_ENTRY_URL",
+      "name": "APP_ENTRY_URL",
+      "kind": "value",
+      "file": "src/main/app-protocol.ts",
+      "line": 15,
+      "endLine": 15
+    },
+    {
+      "id": "symbol:src/main/app-protocol.ts#APP_HOST",
+      "name": "APP_HOST",
+      "kind": "value",
+      "file": "src/main/app-protocol.ts",
+      "line": 14,
+      "endLine": 14
+    },
+    {
+      "id": "symbol:src/main/app-protocol.ts#APP_SCHEME",
+      "name": "APP_SCHEME",
+      "kind": "value",
+      "file": "src/main/app-protocol.ts",
+      "line": 13,
+      "endLine": 13
+    },
+    {
+      "id": "symbol:src/main/app-protocol.ts#APP_SCHEME_PRIVILEGES",
+      "name": "APP_SCHEME_PRIVILEGES",
+      "kind": "value",
+      "file": "src/main/app-protocol.ts",
+      "line": 17,
+      "endLine": 23
+    },
+    {
+      "id": "symbol:src/main/app-protocol.ts#resolveAppRequestPath",
+      "name": "resolveAppRequestPath",
+      "kind": "value",
+      "file": "src/main/app-protocol.ts",
+      "line": 29,
+      "endLine": 56
+    },
+    {
       "id": "symbol:src/main/crash-log.ts#CRASH_LOG_DIR_NAME",
       "name": "CRASH_LOG_DIR_NAME",
       "kind": "value",
@@ -47707,7 +47792,7 @@
       "kind": "value",
       "file": "src/main/renderer-security-policy.ts",
       "line": 7,
-      "endLine": 18
+      "endLine": 21
     },
     {
       "id": "symbol:src/main/save-recovery-fs.ts#nodeSaveRecoveryFileSystem",
@@ -90561,6 +90646,36 @@
       "label": "stat feedback"
     },
     {
+      "id": "exports:src/main/app-protocol.ts->symbol:src/main/app-protocol.ts#APP_ENTRY_URL",
+      "source": "file:src/main/app-protocol.ts",
+      "target": "symbol:src/main/app-protocol.ts#APP_ENTRY_URL",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/app-protocol.ts->symbol:src/main/app-protocol.ts#APP_HOST",
+      "source": "file:src/main/app-protocol.ts",
+      "target": "symbol:src/main/app-protocol.ts#APP_HOST",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/app-protocol.ts->symbol:src/main/app-protocol.ts#APP_SCHEME",
+      "source": "file:src/main/app-protocol.ts",
+      "target": "symbol:src/main/app-protocol.ts#APP_SCHEME",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/app-protocol.ts->symbol:src/main/app-protocol.ts#APP_SCHEME_PRIVILEGES",
+      "source": "file:src/main/app-protocol.ts",
+      "target": "symbol:src/main/app-protocol.ts#APP_SCHEME_PRIVILEGES",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/main/app-protocol.ts->symbol:src/main/app-protocol.ts#resolveAppRequestPath",
+      "source": "file:src/main/app-protocol.ts",
+      "target": "symbol:src/main/app-protocol.ts#resolveAppRequestPath",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/main/crash-log.ts->symbol:src/main/crash-log.ts#CRASH_LOG_DIR_NAME",
       "source": "file:src/main/crash-log.ts",
       "target": "symbol:src/main/crash-log.ts#CRASH_LOG_DIR_NAME",
@@ -119765,6 +119880,18 @@
       "kind": "implemented_by"
     },
     {
+      "id": "imports:src/main/app-protocol.test.ts->src/main/app-protocol.ts",
+      "source": "file:src/main/app-protocol.test.ts",
+      "target": "file:src/main/app-protocol.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/app-protocol.test.ts->src/main/renderer-security-policy.ts",
+      "source": "file:src/main/app-protocol.test.ts",
+      "target": "file:src/main/renderer-security-policy.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/main/crash-log.test.ts->src/main/crash-log.ts",
       "source": "file:src/main/crash-log.test.ts",
       "target": "file:src/main/crash-log.ts",
@@ -119798,6 +119925,12 @@
       "id": "imports:src/main/fatal-startup.test.ts->src/main/fatal-startup.ts",
       "source": "file:src/main/fatal-startup.test.ts",
       "target": "file:src/main/fatal-startup.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/main/index.ts->src/main/app-protocol.ts",
+      "source": "file:src/main/index.ts",
+      "target": "file:src/main/app-protocol.ts",
       "kind": "imports"
     },
     {
@@ -152296,6 +152429,12 @@
       "kind": "tested_by"
     },
     {
+      "id": "tested_by:src/main/app-protocol.ts->file:src/main/app-protocol.test.ts",
+      "source": "file:src/main/app-protocol.ts",
+      "target": "file:src/main/app-protocol.test.ts",
+      "kind": "tested_by"
+    },
+    {
       "id": "tested_by:src/main/crash-log.ts->file:src/main/crash-log.test.ts",
       "source": "file:src/main/crash-log.ts",
       "target": "file:src/main/crash-log.test.ts",
@@ -152359,6 +152498,12 @@
       "id": "tested_by:src/main/renderer-loader.ts->file:src/main/renderer-loader.test.ts",
       "source": "file:src/main/renderer-loader.ts",
       "target": "file:src/main/renderer-loader.test.ts",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/main/renderer-security-policy.ts->file:src/main/app-protocol.test.ts",
+      "source": "file:src/main/renderer-security-policy.ts",
+      "target": "file:src/main/app-protocol.test.ts",
       "kind": "tested_by"
     },
     {

@@ -15,6 +15,7 @@ await Promise.all([101, 110, 105, 109, 120, 119].map(score => request({ name: 'B
 const final = await request();
 assert.deepEqual({ name: final.body.record.name, score: final.body.record.score }, { name: 'Boris', score: 120 });
 assert.equal(final.cors, 'https://html-classic.itch.zone');
+assert.equal((await request(undefined, { Origin: 'app://game' })).cors, 'app://game');
 assert.equal((await request({ name: 'Ada', score: 1000 }, { Origin: 'https://unrelated.example' })).status, 403);
 for (let i = 0; i < 30; i++) await request({ name: 'Ada', score: 1 });
 assert.equal((await request({ name: 'Ada', score: 1 })).status, 429);

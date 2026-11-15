@@ -1,6 +1,7 @@
 import { clean, reject } from '../src/renderer/records/playerNames.mjs';
 
-const allowedOrigin = (origin) => origin === 'null' || origin === 'https://html-classic.itch.zone' ||
+// 'app://game' is the desktop build (src/main/app-protocol.ts); 'null' is any build older than that.
+const allowedOrigin = (origin) => origin === 'app://game' || origin === 'null' || origin === 'https://html-classic.itch.zone' ||
     origin === 'https://html.itch.zone' || origin === 'https://boristhoris.itch.io' ||
     /^https:\/\/(?:[a-z0-9-]+\.)?memory-dungeon-git\.pages\.dev$/.test(origin) ||
     origin === 'https://memory-dungeon-test.modaxxx009.workers.dev' ||

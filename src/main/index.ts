@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { app, BrowserWindow, screen, shell, dialog } from 'electron';
+import { app, BrowserWindow, screen, shell, dialog, net, protocol } from 'electron';
+import { APP_ENTRY_URL, APP_SCHEME, APP_SCHEME_PRIVILEGES, resolveAppRequestPath } from './app-protocol';
 import type { DisplayMode } from '../shared/contracts';
 import { resolveDevServerUrl } from './dev-server-url';
 import { handleFatalStartupFailure, runMainProcessAction } from './fatal-startup';
@@ -115,9 +116,7 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
     });
 
     const devServerUrl = resolveDevServerUrl(process.env.VITE_DEV_SERVER_URL, app.isPackaged);
-    const rendererFilePath = path.join(app.getAppPath(), 'dist', 'index.html');
-    const rendererFileUrl = pathToFileURL(rendererFilePath).href;
-    let rendererEntryUrl = devServerUrl ?? rendererFileUrl;
+    let rendererEntryUrl = devServerUrl ?? APP_ENTRY_URL;
 
     window.webContents.on('will-navigate', (event, targetUrl) => {
         if (!rendererNavigationIsAllowed(targetUrl, rendererEntryUrl)) {
@@ -140,8 +139,8 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
         developmentUrl: devServerUrl,
         loadDevelopmentUrl: (url) => window.loadURL(url),
         loadBundledFile: () => {
-            rendererEntryUrl = rendererFileUrl;
-            return window.loadFile(rendererFilePath);
+            rendererEntryUrl = APP_ENTRY_URL;
+            return window.loadURL(APP_ENTRY_URL);
         },
         reportError: (source, error) => console.error(`[startup] ${source} renderer load failed`, error)
     }).then((source) => {
@@ -218,6 +217,21 @@ const createOrShowMainWindow = (): void => {
     mainWindow = createMainWindow(displayMode);
 };
 
+// Before `ready`: Electron only grants a scheme its privileges (a real origin, fetch, streaming) here.
+protocol.registerSchemesAsPrivileged([{ scheme: APP_SCHEME, privileges: APP_SCHEME_PRIVILEGES }]);
+
+/** Serve `dist/` at `app://game/` (see app-protocol.ts for why not `file://`). */
+const registerAppProtocol = (): void => {
+    const distDir = path.join(app.getAppPath(), 'dist');
+    protocol.handle(APP_SCHEME, (request) => {
+        const filePath = resolveAppRequestPath(distDir, request.url);
+        if (!filePath) {
+            return new Response('Not found', { status: 404 });
+        }
+        return net.fetch(pathToFileURL(filePath).href);
+    });
+};
+
 const gotLock = app.requestSingleInstanceLock();
 const handleFatalStartup = (error: unknown): void => {
     handleFatalStartupFailure(error, {
@@ -239,6 +253,7 @@ if (!gotLock) {
     });
 
     void app.whenReady().then(() => {
+        registerAppProtocol();
         const started = runMainProcessAction(createOrShowMainWindow, handleFatalStartup);
         if (!started) {
             return;
