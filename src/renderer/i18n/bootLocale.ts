@@ -9,11 +9,26 @@ import { getActiveLocale, matchShippingLocale, parseStoredLocale, PSEUDO_LOCALE,
  */
 export const LOCALE_STORAGE_KEY = 'memory-dungeon.locale';
 
-/** Lazily split per language, so an English player downloads none of them. */
-const CATALOG_LOADERS = import.meta.glob<{ default: MessageCatalog }>('../../locales/*.json');
+/*
+ * Each language is a plain JSON file in the build, fetched once at boot: an English player
+ * downloads none, anyone else exactly one (the bundle budget counts it that way). As data rather
+ * than JS chunks they never touch the script budget or the CSP's script-src.
+ */
+const CATALOG_URLS = import.meta.glob<string>(['../../locales/*.json', '!../../locales/en.json'], { query: '?url', import: 'default' });
 
-const catalogLoaderFor = (locale: Locale): (() => Promise<{ default: MessageCatalog }>) | undefined =>
-    CATALOG_LOADERS[`../../locales/${locale}.json`];
+const catalogLoaderFor = (locale: Locale): (() => Promise<{ default: MessageCatalog }>) | undefined => {
+    const urlLoader = CATALOG_URLS[`../../locales/${locale}.json`];
+    if (!urlLoader) {
+        return undefined;
+    }
+    return async () => {
+        const response = await fetch(await urlLoader());
+        if (!response.ok) {
+            throw new Error(`catalog ${locale}: HTTP ${response.status}`);
+        }
+        return { default: (await response.json()) as MessageCatalog };
+    };
+};
 
 const readStoredLocale = (): Locale | null => {
     try {

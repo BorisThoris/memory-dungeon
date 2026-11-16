@@ -18,15 +18,29 @@ export const viewKeepsBackGuard = (view: ViewState): boolean => view !== 'menu' 
 const hasGuard = (state: unknown): boolean =>
     typeof state === 'object' && state !== null && (state as Record<string, unknown>).memoryDungeonBackGuard === true;
 
+/*
+ * `history.back()` is asynchronous: the pop the menu asks for (to drop the entry the last screen
+ * left) can arrive after the player has already opened the next screen, which would read it as a
+ * back press and close that screen at once. Pops the game asked for itself are counted and skipped.
+ */
+let selfPops = 0;
+
 export const useHardwareBack = (view: ViewState, enabled: boolean): void => {
     useEffect(() => {
-        if (!enabled || !viewKeepsBackGuard(view)) {
+        if (!enabled) {
             return;
         }
-        if (!hasGuard(window.history.state)) {
-            window.history.pushState(GUARD_STATE, '');
-        }
         const onPopState = (): void => {
+            if (selfPops > 0) {
+                selfPops -= 1;
+                if (viewKeepsBackGuard(view) && !hasGuard(window.history.state)) {
+                    window.history.pushState(GUARD_STATE, '');
+                }
+                return;
+            }
+            if (!viewKeepsBackGuard(view)) {
+                return;
+            }
             // Answer as Escape would, from wherever focus is, then take the entry back while this
             // screen still wants one (the effect re-runs and re-arms if the view changed).
             const target = document.activeElement instanceof HTMLElement ? document.activeElement : document.body;
@@ -34,15 +48,17 @@ export const useHardwareBack = (view: ViewState, enabled: boolean): void => {
             window.history.pushState(GUARD_STATE, '');
         };
         window.addEventListener('popstate', onPopState);
+        if (viewKeepsBackGuard(view)) {
+            if (!hasGuard(window.history.state) && selfPops === 0) {
+                window.history.pushState(GUARD_STATE, '');
+            }
+        } else if (view === 'menu' && hasGuard(window.history.state)) {
+            // Back on the menu must leave the game: drop the entry the last screen left behind.
+            selfPops += 1;
+            window.history.back();
+        }
         return () => {
             window.removeEventListener('popstate', onPopState);
         };
-    }, [enabled, view]);
-
-    // Back on the menu must leave the game: drop the entry the last screen left behind.
-    useEffect(() => {
-        if (enabled && view === 'menu' && hasGuard(window.history.state)) {
-            window.history.back();
-        }
     }, [enabled, view]);
 };

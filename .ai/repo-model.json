@@ -5349,8 +5349,8 @@
     {
       "path": "scripts/check-renderer-bundle-budget.mjs",
       "category": "script",
-      "bytes": 5477,
-      "sha256": "04fc39a12441a98a9fa1c12e725966c7c4be5d8f40d029a4b8251fc1f4bf0616"
+      "bytes": 5967,
+      "sha256": "9d5d285313591065d173d13ba02bde7b8d31cc6f5f2ed9dbb53a4a05012a3ba6"
     },
     {
       "path": "scripts/check-test-file-extensions.mjs",
@@ -12099,8 +12099,8 @@
     {
       "path": "src/renderer/components/RunShell.module.css",
       "category": "source",
-      "bytes": 69175,
-      "sha256": "4233d514f06c92653a7df701cf9b5bcee7b8cedcbf7e16118e425e705abbe6eb"
+      "bytes": 69137,
+      "sha256": "3e4f249cf20c3c1f52ccc1b401a2700e2199e24bf0b68d73109727ab9cf1615f"
     },
     {
       "path": "src/renderer/components/RunShell.test.tsx",
@@ -14163,8 +14163,8 @@
     {
       "path": "src/renderer/hooks/useHardwareBack.ts",
       "category": "source",
-      "bytes": 2370,
-      "sha256": "2c17347c4f9bca97be2fd09b56ff8301cad5b6ab92d1c07ff8727887af673187"
+      "bytes": 3065,
+      "sha256": "30d3f22efb2cd6add717ef0056344176a066f383d5950a4b6da825049dce0e25"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
@@ -14253,8 +14253,8 @@
     {
       "path": "src/renderer/i18n/bootLocale.ts",
       "category": "source",
-      "bytes": 3114,
-      "sha256": "bb903ee08c068c942b440d0c8fa25ef2712f2d8a7bd4fe6d47633a593908ad25"
+      "bytes": 3699,
+      "sha256": "771785b3c53f26f2fa914f3dc4b9e8744eda721d583e9f21cf0f2d976ee8b450"
     },
     {
       "path": "src/renderer/initRendererShell.test.tsx",
@@ -33297,7 +33297,7 @@
       "path": "src/renderer/hooks/useHardwareBack.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 49,
+      "lineCount": 65,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
@@ -33533,7 +33533,7 @@
       "path": "src/renderer/i18n/bootLocale.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 77,
+      "lineCount": 92,
       "imports": [
         "file:src/shared/i18n.ts"
       ],
@@ -62057,8 +62057,8 @@
       "name": "useHardwareBack",
       "kind": "value",
       "file": "src/renderer/hooks/useHardwareBack.ts",
-      "line": 21,
-      "endLine": 48
+      "line": 28,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/hooks/useHardwareBack.ts#viewKeepsBackGuard",
@@ -62161,16 +62161,16 @@
       "name": "chooseLocaleAndReload",
       "kind": "value",
       "file": "src/renderer/i18n/bootLocale.ts",
-      "line": 63,
-      "endLine": 76
+      "line": 78,
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/i18n/bootLocale.ts#loadBootLocale",
       "name": "loadBootLocale",
       "kind": "value",
       "file": "src/renderer/i18n/bootLocale.ts",
-      "line": 38,
-      "endLine": 60
+      "line": 53,
+      "endLine": 75
     },
     {
       "id": "symbol:src/renderer/i18n/bootLocale.ts#LOCALE_STORAGE_KEY",
@@ -62185,8 +62185,8 @@
       "name": "resolveBootLocale",
       "kind": "value",
       "file": "src/renderer/i18n/bootLocale.ts",
-      "line": 27,
-      "endLine": 36
+      "line": 42,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/initRendererShell.tsx#bootstrapWebRenderer",

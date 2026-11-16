@@ -1091,21 +1091,20 @@
 }
 
 .toolLabel {
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     letter-spacing: 0.1em;
     line-height: 1;
     color: var(--paper-2);
 }
 
 /*
- * A tool is 3.5rem wide; English labels were written for it. Translated ones run longer (Russian
- * ПЕРЕТАСОВКА), so they lose the tracking and a step of size, and the rare one still too long ends
- * in an ellipsis rather than running into its neighbour. The button's own label says it in full.
+ * A tool is 3.5rem wide; English labels were written for it. Translated ones run longer, so they
+ * lose the tracking and a step of size, and one still too long breaks onto a second line inside
+ * its own button rather than running into its neighbour (the fit contract forbids clipping it).
  */
 :global(html:not([lang='en'])) .toolLabel {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    text-align: center;
     letter-spacing: 0;
     /* The 12px floor (scripts/min-type-size.ts); the long Russian words were shortened to fit it. */
     font-size: 0.75rem;

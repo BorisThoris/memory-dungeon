@@ -76,7 +76,13 @@ if (!fs.existsSync(outDir)) {
  */
 const PORTFOLIO_MEDIA_DIRS = ['trailers/', 'artwork/'];
 
-const files = walkFiles(outDir).map((absolute) => {
+/**
+ * Translation catalogs (`src/locales/*.json`, docs/LOCALIZATION_PLAN.md): a player downloads the one
+ * for their language, or none in English. The largest stands for all of them in the total.
+ */
+const LOCALE_CATALOG = /^assets\/(?:zh-Hans|ru|es|pt-BR|de|fr)-[\w-]+\.json$/;
+
+const allFiles = walkFiles(outDir).map((absolute) => {
     const rel = path.relative(outDir, absolute).replace(/\\/g, '/');
     const size = fs.statSync(absolute).size;
     return {
@@ -87,6 +93,9 @@ const files = walkFiles(outDir).map((absolute) => {
         size
     };
 }).filter((file) => !PORTFOLIO_MEDIA_DIRS.some((dir) => file.rel.startsWith(dir)));
+
+const catalogs = allFiles.filter((file) => LOCALE_CATALOG.test(file.rel)).sort((a, b) => b.size - a.size);
+const files = allFiles.filter((file) => !LOCALE_CATALOG.test(file.rel) || file === catalogs[0]);
 
 const totalBytes = files.reduce((sum, file) => sum + file.size, 0);
 const jsFiles = files.filter((file) => file.ext === '.js');
