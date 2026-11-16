@@ -29,7 +29,9 @@ claim more than the owner has checked, and Settings says so beside the language 
 - **Pseudo-locale `en-XA`** (accented, ~40% longer) exists to find unwrapped strings and clipping:
   run the playtest in it and read the screenshots.
 - **Fonts.** Latin-1 covers es/pt-BR/de/fr. Cyrillic subsets of Source Sans 3, Cormorant Garamond
-  and Lora ship from the installed `@fontsource` packages (Cinzel has no Cyrillic and falls back).
+  and Lora ship from the installed `@fontsource` packages (Cinzel has no Cyrillic and falls back), in
+  `styles/fonts-cyrillic.css`, which `bootLocale.ts` imports only for Russian: preloaded for every
+  player they slowed the menu by several seconds and timed out the controller e2e under load.
   Simplified Chinese uses the system CJK face (`Microsoft YaHei`, `PingFang SC`, `Noto Sans CJK SC`);
   no CJK web font is bundled.
 

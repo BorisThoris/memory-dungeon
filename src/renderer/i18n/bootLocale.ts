@@ -70,6 +70,10 @@ export const loadBootLocale = async (): Promise<Locale> => {
     } else {
         setActiveLocale(locale, catalog);
     }
+    if (getActiveLocale() === 'ru') {
+        // Before the app imports, so the run's font preload sees these faces too.
+        await import('../styles/fonts-cyrillic.css').catch((error: unknown) => console.error('[i18n] Cyrillic fonts failed to load', error));
+    }
     document.documentElement.lang = getActiveLocale() === PSEUDO_LOCALE ? 'en' : getActiveLocale();
     return getActiveLocale();
 };

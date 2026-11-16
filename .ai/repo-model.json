@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3467,
+    "trackedFileCount": 3468,
     "codeFileCount": 1364,
     "exportedSymbolCount": 4507,
     "contentItemCount": 16,
@@ -963,8 +963,8 @@
     {
       "path": "docs/LOCALIZATION_PLAN.md",
       "category": "documentation",
-      "bytes": 4943,
-      "sha256": "a3871053fb877f8659d74cb002be2a3f2f5cd9136781e6197bb8b728d006ef32"
+      "bytes": 5139,
+      "sha256": "ac7b8d0aa7e470c36a1a505e5b35a4ceb6f77e257daefd2d0dd6b239f90c909a"
     },
     {
       "path": "docs/MARKET_FLOW_REVIEW_WIDER.md",
@@ -14259,8 +14259,8 @@
     {
       "path": "src/renderer/i18n/bootLocale.ts",
       "category": "source",
-      "bytes": 3699,
-      "sha256": "771785b3c53f26f2fa914f3dc4b9e8744eda721d583e9f21cf0f2d976ee8b450"
+      "bytes": 3968,
+      "sha256": "643b2933a992d85ef1aeb9fdf23b7fe905021addb51f85b863da378514aadbb2"
     },
     {
       "path": "src/renderer/initRendererShell.test.tsx",
@@ -14893,10 +14893,16 @@
       "sha256": "6809e656d14c0c2a23f1d8113d84afe6bb46fc31f2300f36690e451543bf17a5"
     },
     {
+      "path": "src/renderer/styles/fonts-cyrillic.css",
+      "category": "source",
+      "bytes": 981,
+      "sha256": "f8d65b20ae467c294d5b689703a3ca4f1b15ebd54ff9bd61632ffcf3c8fc1ebd"
+    },
+    {
       "path": "src/renderer/styles/global.css",
       "category": "source",
-      "bytes": 9215,
-      "sha256": "b489dfd148add6c6d3af8a03ad7834f712ab06342ae6415c72b55518a5926629"
+      "bytes": 8308,
+      "sha256": "95367bf68a4504492ffe8a5dbaddea5c46485060800ae65441acfcfb874fab45"
     },
     {
       "path": "src/renderer/styles/highContrast.test.ts",
@@ -33554,7 +33560,7 @@
       "path": "src/renderer/i18n/bootLocale.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 92,
+      "lineCount": 96,
       "imports": [
         "file:src/shared/i18n.ts"
       ],
@@ -62190,8 +62196,8 @@
       "name": "chooseLocaleAndReload",
       "kind": "value",
       "file": "src/renderer/i18n/bootLocale.ts",
-      "line": 78,
-      "endLine": 91
+      "line": 82,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/i18n/bootLocale.ts#loadBootLocale",
@@ -62199,7 +62205,7 @@
       "kind": "value",
       "file": "src/renderer/i18n/bootLocale.ts",
       "line": 53,
-      "endLine": 75
+      "endLine": 79
     },
     {
       "id": "symbol:src/renderer/i18n/bootLocale.ts#LOCALE_STORAGE_KEY",

@@ -16,21 +16,6 @@
 @import '@fontsource/lora/latin-500.css';
 @import '@fontsource/lora/latin-500-italic.css';
 @import '@fontsource/lora/latin-600.css';
-/* Russian (docs/LOCALIZATION_PLAN.md): Cyrillic from the same families. Cinzel has none and falls back;
-   Simplified Chinese uses the system CJK face. unicode-range keeps these unused in other languages. */
-@import '@fontsource/source-sans-3/cyrillic-400.css';
-@import '@fontsource/source-sans-3/cyrillic-500.css';
-@import '@fontsource/source-sans-3/cyrillic-600.css';
-@import '@fontsource/source-sans-3/cyrillic-700.css';
-@import '@fontsource/cormorant-garamond/cyrillic-400.css';
-@import '@fontsource/cormorant-garamond/cyrillic-400-italic.css';
-@import '@fontsource/cormorant-garamond/cyrillic-500.css';
-@import '@fontsource/cormorant-garamond/cyrillic-600.css';
-@import '@fontsource/lora/cyrillic-400.css';
-@import '@fontsource/lora/cyrillic-400-italic.css';
-@import '@fontsource/lora/cyrillic-500.css';
-@import '@fontsource/lora/cyrillic-500-italic.css';
-@import '@fontsource/lora/cyrillic-600.css';
 
 :root {
     /*
