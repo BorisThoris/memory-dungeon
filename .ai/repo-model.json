@@ -3,13 +3,13 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3466,
-    "codeFileCount": 1363,
-    "exportedSymbolCount": 4506,
+    "trackedFileCount": 3467,
+    "codeFileCount": 1364,
+    "exportedSymbolCount": 4507,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12708
+    "relationshipCount": 12711
   },
   "inventory": [
     {
@@ -969,8 +969,8 @@
     {
       "path": "docs/MARKET_FLOW_REVIEW_WIDER.md",
       "category": "documentation",
-      "bytes": 18838,
-      "sha256": "3f8950eaa7c9e6f580fb892b16a889955478aab0aebca7536301ccc82226e84c"
+      "bytes": 18915,
+      "sha256": "447dd671ffa129d27be957761f08f2fff479121d22c782c1f4b13225696c37c0"
     },
     {
       "path": "docs/MARKET_FLOW_REVIEW.md",
@@ -2518,7 +2518,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "b76c1802e4dcaebddfeb32afeabe322b4aaac45cfef85a87d42074c39ef1f727"
+      "sha256": "8a60cebb36db500c2fc3a841866e83a74aeb482522e557d72e88144ba4a34cad"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4047,8 +4047,8 @@
     {
       "path": "e2e/hardware-back.spec.ts",
       "category": "test",
-      "bytes": 2557,
-      "sha256": "88d53e38f9b0a2d05b9b9574ead80490aea5df85e9162ea4f0e9a7a2f2feafd0"
+      "bytes": 2658,
+      "sha256": "89e48bd832b66d29e2a1b696f30d33305924db348680ba249287c58a38f0e2e3"
     },
     {
       "path": "e2e/key-bindings-contrast.spec.ts",
@@ -6375,8 +6375,8 @@
     {
       "path": "src/renderer/App.tsx",
       "category": "source",
-      "bytes": 28536,
-      "sha256": "6cc2c1350026f17f4ddab0b5a08ca8c290da38d468b7be37b0f028d239378692"
+      "bytes": 28581,
+      "sha256": "2804a5c51290fb7955d341277596cd60eb66fb4bb5566e63c12284e4c00bc16e"
     },
     {
       "path": "src/renderer/assets/ASSET_SOURCES.md",
@@ -14161,10 +14161,16 @@
       "sha256": "8f4360574f30812b897da3c46ab469bbf8dd92bd122c74d6f800baff8c552ef6"
     },
     {
+      "path": "src/renderer/hooks/useHardwareBack.test.ts",
+      "category": "test",
+      "bytes": 802,
+      "sha256": "c80aa3b5c580cf0e44678f49d65f07cc3f069fd9d4704966b365a4161a15e23a"
+    },
+    {
       "path": "src/renderer/hooks/useHardwareBack.ts",
       "category": "source",
-      "bytes": 3065,
-      "sha256": "30d3f22efb2cd6add717ef0056344176a066f383d5950a4b6da825049dce0e25"
+      "bytes": 4568,
+      "sha256": "06af3ab749d041047ce50fd743f8a5ce9950c2fd7548f5d57a42e65aa9cf4355"
     },
     {
       "path": "src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
@@ -33293,19 +33299,34 @@
       "testedBy": []
     },
     {
+      "id": "file:src/renderer/hooks/useHardwareBack.test.ts",
+      "path": "src/renderer/hooks/useHardwareBack.test.ts",
+      "layer": "renderer",
+      "role": "test",
+      "lineCount": 12,
+      "imports": [
+        "file:src/renderer/hooks/useHardwareBack.ts"
+      ],
+      "exports": [],
+      "testedBy": []
+    },
+    {
       "id": "file:src/renderer/hooks/useHardwareBack.ts",
       "path": "src/renderer/hooks/useHardwareBack.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 65,
+      "lineCount": 96,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
       "exports": [
+        "symbol:src/renderer/hooks/useHardwareBack.ts#hardwareBackApplies",
         "symbol:src/renderer/hooks/useHardwareBack.ts#useHardwareBack",
         "symbol:src/renderer/hooks/useHardwareBack.ts#viewKeepsBackGuard"
       ],
-      "testedBy": []
+      "testedBy": [
+        "file:src/renderer/hooks/useHardwareBack.test.ts"
+      ]
     },
     {
       "id": "file:src/renderer/hooks/useHudPoliteLiveAnnouncement.test.ts",
@@ -62053,12 +62074,20 @@
       "endLine": 123
     },
     {
+      "id": "symbol:src/renderer/hooks/useHardwareBack.ts#hardwareBackApplies",
+      "name": "hardwareBackApplies",
+      "kind": "value",
+      "file": "src/renderer/hooks/useHardwareBack.ts",
+      "line": 24,
+      "endLine": 31
+    },
+    {
       "id": "symbol:src/renderer/hooks/useHardwareBack.ts#useHardwareBack",
       "name": "useHardwareBack",
       "kind": "value",
       "file": "src/renderer/hooks/useHardwareBack.ts",
-      "line": 28,
-      "endLine": 64
+      "line": 54,
+      "endLine": 95
     },
     {
       "id": "symbol:src/renderer/hooks/useHardwareBack.ts#viewKeepsBackGuard",
@@ -102002,6 +102031,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/hooks/useHardwareBack.ts->symbol:src/renderer/hooks/useHardwareBack.ts#hardwareBackApplies",
+      "source": "file:src/renderer/hooks/useHardwareBack.ts",
+      "target": "symbol:src/renderer/hooks/useHardwareBack.ts#hardwareBackApplies",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/hooks/useHardwareBack.ts->symbol:src/renderer/hooks/useHardwareBack.ts#useHardwareBack",
       "source": "file:src/renderer/hooks/useHardwareBack.ts",
       "target": "symbol:src/renderer/hooks/useHardwareBack.ts#useHardwareBack",
@@ -134182,6 +134217,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/hooks/useHardwareBack.test.ts->src/renderer/hooks/useHardwareBack.ts",
+      "source": "file:src/renderer/hooks/useHardwareBack.test.ts",
+      "target": "file:src/renderer/hooks/useHardwareBack.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/hooks/useHardwareBack.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/hooks/useHardwareBack.ts",
       "target": "file:src/shared/contracts.ts",
@@ -157290,6 +157331,12 @@
       "id": "tested_by:src/renderer/hooks/useGamepadNavigation.ts->file:src/renderer/hooks/useGamepadNavigation.test.tsx",
       "source": "file:src/renderer/hooks/useGamepadNavigation.ts",
       "target": "file:src/renderer/hooks/useGamepadNavigation.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/renderer/hooks/useHardwareBack.ts->file:src/renderer/hooks/useHardwareBack.test.ts",
+      "source": "file:src/renderer/hooks/useHardwareBack.ts",
+      "target": "file:src/renderer/hooks/useHardwareBack.test.ts",
       "kind": "tested_by"
     },
     {

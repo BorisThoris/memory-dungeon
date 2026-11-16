@@ -40,7 +40,7 @@ import {
 } from '../shared/playable-path-fixtures';
 import { useAppStore } from './store/useAppStore';
 import { hasDesktopBridge } from './desktop-client';
-import { useHardwareBack } from './hooks/useHardwareBack';
+import { hardwareBackApplies, useHardwareBack } from './hooks/useHardwareBack';
 import { preloadRunAssets } from './assets/preloadRunAssets';
 import { getNavigationShellChromeContract } from './store/navigationModel';
 
@@ -140,8 +140,8 @@ const App = () => {
             view: state.view
         }))
     );
-    // Android and browser back answer as Escape away from the menu (useHardwareBack.ts).
-    useHardwareBack(view, hydrated && !hasDesktopBridge());
+    // The Android app's back answers as Escape away from the menu (useHardwareBack.ts).
+    useHardwareBack(view, hydrated && !hasDesktopBridge() && hardwareBackApplies());
     /*
      * The scale the app applies, and whether this window lays out roomy or compact. Both used to be
      * three literals here behind a variable called `safeUiScale` that nothing checked; they live in

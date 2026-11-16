@@ -128,7 +128,7 @@ held to claims rules (the FTC settlement already noted in `MARKET_SIMILAR_GAMES_
   worker is installed, still needs the TWA launcher change described below.
 - **P1 privacy:** `public/privacy.html` now covers the Steam build, its local save and crash logs,
   achievements and Steam Cloud.
-- **P1 back button:** `src/renderer/hooks/useHardwareBack.ts`, checked by `e2e/hardware-back.spec.ts`.
+- **P1 back button:** `src/renderer/hooks/useHardwareBack.ts` in the Android app and installed web apps (a browser tab keeps its own back), checked by `e2e/hardware-back.spec.ts`.
 - **P1 support:** Settings > About > Report a problem (`src/renderer/supportReport.ts`).
 - **Localization:** the seven owner-chosen languages (`docs/LOCALIZATION_PLAN.md`).
 

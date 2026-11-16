@@ -2,7 +2,7 @@ import { expect, test, type Page } from '@playwright/test';
 import { buildVisualSaveJson, gotoWithSaveAndQuery } from './visualScreenHelpers';
 
 /*
- * The Android back button (and a browser's) answers as Escape away from the menu
+ * The Android app's back button answers as Escape away from the menu
  * (src/renderer/hooks/useHardwareBack.ts): back from Settings returns to the menu, back in a run
  * pauses it instead of leaving the game, and back again resumes.
  */
@@ -21,7 +21,8 @@ const storeState = (page: Page): Promise<{ view: string; status: string | null }
 
 test('back leaves a screen, pauses a run and never leaves the game mid-run', async ({ page }) => {
     test.setTimeout(240_000);
-    await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), '');
+    // The guard runs only in the Android app or an installed web app; the query stands in for both.
+    await gotoWithSaveAndQuery(page, buildVisualSaveJson(true), '?backGuard=1');
     await page.keyboard.press('Escape').catch(() => {});
     await expect(page.locator('[data-e2e-menu-pointer="interactive"]')).toBeAttached({ timeout: 120_000 });
     const origin = new URL(page.url()).origin;
