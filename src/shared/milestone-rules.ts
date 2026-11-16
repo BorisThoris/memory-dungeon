@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import { descentActForFloor, endlessPlaceForLevel, type DescentActId } from './floor-mutator-schedule';
 import { descentFloorFor, lastLevelForDescentFloor, levelForDescentFloor } from './descent-length-rules';
 
@@ -12,10 +13,10 @@ import { descentFloorFor, lastLevelForDescentFloor, levelForDescentFloor } from 
  * cycle (`endlessPlaceForLevel`).
  */
 const DESCENT_MILESTONE_NAMES: Readonly<Record<DescentActId, string>> = {
-    gate: 'The Living Dungeon',
-    living_dungeon: 'The Keeper of Halls',
-    deep: 'The Cartographer',
-    abyss: 'The Warden'
+    gate: tr.s('The Living Dungeon'),
+    living_dungeon: tr.s('The Keeper of Halls'),
+    deep: tr.s('The Cartographer'),
+    abyss: tr.s('The Warden')
 };
 
 export interface Milestone {

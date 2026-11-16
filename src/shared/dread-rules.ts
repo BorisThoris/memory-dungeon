@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RealmSeverity, RunState } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -31,14 +32,14 @@ export type DreadTierId = 'quiet' | 'stirring' | 'restless' | 'hungry' | 'awake'
 
 /** The one table the HUD, the Codex and the results screen read. */
 export const DREAD_TIERS: readonly DreadTierDefinition[] = [
-    { id: 'quiet', name: 'Quiet', from: 0 },
-    { id: 'stirring', name: 'Stirring', from: 8 },
-    { id: 'restless', name: 'Restless', from: 30 },
-    { id: 'hungry', name: 'Hungry', from: 75 },
-    { id: 'awake', name: 'Awake', from: 160 },
-    { id: 'watching', name: 'Watching', from: 320 },
-    { id: 'knows', name: 'It knows you', from: 1500 },
-    { id: 'coming', name: 'It is coming', from: 7000 }
+    { id: 'quiet', name: tr.s('Quiet'), from: 0 },
+    { id: 'stirring', name: tr.s('Stirring'), from: 8 },
+    { id: 'restless', name: tr.s('Restless'), from: 30 },
+    { id: 'hungry', name: tr.s('Hungry'), from: 75 },
+    { id: 'awake', name: tr.s('Awake'), from: 160 },
+    { id: 'watching', name: tr.s('Watching'), from: 320 },
+    { id: 'knows', name: tr.s('It knows you'), from: 1500 },
+    { id: 'coming', name: tr.s('It is coming'), from: 7000 }
 ];
 
 /** The run's count of floors entered in a raging and a wild realm, the first floor included. */

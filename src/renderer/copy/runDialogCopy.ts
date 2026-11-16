@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 /**
  * The in-run dialogs and the board's own status lines.
  *
@@ -8,35 +9,35 @@
 const everyOrdinal = (every: number): string => ['', '', 'second', 'third', 'fourth', 'fifth', 'sixth'][every] ?? `${every}th`;
 
 export const PAUSE_DIALOG_COPY = {
-    subtitle: 'Press P to resume.',
+    subtitle: tr.s('Press P to resume.'),
     /** A finger has no P key; the shell picks this line when its input is touch. */
     subtitleTouch: ''
 } as const;
 
 export const ABANDON_DIALOG_COPY = {
-    subtitle: 'You will lose this run and return to the main menu. This cannot be undone.'
+    subtitle: tr.s('You will lose this run and return to the main menu. This cannot be undone.')
 } as const;
 
 export const SHORTCUTS_COPY = {
     /** Shown when a controller is connected. */
-    touch: 'Run paused.',
-    withKeyboard: 'Run paused. Shortcuts stay off while typing.'
+    touch: tr.s('Run paused.'),
+    withKeyboard: tr.s('Run paused. Shortcuts stay off while typing.')
 } as const;
 
 /** Lines the board shows about the floor itself rather than about a power. */
 export const FLOOR_STATUS_COPY = {
-    noKeySource: 'No key source remains; clear the remaining pairs to force this exit open.'
+    noKeySource: tr.s('No key source remains; clear the remaining pairs to force this exit open.')
 } as const;
 
 /** The route step after a floor clears: what the three doors mean and which one moves on. */
 export const ROUTE_CHOICE_COPY = {
-    greedPreview: 'The next floor adds richer caches and extra reward-risk pressure.',
-    mysteryPreview: 'The next floor adds deterministic mystery veils.',
-    prompt: 'Choose the next room type. Safe protects the run, Greed trades danger for reward, and Mystery changes the next board.',
-    safePreview: 'The next floor adds defensive ward support.',
+    greedPreview: tr.s('The next floor adds richer caches and extra reward-risk pressure.'),
+    mysteryPreview: tr.s('The next floor adds deterministic mystery veils.'),
+    prompt: tr.s('Choose the next room type. Safe protects the run, Greed trades danger for reward, and Mystery changes the next board.'),
+    safePreview: tr.s('The next floor adds defensive ward support.'),
     /** Shown once a route is locked, when the remaining actions are no longer the decision. */
-    settled: 'Pick one room to continue. Route choice is the active decision; other floor-clear actions resume after the route is locked.',
-    stair: 'This stair leaves the current floor.'
+    settled: tr.s('Pick one room to continue. Route choice is the active decision; other floor-clear actions resume after the route is locked.'),
+    stair: tr.s('This stair leaves the current floor.')
 } as const;
 
 /**
@@ -53,39 +54,39 @@ export const RUN_SHELL_PAR_COPY = {
     /** `4 of 9 turns, 2 misses left` - or, with the bank empty, `4 of 9 turns, no misses left`. */
     aria: (turnsTaken: number, parTurns: number, missesLeft: number | null): string =>
         missesLeft == null
-            ? `${turnsTaken} of ${parTurns} turns`
-            : `${turnsTaken} of ${parTurns} turns, ${missesLeft === 0 ? 'no' : missesLeft} ${missesLeft === 1 ? 'life' : 'lives'} left`,
+            ? tr`${turnsTaken} of ${parTurns} turns`
+            : tr`${turnsTaken} of ${parTurns} turns, ${missesLeft === 0 ? 'no' : missesLeft} ${missesLeft === 1 ? tr.s('life') : tr.s('lives')} left`,
     /** The word after the count. Short, because it sits in a head that a phone also has to hold. */
-    leftWord: (missesLeft: number): string => (missesLeft === 1 ? 'life left' : 'lives left'),
+    leftWord: (missesLeft: number): string => (missesLeft === 1 ? tr.s('life left') : tr.s('lives left')),
     /** On hover, where there is room to say which rule the count belongs to. */
-    title: 'A miss with none left ends the run.',
+    title: tr.s('A miss with none left ends the run.'),
     /** The pause sheet's note under the count: the misses that go first, and the floor they expire after. */
     soonestToGo: (misses: number, lastFloor: number, total = 0): string =>
-        `${misses === total && misses > 1 ? 'all' : misses} ${misses === 1 ? 'expires' : 'expire'} after floor ${lastFloor}`,
+        tr`${misses === total && misses > 1 ? 'all' : misses} ${misses === 1 ? tr.s('expires') : tr.s('expire')} after floor ${lastFloor}`,
     /** The head's beat when a chain pays into the bank. */
-    earned: (misses: number): string => `+${misses} ${misses === 1 ? 'miss' : 'misses'} earned`
+    earned: (misses: number): string => tr`+${plural(misses, { one: '{0} miss', other: '{0} misses' })} earned`
 } as const;
 
 /** Spoken by screen readers over the run shell's pause control. */
 export const RUN_SHELL_LABELS = {
-    pause: 'Pause and open the run menu',
+    pause: tr.s('Pause and open the run menu'),
     /** What a miss broke, held on the HUD for a moment (dogma 6): the links and the multiplier they paid. */
     comboLost: (links: number, multiplier: number, pot = 0): string =>
-        `${multiplier > 1 ? `Lost ${links} · ×${multiplier}` : `Lost ${links}`}${pot > 0 ? ` · pot ${pot.toLocaleString()}` : ''}`,
+        `${multiplier > 1 ? tr`Lost ${links} · ×${multiplier}` : tr`Lost ${links}`}${pot > 0 ? tr` · pot ${pot.toLocaleString()}` : ''}`,
     /** Cash in (`?combo2=1`): the unbanked pot under the combo, and what it is on hover. */
-    comboPot: (score: number, gold: number): string => `Pot ${score.toLocaleString()}${gold > 0 ? ` · ${gold} gold` : ''}`,
+    comboPot: (score: number, gold: number): string => tr`Pot ${score.toLocaleString()}${gold > 0 ? tr` · ${gold} gold` : ''}`,
     /** What a bank paid, held on the HUD for a moment: the pot and the combo's drop. */
-    comboBanked: (score: number, from: number, to: number): string => `Banked +${score.toLocaleString()} · ${from} → ${to}`,
-    comboPotTitle: 'Unbanked: Bank pays it and halves the combo; a miss takes it all.',
+    comboBanked: (score: number, from: number, to: number): string => tr`Banked +${score.toLocaleString()} · ${from} → ${to}`,
+    comboPotTitle: tr.s('Unbanked: Bank pays it and halves the combo; a miss takes it all.'),
     /** The purse on the head, and what it is for on hover. */
-    gold: 'gold',
-    goldTitle: 'Gold funds automatic upgrades every 3 floors.',
+    gold: tr.s('gold'),
+    goldTitle: tr.s('Gold funds automatic upgrades every 3 floors.'),
     /** The tag on the Floor stat once this run is the deepest the profile has seen. */
-    personalBest: 'Best',
-    personalBestAria: 'Deepest floor yet',
+    personalBest: tr.s('Best'),
+    personalBestAria: tr.s('Deepest floor yet'),
     /** The test pace (`descent-pace-rules.ts`): this run jumps down the Descent and counts toward no record. */
-    testPace: 'Test',
-    testPaceAria: 'Test pace: this run jumps down the Descent and counts toward no record'
+    testPace: tr.s('Test'),
+    testPaceAria: tr.s('Test pace: this run jumps down the Descent and counts toward no record')
 } as const;
 
 /**
@@ -97,21 +98,21 @@ export const RUN_SHELL_LABELS = {
  */
 export const RUN_TOOL_REASONS = {
     undo: {
-        available: 'Undo the flip being resolved',
-        notResolving: 'Undo is available only while a flipped pair is resolving'
+        available: tr.s('Undo the flip being resolved'),
+        notResolving: tr.s('Undo is available only while a flipped pair is resolving')
     },
     greet: {
-        available: 'Say hello to whoever is on this floor',
-        alreadyGreeted: 'You have already said hello on this floor',
-        nobodyHome: 'There is nobody on this floor to greet'
+        available: tr.s('Say hello to whoever is on this floor'),
+        alreadyGreeted: tr.s('You have already said hello on this floor'),
+        nobodyHome: tr.s('There is nobody on this floor to greet')
     },
     exit: {
-        available: 'Open the exit you found on this floor',
-        locked: 'The exit is found, but not open yet'
+        available: tr.s('Open the exit you found on this floor'),
+        locked: tr.s('The exit is found, but not open yet')
     },
     fit: {
-        available: 'Bring the whole board back on screen',
-        atRest: 'The board already fits the screen'
+        available: tr.s('Bring the whole board back on screen'),
+        atRest: tr.s('The board already fits the screen')
     }
 } as const;
 
@@ -122,44 +123,44 @@ export const RUN_TOOL_REASONS = {
  */
 /** The Warden's clear (DGE-006): take the win, or go on into Endless. */
 export const WARDEN_CHOICE_COPY = {
-    title: 'The Warden falls',
-    body: 'The Descent is won. End the run here, or go on into Endless: the acts come round again, shorter each time, and the run is recorded when it ends.',
-    takeWin: 'Take the win',
-    descend: 'Descend into Endless'
+    title: tr.s('The Warden falls'),
+    body: tr.s('The Descent is won. End the run here, or go on into Endless: the acts come round again, shorter each time, and the run is recorded when it ends.'),
+    takeWin: tr.s('Take the win'),
+    descend: tr.s('Descend into Endless')
 } as const;
 
 export const RUN_SHELL_LINE_COPY = {
     chainKicker: (chain: number, tierLabel: string): string =>
-        chain <= 0 ? 'No chain' : tierLabel ? `Chain ${chain} · ${tierLabel}` : `Chain ${chain}`,
-    firstFloorKicker: 'First floor',
-    newItemKicker: 'New item',
-    missKicker: 'No match',
+        chain <= 0 ? tr.s('No chain') : tierLabel ? tr`Chain ${chain} · ${tierLabel}` : tr`Chain ${chain}`,
+    firstFloorKicker: tr.s('First floor'),
+    newItemKicker: tr.s('New item'),
+    missKicker: tr.s('No match'),
     /** `6 pairs. Every face shows for 4 seconds; then the floor begins.` */
     study: (pairs: number, seconds: number): string =>
-        `${pairs} ${pairs === 1 ? 'pair' : 'pairs'}. Every face shows for ${seconds} ${
-            seconds === 1 ? 'second' : 'seconds'
+        `${plural(pairs, { one: '{0} pair', other: '{0} pairs' })}. Every face shows for ${seconds} ${
+            seconds === 1 ? tr.s('second') : tr.s('seconds')
         }; then the floor begins.`,
-    studyKicker: 'Study the board',
+    studyKicker: tr.s('Study the board'),
     /** The Warden's floor (`warden-rules.ts`): both rules, said before the first flip, in the study window. */
     wardenStudy: (redealEvery: number): string =>
-        `The Warden: every turn past par takes a miss, and every ${everyOrdinal(redealEvery)} turn the face-down cards are dealt again.`,
-    wardenKicker: 'The Warden',
+        tr`The Warden: every turn past par takes a miss, and every ${everyOrdinal(redealEvery)} turn the face-down cards are dealt again.`,
+    wardenKicker: tr.s('The Warden'),
     /** The Keeper of Halls (`keeper-rules.ts`): its rule, and the turns to the next swap. */
-    depthKicker: (depth: number): string => `Depth ${depth}`,
-    spiralKicker: 'The Spiral',
+    depthKicker: (depth: number): string => tr`Depth ${depth}`,
+    spiralKicker: tr.s('The Spiral'),
     spiralRules: (par: number, turns: number): string =>
-        `Survive ${par} turns: ${Math.min(turns, par)} of ${par}. Clear the outer ring and it seals; fresh pairs are dealt inside.`,
-    cartographerKicker: 'The Cartographer',
+        tr`Survive ${par} turns: ${Math.min(turns, par)} of ${par}. Clear the outer ring and it seals; fresh pairs are dealt inside.`,
+    cartographerKicker: tr.s('The Cartographer'),
     cartographerRules: (every: number, matchesLeft: number): string =>
-        `Every ${everyOrdinal(every)} match the deck beneath turns a quarter, clockwise. Next turn in ${matchesLeft} ${matchesLeft === 1 ? 'match' : 'matches'}.`,
-    keeperKicker: 'The Keeper of Halls',
+        tr`Every ${everyOrdinal(every)} match the deck beneath turns a quarter, clockwise. Next turn in ${plural(matchesLeft, { one: '{0} match', other: '{0} matches' })}.`,
+    keeperKicker: tr.s('The Keeper of Halls'),
     keeperRules: (every: number, turnsLeft: number): string =>
-        `Every ${everyOrdinal(every)} turn the rooms swap sides; each card keeps its place in its room. Next swap in ${turnsLeft} ${turnsLeft === 1 ? 'turn' : 'turns'}.`,
+        tr`Every ${everyOrdinal(every)} turn the rooms swap sides; each card keeps its place in its room. Next swap in ${plural(turnsLeft, { one: '{0} turn', other: '{0} turns' })}.`,
     wardenRules: (redealEvery: number): string =>
-        `Every turn past par takes a miss. Every ${everyOrdinal(redealEvery)} turn the face-down cards are dealt again.`,
+        tr`Every turn past par takes a miss. Every ${everyOrdinal(redealEvery)} turn the face-down cards are dealt again.`,
     /** The complete Warden, met behind the wild or raging door (`warden-rules.ts`). */
     wardenTest: (fellPairs: number, dealtAgain: number): string =>
-        `It falls only to a Hold released at ${fellPairs} pairs. An empty board is dealt again${dealtAgain > 0 ? ` (dealt ${dealtAgain} ${dealtAgain === 1 ? 'time' : 'times'})` : ''}; the re-deal waits while you hold.`
+        tr`It falls only to a Hold released at ${fellPairs} pairs. An empty board is dealt again${dealtAgain > 0 ? plural(dealtAgain, { one: ' (dealt {0} time)', other: ' (dealt {0} times)' }) : ''}; the re-deal waits while you hold.`
 } as const;
 
 /**
@@ -171,8 +172,8 @@ export const RUN_SHELL_LINE_COPY = {
  * twice. What they are actually offered is a trade, so the line says so.
  */
 export const MEMORIZE_SKIP_COPY = {
-    hint: 'Double-tap the board to start early and bank momentum',
-    label: 'Start the floor early and bank chain momentum'
+    hint: tr.s('Double-tap the board to start early and bank momentum'),
+    label: tr.s('Start the floor early and bank chain momentum')
 } as const;
 
 /**
@@ -180,17 +181,17 @@ export const MEMORIZE_SKIP_COPY = {
  * cost is visible at the moment of the decision, not afterwards.
  */
 export const PERFECT_MEMORY_COPY = {
-    eligible: 'Eligible',
-    label: 'Perfect memory',
-    locked: 'Locked'
+    eligible: tr.s('Eligible'),
+    label: tr.s('Perfect memory'),
+    locked: tr.s('Locked')
 } as const;
 
 /** The miss bank's tooltip in the run rail. */
-export const MISS_BANK_TITLE = 'A mismatch spends one life. Earn more through combos and floor clears.';
+export const MISS_BANK_TITLE = tr.s('A mismatch spends one life. Earn more through combos and floor clears.');
 export const FEATURED_FLOOR_GOAL_COPY = {
-    label: 'Goal:',
+    label: tr.s('Goal:'),
     // Any reaction counts; the floor always deals Fire, Fire, then Water (`featuredRecipePairKeys`), so name that one.
-    amplified: 'Two of one element → another, as Fire → Fire → Water',
-    calm: 'Water → Water → Ice',
-    secured: 'secured'
+    amplified: tr.s('Two of one element → another, as Fire → Fire → Water'),
+    calm: tr.s('Water → Water → Ice'),
+    secured: tr.s('secured')
 };

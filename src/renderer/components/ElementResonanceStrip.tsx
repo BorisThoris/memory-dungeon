@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 import type { CSSProperties, ReactElement } from 'react';
 import type { RunState } from '../../shared/contracts';
 import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
@@ -26,10 +27,10 @@ const ElementResonanceStrip = ({
     const primed = isStreakPrimed(streak);
     const label =
         TILE_SUITS.map((suit) => `${ELEMENT_NAMES[suit]} ${resonanceOf(resonance, suit)}`).join(', ') +
-        (streak ? `. ${ELEMENT_NAMES[streak.suit]} in hand, ${streak.links} in a row${primed ? ': primed, a different element reacts' : ''}.` : '.') +
-        (still > 0 ? ` The floor holds still for ${still} more ${still === 1 ? 'turn' : 'turns'}.` : '');
+        (streak ? `. ${ELEMENT_NAMES[streak.suit]} in hand, ${streak.links} in a row${primed ? tr.s(': primed, a different element reacts') : ''}.` : '.') +
+        (still > 0 ? tr` The floor holds still for ${plural(still, { one: '{0} more turn', other: '{0} more turns' })}.` : '');
     return (
-        <span aria-label={`Resonance: ${label}`} className={styles.strip} data-primed={primed ? 'true' : undefined} data-testid="hud-resonance" role="group">
+        <span aria-label={tr`Resonance: ${label}`} className={styles.strip} data-primed={primed ? 'true' : undefined} data-testid="hud-resonance" role="group">
             {TILE_SUITS.map((suit) => {
                 const stacks = resonanceOf(resonance, suit);
                 const inHand = streak?.suit === suit;
@@ -43,7 +44,7 @@ const ElementResonanceStrip = ({
                         data-tier={resonanceTier(stacks)}
                         key={suit}
                         style={{ '--element-color': getTileSuit(suit).hue } as CSSProperties}
-                        title={`${ELEMENT_NAMES[suit]}: ${stacks} ${stacks === 1 ? 'stack' : 'stacks'}, tier ${resonanceTier(stacks)}, the next at ${stacksForTier(resonanceTier(stacks) + 1)}`}
+                        title={tr`${ELEMENT_NAMES[suit]}: ${plural(stacks, { one: '{0} stack', other: '{0} stacks' })}, tier ${resonanceTier(stacks)}, the next at ${stacksForTier(resonanceTier(stacks) + 1)}`}
                     >
                         <span aria-hidden="true" className={styles.rune}>
                             {getTileSuit(suit).rune}
@@ -59,7 +60,7 @@ const ElementResonanceStrip = ({
             })}
             {still > 0 ? (
                 <span className={styles.still} data-testid="hud-resonance-still">
-                    Still {still}
+                    {tr.s("Still")} {still}
                 </span>
             ) : null}
             <ElementCastGuide run={run} />

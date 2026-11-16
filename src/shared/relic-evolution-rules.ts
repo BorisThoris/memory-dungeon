@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RunState } from './contracts';
 import type { BlueprintId } from './boss-reward-rules';
 import { hasRelic, relicRank, CAMP_UPGRADE_MAX_RANK, type CampUpgradeId } from './run-relic-rules';
@@ -37,14 +38,14 @@ export interface EvolutionRecipe {
 }
 
 export const EVOLUTIONS: readonly EvolutionRecipe[] = [
-    { id: 'lantern_of_recall', title: 'Lantern of Recall', from: ['long_look', 'tallow_candle'], live: true },
-    { id: 'misers_vault', title: "Miser's Vault", from: ['deep_pockets', 'gilded_chain'], live: true },
-    { id: 'cartographers_thread', title: "Cartographer's Thread", from: ['long_look', 'gilded_chain'], live: true },
-    { id: 'keystone_heart', title: 'Keystone Heart', from: ['deep_pockets', 'tallow_candle'], live: true },
+    { id: 'lantern_of_recall', title: tr.s('Lantern of Recall'), from: ['long_look', 'tallow_candle'], live: true },
+    { id: 'misers_vault', title: tr.s("Miser's Vault"), from: ['deep_pockets', 'gilded_chain'], live: true },
+    { id: 'cartographers_thread', title: tr.s("Cartographer's Thread"), from: ['long_look', 'gilded_chain'], live: true },
+    { id: 'keystone_heart', title: tr.s('Keystone Heart'), from: ['deep_pockets', 'tallow_candle'], live: true },
     // Masks (`mask-rules.ts`): every mask drops as the floor is dealt.
-    { id: 'unmasking_glass', title: 'Unmasking Glass', from: ['tallow_candle', 'gilded_chain'], live: true },
+    { id: 'unmasking_glass', title: tr.s('Unmasking Glass'), from: ['tallow_candle', 'gilded_chain'], live: true },
     // Reprise (`reprise-rules.ts`): a Reprise replays five turns.
-    { id: 'echo_chamber', title: 'Echo Chamber', from: ['long_look', 'deep_pockets'], live: true }
+    { id: 'echo_chamber', title: tr.s('Echo Chamber'), from: ['long_look', 'deep_pockets'], live: true }
 ];
 
 export const evolutionRecipe = (id: BlueprintId): EvolutionRecipe => EVOLUTIONS.find((recipe) => recipe.id === id)!;

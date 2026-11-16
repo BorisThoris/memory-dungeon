@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { depthRung } from '../../shared/depth-rules';
 import { LEARNED_RULE_COPY } from '../copy/learnedRuleCopy';
 import { holdBeat, holdReleasePulseTier } from '../copy/holdBeat';
@@ -211,7 +212,7 @@ import {
 } from '../copy/mismatchFloater';
 
 /** OVR-007 / HUD-020: chaff readout for `distraction_channel` — not gameplay state; hidden when reduce motion or assist toggle is off. */
-const DISTRACTION_CHANNEL_LABEL = 'Chaff';
+const DISTRACTION_CHANNEL_LABEL = tr.s('Chaff');
 
 /**
  * The board frame fills its stage. One box, applied the same way in both camera modes.
@@ -742,7 +743,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const boardRecoveryContext =
         boardFloaterPayload?.kind === 'miss' && boardFloaterMismatchNextAction
             ? {
-                  action: boardFloaterMismatchNextAction.tone === 'risk' ? 'Stabilize' : 'Recover',
+                  action: boardFloaterMismatchNextAction.tone === 'risk' ? tr.s('Stabilize') : tr.s('Recover'),
                   detail: boardFloaterMismatchRecovery ?? boardFloaterMismatchNextAction.value,
                   impactCue: boardFloaterMismatchNextAction.arcadeCue,
                   tone: boardFloaterMismatchNextAction.tone,
@@ -1322,7 +1323,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         () => [
             ...deriveTurnCallouts(latestTurnForPulse, missesLeft(run), comboTemper),
             ...(voidReturnKey
-                ? [{ key: voidReturnKey, kind: 'temper' as const, size: 'minor' as const, tone: 'gold' as const, title: 'BACK FROM THE VOID', sub: 'The room is yours again' }]
+                ? [{ key: voidReturnKey, kind: 'temper' as const, size: 'minor' as const, tone: 'gold' as const, title: tr.s('BACK FROM THE VOID'), sub: tr.s('The room is yours again') }]
                 : []),
             ...purchaseCallouts,
             ...zoneCallouts,
@@ -1549,7 +1550,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     const nextFloorMutatorNames =
         nextFloorPreview && nextFloorPreview.mutators.length > 0
             ? nextFloorPreview.mutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id).join(', ')
-            : 'No mutators';
+            : tr.s('No mutators');
     const nextFloorMutatorLabels =
         nextFloorChapterIdentity?.actTitle && nextFloorChapterIdentity.biomeTitle
             ? `${nextFloorChapterIdentity.actTitle} - ${nextFloorChapterIdentity.biomeTitle} - ${nextFloorMutatorNames}.${
@@ -1560,8 +1561,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
     if (nextFloorPreview) {
         nextFloorSignalRows.push({
             id: 'next-floor',
-            label: 'Floor',
-            value: nextFloorPreview.title ?? 'Next floor',
+            label: tr.s('Floor'),
+            value: nextFloorPreview.title ?? tr.s('Next floor'),
             detail:
                 nextFloorChapterIdentity?.actTitle && nextFloorChapterIdentity.biomeTitle
                     ? `${nextFloorChapterIdentity.actTitle} - ${nextFloorChapterIdentity.biomeTitle}`
@@ -1571,15 +1572,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         if (nextFloorObjectiveLabel) {
             nextFloorSignalRows.push({
                 id: 'next-objective',
-                label: 'Objective',
+                label: tr.s('Objective'),
                 value: nextFloorObjectiveLabel,
-                detail: 'Featured payout target',
+                detail: tr.s('Featured payout target'),
                 tone: 'reward'
             });
         }
         nextFloorSignalRows.push({
             id: 'next-pressure',
-            label: 'Pressure',
+            label: tr.s('Pressure'),
             value: nextFloorMutatorNames,
             detail: nextFloorChapterIdentity?.routePreview ?? nextFloorMutatorLabels,
             tone: nextFloorPreview.mutators.length > 0 ? 'pressure' : 'neutral'
@@ -1587,7 +1588,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         if (nextFloorIdentity) {
             nextFloorSignalRows.push({
                 id: 'next-counterplay',
-                label: 'Counterplay',
+                label: tr.s('Counterplay'),
                 value: nextFloorIdentity.label,
                 detail: nextFloorIdentity.counterplaySentence,
                 tone: 'counterplay'
@@ -2210,7 +2211,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                  * while the board already fits: a lit control that does nothing is the worse signal.
                  */
                 ...toolSpec('fit'),
-                name: 'Fit board',
+                name: tr.s('Fit board'),
                 glyph: RUN_SHELL_GLYPHS.fit,
                 disabled: boardViewportAtRest,
                 title: boardViewportAtRest ? RUN_TOOL_REASONS.fit.atRest : RUN_TOOL_REASONS.fit.available,
@@ -2312,7 +2313,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     data-a11y-gameplay-inert={gameplayShellInert ? 'true' : 'false'}
                     inert={gameplayShellInert ? true : undefined}
                 >
-                    <h1 className={styles.srOnly}>Level {run.board.level}</h1>
+                    <h1 className={styles.srOnly}>{tr.s("Level")} {run.board.level}</h1>
                     {persistenceWriteNotice ? (
                         <div className={styles.persistWriteBanner} role="alert">
                             <span>{persistenceWriteNotice}</span>
@@ -2321,7 +2322,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 className={styles.persistWriteBannerDismiss}
                                 onClick={clearPersistenceWriteNotice}
                             >
-                                Dismiss
+                                {tr.s("Dismiss")}
                             </button>
                         </div>
                     ) : null}
@@ -2633,11 +2634,11 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                 >
                     <OverlayModal
                         actions={[
-                            { label: 'Resume', onClick: resume, variant: 'primary' },
+                            { label: tr.s('Resume'), onClick: resume, variant: 'primary' },
                             /* Fit board left this menu for the dock, where the camera is: a pinch
                                is undone next to where it happened, without pausing. */
-                            { label: 'Inventory', onClick: openInventoryFromPlaying, variant: 'secondary' },
-                            { label: 'Codex', onClick: openCodexFromPlaying, variant: 'secondary' },
+                            { label: tr.s('Inventory'), onClick: openInventoryFromPlaying, variant: 'secondary' },
+                            { label: tr.s('Codex'), onClick: openCodexFromPlaying, variant: 'secondary' },
                             /*
                              * The shortcuts overlay opened on F1 or ? and nowhere else, which
                              * asks the player to already know the shortcut for finding out the
@@ -2654,14 +2655,14 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 ? []
                                 : [
                                       {
-                                          label: 'Controls',
+                                          label: tr.s('Controls'),
                                           onClick: openShortcutsHelp,
                                           variant: 'secondary' as const
                                       }
                                   ]),
-                            { label: 'Settings', onClick: openSettingsPlayingMode, variant: 'secondary' },
+                            { label: tr.s('Settings'), onClick: openSettingsPlayingMode, variant: 'secondary' },
                             {
-                                label: 'Retreat',
+                                label: tr.s('Retreat'),
                                 onClick: () => {
                                     playMenuOpen();
                                     setAbandonRunConfirmOpen(true);
@@ -2674,9 +2675,9 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         subtitle={shellProfile.input === 'touch' ? PAUSE_DIALOG_COPY.subtitleTouch : PAUSE_DIALOG_COPY.subtitle}
                         surface="margin"
                         testId="game-pause-overlay"
-                        title="Run paused"
+                        title={tr.s("Run paused")}
                     >
-                        <dl aria-label="Run so far" className={styles.pauseStats}>
+                        <dl aria-label={tr.s("Run so far")} className={styles.pauseStats}>
                             {/* Which run this is, and whether it can still earn perfect memory, are
                                 answers to a question a player asks by pausing; the bar keeps to the
                                 numbers the rules need. */}
@@ -2684,7 +2685,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 const identity = describeRunModeIdentity(run);
                                 return (
                                     <div>
-                                        <dt>Run</dt>
+                                        <dt>{tr.s("Run")}</dt>
                                         <dd data-testid="pause-run-identity">
                                             {identity.label}
                                             {identity.detail ? ` — ${identity.detail}` : ''}
@@ -2694,7 +2695,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                             })()}
                             {run.activeMutators.length > 0 ? (
                                 <div>
-                                    <dt>Mutator</dt>
+                                    <dt>{tr.s("Mutator")}</dt>
                                     <dd data-testid="pause-mutators">
                                         {run.activeMutators.map((id) => MUTATOR_CATALOG[id]?.title ?? id).join(' · ')}
                                     </dd>
@@ -2712,15 +2713,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 );
                             })()}
                             <div>
-                                <dt>Floor</dt>
+                                <dt>{tr.s("Floor")}</dt>
                                 <dd>{run.board?.level ?? run.stats.highestLevel}</dd>
                             </div>
                             <div>
-                                <dt>Score</dt>
+                                <dt>{tr.s("Score")}</dt>
                                 <dd>{runNonNegativeInteger(run.stats.totalScore).toLocaleString()}</dd>
                             </div>
                             <div>
-                                <dt>Turns</dt>
+                                <dt>{tr.s("Turns")}</dt>
                                 <dd data-testid="pause-turns">
                                     {turnsTakenThisFloor(run)} / {parTurnsForRun(run)}
                                 </dd>
@@ -2730,7 +2731,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 player comes to ask how the run is doing, and how much longer it can
                                 go wrong is half of that question. */}
                             <div>
-                                <dt>Lives</dt>
+                                <dt>{tr.s("Lives")}</dt>
                                 <dd data-testid="pause-misses-left">
                                     {missesLeft(run) ?? '—'}
                                     {(() => {
@@ -2747,12 +2748,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 </dd>
                             </div>
                             <div>
-                                <dt>Gold</dt>
+                                <dt>{tr.s("Gold")}</dt>
                                 <dd data-testid="pause-gold">{runGold(run)}</dd>
                             </div>
                             {(run.relics ?? []).length > 0 ? (
                                 <div>
-                                    <dt>Relics</dt>
+                                    <dt>{tr.s("Relics")}</dt>
                                     <dd data-testid="pause-relics">
                                         {(run.relics ?? []).map((id) => relicDefinition(id).title).join(' · ')}
                                     </dd>
@@ -2765,7 +2766,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     <OverlayModal
                         actions={[
                             {
-                                label: 'Close',
+                                label: tr.s('Close'),
                                 onClick: closeShortcutsHelp,
                                 variant: 'secondary'
                             }
@@ -2777,12 +2778,12 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 : SHORTCUTS_COPY.withKeyboard
                         }
                         testId="game-shortcuts-help-overlay"
-                        title={gamepadConnected ? 'Controller shortcuts' : 'Keyboard shortcuts'}
+                        title={gamepadConnected ? tr.s('Controller shortcuts') : tr.s('Keyboard shortcuts')}
                         wide
                     >
                         {/* One list, not two: a player holding a pad is told what the pad does. */}
                         <ul
-                            aria-label={gamepadConnected ? 'Gameplay controller shortcuts' : 'Gameplay keyboard shortcuts'}
+                            aria-label={gamepadConnected ? tr.s('Gameplay controller shortcuts') : tr.s('Gameplay keyboard shortcuts')}
                             className={styles.shortcutsHelpList}
                         >
                             {(gamepadConnected ? GAMEPAD_SHORTCUT_ROWS : gameplayShortcutRows(keyBindings)).map((row) => (
@@ -2897,7 +2898,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                     <OverlayModal
                         actions={[
                             {
-                                label: 'Cancel',
+                                label: tr.s('Cancel'),
                                 onClick: () => {
                                     playUiBack();
                                     setAbandonRunConfirmOpen(false);
@@ -2905,7 +2906,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 variant: 'secondary'
                             },
                             {
-                                label: 'Abandon run',
+                                label: tr.s('Abandon run'),
                                 onClick: () => {
                                     playUiBack();
                                     setAbandonRunConfirmOpen(false);
@@ -2921,7 +2922,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                         }}
                         ornamentalHeaderPlate
                         subtitle={ABANDON_DIALOG_COPY.subtitle}
-                        title="Abandon run?"
+                        title={tr.s("Abandon run?")}
                     />
                 ) : null}
             </div>

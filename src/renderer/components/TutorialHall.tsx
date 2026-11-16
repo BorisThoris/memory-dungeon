@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { useCallback, useEffect, useRef, useState, type CSSProperties } from 'react';
 import { advanceTutorial, resolveTutorial, selectTutorialTile, startTutorial, TUTORIAL_LESSONS, tutorialTarget, type TutorialLesson, type TutorialSession } from '../../shared/tutorial-hall';
 import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
@@ -12,7 +13,7 @@ import { TUTORIAL_HALL_COPY } from '../copy/tutorialHallCopy';
 import { MetaShell, SectionRail, UiButton } from '../ui';
 
 interface Props { initialLessonId?: string; onClose: () => void; reduceMotion: boolean; graphicsQuality: GraphicsQualityPreset }
-const categories = ['Essentials', 'Elements', 'Combinations', 'Interactions'] as const;
+const categories = [tr.s('Essentials'), tr.s('Elements'), tr.s('Combinations'), tr.s('Interactions')] as const;
 
 export default function TutorialHall({ initialLessonId, onClose, reduceMotion, graphicsQuality }: Props) {
     const [session, setSession] = useState<TutorialSession | null>(() => {
@@ -20,7 +21,7 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
         return lesson ? startTutorial(lesson) : null;
     });
     const [completed, setCompleted] = useState<ReadonlySet<string>>(new Set());
-    const [category, setCategory] = useState<(typeof categories)[number]>('Essentials');
+    const [category, setCategory] = useState<(typeof categories)[number]>(tr.s('Essentials'));
     const [attempt, setAttempt] = useState(0);
     const heading = useRef<HTMLHeadingElement>(null);
     const board = useRef<TileBoardHandle>(null);
@@ -79,7 +80,7 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
     const targetTile = session?.run.board?.tiles.find(tile => tile.id === target);
     const callouts = session?.phase === 'result' ? [{
         key: `${attempt}:${session.lesson.id}:${session.step}`, kind: 'rank' as const, size: 'major' as const, tone: 'gold' as const,
-        title: session.lesson.reaction && session.step === 2 ? session.lesson.title.toUpperCase() + '!' : session.run.stats.currentStreak ? 'MATCH!' : 'COMBO BROKEN', sub: ''
+        title: session.lesson.reaction && session.step === 2 ? session.lesson.title.toUpperCase() + '!' : session.run.stats.currentStreak ? 'MATCH!' : tr.s('COMBO BROKEN'), sub: ''
     }] : [];
 
     /*
@@ -91,7 +92,7 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
         return (
             <MetaShell
                 eyebrow={TUTORIAL_HALL_COPY.eyebrow}
-                label="Tutorial Hall"
+                label={tr.s("Tutorial Hall")}
                 onBack={onClose}
                 subtitle={TUTORIAL_HALL_COPY.practiceNote}
                 testId="tutorial-hall"
@@ -117,7 +118,7 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
                             </span>
                             <strong className={styles.lessonTitle}>{lesson.title}</strong>
                             <span className={styles.lessonBody}>{lesson.category === 'Combinations' ? lesson.elements.map((suit) => ELEMENT_NAMES[suit]).join(' + ') : lesson.outcome}</span>
-                            <small className={styles.lessonMeta}>{completed.has(lesson.id) ? '\u2713 Practised' : `${lesson.steps.length * 2} guided taps`}</small>
+                            <small className={styles.lessonMeta}>{completed.has(lesson.id) ? tr.s('\u2713 Practised') : tr`${lesson.steps.length * 2} guided taps`}</small>
                         </button>
                     ))}
                 </div>
@@ -125,16 +126,16 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
         );
     }
 
-    return <section className={styles.hall} data-testid="tutorial-hall" aria-label="Tutorial Hall" data-reduce-motion={reduceMotion}>
+    return <section className={styles.hall} data-testid="tutorial-hall" aria-label={tr.s("Tutorial Hall")} data-reduce-motion={reduceMotion}>
         <header className={styles.header}>
-            <div><span className={styles.eyebrow}>Tutorial Hall</span><h1 ref={heading} tabIndex={-1}>{session?.lesson.title ?? 'Learn by playing'}</h1></div>
-            <UiButton onClick={leave} size="md" variant="secondary">Lessons</UiButton>
+            <div><span className={styles.eyebrow}>{tr.s("Tutorial Hall")}</span><h1 ref={heading} tabIndex={-1}>{session?.lesson.title ?? tr.s('Learn by playing')}</h1></div>
+            <UiButton onClick={leave} size="md" variant="secondary">{tr.s("Lessons")}</UiButton>
         </header>
         <>
-            <div className={styles.progress} aria-label="Lesson progress">
+            <div className={styles.progress} aria-label={tr.s("Lesson progress")}>
                 {session.lesson.steps.map((item, index) => <span key={index} data-current={index === session.step} data-done={index < session.step || session.phase === 'complete'}>{index + 1}</span>)}
-                <span className={styles.readout}>Combo {session.run.stats.currentStreak}{session.run.elementStreak ? ` · ${ELEMENT_NAMES[session.run.elementStreak.suit]} ×${session.run.elementStreak.links}` : ''}</span>
-                <UiButton onClick={() => begin(session.lesson)} size="sm" variant="secondary">Restart</UiButton>
+                <span className={styles.readout}>{tr.s("Combo")} {session.run.stats.currentStreak}{session.run.elementStreak ? ` · ${ELEMENT_NAMES[session.run.elementStreak.suit]} ×${session.run.elementStreak.links}` : ''}</span>
+                <UiButton onClick={() => begin(session.lesson)} size="sm" variant="secondary">{tr.s("Restart")}</UiButton>
             </div>
             <div className={styles.stage} ref={stage} data-testid="tutorial-board-stage">
                 <TileBoard key={`${session.lesson.id}:${attempt}`} ref={board} board={session.run.board!} interactive={session.phase === 'select'}
@@ -143,15 +144,15 @@ export default function TutorialHall({ initialLessonId, onClose, reduceMotion, g
                     runStatus={session.run.status} guidedTargetTileIds={target ? [target] : []} onboardingTargetTileIds={target ? [target] : []}
                     combo={session.run.stats.currentStreak} onTileSelect={select} showTutorialPairMarkers={false} />
                 {target && targetBox ? <button key={target} className={styles.target} style={targetBox as CSSProperties} type="button" autoFocus onClick={() => select(target)}
-                    aria-label={`Select highlighted ${targetTile?.suit ? ELEMENT_NAMES[targetTile.suit] : ''} card`} data-testid="tutorial-target" data-target-id={target} data-label-inside={targetBox.top < 32}>
-                    <span>{session.half === 0 ? 'Tap here' : 'Now here'} ↓</span>
+                    aria-label={tr`Select highlighted ${targetTile?.suit ? ELEMENT_NAMES[targetTile.suit] : ''} card`} data-testid="tutorial-target" data-target-id={target} data-label-inside={targetBox.top < 32}>
+                    <span>{session.half === 0 ? tr.s('Tap here') : tr.s('Now here')} ↓</span>
                 </button> : null}
                 <ScreenCalloutQueue callouts={callouts} reduceMotion={reduceMotion} lowQuality={graphicsQuality === 'low'} />
             </div>
             <div className={styles.coach}>
                 <p role="status" aria-live="polite" data-testid="tutorial-instruction">{session.phase === 'complete' ? TUTORIAL_HALL_COPY.complete : session.phase === 'result' ? reactionResult ? `${session.lesson.title}: ${elementReactionResult(reactionResult)}.` : step?.result : session.hint || (session.phase === 'resolve' ? TUTORIAL_HALL_COPY.resolving : session.half === 1 ? TUTORIAL_HALL_COPY.nextCard : step?.instruction)}</p>
-                {session.phase === 'result' ? <UiButton className={styles.coachAction} onClick={next} autoFocus size="md" variant="primary">{session.step + 1 === session.lesson.steps.length ? 'Finish lesson' : 'Next step'}</UiButton> : null}
-                {session.phase === 'complete' ? <UiButton className={styles.coachAction} autoFocus onClick={() => { setCategory(session.lesson.category); setSession(null); }} size="md" variant="primary">Choose a lesson</UiButton> : null}
+                {session.phase === 'result' ? <UiButton className={styles.coachAction} onClick={next} autoFocus size="md" variant="primary">{session.step + 1 === session.lesson.steps.length ? tr.s('Finish lesson') : tr.s('Next step')}</UiButton> : null}
+                {session.phase === 'complete' ? <UiButton className={styles.coachAction} autoFocus onClick={() => { setCategory(session.lesson.category); setSession(null); }} size="md" variant="primary">{tr.s("Choose a lesson")}</UiButton> : null}
             </div>
         </>
     </section>;

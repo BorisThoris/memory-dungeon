@@ -22,6 +22,7 @@
  * The share is measured against the floor's full configured window, never against whatever was
  * left on a resumed timer — otherwise pausing would inflate the payout for free.
  */
+import { tr } from './i18n';
 import { CHAIN_TIER_CLEAN_FROM } from './chain-tier-rules';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -88,8 +89,8 @@ export const memorizeSkipReward = (
  * starting above zero is visible, but only to a player who already knew to look.
  */
 export const MEMORIZE_SKIP_FEEDBACK_COPY = {
-    elapsed: 'Memorize phase over. Find the pairs.',
-    started: 'Started early.',
+    elapsed: tr.s('Memorize phase over. Find the pairs.'),
+    started: tr.s('Started early.'),
     banked: (momentum: number): string =>
-        `Banked ${momentum} momentum on the chain.`
+        tr`Banked ${momentum} momentum on the chain.`
 } as const;

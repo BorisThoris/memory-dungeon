@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { runFilteredArray } from '../../shared/run-array-guards';
 
 /*
@@ -20,7 +21,7 @@ export type TraitInteractionLaneId = 'tool' | 'block' | 'recall' | 'score';
 
 interface TraitInteractionLaneMapEntry {
     id: TraitInteractionLaneId;
-    label: 'Tool' | 'Block' | 'Recall' | 'Score';
+    label: string;
     count: number;
     cue: string;
 }
@@ -28,17 +29,17 @@ interface TraitInteractionLaneMapEntry {
 const TRAIT_INTERACTION_LANE_ORDER: readonly TraitInteractionLaneId[] = ['tool', 'block', 'recall', 'score'];
 
 export const TRAIT_INTERACTION_LANE_LABELS: Record<TraitInteractionLaneId, TraitInteractionLaneMapEntry['label']> = {
-    block: 'Block',
-    recall: 'Recall',
-    score: 'Score',
-    tool: 'Tool'
+    block: tr.s('Block'),
+    recall: tr.s('Recall'),
+    score: tr.s('Score'),
+    tool: tr.s('Tool')
 };
 
 const TRAIT_INTERACTION_LANE_ACTIONS: Record<TraitInteractionLaneId, string> = {
-    block: 'Deny match',
-    recall: 'Set memory',
-    score: 'Cash score',
-    tool: 'Use tool'
+    block: tr.s('Deny match'),
+    recall: tr.s('Set memory'),
+    score: tr.s('Cash score'),
+    tool: tr.s('Use tool')
 };
 
 export const getTraitInteractionLaneAction = (lane: TraitInteractionLaneId): string =>

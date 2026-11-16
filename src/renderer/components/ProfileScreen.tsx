@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { countEligibleHonors, totalHonorUnlocks } from '../../shared/honorUnlocks';
@@ -87,17 +88,17 @@ const ProfileScreen = () => {
     return (
         <MetaShell
             eyebrow="Local profile"
-            label="Profile"
+            label={tr.s("Profile")}
             onBack={() => {
                 resumeUiSfxContext();
                 playUiBackSfx(uiGain);
                 closeSubscreen();
             }}
-            subtitle={`Level ${board.level} · ${honorsEarned} of ${totalHonorUnlocks} honors · ${PROFILE_PROGRESS_COPY.sharpFloors(sharpFloors)} · stored on this device only.`}
+            subtitle={tr`Level ${board.level} · ${honorsEarned} of ${totalHonorUnlocks} honors · ${PROFILE_PROGRESS_COPY.sharpFloors(sharpFloors)} · stored on this device only.`}
             testId="profile-screen"
-            title="Profile"
+            title={tr.s("Profile")}
         >
-            <dl aria-label="Profile summary" className={styles.summary} data-testid="profile-summary-grid">
+            <dl aria-label={tr.s("Profile summary")} className={styles.summary} data-testid="profile-summary-grid">
                 {summaryRows.map((row) => (
                     <div className={styles.summaryCell} key={row.id}>
                         <dt>{row.label}</dt>
@@ -106,17 +107,17 @@ const ProfileScreen = () => {
                 ))}
             </dl>
 
-            <div aria-label="Profile tiers" className={styles.tiers} data-testid="profile-milestone-rail" role="group">
+            <div aria-label={tr.s("Profile tiers")} className={styles.tiers} data-testid="profile-milestone-rail" role="group">
                 {milestones.map((milestone) => (
                     <div className={styles.tier} data-status={milestone.status} key={milestone.tier}>
-                        <span className={styles.tierLevel}>Lv {milestone.level}</span>
+                        <span className={styles.tierLevel}>{tr.s("Lv")} {milestone.level}</span>
                         <strong className={styles.tierTitle}>{milestone.label}</strong>
                         <span className={styles.tierNote}>
                             {milestone.status === 'current'
-                                ? 'Current'
+                                ? tr.s('Current')
                                 : milestone.status === 'reached'
-                                  ? 'Reached'
-                                  : `${milestone.marksRequired} honor marks`}
+                                  ? tr.s('Reached')
+                                  : tr`${milestone.marksRequired} honor marks`}
                         </span>
                     </div>
                 ))}
@@ -258,7 +259,7 @@ const ProfileScreen = () => {
             <div className={styles.footer}>
                 {nextObjective ? (
                     <p className={styles.nextGoal} data-testid="profile-objective-board">
-                        <span className={styles.nextGoalLabel}>Next goal</span>
+                        <span className={styles.nextGoalLabel}>{tr.s("Next goal")}</span>
                         <strong>{nextObjective.title}</strong> {nextObjective.description}
                     </p>
                 ) : null}
@@ -274,7 +275,7 @@ const ProfileScreen = () => {
                         type="button"
                         variant="primary"
                     >
-                        Claim {readyReward.title}
+                        {tr.s("Claim")} {readyReward.title}
                     </UiButton>
                 ) : null}
             </div>

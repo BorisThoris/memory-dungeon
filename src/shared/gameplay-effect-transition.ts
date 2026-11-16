@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RunState } from './contracts';
 import {
     GAMEPLAY_CORE_SCHEMA_VERSION,
@@ -52,29 +53,29 @@ const conditionFailure = (
 ): string | null => {
     switch (condition.kind) {
         case 'run.status_is':
-            return run.status === condition.status ? null : `run status is ${run.status}, expected ${condition.status}`;
+            return run.status === condition.status ? null : tr`run status is ${run.status}, expected ${condition.status}`;
         case 'inventory.at_least':
             return getRunInventoryItemQuantity(run, condition.itemId) >= condition.amount
                 ? null
-                : `${condition.itemId} is below ${condition.amount}`;
+                : tr`${condition.itemId} is below ${condition.amount}`;
         case 'trait.matched':
-            return facts.matchedTraits.includes(condition.trait) ? null : `${condition.trait} was not matched`;
+            return facts.matchedTraits.includes(condition.trait) ? null : tr`${condition.trait} was not matched`;
         case 'trait.adjacent':
-            return facts.adjacentTraits.includes(condition.trait) ? null : `${condition.trait} was not adjacent`;
+            return facts.adjacentTraits.includes(condition.trait) ? null : tr`${condition.trait} was not adjacent`;
         case 'trait.any_matched':
-            return facts.matchedTraits.length > 0 ? null : 'no trait was matched';
+            return facts.matchedTraits.length > 0 ? null : tr.s('no trait was matched');
         case 'streak.at_least':
             return runNonNegativeInteger(normalizeSessionStats(run.stats).currentStreak) >= condition.amount
                 ? null
-                : `clean streak is below ${condition.amount}`;
+                : tr`clean streak is below ${condition.amount}`;
         case 'findable.matched':
-            return facts.matchedFindables.includes(condition.findable) ? null : `${condition.findable} was not matched`;
+            return facts.matchedFindables.includes(condition.findable) ? null : tr`${condition.findable} was not matched`;
         case 'floor.match_resolutions_is':
             return runNonNegativeInteger(run.matchResolutionsThisFloor) === condition.amount
                 ? null
-                : `floor match resolutions are ${runNonNegativeInteger(run.matchResolutionsThisFloor)}, expected ${condition.amount}`;
+                : tr`floor match resolutions are ${runNonNegativeInteger(run.matchResolutionsThisFloor)}, expected ${condition.amount}`;
         case 'featured_objective.completed':
-            return facts.featuredObjectiveCompleted ? null : 'featured objective was not completed';
+            return facts.featuredObjectiveCompleted ? null : tr.s('featured objective was not completed');
     }
 };
 
@@ -90,7 +91,7 @@ export const applyGameplayDefinitionTransition = (
     for (const condition of definition.conditions) {
         const failure = conditionFailure(run, condition, facts);
         if (failure) {
-            const rejectionReason = `Condition failed: ${failure}.`;
+            const rejectionReason = tr`Condition failed: ${failure}.`;
             writeEvent({ type: 'command.rejected', reason: rejectionReason });
             return { run, events, accepted: false, rejectionReason };
         }
@@ -116,7 +117,7 @@ export const applyGameplayDefinitionTransition = (
                     writeEvent({
                         type: 'effect.skipped',
                         effectKind: effect.kind,
-                        reason: `${effect.itemId} could not accept the requested grant.`
+                        reason: tr`${effect.itemId} could not accept the requested grant.`
                     });
                 }
                 break;
@@ -139,7 +140,7 @@ export const applyGameplayDefinitionTransition = (
                     writeEvent({
                         type: 'effect.skipped',
                         effectKind: effect.kind,
-                        reason: used.reason ?? `${effect.itemId} could not be consumed.`
+                        reason: used.reason ?? tr`${effect.itemId} could not be consumed.`
                     });
                 }
                 break;

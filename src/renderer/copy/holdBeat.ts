@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 import type { RunState } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
@@ -11,7 +12,7 @@ export type HoldBeat = { readonly key: string; readonly line: string };
 type HoldFields = Pick<RunState, 'board'> & Partial<Pick<RunState, 'holding' | 'heldSeedIds' | 'holdsReleasedThisFloor'>>;
 
 const held = (run: HoldFields): number => Math.floor((run.heldSeedIds ?? []).length / 2);
-const pairs = (n: number): string => `${n} held ${n === 1 ? 'pair' : 'pairs'}`;
+const pairs = (n: number): string => `${plural(n, { one: '{0} held pair', other: '{0} held pairs' })}`;
 
 /** The beat between two run states, or null when the Hold did nothing between them. */
 export const holdBeat = (before: HoldFields | null | undefined, after: HoldFields): HoldBeat | null => {
@@ -19,13 +20,13 @@ export const holdBeat = (before: HoldFields | null | undefined, after: HoldField
     const level = after.board?.level ?? 0;
     const released = runNonNegativeInteger(after.holdsReleasedThisFloor);
     if (released > runNonNegativeInteger(before.holdsReleasedThisFloor)) {
-        return { key: `hold:${level}:release:${released}`, line: `Released ${pairs(held(before))}: every one breaks at once.` };
+        return { key: `hold:${level}:release:${released}`, line: tr`Released ${pairs(held(before))}: every one breaks at once.` };
     }
     if (after.holding && !before.holding) {
-        return { key: `hold:${level}:start:${released}`, line: 'Holding: the pairs you match keep their pops until you release them.' };
+        return { key: `hold:${level}:start:${released}`, line: tr.s('Holding: the pairs you match keep their pops until you release them.') };
     }
     if (after.holding && before.holding && held(after) < held(before)) {
-        return { key: `hold:${level}:drop:${released}:${held(after)}`, line: `The miss dropped ${held(before) - held(after)} of the stack; ${pairs(held(after))} left.` };
+        return { key: `hold:${level}:drop:${released}:${held(after)}`, line: tr`The miss dropped ${held(before) - held(after)} of the stack; ${pairs(held(after))} left.` };
     }
     return null;
 };

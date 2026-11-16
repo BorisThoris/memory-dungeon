@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { DescentRecordPersisted, RunState } from './contracts';
 import { DESCENT_ACTS, descentActForLevel } from './floor-mutator-schedule';
 import { DREAD_TIERS, dreadForRun, dreadTier } from './dread-rules';
@@ -39,11 +40,11 @@ export const summarizeDescent = (
     const ahead = nextMilestone(floor, run.runRulesVersion);
     const firsts: string[] = [];
     if (recordAtStart) {
-        if (actIndex(act.id) > 0 && actIndex(act.id) > actIndex(recordAtStart.deepestActId)) firsts.push(`first time in ${act.title}`);
-        if (won && recordAtStart.wardenClears === 0) firsts.push('the first Warden felled');
-        if (tierIndex(tier.id) > 0 && tierIndex(tier.id) > tierIndex(recordAtStart.deepestDreadTierId)) firsts.push(`first time at ${tier.name}`);
-        if (floor > recordAtStart.deepestFloor && recordAtStart.deepestFloor > 0) firsts.push(`deepest yet, past floor ${recordAtStart.deepestFloor}`);
-        if (won && runDepth(run) < MAX_DEPTH && runDepth(run) + 1 > recordAtStart.bestDepth) firsts.push(`Depth ${runDepth(run) + 1} opened`);
+        if (actIndex(act.id) > 0 && actIndex(act.id) > actIndex(recordAtStart.deepestActId)) firsts.push(tr`first time in ${act.title}`);
+        if (won && recordAtStart.wardenClears === 0) firsts.push(tr.s('the first Warden felled'));
+        if (tierIndex(tier.id) > 0 && tierIndex(tier.id) > tierIndex(recordAtStart.deepestDreadTierId)) firsts.push(tr`first time at ${tier.name}`);
+        if (floor > recordAtStart.deepestFloor && recordAtStart.deepestFloor > 0) firsts.push(tr`deepest yet, past floor ${recordAtStart.deepestFloor}`);
+        if (won && runDepth(run) < MAX_DEPTH && runDepth(run) + 1 > recordAtStart.bestDepth) firsts.push(tr`Depth ${runDepth(run) + 1} opened`);
     }
     return {
         floor,

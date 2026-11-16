@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import { isEndlessUnlocked, normalizeDescentRecord } from './descent-record';
 import { DESCENT_ACTS } from './floor-mutator-schedule';
 import { DREAD_TIERS } from './dread-rules';
@@ -73,14 +74,14 @@ export const buildProfileSaveShellSummary = (
         runHistoryEntries: buildRunJournalRowsFromSave(save).length,
         runsFinished: runNonNegativeInteger(save.playerStats?.runsFinished),
         sharpFloors: runNonNegativeInteger(save.playerStats?.sharpFloors),
-        saveLocationCopy: 'One profile, saved on this device.',
+        saveLocationCopy: tr.s('One profile, saved on this device.'),
         cloudSyncState: cloudSaveAvailable ? 'available' : 'not_available',
         cloudSyncCopy: cloudSaveAvailable
-            ? 'Platform cloud sync is available for this profile.'
-            : 'Cloud sync is not available in this build, so your progress stays on this device.',
-        exportCopy: 'Sharing a run shares only that run: never an account or personal details.',
-        importCopy: 'Saves from older versions are brought up to date when the game loads them.',
-        resetCopy: 'Reset to defaults changes only settings. Delete all progress, beside it, erases the profile after its own confirmation.'
+            ? tr.s('Platform cloud sync is available for this profile.')
+            : tr.s('Cloud sync is not available in this build, so your progress stays on this device.'),
+        exportCopy: tr.s('Sharing a run shares only that run: never an account or personal details.'),
+        importCopy: tr.s('Saves from older versions are brought up to date when the game loads them.'),
+        resetCopy: tr.s('Reset to defaults changes only settings. Delete all progress, beside it, erases the profile after its own confirmation.')
     };
 };
 
@@ -96,17 +97,17 @@ const descentSummaryRow = (save: SaveData): ProfileSummaryRow => {
     const act = DESCENT_ACTS.find((entry) => entry.id === record.deepestActId);
     const dread = DREAD_TIERS.find((tier) => tier.id === record.deepestDreadTierId);
     const warden = record.wardenClears > 0
-        ? `The Warden fell ${record.wardenClears === 1 ? 'once' : `${record.wardenClears} times`}${isEndlessUnlocked(save) ? ' · Endless open' : ''}`
-        : 'The Warden still stands';
+        ? tr`The Warden fell ${record.wardenClears === 1 ? 'once' : tr`${record.wardenClears} times`}${isEndlessUnlocked(save) ? tr.s(' · Endless open') : ''}`
+        : tr.s('The Warden still stands');
     // The Depths (DGE-025): the deepest one opened rides the Warden's words.
-    const depths = record.bestDepth > 0 ? ` · Depth ${record.bestDepth} open` : '';
+    const depths = record.bestDepth > 0 ? tr` · Depth ${record.bestDepth} open` : '';
     return {
         id: 'descent',
-        label: 'Deepest floor',
+        label: tr.s('Deepest floor'),
         // A cell holds a short value (the landscape phone grid wraps on anything longer); the act, the
         // Warden and the Dread are the source line, which Settings shows under it.
-        value: act ? String(record.deepestFloor) : 'None',
-        source: act ? `${act.title} · ${warden}${depths}${dread ? ` · Dread ${dread.name}` : ''}` : `${warden}${depths}`
+        value: act ? String(record.deepestFloor) : tr.s('None'),
+        source: act ? `${act.title} · ${warden}${depths}${dread ? tr` · Dread ${dread.name}` : ''}` : `${warden}${depths}`
     };
 };
 
@@ -118,15 +119,15 @@ export const getProfileSummaryRows = (save: SaveData): ProfileSummaryRow[] => {
     const title = equippedCosmeticLabel(save, 'title');
     const crest = equippedCosmeticLabel(save, 'crest');
     return [
-        { id: 'profile_level', label: 'Profile level', value: String(summary.profileLevel), source: 'Honor marks' },
-        { id: 'honor_marks', label: 'Honor marks', value: String(summary.honorMarks), source: 'Achievements/dailies/mastery' },
+        { id: 'profile_level', label: tr.s('Profile level'), value: String(summary.profileLevel), source: tr.s('Honor marks') },
+        { id: 'honor_marks', label: tr.s('Honor marks'), value: String(summary.honorMarks), source: tr.s('Achievements/dailies/mastery') },
         /* The source line is shown to the player under the value; it used to print the save field's name. */
-        { id: 'best_score', label: 'Best score', value: runNonNegativeInteger(save.bestScore).toLocaleString('en-US'), source: 'Highest single-run score' },
+        { id: 'best_score', label: tr.s('Best score'), value: runNonNegativeInteger(save.bestScore).toLocaleString('en-US'), source: tr.s('Highest single-run score') },
         {
             id: 'cosmetics',
-            label: 'Title',
-            value: title ?? 'None',
-            source: `${crest ?? 'No crest'} · ${summary.cosmeticOwned} owned`
+            label: tr.s('Title'),
+            value: title ?? tr.s('None'),
+            source: tr`${crest ?? tr.s('No crest')} · ${summary.cosmeticOwned} owned`
         },
         /*
          * Two different numbers on one row, because the difference is the point and a seventh row
@@ -138,9 +139,9 @@ export const getProfileSummaryRows = (save: SaveData): ProfileSummaryRow[] => {
          */
         {
             id: 'history',
-            label: 'Recent runs kept',
+            label: tr.s('Recent runs kept'),
             value: String(summary.runHistoryEntries),
-            source: `of ${summary.runsFinished} runs finished`
+            source: tr`of ${summary.runsFinished} runs finished`
         },
         /*
          * The Descent (DGE-031) takes the sixth cell: the Sharp-floor count it held is the screen's subtitle
@@ -158,31 +159,31 @@ export const getSaveTrustRows = (
     return [
         {
             id: 'slot_scope',
-            label: 'Single local profile',
+            label: tr.s('Single local profile'),
             status: 'active',
             description: summary.saveLocationCopy
         },
         {
             id: 'cloud_sync',
-            label: 'Cloud sync',
+            label: tr.s('Cloud sync'),
             status: summary.cloudSyncState === 'available' ? 'active' : 'deferred',
             description: summary.cloudSyncCopy
         },
         {
             id: 'export_import',
-            label: 'Sharing and older saves',
+            label: tr.s('Sharing and older saves'),
             status: 'manual',
             description: `${summary.exportCopy} ${summary.importCopy}`
         },
         {
             id: 'backup',
-            label: 'Backups',
+            label: tr.s('Backups'),
             status: 'manual',
-            description: 'To keep a backup, or to play on another device, export your progress under About › Move progress.'
+            description: tr.s('To keep a backup, or to play on another device, export your progress under About › Move progress.')
         },
         {
             id: 'reset',
-            label: 'Resetting',
+            label: tr.s('Resetting'),
             status: 'manual',
             description: summary.resetCopy
         }

@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 /**
  * The Settings line about crash reports.
  *
@@ -6,10 +7,10 @@
  * promise, because "crash reports" alone reads like telemetry.
  */
 export const DIAGNOSTICS_COPY = {
-    hint: 'Reports stay on this machine. Attach one if you write in about a problem.',
-    label: 'Crash reports',
+    hint: tr.s('Reports stay on this machine. Attach one if you write in about a problem.'),
+    label: tr.s('Crash reports'),
     /** Shown when nothing has gone wrong, so the row is not a permanent empty space. */
-    none: 'No crash reports from earlier sessions.'
+    none: tr.s('No crash reports from earlier sessions.')
 } as const;
 
 /**
@@ -18,6 +19,6 @@ export const DIAGNOSTICS_COPY = {
  * is an invitation to edit it by hand.
  */
 export const SAVE_FILE_COPY = {
-    reveal: 'Show save file',
-    revealAriaLabel: 'Show the save file in the file manager'
+    reveal: tr.s('Show save file'),
+    revealAriaLabel: tr.s('Show the save file in the file manager')
 } as const;

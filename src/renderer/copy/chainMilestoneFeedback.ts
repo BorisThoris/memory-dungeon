@@ -1,11 +1,12 @@
+import { tr } from '../../shared/i18n';
 import { chainRungScoreMultiplier } from '../../shared/chain-rung-value-rules';
 import type { ChainTier } from '../../shared/chain-tier-rules';
 
 export type ChainMilestoneFeedback = {
-    action: 'Hold the chain' | 'Carry it into the next clump' | 'Keep the fire';
+    action: string;
     audioCue: 'chain-start-ping' | 'surge-hit-ping' | 'combo-hit-ping';
     beatCount: 3 | 4 | 5;
-    label: 'Clean reached' | 'Sharp reached' | 'Fever reached';
+    label: string;
     screenCue: 'reward-loop' | 'surge-live' | 'combo-live';
     /** What the rung pays per pair a break takes, as the chain rail prints it (`×2`). */
     target: string;
@@ -16,9 +17,9 @@ export type ChainMilestoneFeedback = {
 const TIER_ORDER: readonly ChainTier[] = ['none', 'clean', 'sharp', 'fever'];
 
 const MILESTONES: Record<Exclude<ChainTier, 'none'>, Omit<ChainMilestoneFeedback, 'target' | 'value'>> = {
-    clean: { action: 'Hold the chain', audioCue: 'chain-start-ping', beatCount: 3, label: 'Clean reached', screenCue: 'reward-loop', tone: 'chain' },
-    sharp: { action: 'Carry it into the next clump', audioCue: 'surge-hit-ping', beatCount: 4, label: 'Sharp reached', screenCue: 'surge-live', tone: 'surge' },
-    fever: { action: 'Keep the fire', audioCue: 'combo-hit-ping', beatCount: 5, label: 'Fever reached', screenCue: 'combo-live', tone: 'combo' }
+    clean: { action: tr.s('Hold the chain'), audioCue: 'chain-start-ping', beatCount: 3, label: tr.s('Clean reached'), screenCue: 'reward-loop', tone: 'chain' },
+    sharp: { action: tr.s('Carry it into the next clump'), audioCue: 'surge-hit-ping', beatCount: 4, label: tr.s('Sharp reached'), screenCue: 'surge-live', tone: 'surge' },
+    fever: { action: tr.s('Keep the fire'), audioCue: 'combo-hit-ping', beatCount: 5, label: tr.s('Fever reached'), screenCue: 'combo-live', tone: 'combo' }
 };
 
 /**
@@ -44,6 +45,6 @@ export const getChainMilestoneFeedback = (
     return {
         ...MILESTONES[tier],
         target: `×${multiplier}`,
-        value: `Every pair a break takes pays ×${multiplier}`
+        value: tr`Every pair a break takes pays ×${multiplier}`
     };
 };

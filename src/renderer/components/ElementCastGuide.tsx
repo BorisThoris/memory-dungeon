@@ -1,3 +1,5 @@
+import { COMPONENT_PROSE } from '../copy/componentProse';
+import { tr } from '../../shared/i18n';
 import { useId } from 'react';
 import type { RunState } from '../../shared/contracts';
 import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
@@ -20,11 +22,11 @@ export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board
     const lastCast = run.board?.elementCast;
     const multiplier = CHAIN_MULT[runChainTier(run)];
     return <>
-        <button className={styles.trigger} type="button" popoverTarget={id} aria-label="How elemental matches work" data-testid="element-cast-guide">Casts</button>
-        <div id={id} className={styles.panel} popover="auto" role="dialog" aria-label="Elemental cast rules" data-testid="element-cast-rules"
+        <button className={styles.trigger} type="button" popoverTarget={id} aria-label={tr.s("How elemental matches work")} data-testid="element-cast-guide">{tr.s("Casts")}</button>
+        <div id={id} className={styles.panel} popover="auto" role="dialog" aria-label={tr.s("Elemental cast rules")} data-testid="element-cast-rules"
             onToggle={(event) => { event.currentTarget.dataset.castGuideOpen = String(event.newState === 'open'); }}>
             <div className={styles.content} data-testid="element-cast-scroll">
-                <strong className={styles.heading}>Every pair casts</strong>
+                <strong className={styles.heading}>{tr.s("Every pair casts")}</strong>
                 <div className={styles.grid}>{TILE_SUITS.map(suit => {
                     const pending = pendingElementReaction(run, suit);
                     const focus = focusOf(run, suit);
@@ -32,26 +34,26 @@ export function ElementCastGuide({ run }: { run: Pick<RunState, 'stats' | 'board
                     return <div className={styles.rule} key={suit}>
                         <strong><span aria-hidden="true">{getTileSuit(suit).rune} </span>{ELEMENT_NAMES[suit]}</strong>
                         <span>{ELEMENT_ACTION[suit]}</span>
-                        <small>{suit === 'tide' ? elementWashCapacity(power) : power.targets}+ cards · +{power.extraReach} reach</small>
+                        <small>{suit === 'tide' ? elementWashCapacity(power) : power.targets}{tr.s("+ cards · +")}{power.extraReach} reach</small>
                         {pending ? <span className={styles.preview} data-testid={`element-next-${suit}`}><strong>{pending.definition.name} ×{pending.potency}</strong><br />{elementReactionSummary(pending.definition.kind, pending.potency)}</span> : null}
                         {focus > 0 ? <small>{focusSummary(suit, focus)}</small> : null}
                     </div>;
                 })}</div>
-                <p className={styles.formula}>Same element twice → switch element. A miss breaks the streak.</p>
-                {openTutorial ? <div className={styles.recipes} aria-label="Practise combinations">{Object.values(ELEMENT_REACTIONS).map(reaction => <button type="button" key={reaction.kind} onClick={() => openTutorial(reaction.kind)}>
+                <p className={styles.formula}>{COMPONENT_PROSE.elementCastGuideSameElementTwiceSwitch}</p>
+                {openTutorial ? <div className={styles.recipes} aria-label={tr.s("Practise combinations")}>{Object.values(ELEMENT_REACTIONS).map(reaction => <button type="button" key={reaction.kind} onClick={() => openTutorial(reaction.kind)}>
                     <span>{reaction.elements.map(suit => ELEMENT_NAMES[suit]).join(' + ')}</span><strong>{reaction.name} ↗</strong>
                 </button>)}</div> : null}
                 {run.realmId ? <span className={styles.arena}>{ARENA_ACTION[run.realmId]}</span> : null}
                 {run.realmSecondaryId ? <span>{ARENA_ACTION[run.realmSecondaryId]}</span> : null}
-                {lastCast ? <details className={styles.receipt} data-testid="element-cast-receipt"><summary>Last match · {ELEMENT_NAMES[lastCast.suit]}{lastCast.reaction ? ` + ${lastCast.reaction}` : ''}</summary>
+                {lastCast ? <details className={styles.receipt} data-testid="element-cast-receipt"><summary>{tr.s("Last match ·")} {ELEMENT_NAMES[lastCast.suit]}{lastCast.reaction ? ` + ${lastCast.reaction}` : ''}</summary>
                     {lastCast.reactions?.map(reaction => <div className={styles.reactionResult} key={`${reaction.scope}:${reaction.kind}`} data-testid={`reaction-result-${reaction.scope}`}>
-                        <strong>{reaction.scope === 'ground' ? 'Ground' : 'Amplified'} · {ELEMENT_REACTIONS[reaction.kind].name} ×{reaction.potency}</strong>
+                        <strong>{reaction.scope === 'ground' ? tr.s('Ground') : tr.s('Amplified')} · {ELEMENT_REACTIONS[reaction.kind].name} ×{reaction.potency}</strong>
                         <span>{elementReactionResult(reaction)}</span>
                     </div>)}
                     <p>{lastCast.detail}</p>
                 </details> : null}
             </div>
-            <div className={styles.actions}>{openTutorial ? <button className={styles.close} type="button" onClick={() => openTutorial()}>Tutorial Hall</button> : null}<button className={styles.close} type="button" popoverTarget={id} popoverTargetAction="hide">Back</button></div>
+            <div className={styles.actions}>{openTutorial ? <button className={styles.close} type="button" onClick={() => openTutorial()}>{tr.s("Tutorial Hall")}</button> : null}<button className={styles.close} type="button" popoverTarget={id} popoverTargetAction="hide">{tr.s("Back")}</button></div>
         </div>
     </>;
 }

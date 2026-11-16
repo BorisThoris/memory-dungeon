@@ -1,7 +1,12 @@
-import { activateContentLockFromEnv } from '../shared/content-lock';
-import { bootstrapWebRenderer } from './initRendererShell';
+import { loadBootLocale } from './i18n/bootLocale';
+import { registerServiceWorker } from './serviceWorker';
 
-// The build flavour decides what the demo ships; it must be set before any screen reads the catalog.
-activateContentLockFromEnv(import.meta.env.VITE_BUILD_FLAVOUR);
+registerServiceWorker();
 
-bootstrapWebRenderer();
+/*
+ * The language first, then everything else: copy modules build their text when they evaluate, so
+ * the catalog has to be installed before any of them is imported (docs/LOCALIZATION_PLAN.md).
+ */
+void loadBootLocale()
+    .catch((error: unknown) => console.error('[i18n] boot locale failed; continuing in English', error))
+    .then(() => import('./mainAfterLocale'));

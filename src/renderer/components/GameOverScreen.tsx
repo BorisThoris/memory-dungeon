@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { summarizeDescent } from '../../shared/descent-run-summary';
 import { normalizeDescentRecord } from '../../shared/descent-record';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -236,7 +237,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                 eligible={!summary.practiceMode && !run.debugUsed && (summary.achievementsEnabled || passAndPlayOutcome !== null)} />
             <p
                 aria-atomic="true"
-                aria-label="Run summary announcement"
+                aria-label={tr.s("Run summary announcement")}
                 aria-live="polite"
                 className={styles.visuallyHidden}
                 role="status"
@@ -385,7 +386,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                     </Panel>
 
                     <details className={styles.runDetails} data-testid="game-over-run-details">
-                        <summary>Run details</summary>
+                        <summary>{tr.s("Run details")}</summary>
                         <div className={styles.detailsBody}>
                             {/* The rules this run ran under: a fact the score means nothing without. */}
                             <p className={styles.copy} data-testid="game-over-mode-identity">
@@ -466,7 +467,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
 
                             {contentLock.flavour === 'demo' ? (
                                 <Panel padding="lg" variant="default" data-testid="game-over-demo-ledger">
-                                    <span className={styles.panelKicker}>The full game adds</span>
+                                    <span className={styles.panelKicker}>{tr.s("The full game adds")}</span>
                                     <ul className={styles.demoLedger}>
                                         {contentLock.fullGameLedger.map((line) => (
                                             <li key={line}>{line}</li>
@@ -480,7 +481,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                                             rel="noopener noreferrer"
                                             target="_blank"
                                         >
-                                            Wishlist on Steam
+                                            {tr.s("Wishlist on Steam")}
                                         </a>
                                     ) : null}
                                 </Panel>

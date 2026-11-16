@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RunState, Tile, TileSuit } from './contracts';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -38,10 +39,10 @@ export const FOCUS_ESSENCE_COST = 2;
 export const PRIME_ESSENCE_COST = 1;
 
 export const FOCUS_EFFECTS: Readonly<Record<TileSuit, string>> = {
-    ember: 'Convert one burning card reached by your cast into charge per rank. Charge powers its next match.',
-    tide: 'Reveal one card affected by your current per rank until the next flip.',
-    bone: 'Every Frost cast banks one calm turn per rank, pausing arena hazards.',
-    moss: 'Ripen one seed reached by your cast per rank into a 2-gold bloom. Fire can burn it away.'
+    ember: tr.s('Convert one burning card reached by your cast into charge per rank. Charge powers its next match.'),
+    tide: tr.s('Reveal one card affected by your current per rank until the next flip.'),
+    bone: tr.s('Every Frost cast banks one calm turn per rank, pausing arena hazards.'),
+    moss: tr.s('Ripen one seed reached by your cast per rank into a 2-gold bloom. Fire can burn it away.')
 };
 
 /** Applied to the real cast's targets, after elemental resistances and movement. */

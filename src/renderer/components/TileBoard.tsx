@@ -1,3 +1,5 @@
+import { COMPONENT_PROSE } from '../copy/componentProse';
+import { startsWithCopyPrefix, tr } from '../../shared/i18n';
 import { boardDealKey } from '../../shared/board-layers-rules';
 import { boardFitFrame, boardGridWorldSize } from './tileBoardResponsiveLayout';
 import { colossusFitLift, colossusReservedRows } from './colossusStoneLayout';
@@ -442,10 +444,10 @@ interface MouseDragSnapshot {
 const MOUSE_PAN_DRAG_THRESHOLD_PX = 8;
 const EMPTY_TILE_IDS: ReadonlySet<string> = new Set();
 const BOARD_MARKER_READABILITY_CONTRACT =
-    'hidden selected matched disabled findable trait chain-ready chain-surge chain-reward-hot chain-setup trait-combo trait-combo-surge trait-payoff-stack trait-route-target selected-followup';
-const BOARD_MARKER_SHAPE_CONTRACT = 'linked-route combo-surge payoff-bar payoff-stack swap-target-crossbar followup-target';
-const BOARD_MARKER_ACTION_CUE_CONTRACT = 'bank-lane build-lane cash-now follow-up route-setup';
-const BOARD_MARKER_ACTION_PRIORITY_CONTRACT = 'cash-now follow-up build-lane route-setup bank-lane';
+    tr.s('hidden selected matched disabled findable trait chain-ready chain-surge chain-reward-hot chain-setup trait-combo trait-combo-surge trait-payoff-stack trait-route-target selected-followup');
+const BOARD_MARKER_SHAPE_CONTRACT = tr.s('linked-route combo-surge payoff-bar payoff-stack swap-target-crossbar followup-target');
+const BOARD_MARKER_ACTION_CUE_CONTRACT = tr.s('bank-lane build-lane cash-now follow-up route-setup');
+const BOARD_MARKER_ACTION_PRIORITY_CONTRACT = tr.s('cash-now follow-up build-lane route-setup bank-lane');
 /*
  * Gen 213: this read 'shard guard tool risk block recall score' and was cast to the lane id type
  * to make it compile. Gen 202 cut the shard, guard and risk lanes; `TraitInteractionLaneId` and
@@ -465,48 +467,48 @@ const BOARD_MARKER_ROUTE_GLYPH_CONTRACT = CARD_FEEDBACK_ROUTE_GLYPH_CONTRACT;
 const PRELOAD_READY_TIMEOUT_MS = 320;
 
 const CARD_ACTION_PRIORITY_LABELS: Record<string, string> = {
-    'bank-lane': 'Bank lane',
-    'build-lane': 'Route prime',
-    'cash-now': 'Cash now',
-    'follow-up': 'Follow-up',
-    'route-setup': 'Route prime'
+    'bank-lane': tr.s('Bank lane'),
+    'build-lane': tr.s('Route prime'),
+    'cash-now': tr.s('Cash now'),
+    'follow-up': tr.s('Follow-up'),
+    'route-setup': tr.s('Route prime')
 };
 const CARD_ACTION_SHOT_LABELS: Record<string, string> = {
-    'bank-lane': 'Bank',
-    'build-lane': 'Build',
-    'cash-now': 'Cash',
-    'follow-up': 'Tap',
-    'route-setup': 'Set'
+    'bank-lane': tr.s('Bank'),
+    'build-lane': tr.s('Build'),
+    'cash-now': tr.s('Cash'),
+    'follow-up': tr.s('Tap'),
+    'route-setup': tr.s('Set')
 };
 const CARD_ACTION_SHOT_DETAILS: Record<string, string> = {
-    'bank-lane': 'Reward lane',
-    'build-lane': 'Route lane',
-    'cash-now': 'Cashout lane',
-    'follow-up': 'Next tap',
-    'route-setup': 'Setup lane'
+    'bank-lane': tr.s('Reward lane'),
+    'build-lane': tr.s('Route lane'),
+    'cash-now': tr.s('Cashout lane'),
+    'follow-up': tr.s('Next tap'),
+    'route-setup': tr.s('Setup lane')
 };
 const CARD_FEEDBACK_BEAT_PRIORITY = ['cashout', 'surge', 'follow-up', 'route', 'setup'] as const;
 const CARD_FEEDBACK_BEAT_LABELS: Record<(typeof CARD_FEEDBACK_BEAT_PRIORITY)[number], string> = {
-    cashout: 'Cashout',
-    'follow-up': 'Follow-up',
-    route: 'Route',
-    setup: 'Prime',
-    surge: 'Surge'
+    cashout: tr.s('Cashout'),
+    'follow-up': tr.s('Follow-up'),
+    route: tr.s('Route'),
+    setup: tr.s('Prime'),
+    surge: tr.s('Surge')
 };
 const CARD_FEEDBACK_BEAT_ACTIONS: Record<(typeof CARD_FEEDBACK_BEAT_PRIORITY)[number], string> = {
-    cashout: 'hit now',
-    'follow-up': 'tap next',
-    route: 'build chain',
-    setup: 'set route',
-    surge: 'chain routes'
+    cashout: tr.s('hit now'),
+    'follow-up': tr.s('tap next'),
+    route: tr.s('build chain'),
+    setup: tr.s('set route'),
+    surge: tr.s('chain routes')
 };
 const CARD_FEEDBACK_CADENCE_PRIORITY = ['cashout', 'surge', 'follow-up', 'route', 'prime'] as const;
 const CARD_FEEDBACK_CADENCE_LABELS: Record<(typeof CARD_FEEDBACK_CADENCE_PRIORITY)[number], string> = {
-    cashout: 'Cashout',
-    'follow-up': 'Follow-up',
-    prime: 'Prime',
-    route: 'Route',
-    surge: 'Surge'
+    cashout: tr.s('Cashout'),
+    'follow-up': tr.s('Follow-up'),
+    prime: tr.s('Prime'),
+    route: tr.s('Route'),
+    surge: tr.s('Surge')
 };
 const CARD_FEEDBACK_CADENCE_BEATS: Record<(typeof CARD_FEEDBACK_CADENCE_PRIORITY)[number], 2 | 3 | 4 | 5> = {
     cashout: 5,
@@ -905,7 +907,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             .join(';');
         if (next) {
             // Keep the reduced-motion feedback test hook in lockstep with resolution state.
-            // eslint-disable-next-line react-hooks/set-state-in-effect
+             
             setLastResolutionFeedback(next);
         }
     }, [board, runStatus]);
@@ -1169,7 +1171,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         () =>
             cardFeedbackActionPriorityRows.map((row) => ({
                 ...row,
-                detail: CARD_ACTION_SHOT_DETAILS[row.id] ?? 'Action lane',
+                detail: CARD_ACTION_SHOT_DETAILS[row.id] ?? tr.s('Action lane'),
                 shotLabel: CARD_ACTION_SHOT_LABELS[row.id] ?? row.label
             })),
         [cardFeedbackActionPriorityRows]
@@ -1253,7 +1255,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 actionByLane.get(id as TraitInteractionLaneId) ??
                 (CARD_TRAIT_LANE_ORDER_SET.has(id as TraitInteractionLaneId)
                     ? getTraitInteractionLaneAction(id as TraitInteractionLaneId)
-                    : 'trait route'),
+                    : tr.s('trait route')),
             beatCount: beatCounts.get(id) ?? getTraitLaneFeedbackBeatCount(id as Parameters<typeof getTraitLaneFeedbackBeatCount>[0]),
             count,
             id,
@@ -1392,15 +1394,15 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             examples.add(getFindableRewardText(tile.findableKind).replace(/\.$/, ''));
         }
         const count = pickupPairs.size;
-        const valueLabel = count === 1 ? '1 reward' : `${count} rewards`;
-        const target = count > 0 ? 'Claim before exit' : '';
+        const valueLabel = count === 1 ? tr.s('1 reward') : tr`${count} rewards`;
+        const target = count > 0 ? tr.s('Claim before exit') : '';
         const visibleExamples = [...examples].slice(0, 2);
         const sequenceCue =
             count > 0
                 ? {
                       first: target,
                       keep: visibleExamples[0] ?? valueLabel,
-                      then: 'Bank pickup reward',
+                      then: tr.s('Bank pickup reward'),
                       tone: 'reward' as const
                   }
                 : null;
@@ -1482,48 +1484,48 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             }
         }
 
-        const setupAction = setupCount > 0 && traitRouteHintText?.startsWith('Swap ') ? 'Use swap' : null;
+        const setupAction = setupCount > 0 && startsWithCopyPrefix(traitRouteHintText, 'Swap {0} with {1}: {2}') ? tr.s('Use swap') : null;
         const chainReadyCount = readyExamples.size;
         const chainReadyTileCount = traitOpportunityTileIds.size;
         const milestonePreview = chainContext ? getChainMilestonePreview(chainContext.currentStreak) : null;
         const milestoneTargetLabel = milestonePreview
             ? milestonePreview.distance <= 0
                 ? milestonePreview.distanceLabel
-                : `${milestonePreview.distanceLabel} to ${milestonePreview.target}`
+                : tr`${milestonePreview.distanceLabel} to ${milestonePreview.target}`
             : null;
         const readyRouteLabel =
-            chainReadyCount === 1 ? '1 route ready' : chainReadyCount > 1 ? `${chainReadyCount} routes ready` : null;
+            chainReadyCount === 1 ? tr.s('1 route ready') : chainReadyCount > 1 ? tr`${chainReadyCount} routes ready` : null;
         const readyCardLabel =
             chainReadyTileCount > 0
                 ? chainReadyTileCount === 1
-                    ? '1 card lit'
-                    : `${chainReadyTileCount} cards lit`
+                    ? tr.s('1 card lit')
+                    : tr`${chainReadyTileCount} cards lit`
                 : null;
         const selectedFollowupCount = selectedTraitFollowupTileIds.length;
         const selectedFollowupLabel =
             selectedFollowupCount > 0
                 ? selectedFollowupCount === 1
-                    ? '1 follow-up marked'
-                    : `${selectedFollowupCount} follow-ups marked`
+                    ? tr.s('1 follow-up marked')
+                    : tr`${selectedFollowupCount} follow-ups marked`
                 : null;
         const followupReady = selectedFollowupCount > 0;
         const activeRouteReady = chainReadyCount > 0 || followupReady;
-        const comboSurgeLabel = chainReadyCount > 1 ? 'Combo surge' : null;
+        const comboSurgeLabel = chainReadyCount > 1 ? tr.s('Combo surge') : null;
         const priorityLabel = followupReady
-            ? 'Follow-up ready'
+            ? tr.s('Follow-up ready')
             : chainReadyCount > 0
-              ? 'Chain play'
+              ? tr.s('Chain play')
               : setupCount > 0
-                ? 'Prime route'
+                ? tr.s('Prime route')
                 : null;
         const nextTarget = followupReady
-            ? 'Tap marked follow-up'
+            ? tr.s('Tap marked follow-up')
             : chainReadyCount > 0
-              ? 'Keep streak alive'
+              ? tr.s('Keep streak alive')
               : setupAction
-                ? `${setupAction} to connect route`
+                ? tr`${setupAction} to connect route`
                 : setupCount > 0
-                  ? 'Move traits together'
+                  ? tr.s('Move traits together')
                   : null;
         const lines = [
             readyRouteLabel,
@@ -1531,14 +1533,14 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             selectedFollowupLabel,
             comboSurgeLabel,
             setupAction,
-            setupCount > 0 ? `${setupCount} primed` : null
+            setupCount > 0 ? tr`${setupCount} primed` : null
         ].filter((line): line is string => line != null);
         const cue = followupReady
-            ? 'Follow up'
+            ? tr.s('Follow up')
             : chainReadyCount > 0
-              ? 'Match now'
+              ? tr.s('Match now')
               : setupCount > 0
-                ? 'Prime move'
+                ? tr.s('Prime move')
                 : '';
         const tone = activeRouteReady ? 'ready' : 'setup';
         const setupHint = setupCount > 0 ? traitRouteHintText : null;
@@ -1558,19 +1560,19 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 : 'idle' as const;
         const nextActionLabel =
             nextActionId === 'follow-up'
-                ? 'Do next: follow-up'
+                ? tr.s('Do next: follow-up')
                 : nextActionId === 'match-route'
-                  ? 'Do next: match route'
+                  ? tr.s('Do next: match route')
                   : nextActionId === 'prime-route'
-                    ? 'Do next: prime route'
+                    ? tr.s('Do next: prime route')
                     : null;
         const nextActionDetail =
             nextActionId === 'follow-up'
-                ? selectedFollowupLabel ?? nextTarget ?? 'Tap marked follow-up'
+                ? selectedFollowupLabel ?? nextTarget ?? tr.s('Tap marked follow-up')
                 : nextActionId === 'match-route'
-                  ? examples[0] ?? nextTarget ?? 'Match lit route'
+                  ? examples[0] ?? nextTarget ?? tr.s('Match lit route')
                   : nextActionId === 'prime-route'
-                    ? setupHint ?? nextTarget ?? 'Move traits together'
+                    ? setupHint ?? nextTarget ?? tr.s('Move traits together')
                     : null;
         const nextActionTone =
             nextActionId === 'prime-route'
@@ -1578,34 +1580,34 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 : nextActionId === 'idle'
                   ? 'idle' as const
                   : 'ready' as const;
-        const momentumLabel = chainContext && chainContext.currentStreak > 0 ? `${chainContext.currentStreak} in a row` : null;
+        const momentumLabel = chainContext && chainContext.currentStreak > 0 ? tr`${chainContext.currentStreak} in a row` : null;
         const targetPlanLabel =
             activeRouteReady && chainContext
                 ? getChainTargetFeedback(chainContext.currentStreak, getChainTier(chainContext.momentum, board.pairCount)).value
                 : null;
         const arcadeCallout = comboSurgeLabel
             ? {
-                  label: 'Surge chain',
+                  label: tr.s('Surge chain'),
                   tone: 'surge' as const,
-                  value: readyCardLabel ?? readyRouteLabel ?? 'Multiple routes'
+                  value: readyCardLabel ?? readyRouteLabel ?? tr.s('Multiple routes')
               }
             : followupReady
               ? {
-                    label: 'Follow-up',
+                    label: tr.s('Follow-up'),
                     tone: 'ready' as const,
-                    value: selectedFollowupLabel ?? 'Marked card'
+                    value: selectedFollowupLabel ?? tr.s('Marked card')
                 }
               : chainReadyCount > 0
                 ? {
-                      label: 'Chain shot',
+                      label: tr.s('Chain shot'),
                       tone: 'ready' as const,
-                      value: readyCardLabel ?? readyRouteLabel ?? 'Match lit route'
+                      value: readyCardLabel ?? readyRouteLabel ?? tr.s('Match lit route')
                   }
                 : setupCount > 0
                   ? {
-                        label: 'Prime shot',
+                        label: tr.s('Prime shot'),
                         tone: 'setup' as const,
-                        value: setupAction ?? 'Move traits together'
+                        value: setupAction ?? tr.s('Move traits together')
                     }
                   : null;
         const beatSignal = getChainOpportunityBeatSignal({
@@ -1688,12 +1690,12 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             return {
                 detail:
                     boardChainOpportunity.chainReadyCount === 1
-                        ? '1 route ready'
-                        : `${boardChainOpportunity.chainReadyCount} routes ready`,
-                nextReward: boardChainOpportunity.nextTarget ?? 'Match highlighted traits',
+                        ? tr.s('1 route ready')
+                        : tr`${boardChainOpportunity.chainReadyCount} routes ready`,
+                nextReward: boardChainOpportunity.nextTarget ?? tr.s('Match highlighted traits'),
                 label: 'Trait mode',
                 tone: 'surge',
-                value: 'Surge live'
+                value: tr.s('Surge live')
             };
         }
         if (boardChainOpportunity.chainReadyCount > 0 || boardChainOpportunity.selectedFollowupCount > 0) {
@@ -1702,20 +1704,20 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     boardChainOpportunity.selectedFollowupLabel ??
                     boardChainOpportunity.examples[0] ??
                     boardChainOpportunity.nextTarget ??
-                    'Match highlighted traits',
-                nextReward: boardChainOpportunity.nextTarget ?? 'Keep the chain alive',
+                    tr.s('Match highlighted traits'),
+                nextReward: boardChainOpportunity.nextTarget ?? tr.s('Keep the chain alive'),
                 label: 'Trait mode',
                 tone: 'ready',
-                value: boardChainOpportunity.selectedFollowupCount > 0 ? 'Follow-up live' : 'Route live'
+                value: boardChainOpportunity.selectedFollowupCount > 0 ? tr.s('Follow-up live') : tr.s('Route live')
             };
         }
         if (boardChainOpportunity.setupCount > 0) {
             return {
-                detail: boardChainOpportunity.setupHint ?? boardChainOpportunity.nextTarget ?? 'Move traits together',
-                nextReward: boardChainOpportunity.nextTarget ?? 'Move traits together',
+                detail: boardChainOpportunity.setupHint ?? boardChainOpportunity.nextTarget ?? tr.s('Move traits together'),
+                nextReward: boardChainOpportunity.nextTarget ?? tr.s('Move traits together'),
                 label: 'Trait mode',
                 tone: 'setup',
-                value: 'Prime route'
+                value: tr.s('Prime route')
             };
         }
         return null;
@@ -1731,17 +1733,17 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         }
         if (boardChainOpportunity.selectedFollowupCount > 0) {
             return {
-                first: boardChainOpportunity.nextTarget ?? 'Tap marked follow-up',
-                keep: boardChainOpportunity.targetPlanLabel ?? 'Keep chain target live',
-                then: boardChainOpportunity.examples[0] ?? 'Resolve trait route',
+                first: boardChainOpportunity.nextTarget ?? tr.s('Tap marked follow-up'),
+                keep: boardChainOpportunity.targetPlanLabel ?? tr.s('Keep chain target live'),
+                then: boardChainOpportunity.examples[0] ?? tr.s('Resolve trait route'),
                 tone: 'followup'
             };
         }
         if (boardChainOpportunity.setupCount > 0) {
             return {
-                first: boardChainOpportunity.nextActionDetail ?? boardChainOpportunity.nextTarget ?? 'Prime route',
-                keep: 'Keep reward stack primed',
-                then: 'Match lit route',
+                first: boardChainOpportunity.nextActionDetail ?? boardChainOpportunity.nextTarget ?? tr.s('Prime route'),
+                keep: tr.s('Keep reward stack primed'),
+                then: tr.s('Match lit route'),
                 tone: 'setup'
             };
         }
@@ -1763,38 +1765,38 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             return tileSwapFirstTileId
                 ? {
                       beats: 2,
-                      label: 'Swap armed',
-                      detail: 'Place target',
-                      first: 'Pick target',
-                      then: 'Preview route payoff',
+                      label: tr.s('Swap armed'),
+                      detail: tr.s('Place target'),
+                      first: tr.s('Pick target'),
+                      then: tr.s('Preview route payoff'),
                       tone: 'setup'
                   }
                 : {
                       beats: 2,
-                      label: 'Swap armed',
-                      detail: 'Pick first tile',
-                      first: 'Pick source',
-                      then: 'Move into combo route',
+                      label: tr.s('Swap armed'),
+                      detail: tr.s('Pick first tile'),
+                      first: tr.s('Pick source'),
+                      then: tr.s('Move into combo route'),
                       tone: 'setup'
                   };
         }
         if (peekPowerVisualActive) {
             return {
                 beats: 3,
-                label: 'Peek armed',
-                detail: 'Tap hidden tile',
-                first: 'Reveal one',
-                then: 'Lock memory route',
+                label: tr.s('Peek armed'),
+                detail: tr.s('Tap hidden tile'),
+                first: tr.s('Reveal one'),
+                then: tr.s('Lock memory route'),
                 tone: 'recall'
             };
         }
         if (pinModeBoardHintActive) {
             return {
                 beats: 3,
-                label: 'Pin mode',
-                detail: 'Mark memory',
-                first: 'Pin clue',
-                then: 'Return for pair',
+                label: tr.s('Pin mode'),
+                detail: tr.s('Mark memory'),
+                first: tr.s('Pin clue'),
+                then: tr.s('Return for pair'),
                 tone: 'recall'
             };
         }
@@ -1822,7 +1824,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     detail: recoveryContext.detail,
                     id: 'recovery',
                     impactCue: recoveryContext.impactCue,
-                    label: 'Recovery',
+                    label: tr.s('Recovery'),
                     tone: recoveryContext.tone,
                     value: recoveryContext.value
                 });
@@ -1830,7 +1832,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
             if (boardChainOpportunity.chainReadyTileCount > 0 || boardChainOpportunity.selectedFollowupCount > 0) {
                 rows.push({
-                    action: boardChainOpportunity.selectedFollowupCount > 0 ? 'Follow up' : 'Match',
+                    action: boardChainOpportunity.selectedFollowupCount > 0 ? tr.s('Follow up') : tr.s('Match'),
                     detail: [
                         boardChainOpportunity.selectedFollowupLabel,
                         boardChainOpportunity.nextTarget,
@@ -1840,45 +1842,45 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     ].filter(Boolean).join(' / '),
                     id: 'chain',
                     impactCue: boardChainOpportunity.selectedFollowupCount > 0
-                        ? 'Follow-up route'
+                        ? tr.s('Follow-up route')
                         : boardChainOpportunity.comboSurgeLabel
-                          ? 'Combo surge'
-                          : 'Keep streak',
-                    label: 'Combo route',
+                          ? tr.s('Combo surge')
+                          : tr.s('Keep streak'),
+                    label: tr.s('Combo route'),
                     tone: 'chain',
                     value:
                         boardChainOpportunity.selectedFollowupLabel ??
                         (boardChainOpportunity.chainReadyCount === 1
-                            ? '1 route ready'
-                            : `${boardChainOpportunity.chainReadyCount} routes ready`)
+                            ? tr.s('1 route ready')
+                            : tr`${boardChainOpportunity.chainReadyCount} routes ready`)
                 });
             } else if (boardChainOpportunity.setupCount > 0) {
                 rows.push({
-                    action: boardChainOpportunity.setupAction ?? 'Route',
+                    action: boardChainOpportunity.setupAction ?? tr.s('Route'),
                     detail: [
                         boardChainOpportunity.nextTarget,
                         boardChainOpportunity.setupHint ?? BOARD_ROUTE_COACHING.routeTools
                     ].filter(Boolean).join(' / '),
                     id: 'chain',
-                    impactCue: 'Route prime',
-                    label: 'Route prime',
+                    impactCue: tr.s('Route prime'),
+                    label: tr.s('Route prime'),
                     tone: 'setup',
-                    value: `${boardChainOpportunity.setupCount} primed`
+                    value: tr`${boardChainOpportunity.setupCount} primed`
                 });
             }
 
             if (traitOpportunitySummary.tiles.length > 0) {
                 const traitComboRewardCue = boardChainOpportunity.nextTarget;
-                const traitOpportunityLabel = cardFeedbackTraitPayoffStackActive ? 'Trait stack' : 'Trait combo';
+                const traitOpportunityLabel = cardFeedbackTraitPayoffStackActive ? tr.s('Trait stack') : tr.s('Trait combo');
                 rows.push({
-                    action: 'Study',
+                    action: tr.s('Study'),
                     detail: [
                         traitOpportunitySummary.tiles
                             .slice(0, 4)
                             .map((tile) => `${tile.label} (${tile.traitKind})`)
                             .join(' / '),
-                        traitOpportunitySummary.interactionLines[0] ?? 'Trait combo ready',
-                        traitComboRewardCue ? `Next reward ${traitComboRewardCue}` : null,
+                        traitOpportunitySummary.interactionLines[0] ?? tr.s('Trait combo ready'),
+                        traitComboRewardCue ? tr`Next reward ${traitComboRewardCue}` : null,
                         traitOpportunitySummary.reason
                     ]
                         .filter(Boolean)
@@ -1887,30 +1889,30 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     impactCue:
                         cardFeedbackTraitPayoffStackActive
                             ? traitOpportunitySummary.tiles.length > 1
-                                ? 'Trait stack surge'
-                                : 'Trait stack route'
+                                ? tr.s('Trait stack surge')
+                                : tr.s('Trait stack route')
                             : traitOpportunitySummary.tiles.length > 1
-                              ? 'Trait combo surge'
-                              : 'Trait combo route',
+                              ? tr.s('Trait combo surge')
+                              : tr.s('Trait combo route'),
                     label: traitOpportunityLabel,
                     tone: 'trait',
                     value:
                         traitOpportunitySummary.tiles.length === 1
-                            ? '1 combo card lit'
-                            : `${traitOpportunitySummary.tiles.length} combo cards lit`
+                            ? tr.s('1 combo card lit')
+                            : tr`${traitOpportunitySummary.tiles.length} combo cards lit`
                 });
             }
 
             if (boardPickupOpportunity.count > 0) {
                 rows.push({
-                    action: 'Claim',
+                    action: tr.s('Claim'),
                     detail: [
                         boardPickupOpportunity.target,
                         boardPickupOpportunity.examples[0] ?? BOARD_ROUTE_COACHING.pickups
                     ].filter(Boolean).join(' / '),
                     id: 'pickup',
                     impactCue: 'Pickup cashout',
-                    label: 'Rewards',
+                    label: tr.s('Rewards'),
                     tone: 'pickup',
                     value: boardPickupOpportunity.valueLabel
                 });
@@ -1918,16 +1920,16 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
             if (activePowerBoardChip) {
                 rows.push({
-                    action: 'Use',
+                    action: tr.s('Use'),
                     detail: activePowerBoardChip.detail,
                     id: 'tool',
                     impactCue:
                         activePowerBoardChip.tone === 'recall'
-                            ? 'Recall tool'
+                            ? tr.s('Recall tool')
                             : activePowerBoardChip.tone === 'control'
-                              ? 'Control tool'
-                              : 'Tool route',
-                    label: 'Tool',
+                              ? tr.s('Control tool')
+                              : tr.s('Tool route'),
+                    label: tr.s('Tool'),
                     tone: activePowerBoardChip.tone,
                     value: activePowerBoardChip.label
                 });
@@ -1951,13 +1953,13 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         row.id === 'chain' || row.id === 'pickup' || row.id === 'recovery' || row.id === 'tool'
     );
     const boardPayoffStackLabelForRow = (row: BoardOpportunityCompassRow): string =>
-        row.id === 'chain' ? 'Stack route' : row.label;
+        row.id === 'chain' ? tr.s('Stack route') : row.label;
     const boardOpportunityLaneMapRows = boardOpportunityLaneMap(boardOpportunityCompassRows);
     const boardOpportunityLaneMapAttrValue = boardOpportunityLaneMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneActionMapAttrValue = boardOpportunityLaneActionMapAttr(boardOpportunityLaneMapRows);
     const boardOpportunityLaneMapLiveText =
         boardOpportunityLaneMapRows.length > 1
-            ? ` Decision lanes: ${boardOpportunityLaneMapRows.map((lane) => `${lane.label} ${lane.count}, ${lane.action}`).join(', ')}.`
+            ? tr` Decision lanes: ${boardOpportunityLaneMapRows.map((lane) => `${lane.label} ${lane.count}, ${lane.action}`).join(', ')}.`
             : '';
     const boardPayoffStack =
         boardPayoffStackRows.length >= 2
@@ -1968,31 +1970,31 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                       : impactCues.has('Follow-up route')
                         ? 'followup'
                         : 'build';
-                  const cue = tone === 'followup' ? 'Follow-up stack' : 'Stack prime';
-                  const action = tone === 'followup' ? 'Next tap' : 'Prime';
+                  const cue = tone === 'followup' ? tr.s('Follow-up stack') : tr.s('Stack prime');
+                  const action = tone === 'followup' ? tr.s('Next tap') : tr.s('Prime');
                   const firstRow = boardPayoffStackRows[0] ?? null;
                   const secondRow = boardPayoffStackRows[1] ?? null;
                   const thirdRow = boardPayoffStackRows[2] ?? null;
-                  const first = firstRow ? `${firstRow.action} ${boardPayoffStackLabelForRow(firstRow).toLowerCase()}` : 'Act';
-                  const then = secondRow ? `${secondRow.action} ${boardPayoffStackLabelForRow(secondRow).toLowerCase()}` : 'Lock payoff route';
+                  const first = firstRow ? `${firstRow.action} ${boardPayoffStackLabelForRow(firstRow).toLowerCase()}` : tr.s('Act');
+                  const then = secondRow ? `${secondRow.action} ${boardPayoffStackLabelForRow(secondRow).toLowerCase()}` : tr.s('Lock payoff route');
                   const keep = thirdRow
                       ? `${thirdRow.action} ${boardPayoffStackLabelForRow(thirdRow).toLowerCase()}`
                       : tone === 'followup'
-                        ? 'Keep route moving'
-                        : 'Keep reward stack primed';
+                        ? tr.s('Keep route moving')
+                        : tr.s('Keep reward stack primed');
                   const crescendo =
                       boardPayoffStackRows.length >= 3
                             ? {
                                   beatCount: 4,
                                   detail: BOARD_ROUTE_COACHING.stacked,
-                                  label: 'Stack burst',
+                                  label: tr.s('Stack burst'),
                                   screenCue: 'burst',
                                   tier: 'stack'
                               }
                             : {
                                   beatCount: 2,
                                   detail: BOARD_ROUTE_COACHING.payoff,
-                                  label: 'Prime beat',
+                                  label: tr.s('Prime beat'),
                                   screenCue: 'pulse',
                                   tier: 'prime'
                               };
@@ -2005,11 +2007,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                           .map((row) => boardPayoffStackLabelForRow(row))
                           .join(' + '),
                       heat: 'prime',
-                      nextCue: `First: ${first}`,
+                      nextCue: tr`First: ${first}`,
                       sequence: { first, keep, then },
-                      sequenceCue: `Then: ${then}`,
+                      sequenceCue: tr`Then: ${then}`,
                       tone,
-                      value: `${boardPayoffStackRows.length} payoffs live`
+                      value: tr`${boardPayoffStackRows.length} payoffs live`
                   };
               })()
             : null;
@@ -2055,21 +2057,21 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                 return;
             }
             const stackLiveText = boardPayoffStack
-                ? ` Board stack: ${boardPayoffStack.cue}. ${boardPayoffStack.action}. ${boardPayoffStack.value}. ${boardPayoffStack.detail}. ${boardPayoffStack.crescendo.label}. ${boardPayoffStack.crescendo.detail}. ${boardPayoffStack.nextCue}.${
+                ? tr` Board stack: ${boardPayoffStack.cue}. ${boardPayoffStack.action}. ${boardPayoffStack.value}. ${boardPayoffStack.detail}. ${boardPayoffStack.crescendo.label}. ${boardPayoffStack.crescendo.detail}. ${boardPayoffStack.nextCue}.${
                       boardPayoffStack.sequenceCue ? ` ${boardPayoffStack.sequenceCue}.` : ''
                   } Keep: ${boardPayoffStack.sequence.keep}.`
                 : '';
             const bestOpportunity = boardOpportunityCompassRows[0];
             const bestOpportunityLiveText = bestOpportunity
-                ? ` Best play: ${bestOpportunity.impactCue}. ${bestOpportunity.label}: ${bestOpportunity.value}. ${bestOpportunity.action}: ${bestOpportunity.detail}.`
+                ? tr` Best play: ${bestOpportunity.impactCue}. ${bestOpportunity.label}: ${bestOpportunity.value}. ${bestOpportunity.action}: ${bestOpportunity.detail}.`
                 : '';
             const traitModeLiveText = boardTraitModeCue
-                ? ` Trait mode: ${boardTraitModeCue.value}.${boardTraitModeCue.nextReward ? ` ${boardTraitModeCue.nextReward}.` : ''} ${boardTraitModeCue.detail}.`
+                ? tr` Trait mode: ${boardTraitModeCue.value}.${boardTraitModeCue.nextReward ? ` ${boardTraitModeCue.nextReward}.` : ''} ${boardTraitModeCue.detail}.`
                 : '';
             const chainLiveText =
                 boardChainAccessibilitySummary.tone === 'idle' ? '' : ` ${boardChainAccessibilitySummary.label}`;
             setBoardLiveMessage(
-                `Focus: ${focusedTileLabel}${bestOpportunityLiveText}${traitModeLiveText}${boardOpportunityLaneMapLiveText}${stackLiveText}${chainLiveText}`
+                tr`Focus: ${focusedTileLabel}${bestOpportunityLiveText}${traitModeLiveText}${boardOpportunityLaneMapLiveText}${stackLiveText}${chainLiveText}`
             );
         });
         return () => {
@@ -2470,7 +2472,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         hoverTiltRef.current = { tileId: null, x: 0, y: 0 };
     }, [board.level, board.tiles.length, reduceMotion, selectionSuppressed]);
 
-    /* eslint-disable react-hooks/set-state-in-effect -- viewport React state must track fitted board geometry when the stage or board changes */
+     
     useLayoutEffect(() => {
         const geometry = `${board.level}:${board.columns}:${board.rows}:${stageWorldViewport.width}:${stageWorldViewport.height}`;
         const resetRequested = viewportResetToken !== viewportResetTokenRef.current || geometry !== fittedGeometryRef.current;
@@ -2537,11 +2539,11 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
         viewportResetToken,
         clearTouchGestureState
     ]);
-    /* eslint-enable react-hooks/set-state-in-effect */
+     
 
     useEffect(() => {
         if (!touchGestureMode) {
-            clearTouchGestureState(true); // eslint-disable-line react-hooks/set-state-in-effect -- reset gesture UI when leaving two-finger mode
+            clearTouchGestureState(true);  
             return;
         }
 
@@ -3039,7 +3041,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
 
     const sceneErrorFallback = (
         <div className={styles.webglSceneError} data-testid="tile-board-scene-error" role="alert">
-            Board graphics encountered an error. Try reloading the page.
+            {COMPONENT_PROSE.tileBoardBoardGraphicsEncounteredAn}
         </div>
     );
 
@@ -3229,7 +3231,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
             ) : null}
             {!baselineWebGl ? (
                 <div className={styles.webglRequired} data-testid="tile-board-webgl-required">
-                    This game requires WebGL. Enable hardware acceleration or update your browser, then reload.
+                    {COMPONENT_PROSE.tileBoardThisGameRequiresWebgl}
                 </div>
             ) : (
                 <div
@@ -3254,8 +3256,7 @@ const TileBoard = forwardRef<TileBoardHandle, TileBoardProps>(function TileBoard
                     >
                         {gpuSurfaceLost ? (
                             <div className={styles.webglSceneError} data-testid="tile-board-gpu-lost" role="alert">
-                                WebGL context was lost. The board will rebuild when the GPU restores it. If this
-                                stays visible, reload the page or update GPU drivers.
+                                {COMPONENT_PROSE.tileBoardWebglContextWasLost}
                             </div>
                         ) : null}
                         {/*

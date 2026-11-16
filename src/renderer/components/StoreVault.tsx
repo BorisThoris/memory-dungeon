@@ -1,3 +1,5 @@
+import { COMPONENT_PROSE } from '../copy/componentProse';
+import { tr } from '../../shared/i18n';
 import { useEffect, useId, useRef, useState, type ReactElement } from 'react';
 import type { FusionId, RunState } from '../../shared/contracts';
 import { runGold, storeOffer, type StoreItemId, type StoreOfferRow } from '../../shared/run-store-rules';
@@ -68,66 +70,66 @@ const StoreVault = ({ run, floor, onBuy, onDescend, onEvolve, onFuse }: StoreVau
         <div aria-describedby={subtitleId} aria-labelledby={titleId} aria-modal="true"
             className={styles.camp} data-testid="store-sheet" ref={rootRef} role="dialog">
             <header className={styles.head}>
-                <div><span className={styles.eyebrow}>Floor {floor} cleared · Camp</span>
-                    <h2 id={titleId}>Make the next floors yours</h2></div>
+                <div><span className={styles.eyebrow}>{tr.s("Floor")} {floor} {tr.s("cleared · Camp")}</span>
+                    <h2 id={titleId}>{COMPONENT_PROSE.storeVaultMakeTheNextFloors}</h2></div>
                 <strong className={styles.purse} data-testid="camp-gold">{gold} <span>gold</span></strong>
             </header>
             <p className={styles.subtitle} data-testid="store-subtitle" id={subtitleId}>
-                Build your run or stock up for the next floor. The stop comes back every 3 floors, with a new shelf.
+                {COMPONENT_PROSE.storeVaultBuildYourRunOr}
             </p>
             <div className={styles.scroll} ref={spotsRef} data-testid="store-rows">
                 {build.length > 0 ? (
                     <p className={styles.subtitle} data-testid="store-build">
-                        Your build: {build.map((entry) => `${snowballRelicTitle(run, entry.id, relicDefinition(entry.id).title)} ×${entry.factor.toFixed(2)}`).join(' · ')}
-                        {(run.runRulesVersion ?? 0) >= BUILD_PAYS_FROM ? ` · every match and every clear’s gold ×${relicScoreMultiplier(run).toFixed(2)}` : null}
+                        {tr.s("Your build:")} {build.map((entry) => `${snowballRelicTitle(run, entry.id, relicDefinition(entry.id).title)} ×${entry.factor.toFixed(2)}`).join(' · ')}
+                        {(run.runRulesVersion ?? 0) >= BUILD_PAYS_FROM ? tr` · every match and every clear’s gold ×${relicScoreMultiplier(run).toFixed(2)}` : null}
                     </p>
                 ) : null}
-                {fusions.length > 0 ? <section className={styles.section} aria-label="Fusions">
-                    <div className={styles.sectionHead}><h3>Fuse</h3><span>Two relics that grow, made one power · Both kept · No slot taken</span></div>
+                {fusions.length > 0 ? <section className={styles.section} aria-label={tr.s("Fusions")}>
+                    <div className={styles.sectionHead}><h3>{tr.s("Fuse")}</h3><span>{COMPONENT_PROSE.storeVaultTwoRelicsThatGrow}</span></div>
                     <div className={styles.grid}>{fusions.map((fusion) =>
                         <article className={styles.card} key={fusion.id} data-testid={`store-fuse-${fusion.id}`}>
                             <div className={styles.cardHead}><h4>{fusion.title}</h4></div>
                             <p>{fusion.body}</p>
-                            <span className={styles.blocked}>{gold < FUSION_PRICE ? `Need ${FUSION_PRICE - gold} more gold` : fusion.from}</span>
+                            <span className={styles.blocked}>{gold < FUSION_PRICE ? tr`Need ${FUSION_PRICE - gold} more gold` : fusion.from}</span>
                             <button data-testid={`store-fuse-buy-${fusion.id}`} disabled={gold < FUSION_PRICE} type="button" onClick={() => onFuse(fusion.id)}>
-                                {`Fuse · ${FUSION_PRICE} gold`}
+                                {tr`Fuse · ${FUSION_PRICE} gold`}
                             </button>
                         </article>
                     )}</div>
                 </section> : null}
-                {evolutions.length > 0 ? <section className={styles.section} aria-label="Evolutions">
-                    <div className={styles.sectionHead}><h3>Evolve</h3><span>Two relics at rank 3 and a boss's blueprint · Kept to the end of the run</span></div>
+                {evolutions.length > 0 ? <section className={styles.section} aria-label={tr.s("Evolutions")}>
+                    <div className={styles.sectionHead}><h3>{tr.s("Evolve")}</h3><span>{COMPONENT_PROSE.storeVaultTwoRelicsAtRank}</span></div>
                     <div className={styles.grid}>{evolutions.map((recipe) =>
                         <article className={styles.card} key={recipe.id} data-testid={`store-evolve-${recipe.id}`}>
                             <div className={styles.cardHead}><h4>{recipe.title}</h4></div>
                             <p>{EVOLUTION_LINES[recipe.id]}</p>
-                            <span className={styles.blocked}>{gold < EVOLUTION_PRICE ? `Need ${EVOLUTION_PRICE - gold} more gold` : ' '}</span>
+                            <span className={styles.blocked}>{gold < EVOLUTION_PRICE ? tr`Need ${EVOLUTION_PRICE - gold} more gold` : ' '}</span>
                             <button data-testid={`store-evolve-buy-${recipe.id}`} disabled={gold < EVOLUTION_PRICE} type="button" onClick={() => onEvolve(recipe.id)}>
-                                {`Evolve · ${EVOLUTION_PRICE} gold`}
+                                {tr`Evolve · ${EVOLUTION_PRICE} gold`}
                             </button>
                         </article>
                     )}</div>
                 </section> : null}
-                {(['relic', 'consumable'] as const).map(kind => <section key={kind} className={styles.section} aria-label={kind === 'relic' ? 'Run upgrades' : 'Supplies'}>
-                    <div className={styles.sectionHead}><h3>{kind === 'relic' ? 'Build your run' : 'Need help now?'}</h3>
-                        <span>{kind === 'relic' ? 'Three on this shelf, drawn for this run · Four slots · Kept to the end of the run' : 'One charge per purchase · Repeat purchases cost more'}</span></div>
+                {(['relic', 'consumable'] as const).map(kind => <section key={kind} className={styles.section} aria-label={kind === 'relic' ? tr.s('Run upgrades') : tr.s('Supplies')}>
+                    <div className={styles.sectionHead}><h3>{kind === 'relic' ? tr.s('Build your run') : tr.s('Need help now?')}</h3>
+                        <span>{kind === 'relic' ? COMPONENT_PROSE.storeVaultThreeOnThisShelf : COMPONENT_PROSE.storeVaultOneChargePerPurchase}</span></div>
                     <div className={styles.grid}>{offer.filter(row => row.kind === kind).map(row =>
                         <article className={styles.card} key={row.id} data-testid={`store-row-${row.id}`} data-maxed={row.blocked === 'max_rank'}>
                             <div className={styles.cardHead}>
                                 <svg className={styles.ware} viewBox="0 0 40 40" aria-hidden="true">{storeWareGlyph(row.id)}</svg>
                                 <h4>{row.title}</h4>
-                                {row.rank !== undefined ? <span className={styles.rank} aria-label={`Rank ${row.rank} of 3`}>
+                                {row.rank !== undefined ? <span className={styles.rank} aria-label={tr`Rank ${row.rank} of 3`}>
                                     {[1, 2, 3].map(rank => <i key={rank} data-filled={rank <= row.rank!} />)}<span>{row.rank}/3</span>
                                 </span> : null}
                             </div>
                             <p id={`${titleId}-${row.id}`}>{row.body}{(run.runRulesVersion ?? 0) >= AWAKENING_FROM && isSnowballRelicId(row.id) ? ` ${awakeningDefinition(row.id).mark}` : null}</p>
                             <span className={styles.blocked}>
-                                {row.blocked === 'gold' ? `Need ${row.goldShortfall} more gold` : row.blocked === 'full' ? 'You hold all the lives you can' : row.blocked === 'max_rank' ? 'Fully upgraded for this run' : row.blocked === 'no_bank' ? 'This mode has no miss bank' : row.blocked === 'owned' ? 'Already owned' : row.blocked === 'slots' ? 'Your four slots are full' : '\u00a0'}
+                                {row.blocked === 'gold' ? tr`Need ${row.goldShortfall} more gold` : row.blocked === 'full' ? COMPONENT_PROSE.storeVaultYouHoldAllThe : row.blocked === 'max_rank' ? COMPONENT_PROSE.storeVaultFullyUpgradedForThis : row.blocked === 'no_bank' ? COMPONENT_PROSE.storeVaultThisModeHasNo : row.blocked === 'owned' ? tr.s('Already owned') : row.blocked === 'slots' ? tr.s('Your four slots are full') : '\u00a0'}
                             </span>
                             <button aria-label={STORE_SHEET_COPY.buyAriaLabel(row)} aria-describedby={`${titleId}-${row.id}`}
                                 data-testid={`store-buy-${row.id}`} disabled={row.blocked !== null} type="button"
                                 onClick={() => { if (onBuy(row.id)) setReceipt(row); }}>
-                                {row.blocked === 'max_rank' ? 'Max rank' : row.blocked === 'owned' ? 'Owned' : row.blocked === 'slots' ? 'No slot' : `${row.rank === undefined ? 'Buy' : row.rank ? 'Upgrade' : 'Unlock'} · ${row.price} gold`}
+                                {row.blocked === 'max_rank' ? tr.s('Max rank') : row.blocked === 'owned' ? tr.s('Owned') : row.blocked === 'slots' ? tr.s('No slot') : tr`${row.rank === undefined ? tr.s('Buy') : row.rank ? tr.s('Upgrade') : tr.s('Unlock')} · ${row.price} gold`}
                             </button>
                         </article>
                     )}</div>
@@ -135,10 +137,10 @@ const StoreVault = ({ run, floor, onBuy, onDescend, onEvolve, onFuse }: StoreVau
             </div>
             <footer className={styles.footer}>
                 <p aria-atomic="true" aria-live="polite" data-testid="store-receipt" role="status">
-                    {receipt ? STORE_SHEET_COPY.receipt(receipt, gold) : 'Saving for an upgrade? Keep your gold and continue. Gold and upgrades reset when the run ends.'}
+                    {receipt ? STORE_SHEET_COPY.receipt(receipt, gold) : COMPONENT_PROSE.storeVaultSavingForAnUpgrade}
                 </p>
                 <button className={styles.continue} data-modal-initial-focus data-testid="store-descend" ref={descendRef} type="button" onClick={onDescend}>
-                    Descend to floor {floor + 1} <span aria-hidden="true">→</span>
+                    {tr.s("Descend to floor")} {floor + 1} <span aria-hidden="true">→</span>
                 </button>
             </footer>
         </div>

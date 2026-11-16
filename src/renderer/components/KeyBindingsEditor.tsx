@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { useEffect, useState } from 'react';
 import { DEFAULT_KEY_BINDINGS, KEY_ACTION_IDS, keyCodeLabel, rebindKey, type KeyActionId, type KeyBindings } from '../../shared/key-bindings';
 import { KEY_ACTION_LABELS, KEY_BINDINGS_COPY } from '../copy/keyBindingsCopy';
@@ -58,7 +59,7 @@ const KeyBindingsEditor = ({ bindings, onChange }: KeyBindingsEditorProps) => {
                         </span>
                     </div>
                     <button
-                        aria-label={`${KEY_BINDINGS_COPY.change} ${KEY_ACTION_LABELS[action]} key`}
+                        aria-label={tr`${KEY_BINDINGS_COPY.change} ${KEY_ACTION_LABELS[action]} key`}
                         aria-pressed={listening === action}
                         className={styles.word}
                         onClick={() => {

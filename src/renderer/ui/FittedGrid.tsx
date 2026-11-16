@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import styles from './FittedGrid.module.css';
 import { computeGridFit, growRowHeight, readFrameBox, type GridFit } from './fittedGridFit';
@@ -137,7 +138,7 @@ const FittedGrid = <T,>({
                         onClick={() => goToPage(Math.max(0, safePage - 1))}
                         type="button"
                     >
-                        Previous
+                        {tr.s("Previous")}
                     </button>
                     <span aria-live="polite" className={styles.pageLabel}>
                         {safePage * pageSize + 1}–{Math.min(items.length, (safePage + 1) * pageSize)} of {items.length}{' '}
@@ -149,7 +150,7 @@ const FittedGrid = <T,>({
                         onClick={() => goToPage(Math.min(pageCount - 1, safePage + 1))}
                         type="button"
                     >
-                        Next
+                        {tr.s("Next")}
                     </button>
                 </div>
             ) : null}

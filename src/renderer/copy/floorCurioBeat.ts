@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { FloorCurio } from '../../shared/floor-curio-rules';
 
 /**
@@ -15,15 +16,15 @@ import type { FloorCurio } from '../../shared/floor-curio-rules';
  */
 export const FLOOR_CURIO_COPY = {
     /** Prefix on the floor-clear note. Short, because the resident's own line follows it. */
-    downstairsPrefix: 'Downstairs',
+    downstairsPrefix: tr.s('Downstairs'),
     /** Heading for the Codex article that lists the whole cast. */
-    codexTitle: 'The residents',
+    codexTitle: tr.s('The residents'),
     codexDescription:
-        'Every floor has someone else on it, rolled from your run seed. Most of them help. One of them ' +
-        'talks over the memorize window. One of them is a sock. Their portrait and name stay beside ' +
-        'the tools. After the first floor, their arrival can change your study time or supplies. Open the resident to read ' +
-        'their story and say hello — free, once per floor. Some offer supplies; others offer advice ' +
-        'or absolutely nothing.'
+        tr.s('Every floor has someone else on it, rolled from your run seed. Most of them help. One of them ') +
+        tr.s('talks over the memorize window. One of them is a sock. Their portrait and name stay beside ') +
+        tr.s('the tools. After the first floor, their arrival can change your study time or supplies. Open the resident to read ') +
+        tr.s('their story and say hello — free, once per floor. Some offer supplies; others offer advice ') +
+        tr.s('or absolutely nothing.')
 } as const;
 
 /** "Downstairs: A hoarding rat. It has been collecting..." — the note on the floor-clear beat. */
@@ -32,8 +33,8 @@ export const floorClearResidentLine = (curio: FloorCurio): string =>
 
 /** How the Codex describes one resident: what they do on arrival, and what they say if greeted. */
 export const codexResidentDescription = (curio: FloorCurio, greetingGained: string): string =>
-    `${curio.line} ${curio.effectSummary} Greet them: ${greetingGained}`;
+    tr`${curio.line} ${curio.effectSummary} Greet them: ${greetingGained}`;
 
 /** The same meeting, said plainly: who, and what it changes. */
 export const floorCurioAnnouncement = (curio: FloorCurio): string =>
-    `${curio.name} is on the next floor. ${curio.effectSummary}`;
+    tr`${curio.name} is on the next floor. ${curio.effectSummary}`;

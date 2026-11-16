@@ -126,7 +126,7 @@ const createMainWindow = (displayMode: DisplayMode): BrowserWindow => {
     window.webContents.setWindowOpenHandler(({ url }) => {
         // The outbound links: the run-end wishlist link and the privacy policy (Settings > About).
         // Everything else stays denied.
-        if (url.startsWith('https://store.steampowered.com/') || url === 'https://memory-dungeon-git.pages.dev/privacy') {
+        if (url.startsWith('https://store.steampowered.com/') || url === 'https://memory-dungeon-git.pages.dev/privacy' || url.startsWith('mailto:modaxxx009@yahoo.com?')) {
             void shell.openExternal(url);
         }
         return { action: 'deny' };

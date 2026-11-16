@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { GraphicsQualityPreset } from '../../shared/contracts';
 
 export type GameplayRenderQualityProfile = {
@@ -30,7 +31,7 @@ type GameplayRenderProfile = {
 
 export const GAMEPLAY_RENDER_PROFILE: GameplayRenderProfile = {
     id: 'arcane-workshop-v2',
-    description: 'High-spectacle arcane table renderer: deeper card relief, brighter rune light, and stronger match bloom.',
+    description: tr.s('High-spectacle arcane table renderer: deeper card relief, brighter rune light, and stronger match bloom.'),
     cacheSalt: 'arcane-workshop-v2',
     quality: {
         high: {

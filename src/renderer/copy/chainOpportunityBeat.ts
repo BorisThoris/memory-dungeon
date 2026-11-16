@@ -1,10 +1,11 @@
+import { tr } from '../../shared/i18n';
 export type ChainOpportunityBeatSignal = {
-    action: 'Prime route' | 'Match route' | 'Tap follow-up' | 'Chain routes';
+    action: string;
     audioCue: 'setup-beat' | 'route-beat' | 'follow-up-beat' | 'surge-beat';
     beatCount: 2 | 3 | 4;
     cue: 'pulse' | 'snap' | 'burst';
     detail: string;
-    label: 'Prime beat' | 'Route beat' | 'Follow-up beat' | 'Surge beat';
+    label: string;
     screenCue: 'pulse' | 'snap' | 'burst';
     tier: 'setup' | 'route' | 'follow-up' | 'surge';
 };
@@ -32,11 +33,11 @@ export function getChainOpportunityBeatSignal({
 }: ChainOpportunityBeatContext): ChainOpportunityBeatSignal | null {
     if (comboSurgeLabel) {
         return {
-            action: 'Chain routes',
+            action: tr.s('Chain routes'),
             audioCue: 'surge-beat',
             beatCount: 4,
-            detail: readyRouteLabel ?? readyCardLabel ?? 'Multiple trait routes are lit',
-            label: 'Surge beat',
+            detail: readyRouteLabel ?? readyCardLabel ?? tr.s('Multiple trait routes are lit'),
+            label: tr.s('Surge beat'),
             cue: 'burst',
             screenCue: 'burst',
             tier: 'surge'
@@ -44,11 +45,11 @@ export function getChainOpportunityBeatSignal({
     }
     if (followupReady) {
         return {
-            action: 'Tap follow-up',
+            action: tr.s('Tap follow-up'),
             audioCue: 'follow-up-beat',
             beatCount: 3,
-            detail: selectedFollowupLabel ?? 'Marked follow-up is ready',
-            label: 'Follow-up beat',
+            detail: selectedFollowupLabel ?? tr.s('Marked follow-up is ready'),
+            label: tr.s('Follow-up beat'),
             cue: 'snap',
             screenCue: 'snap',
             tier: 'follow-up'
@@ -56,11 +57,11 @@ export function getChainOpportunityBeatSignal({
     }
     if (chainReadyCount > 0) {
         return {
-            action: 'Match route',
+            action: tr.s('Match route'),
             audioCue: 'route-beat',
             beatCount: 3,
-            detail: readyRouteLabel ?? readyCardLabel ?? 'Trait route is lit',
-            label: 'Route beat',
+            detail: readyRouteLabel ?? readyCardLabel ?? tr.s('Trait route is lit'),
+            label: tr.s('Route beat'),
             cue: 'snap',
             screenCue: 'snap',
             tier: 'route'
@@ -68,11 +69,11 @@ export function getChainOpportunityBeatSignal({
     }
     if (setupCount > 0) {
         return {
-            action: 'Prime route',
+            action: tr.s('Prime route'),
             audioCue: 'setup-beat',
             beatCount: 2,
-            detail: setupAction ?? 'Move traits together',
-            label: 'Prime beat',
+            detail: setupAction ?? tr.s('Move traits together'),
+            label: tr.s('Prime beat'),
             cue: 'pulse',
             screenCue: 'pulse',
             tier: 'setup'
@@ -82,5 +83,5 @@ export function getChainOpportunityBeatSignal({
 }
 
 export function formatChainOpportunityBeatLabel(signal: ChainOpportunityBeatSignal): string {
-    return `${signal.label}: ${signal.action}. ${signal.beatCount} beats. ${signal.detail}.`;
+    return tr`${signal.label}: ${signal.action}. ${signal.beatCount} beats. ${signal.detail}.`;
 }

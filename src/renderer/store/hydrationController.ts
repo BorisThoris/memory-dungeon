@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { DesktopApi, SaveData, Settings } from '../../shared/contracts';
 import { normalizeUnknownSteamConnected } from '../../shared/desktop-api-boundary';
 import { mergeHonorUnlockTags } from '../../shared/honorUnlocks';
@@ -7,11 +8,11 @@ import { detectGraphicsTier } from '../graphicsTier';
 import { runPersistenceInBackground } from './backgroundPersistence';
 
 export const SAVE_READ_FAILURE_NOTICE =
-    'Save read failed. Started a temporary in-memory profile and paused autosave to avoid overwriting recoverable data.';
+    tr.s('Save read failed. Started a temporary in-memory profile and paused autosave to avoid overwriting recoverable data.');
 
 /** Shown when the way out of a read failure itself fails; the old save is still untouched. */
 export const SAVE_RECOVERY_FAILED_NOTICE =
-    'Could not start a fresh profile. Your existing save file has not been changed, and autosave stays paused.';
+    tr.s('Could not start a fresh profile. Your existing save file has not been changed, and autosave stays paused.');
 
 interface HydratedAppStatePatch {
     hydrated: true;

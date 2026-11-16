@@ -1,3 +1,5 @@
+import { COMPONENT_PROSE } from '../copy/componentProse';
+import { tr } from '../../shared/i18n';
 import type { CSSProperties } from 'react';
 import type { RunState } from '../../shared/contracts';
 import { essenceOf } from '../../shared/elemental-loot-rules';
@@ -13,26 +15,26 @@ export function FloorJourney({ run, phase }: { run: RunState; phase: 'camp' | 'f
     const result = run.lastLevelResult;
     if (!result) return null;
     const carry = realmCarryoverLines(result, run.realmAttunement);
-    return <aside className={styles.journey} aria-label="Between floors" data-testid="floor-journey" data-phase={phase}>
+    return <aside className={styles.journey} aria-label={tr.s("Between floors")} data-testid="floor-journey" data-phase={phase}>
         <div className={styles.path}>
-            <span>Floor {result.level} cleared</span><span aria-hidden="true">/</span>
-            <strong>{phase === 'camp' ? 'Rest & upgrade' : phase === 'forge' ? 'Prepare your next cast' : 'Next arena'}</strong>
-            <span className={styles.next}>Floor {result.level + 1} ahead <span aria-hidden="true">↘</span></span>
+            <span>{tr.s("Floor")} {result.level} cleared</span><span aria-hidden="true">/</span>
+            <strong>{phase === 'camp' ? tr.s('Rest & upgrade') : phase === 'forge' ? tr.s('Prepare your next cast') : tr.s('Next arena')}</strong>
+            <span className={styles.next}>{tr.s("Floor")} {result.level + 1} ahead <span aria-hidden="true">↘</span></span>
         </div>
         <div className={styles.rewards} aria-label={FLOOR_JOURNEY_REWARDS_LABEL}>
-            <strong>+{result.goldEarned ?? 0} gold earned</strong>
-            {phase === 'camp' ? <span className={styles.next}>Floor {result.level + 1} ahead</span> : null}
+            <strong>+{result.goldEarned ?? 0} {tr.s("gold earned")}</strong>
+            {phase === 'camp' ? <span className={styles.next}>{tr.s("Floor")} {result.level + 1} ahead</span> : null}
             {TILE_SUITS.filter(suit => essenceOf(result.elementalDrops, suit) > 0).map(suit =>
                 <span key={suit} style={{ '--reward-color': getTileSuit(suit).hue } as CSSProperties}>
                     <span aria-hidden="true">{getTileSuit(suit).rune}</span> +{essenceOf(result.elementalDrops, suit)} {ELEMENT_NAMES[suit]} essence
                 </span>)}
         </div>
         {run.nextRealm ? <details className={styles.destination} data-testid="camp-next-arena">
-            <summary>Next: <strong>{REALMS[run.nextRealm.realmId].title} · {REALM_SEVERITIES[run.nextRealm.severity].title}</strong></summary>
-            <p>{ARENA_ACTION[run.nextRealm.realmId]}.{run.nextRealm.confluence ? ` Also ${REALMS[run.nextRealm.confluence].title}: ${ARENA_ACTION[run.nextRealm.confluence]}.` : ''} Randomly selected for this run.{run.nextRealm.severity === 'raging' ? ` Weather strikes every ${realmIntervalFor(run.nextRealm.realmId, 'raging')} turns.` : ''}</p>
+            <summary>{tr.s("Next:")} <strong>{REALMS[run.nextRealm.realmId].title} · {REALM_SEVERITIES[run.nextRealm.severity].title}</strong></summary>
+            <p>{ARENA_ACTION[run.nextRealm.realmId]}.{run.nextRealm.confluence ? tr` Also ${REALMS[run.nextRealm.confluence].title}: ${ARENA_ACTION[run.nextRealm.confluence]}.` : ''} {COMPONENT_PROSE.floorJourneyRandomlySelectedForThis}{run.nextRealm.severity === 'raging' ? tr` Weather strikes every ${realmIntervalFor(run.nextRealm.realmId, 'raging')} turns.` : ''}</p>
             {carry.length ? <ul>{carry.map(line => <li key={line}>{line}</li>)}</ul> : null}
         </details> : null}
-        {carry.length && !run.nextRealm ? <details className={styles.carry}><summary>{result.realmSmoke || result.realmChill ? `Carried downstairs: ${[result.realmSmoke ? 'smoke' : null, result.realmChill ? 'chill' : null].filter(Boolean).join(' and ')}` : 'What follows you downstairs'}</summary>
+        {carry.length && !run.nextRealm ? <details className={styles.carry}><summary>{result.realmSmoke || result.realmChill ? tr`Carried downstairs: ${[result.realmSmoke ? 'smoke' : null, result.realmChill ? 'chill' : null].filter(Boolean).join(' and ')}` : tr.s('What follows you downstairs')}</summary>
             <ul>{carry.map(line => <li key={line}>{line}</li>)}</ul>
         </details> : null}
     </aside>;

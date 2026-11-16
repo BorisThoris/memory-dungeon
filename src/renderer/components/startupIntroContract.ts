@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { IntroPlaybackState } from './startupIntroConfig';
 
 type StartupIntroAssetState = 'loading' | 'ready' | 'fallback';
@@ -86,8 +87,8 @@ export const resolveStartupIntroOverlayContract = ({
     const loadingLabel = assetsReady
         ? null
         : skipPending
-          ? 'Skip requested — preparing a safe intro fallback…'
-          : (stepLabel ?? 'Preparing intro assets…');
+          ? tr.s('Skip requested — preparing a safe intro fallback…')
+          : (stepLabel ?? tr.s('Preparing intro assets…'));
     const progress = assetsReady ? 1 : totalSteps > 0 ? clamp01(loadedSteps / totalSteps) : 0;
 
     return {

@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { AchievementId, AchievementUnlockResult, SaveData } from '../../shared/contracts';
 import { normalizeUnknownAchievementUnlockResult } from '../../shared/desktop-api-boundary';
 import { ACHIEVEMENT_IDS } from '../../shared/save-data';
@@ -5,7 +6,7 @@ import { desktopClient } from '../desktop-client';
 import { persistSaveData } from './persistBridge';
 
 export const ACHIEVEMENT_SYNC_FAILURE_NOTICE =
-    'Some achievements could not sync with Steam. Your unlocks are saved in this build.';
+    tr.s('Some achievements could not sync with Steam. Your unlocks are saved in this build.');
 
 type AchievementSyncResult = { failures: { id: AchievementId; result: AchievementUnlockResult }[] };
 

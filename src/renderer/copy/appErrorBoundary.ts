@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 /**
  * What a player is told when a screen fails to draw.
  *
@@ -8,9 +9,9 @@
  */
 export const APP_ERROR_COPY = {
     /** The action that puts them back somewhere usable. */
-    action: 'Reload the game',
-    detail: 'Your saved progress is on disk and has not been changed. Reloading returns you to the menu.',
+    action: tr.s('Reload the game'),
+    detail: tr.s('Your saved progress is on disk and has not been changed. Reloading returns you to the menu.'),
     /** Shown under the detail when a report was written, so the file is findable. */
-    reported: 'A report was written to the crash-logs folder beside your save.',
-    title: 'Something in the game failed to draw'
+    reported: tr.s('A report was written to the crash-logs folder beside your save.'),
+    title: tr.s('Something in the game failed to draw')
 } as const;

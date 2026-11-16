@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { CSSProperties, ReactNode } from 'react';
 import type { RunEndReason, RunSummary } from '../../shared/contracts';
 import { comboHeatThemeForSeed } from '../../shared/combo-heat-rules';
@@ -56,7 +57,7 @@ export function RunEndStamp({ summary, reason, runSeed, personalBest, actions, r
                     </span>
                 </span>
             ) : null}
-            <div className={styles.actions} role="group" aria-label="What next">
+            <div className={styles.actions} role="group" aria-label={tr.s("What next")}>
                 {actions.map((action, index) => (
                     <button
                         aria-label={action.ariaLabel}

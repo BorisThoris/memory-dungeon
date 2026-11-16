@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RunState } from './contracts';
 import {
     CORE_SAFE_MEMORY_TAX,
@@ -20,7 +21,8 @@ export type PowerVerbId =
     | 'undo_resolve'
     | 'gambit';
 
-export type PowerVerbJob = 'Recall' | 'Search' | 'Damage control' | 'Risk';
+/** A display label (translated), never compared. */
+export type PowerVerbJob = string;
 
 export interface PowerVerbTeachingRow {
     id: PowerVerbId;
@@ -38,13 +40,13 @@ export interface PowerVerbTeachingRow {
 }
 
 export const POWER_VERB_GROUPS = {
-    recall: 'Recall',
-    search: 'Search',
-    damage_control: 'Damage control',
-    risk: 'Risk'
+    recall: tr.s('Recall'),
+    search: tr.s('Search'),
+    damage_control: tr.s('Damage control'),
+    risk: tr.s('Risk')
 } as const;
 
-const onlyWhilePlaying = (run: RunState): string | null => (run.status === 'playing' ? null : 'Only while playing.');
+const onlyWhilePlaying = (run: RunState): string | null => (run.status === 'playing' ? null : tr.s('Only while playing.'));
 const locksPerfectMemory = perfectMemoryImpactCopy('locks_perfect_memory');
 
 const powerVerbArrayIncludes = (value: unknown, item: string): boolean => runStringArray(value).includes(item);
@@ -66,11 +68,11 @@ const hiddenTileCount = (run: RunState): number =>
 const peekDisabledReason = (run: RunState, peekCharges: number): string | null =>
     onlyWhilePlaying(run) ??
     (peekCharges < 1
-        ? 'No peek charges.'
+        ? tr.s('No peek charges.')
         : hasOpenFlip(run)
-          ? 'Resolve the current flip first.'
+          ? tr.s('Resolve the current flip first.')
           : !hasPeekTarget(run)
-            ? 'No hidden peek targets.'
+            ? tr.s('No hidden peek targets.')
             : null);
 
 export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
@@ -88,13 +90,13 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
     return [
     {
         id: 'pin',
-        label: 'Pin',
-        job: 'Recall',
+        label: tr.s('Pin'),
+        job: tr.s('Recall'),
         mechanicClass: 'tool',
         tokens: ['hidden_known', 'build'],
-        purpose: 'Mark remembered locations without revealing or changing tiles.',
-        cost: `${runArrayCount(run.pinnedTileIds)} pinned now; pins are slot-limited.`,
-        consequence: 'Records your read only; it does not reveal or solve cards.',
+        purpose: tr.s('Mark remembered locations without revealing or changing tiles.'),
+        cost: tr`${runArrayCount(run.pinnedTileIds)} pinned now; pins are slot-limited.`,
+        consequence: tr.s('Records your read only; it does not reveal or solve cards.'),
         perfectMemoryImpact: 'allowed',
         perfectMemoryCopy: perfectMemoryImpactCopy('allowed'),
         memoryTax: CORE_SAFE_MEMORY_TAX,
@@ -102,18 +104,18 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
             onlyWhilePlaying(run) ??
             (maxPinsTotalRun != null &&
             pinsPlacedCountThisRun >= maxPinsTotalRun
-                ? 'Pin vow placement cap reached.'
+                ? tr.s('Pin vow placement cap reached.')
                 : null)
     },
     {
         id: 'peek',
-        label: 'Peek',
-        job: 'Recall',
+        label: tr.s('Peek'),
+        job: tr.s('Recall'),
         mechanicClass: 'bailout',
         tokens: ['hidden_known', 'cost', 'forfeit'],
-        purpose: 'Briefly reveal one hidden tile when memory needs a cue.',
-        cost: `${peekCharges} peek charge(s).`,
-        consequence: 'Spends a charge for exact information on one tile.',
+        purpose: tr.s('Briefly reveal one hidden tile when memory needs a cue.'),
+        cost: tr`${peekCharges} peek charge(s).`,
+        consequence: tr.s('Spends a charge for exact information on one tile.'),
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, informationBypass: 2, uiComprehensionLoad: 1 },
@@ -121,113 +123,113 @@ export const getPowerVerbRows = (run: RunState): PowerVerbTeachingRow[] => {
     },
     {
         id: 'flash_pair',
-        label: 'Flash',
-        job: 'Recall',
+        label: tr.s('Flash'),
+        job: tr.s('Recall'),
         mechanicClass: 'bailout',
         tokens: ['hidden_known', 'cost', 'forfeit'],
-        purpose: 'Reveal one random hidden pair briefly in Practice or Wild runs.',
-        cost: `${flashPairCharges} flash charge(s).`,
-        consequence: 'Temporarily shows a pair and counts as an assist.',
+        purpose: tr.s('Reveal one random hidden pair briefly in Practice or Wild runs.'),
+        cost: tr`${flashPairCharges} flash charge(s).`,
+        consequence: tr.s('Temporarily shows a pair and counts as an assist.'),
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, informationBypass: 2, mistakeRecovery: 1, uiComprehensionLoad: 1 },
-        disabledReason: onlyWhilePlaying(run) ?? (flashPairCharges < 1 ? 'No flash charges.' : null)
+        disabledReason: onlyWhilePlaying(run) ?? (flashPairCharges < 1 ? tr.s('No flash charges.') : null)
     },
     {
         id: 'shuffle',
-        label: 'Shuffle',
-        job: 'Search',
+        label: tr.s('Shuffle'),
+        job: tr.s('Search'),
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit', 'locked'],
-        purpose: 'Re-roll hidden tile positions when the layout is no longer useful.',
-        cost: run.activeContract?.noShuffle ? 'Locked by Scholar contract.' : `${shuffleCharges} full-board charge(s).`,
-        consequence: 'Breaks the current spatial read and counts as an assist.',
+        purpose: tr.s('Re-roll hidden tile positions when the layout is no longer useful.'),
+        cost: run.activeContract?.noShuffle ? tr.s('Locked by Scholar contract.') : tr`${shuffleCharges} full-board charge(s).`,
+        consequence: tr.s('Breaks the current spatial read and counts as an assist.'),
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, spatialDisruption: 2, mistakeRecovery: 1, uiComprehensionLoad: 1 },
         disabledReason:
             onlyWhilePlaying(run) ??
             (run.activeContract?.noShuffle
-                ? 'Scholar contract disables full-board shuffle.'
+                ? tr.s('Scholar contract disables full-board shuffle.')
                 : shuffleCharges < 1
-                  ? 'No shuffle charges.'
+                  ? tr.s('No shuffle charges.')
                   : hasOpenFlip(run)
-                    ? 'Resolve the current flip first.'
+                    ? tr.s('Resolve the current flip first.')
                     : null)
     },
     {
         id: 'region_shuffle',
-        label: 'Rows',
-        job: 'Search',
+        label: tr.s('Rows'),
+        job: tr.s('Search'),
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit', 'locked'],
-        purpose: 'Shuffle one row while preserving the rest of your spatial read.',
-        cost: `${regionShuffleCharges} row/swap charge(s); build effects may make the first row shuffle or tile swap free.`,
-        consequence: 'Breaks memory for one row and counts as an assist.',
+        purpose: tr.s('Shuffle one row while preserving the rest of your spatial read.'),
+        cost: tr`${regionShuffleCharges} row/swap charge(s); build effects may make the first row shuffle or tile swap free.`,
+        consequence: tr.s('Breaks memory for one row and counts as an assist.'),
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, spatialDisruption: 1, mistakeRecovery: 1, uiComprehensionLoad: 1 },
         disabledReason:
             onlyWhilePlaying(run) ??
             (run.activeContract?.noShuffle
-                ? 'Scholar contract disables row shuffle.'
+                ? tr.s('Scholar contract disables row shuffle.')
                 : hasOpenFlip(run)
-                  ? 'Resolve the current flip first.'
+                  ? tr.s('Resolve the current flip first.')
                   : !hasRowShufflePayment(run)
-                    ? 'No row or swap charge.'
+                    ? tr.s('No row or swap charge.')
                     : null)
     },
     {
         id: 'tile_swap',
-        label: 'Swap',
-        job: 'Search',
+        label: tr.s('Swap'),
+        job: tr.s('Search'),
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit', 'locked'],
-        purpose: 'Exchange two hidden tile positions to set up trait adjacency or repair a bad layout read.',
-        cost: `${regionShuffleCharges} row/swap charge(s); build effects may make the first row shuffle or tile swap free.`,
-        consequence: 'Invalidates memory for the two moved tiles and counts as an assist.',
+        purpose: tr.s('Exchange two hidden tile positions to set up trait adjacency or repair a bad layout read.'),
+        cost: tr`${regionShuffleCharges} row/swap charge(s); build effects may make the first row shuffle or tile swap free.`,
+        consequence: tr.s('Invalidates memory for the two moved tiles and counts as an assist.'),
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, spatialDisruption: 1, mistakeRecovery: 1, uiComprehensionLoad: 2 },
         disabledReason:
             onlyWhilePlaying(run) ??
             (run.activeContract?.noShuffle
-                ? 'Scholar contract disables tile swap.'
+                ? tr.s('Scholar contract disables tile swap.')
                 : hasOpenFlip(run)
-                  ? 'Resolve the current flip first.'
+                  ? tr.s('Resolve the current flip first.')
                   : !hasRowShufflePayment(run)
-                    ? 'No row/swap charge or free swap.'
+                    ? tr.s('No row/swap charge or free swap.')
                     : hiddenTileCount(run) < 2
-                      ? 'Need two hidden tiles to swap.'
+                      ? tr.s('Need two hidden tiles to swap.')
                       : null)
     },
     {
         id: 'undo_resolve',
-        label: 'Undo',
-        job: 'Damage control',
+        label: tr.s('Undo'),
+        job: tr.s('Damage control'),
         mechanicClass: 'bailout',
         tokens: ['cost', 'forfeit'],
-        purpose: 'Cancel a resolving flip before it commits.',
-        cost: `${undoUsesThisFloor} undo use(s) this floor.`,
-        consequence: 'Rewinds a pending mistake window and counts as an assist.',
+        purpose: tr.s('Cancel a resolving flip before it commits.'),
+        cost: tr`${undoUsesThisFloor} undo use(s) this floor.`,
+        consequence: tr.s('Rewinds a pending mistake window and counts as an assist.'),
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, mistakeRecovery: 2, uiComprehensionLoad: 1 },
-        disabledReason: undoUsesThisFloor < 1 ? 'No undo uses this floor.' : null
+        disabledReason: undoUsesThisFloor < 1 ? tr.s('No undo uses this floor.') : null
     },
     {
         id: 'gambit',
-        label: 'Gambit',
-        job: 'Risk',
+        label: tr.s('Gambit'),
+        job: tr.s('Risk'),
         mechanicClass: 'bailout',
         tokens: ['risk', 'cost', 'forfeit'],
-        purpose: 'Commit a third flip during a mismatch to look for a rescue match.',
-        cost: run.gambitAvailableThisFloor ? 'One chance this floor.' : 'Already spent this floor.',
-        consequence: 'Turns a miss into a risky rescue attempt and counts as an assist.',
+        purpose: tr.s('Commit a third flip during a mismatch to look for a rescue match.'),
+        cost: run.gambitAvailableThisFloor ? tr.s('One chance this floor.') : tr.s('Already spent this floor.'),
+        consequence: tr.s('Turns a miss into a risky rescue attempt and counts as an assist.'),
         perfectMemoryImpact: 'locks_perfect_memory',
         perfectMemoryCopy: locksPerfectMemory,
         memoryTax: { ...CORE_SAFE_MEMORY_TAX, mistakeRecovery: 2, hiddenPunishment: 1, uiComprehensionLoad: 2 },
-        disabledReason: run.gambitAvailableThisFloor ? null : 'Gambit already used this floor.'
+        disabledReason: run.gambitAvailableThisFloor ? null : tr.s('Gambit already used this floor.')
     }
     ];
 };

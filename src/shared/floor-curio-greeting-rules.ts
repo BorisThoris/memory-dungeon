@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RunState } from './contracts';
 import { getFloorCurio, type FloorCurioId } from './floor-curio-rules';
 import { getTileSuit, largestHiddenSuitClump } from './tile-suit-rules';
@@ -44,45 +45,45 @@ const NOTHING: FloorCurioGreetingEffect = {
 export const FLOOR_CURIO_GREETINGS: Readonly<Record<FloorCurioId, FloorCurioGreeting>> = {
     lost_sock: {
         curioId: 'lost_sock',
-        reply: 'You say hello to the sock. The sock does not say hello back. You both let it go.',
-        gained: 'Nothing. It is a sock.',
+        reply: tr.s('You say hello to the sock. The sock does not say hello back. You both let it go.'),
+        gained: tr.s('Nothing. It is a sock.'),
         // The one greeting that pays nothing, and the reason the others land. If every resident
         // handed something over, the verb would be a vending machine with faces on it.
         effect: NOTHING
     },
     nervous_torchbearer: {
         curioId: 'nervous_torchbearer',
-        reply: 'He jumps, apologises, points at a tile, apologises for pointing, and holds the light steady for a moment.',
-        gained: 'A peek, from a man who would rather you did not mention it.',
+        reply: tr.s('He jumps, apologises, points at a tile, apologises for pointing, and holds the light steady for a moment.'),
+        gained: tr.s('A peek, from a man who would rather you did not mention it.'),
         effect: { ...NOTHING, peekCharges: 1 }
     },
     hoarding_rat: {
         curioId: 'hoarding_rat',
-        reply: 'It considers you at length, moves itself between you and the pile, and does not blink.',
-        gained: 'Nothing more. It is keeping the pile.',
+        reply: tr.s('It considers you at length, moves itself between you and the pile, and does not blink.'),
+        gained: tr.s('Nothing more. It is keeping the pile.'),
         // The rat's gift is its arrival peek; the greeting pays nothing on purpose, because a
         // hoarder that hands over a second thing when asked nicely is not a hoarder.
         effect: NOTHING
     },
     gossiping_skull: {
         curioId: 'gossiping_skull',
-        reply: 'It tells you, in detail, about the last person who came through here and exactly which tile finished them.',
+        reply: tr.s('It tells you, in detail, about the last person who came through here and exactly which tile finished them.'),
         // The skull has watched this floor for a long time. It knows which clump is worth a chain.
         replyFor: (run) => {
             const clump = run.board ? largestHiddenSuitClump(run.board) : null;
             return clump && clump.size >= 3
-                ? `It tells you, in detail, about the last person who came through here — and that the big ${
+                ? tr`It tells you, in detail, about the last person who came through here — and that the big ${
                       getTileSuit(clump.suit).name
                   } clump, ${clump.size} tiles of it, is where they should have started.`
                 : null;
         },
-        gained: 'One more chance to take a flip back — someone else already made that mistake for you.',
+        gained: tr.s('One more chance to take a flip back — someone else already made that mistake for you.'),
         effect: { ...NOTHING, undoUses: 1 }
     },
     off_duty_guard: {
         curioId: 'off_duty_guard',
-        reply: '"Bird about," he says, without looking up. "Takes things. Already looked the other way once for you; twice gets noticed."',
-        gained: 'No supplies. Just a warning about the magpie.',
+        reply: tr.s('"Bird about," he says, without looking up. "Takes things. Already looked the other way once for you; twice gets noticed."'),
+        gained: tr.s('No supplies. Just a warning about the magpie.'),
         // Gen 183: the token he lent bought a life, and there are no lives. His gift is the peek on
         // arrival (`floor-curio-rules.ts`); the torchbearer's greeting is the one that pays a peek,
         // and a cast where two residents hand over the same thing is one button with two labels.
@@ -90,7 +91,7 @@ export const FLOOR_CURIO_GREETINGS: Readonly<Record<FloorCurioId, FloorCurioGree
     },
     sticky_toffee: {
         curioId: 'sticky_toffee',
-        reply: 'You address the toffee. The toffee does not answer, but the whole floor comes unstuck.',
+        reply: tr.s('You address the toffee. The toffee does not answer, but the whole floor comes unstuck.'),
         /*
          * Gen 200: the toffee used to hand over a stray charge, and Stray left with the last card
          * it could legally take. The first replacement paid an undo - and the test above caught it
@@ -98,7 +99,7 @@ export const FLOOR_CURIO_GREETINGS: Readonly<Record<FloorCurioId, FloorCurioGree
          * residents hand over the same thing is one button with two faces. A shuffle is the third
          * lever the game still has, and "comes unstuck" is the same joke about a sticky floor.
          */
-        gained: 'One shuffle, on the house.',
+        gained: tr.s('One shuffle, on the house.'),
         effect: { ...NOTHING, shuffleCharges: 1 }
     }
 };

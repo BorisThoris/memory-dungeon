@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { BoardFold } from './board-fold-rules';
 import type { BoardState, ElementReactionImpact, RealmId, Tile, TileSuit } from './contracts';
 import { ELEMENT_NAMES, type AlchemyLog } from './element-alchemy-rules';
@@ -8,18 +9,18 @@ import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 
 /** Ground is geometry, not a card status. A current carries the card, never the pool beneath it. */
 export const ELEMENT_GROUND_RULES: Readonly<Record<TileSuit, string>> = {
-    ember: 'Cinders react with later water or frost casts. Fire matches kindle vulnerable cards.',
-    tide: 'Water casts douse fires and carry unanchored cards. Pools meet cinders for a Steam reveal.',
-    bone: 'Ice anchors cards against elemental currents, wind and lightning. Cards can still be turned.',
-    moss: 'Roots bear fruit: a later match on planted roots harvests one gold, at most once per turn.'
+    ember: tr.s('Cinders react with later water or frost casts. Fire matches kindle vulnerable cards.'),
+    tide: tr.s('Water casts douse fires and carry unanchored cards. Pools meet cinders for a Steam reveal.'),
+    bone: tr.s('Ice anchors cards against elemental currents, wind and lightning. Cards can still be turned.'),
+    moss: tr.s('Roots bear fruit: a later match on planted roots harvests one gold, at most once per turn.')
 };
 
 export const ARENA_GROUND_RULES: Readonly<Record<RealmId, string>> = {
-    ember: 'The arena is hot: water makes Steam, frost Thaw, grove Blaze.',
-    tide: 'The arena is wet: fire makes Steam, frost Freeze-over, grove Flood.',
-    frost: 'The arena is frozen: fire makes Thaw, water Freeze-over, grove Frostbloom.',
-    grove: 'The arena is fertile: fire makes Blaze, water Flood, frost Frostbloom.',
-    storm: 'The arena conducts every cast: one nearby face flashes into view.'
+    ember: tr.s('The arena is hot: water makes Steam, frost Thaw, grove Blaze.'),
+    tide: tr.s('The arena is wet: fire makes Steam, frost Freeze-over, grove Flood.'),
+    frost: tr.s('The arena is frozen: fire makes Thaw, water Freeze-over, grove Frostbloom.'),
+    grove: tr.s('The arena is fertile: fire makes Blaze, water Flood, frost Frostbloom.'),
+    storm: tr.s('The arena conducts every cast: one nearby face flashes into view.')
 };
 
 const SUITS: readonly TileSuit[] = ['ember', 'tide', 'bone', 'moss'];
@@ -83,7 +84,7 @@ export const castElementalGround = ({
     const lit = new Set<string>();
     const notes: string[] = [];
     let gold = sources.some((i) => previous[i] === 'moss') ? 1 : 0;
-    if (gold) notes.push('Roots harvested +1 gold');
+    if (gold) notes.push(tr.s('Roots harvested +1 gold'));
     const primary = realmSuit(realmId);
     const substrate = primary === suit ? realmSuit(secondaryId) ?? primary : primary;
     const origins = reactionTileIds.map(id => tiles.findIndex(tile => tile.id === id)).filter(i => i >= 0).sort((a, b) => a - b);
@@ -96,17 +97,17 @@ export const castElementalGround = ({
         gold += chemistry.gold;
         for (const id of chemistry.touchedTileIds) touched.add(id);
         for (const id of chemistry.litTileIds) lit.add(id);
-        notes.push(`${ELEMENT_NAMES[suit]} + ${ELEMENT_NAMES[met!]} ground → ${reaction!.name}: ${elementReactionSummary(reaction!.kind, 1)}`);
+        notes.push(tr`${ELEMENT_NAMES[suit]} + ${ELEMENT_NAMES[met!]} ground → ${reaction!.name}: ${elementReactionSummary(reaction!.kind, 1)}`);
         if (reaction!.kind === 'freezeover') for (const i of footprint) ground[i] = 'bone';
         if (reaction!.kind === 'flood') for (const i of footprint) ground[i] = 'moss';
     }
 
     if (realmId === 'storm' || secondaryId === 'storm') {
         const index = neighbours.find(i => !lit.has(tiles[i]!.id));
-        if (index != null) { lit.add(tiles[index]!.id); notes.push('Storm reveals an extra face'); }
+        if (index != null) { lit.add(tiles[index]!.id); notes.push(tr.s('Storm reveals an extra face')); }
     }
     for (const id of lit) touched.add(id);
     const name = reaction?.name ?? null;
-    if (notes.length === 0) notes.push(suit === 'bone' ? 'Ice anchors the ground' : suit === 'moss' ? 'Roots planted for your next match' : `${ELEMENT_NAMES[suit]} ground spreads`);
+    if (notes.length === 0) notes.push(suit === 'bone' ? tr.s('Ice anchors the ground') : suit === 'moss' ? tr.s('Roots planted for your next match') : tr`${ELEMENT_NAMES[suit]} ground spreads`);
     return { ...(chemistry ? { reactionImpact: { kind: chemistry.kind, scope: 'ground' as const, potency: chemistry.potency, sourceCells: origins, changes: chemistry.changes, gold: chemistry.gold, score: chemistry.score, stillTurns: chemistry.stillTurns, resonanceGain: chemistry.resonanceGain } } : {}), ground, cells: footprint.length, touchedTileIds: [...touched], litTileIds: [...lit], gold, score: chemistry?.score ?? 0, stillTurns: chemistry?.stillTurns ?? 0, resonanceGain: chemistry?.resonanceGain ?? 0, reactionElements: reaction?.elements ?? [], reaction: name, detail: notes.join(' · '), quenchFire: reaction?.kind === 'steam' || reaction?.kind === 'melt' };
 };

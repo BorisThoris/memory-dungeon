@@ -13,6 +13,7 @@
  * game does not have. Checked mechanically: collect every string the shipping code can emit, and
  * a branch whose needle appears nowhere in that corpus cannot fire.
  */
+import { englishOf, isCopy, plural, tr } from '../../shared/i18n';
 import type { RunState } from '../../shared/contracts';
 
 export type VisualHudAnnouncementSignalTone = 'chain' | 'reward' | 'risk' | 'guard' | 'trait' | 'objective' | 'info';
@@ -37,12 +38,12 @@ export const getStackCashoutLaneCount = (labels: readonly string[]): number =>
     [
         labels.some(
             (label) =>
-                /^Chain x/i.test(label)
+                /^Chain x/i.test(englishOf(label))
         ),
-        labels.includes('Pickup') || labels.includes('Pickup cashout'),
-        labels.includes('Route paid') || labels.includes('Route cashout'),
-        labels.includes('Trait cashout') || labels.includes('Perk pop'),
-        labels.includes('Stack cashout') || labels.includes('Super stack')
+        labels.some((label) => isCopy(label, 'Pickup')) || labels.some((label) => isCopy(label, 'Pickup cashout')),
+        labels.some((label) => isCopy(label, 'Route paid')) || labels.some((label) => isCopy(label, 'Route cashout')),
+        labels.some((label) => isCopy(label, 'Trait cashout')) || labels.some((label) => isCopy(label, 'Perk pop')),
+        labels.some((label) => isCopy(label, 'Stack cashout')) || labels.some((label) => isCopy(label, 'Super stack'))
     ].filter(Boolean).length;
 
 const chainWordToNumber: Record<string, number> = {
@@ -64,13 +65,13 @@ export const getVisualHudAnnouncementSignal = (
     if (!announcement) {
         return null;
     }
-    const normalized = announcement.toLowerCase();
+    const normalized = englishOf(announcement).toLowerCase();
     if (
         priority === 'error' ||
         normalized.includes('no match') ||
         (normalized.includes('chain') && normalized.includes('broken'))
     ) {
-        return { label: 'Risk', tone: 'risk' };
+        return { label: tr.s('Risk'), tone: 'risk' };
     }
     if (
         normalized.includes('chain times') ||
@@ -78,7 +79,7 @@ export const getVisualHudAnnouncementSignal = (
         normalized.includes('streak') ||
         normalized.includes('chain cascade')
     ) {
-        return { label: 'Chain', tone: 'chain' };
+        return { label: tr.s('Chain'), tone: 'chain' };
     }
     if (
         normalized.includes('reward cascade') ||
@@ -87,15 +88,15 @@ export const getVisualHudAnnouncementSignal = (
         normalized.includes('cashout') ||
         normalized.includes('reward')
     ) {
-        return { label: 'Reward', tone: 'reward' };
+        return { label: tr.s('Reward'), tone: 'reward' };
     }
     if (normalized.includes('trait') || normalized.includes('perk pop')) {
-        return { label: 'Trait', tone: 'trait' };
+        return { label: tr.s('Trait'), tone: 'trait' };
     }
     if (normalized.includes('objective') || normalized.includes('match resolved')) {
-        return { label: 'Objective', tone: 'objective' };
+        return { label: tr.s('Objective'), tone: 'objective' };
     }
-    return { label: 'Action', tone: 'info' };
+    return { label: tr.s('Action'), tone: 'info' };
 };
 
 const pushUniqueDetail = (
@@ -132,81 +133,81 @@ export const getVisualHudAnnouncementImpact = (
         return { burstTier: 'none', details, level: 'low' };
     }
 
-    const normalizedAnnouncement = announcement.toLowerCase();
+    const normalizedAnnouncement = englishOf(announcement).toLowerCase();
     const chainLabel = getChainMultiplierLabel(normalizedAnnouncement);
 
     if (chainLabel) {
-        pushUniqueDetail(details, { label: `Chain ${chainLabel}`, tone: 'chain' });
+        pushUniqueDetail(details, { label: tr`Chain ${chainLabel}`, tone: 'chain' });
     } else if (/\b\d+\s+match streak\b|\bstreak\s+x?\d+\b|\bcurrent streak\b|\bstreak live\b/.test(normalizedAnnouncement)) {
-        pushUniqueDetail(details, { label: 'Streak live', tone: 'chain' });
+        pushUniqueDetail(details, { label: tr.s('Streak live'), tone: 'chain' });
     }
     if (normalizedAnnouncement.includes('combo cascade')) {
-        pushUniqueDetail(details, { label: 'Combo cascade', tone: 'chain' });
-        pushUniqueDetail(details, { label: 'Reward cascade', tone: 'reward' });
+        pushUniqueDetail(details, { label: tr.s('Combo cascade'), tone: 'chain' });
+        pushUniqueDetail(details, { label: tr.s('Reward cascade'), tone: 'reward' });
     } else if (normalizedAnnouncement.includes('reward cascade')) {
-        pushUniqueDetail(details, { label: 'Reward cascade', tone: 'reward' });
+        pushUniqueDetail(details, { label: tr.s('Reward cascade'), tone: 'reward' });
     } else if (normalizedAnnouncement.includes('chain cascade')) {
-        pushUniqueDetail(details, { label: 'Chain cascade', tone: 'chain' });
+        pushUniqueDetail(details, { label: tr.s('Chain cascade'), tone: 'chain' });
     }
     if (normalizedAnnouncement.includes('chain') && normalizedAnnouncement.includes('broken')) {
-        pushUniqueDetail(details, { label: 'Chain break', tone: 'risk' });
+        pushUniqueDetail(details, { label: tr.s('Chain break'), tone: 'risk' });
     }
     if (normalizedAnnouncement.includes('super stack')) {
-        pushUniqueDetail(details, { label: 'Super stack', tone: 'reward' });
+        pushUniqueDetail(details, { label: tr.s('Super stack'), tone: 'reward' });
     }
     if (normalizedAnnouncement.includes('payoff stack')) {
-        pushUniqueDetail(details, { label: 'Payoff stack', tone: 'reward' });
+        pushUniqueDetail(details, { label: tr.s('Payoff stack'), tone: 'reward' });
     }
     if (normalizedAnnouncement.includes('stack cashout')) {
-        pushUniqueDetail(details, { label: 'Stack cashout', tone: 'reward' });
+        pushUniqueDetail(details, { label: tr.s('Stack cashout'), tone: 'reward' });
     }
     if (normalizedAnnouncement.includes('cashout hit')) {
-        pushUniqueDetail(details, { label: 'Cashout hit', tone: 'reward' });
+        pushUniqueDetail(details, { label: tr.s('Cashout hit'), tone: 'reward' });
     }
     if (normalizedAnnouncement.includes('reward cashout')) {
-        pushUniqueDetail(details, { label: 'Reward cashout', tone: 'reward' });
+        pushUniqueDetail(details, { label: tr.s('Reward cashout'), tone: 'reward' });
     }
     if (normalizedAnnouncement.includes('perk pop')) {
-        pushUniqueDetail(details, { label: 'Perk pop', tone: 'trait' });
+        pushUniqueDetail(details, { label: tr.s('Perk pop'), tone: 'trait' });
     }
     if (normalizedAnnouncement.includes('trait cashout')) {
-        pushUniqueDetail(details, { label: 'Trait cashout', tone: 'trait' });
+        pushUniqueDetail(details, { label: tr.s('Trait cashout'), tone: 'trait' });
     } else if (normalizedAnnouncement.includes('trait surge') || normalizedAnnouncement.includes('trait combo surge')) {
-        pushUniqueDetail(details, { label: 'Trait surge', tone: 'trait' });
+        pushUniqueDetail(details, { label: tr.s('Trait surge'), tone: 'trait' });
     }
     if (normalizedAnnouncement.includes('pickup cashout')) {
-        pushUniqueDetail(details, { label: 'Pickup cashout', tone: 'reward' });
+        pushUniqueDetail(details, { label: tr.s('Pickup cashout'), tone: 'reward' });
     } else if (normalizedAnnouncement.includes('route cashout')) {
-        pushUniqueDetail(details, { label: 'Route cashout', tone: 'reward' });
+        pushUniqueDetail(details, { label: tr.s('Route cashout'), tone: 'reward' });
     } else if (/\b(clean|sharp|fever) reached\b/.test(normalizedAnnouncement)) {
-        pushUniqueDetail(details, { label: 'Rung reached', tone: 'chain' });
+        pushUniqueDetail(details, { label: tr.s('Rung reached'), tone: 'chain' });
     } else if (normalizedAnnouncement.includes('chain hit')) {
-        pushUniqueDetail(details, { label: 'Chain hit', tone: 'chain' });
+        pushUniqueDetail(details, { label: tr.s('Chain hit'), tone: 'chain' });
     }
     if (normalizedAnnouncement.includes('claimed:') || normalizedAnnouncement.includes('pickup')) {
-        pushUniqueDetail(details, { label: 'Pickup', tone: 'reward' });
+        pushUniqueDetail(details, { label: tr.s('Pickup'), tone: 'reward' });
     }
     if (normalizedAnnouncement.includes('trait routes') || normalizedAnnouncement.includes('trait route')) {
-        pushUniqueDetail(details, { label: normalizedAnnouncement.includes('complete') ? 'Route paid' : 'Route progress', tone: 'trait' });
+        pushUniqueDetail(details, { label: normalizedAnnouncement.includes('complete') ? tr.s('Route paid') : tr.s('Route progress'), tone: 'trait' });
     } else if (normalizedAnnouncement.includes('trait resolved')) {
-        pushUniqueDetail(details, { label: 'Trait payoff', tone: 'trait' });
+        pushUniqueDetail(details, { label: tr.s('Trait payoff'), tone: 'trait' });
     } else if (normalizedAnnouncement.includes('trait penalty')) {
-        pushUniqueDetail(details, { label: 'Trait penalty', tone: 'risk' });
+        pushUniqueDetail(details, { label: tr.s('Trait penalty'), tone: 'risk' });
     }
     if (normalizedAnnouncement.includes('objective')) {
-        pushUniqueDetail(details, { label: normalizedAnnouncement.includes('missed') || normalizedAnnouncement.includes('failed') ? 'Objective missed' : 'Objective', tone: 'objective' });
+        pushUniqueDetail(details, { label: normalizedAnnouncement.includes('missed') || normalizedAnnouncement.includes('failed') ? tr.s('Objective missed') : tr.s('Objective'), tone: 'objective' });
     }
     if (priority === 'error' || normalizedAnnouncement.includes('no match')) {
-        pushUniqueDetail(details, { label: 'Miss', tone: 'risk' });
+        pushUniqueDetail(details, { label: tr.s('Miss'), tone: 'risk' });
     }
     if (
         normalizedAnnouncement.includes('no match') &&
         /\b(recover|rebuild|known pair|safe match|remembered pair|choose another opener)\b/.test(normalizedAnnouncement)
     ) {
-        pushUniqueDetail(details, { label: 'Recover', tone: 'risk' });
+        pushUniqueDetail(details, { label: tr.s('Recover'), tone: 'risk' });
     }
     if (normalizedAnnouncement.includes('gambit')) {
-        pushUniqueDetail(details, { label: 'Gambit', tone: 'objective' });
+        pushUniqueDetail(details, { label: tr.s('Gambit'), tone: 'objective' });
     }
 
     const level =
@@ -219,7 +220,7 @@ export const getVisualHudAnnouncementImpact = (
         chainLabel === 'x9' ||
         chainLabel === 'x10'
             ? 'high'
-            : details.length >= 2 || details.some((detail) => detail.label === 'Trait surge')
+            : details.length >= 2 || details.some((detail) => isCopy(detail.label, 'Trait surge'))
               ? 'medium'
               : 'low';
 
@@ -259,7 +260,7 @@ export const getVisualHudAnnouncementFollowup = ({
     if (!announcement) {
         return null;
     }
-    const normalizedAnnouncement = announcement.toLowerCase();
+    const normalizedAnnouncement = englishOf(announcement).toLowerCase();
 
     if (runStatus === 'gameOver') {
         return null;
@@ -271,11 +272,11 @@ export const getVisualHudAnnouncementFollowup = ({
 
     if (remainingPairCount === 0) {
         // Gen 201: this said "exit is ready". There is no exit - a floor ends when the board does.
-        return 'Next: the floor is clear.';
+        return tr.s('Next: the floor is clear.');
     }
 
     if (normalizedAnnouncement.includes('chain') && normalizedAnnouncement.includes('broken')) {
-        return 'Next: rebuild from a confirmed pair before chasing rewards.';
+        return tr.s('Next: rebuild from a confirmed pair before chasing rewards.');
     }
 
 
@@ -283,23 +284,23 @@ export const getVisualHudAnnouncementFollowup = ({
         normalizedAnnouncement.includes('trait route prime found') ||
         normalizedAnnouncement.includes('trait route setup found')
     ) {
-        return 'Next: use Swap on the marked cards to create the route.';
+        return tr.s('Next: use Swap on the marked cards to create the route.');
     }
 
     if (normalizedAnnouncement.includes('pickup cashout')) {
-        return 'Next: pickup reward applied; keep the streak alive with a confirmed pair.';
+        return tr.s('Next: pickup reward applied; keep the streak alive with a confirmed pair.');
     }
 
     if (normalizedAnnouncement.includes('route cashout')) {
-        return 'Next: route value is banked; chase the safest chainable payoff.';
+        return tr.s('Next: route value is banked; chase the safest chainable payoff.');
     }
 
     if (normalizedAnnouncement.includes('perk pop')) {
-        return 'Next: perk payoff landed; route the next trait or chain cashout.';
+        return tr.s('Next: perk payoff landed; route the next trait or chain cashout.');
     }
 
     if (normalizedAnnouncement.includes('trait cashout')) {
-        return 'Next: trait payoff landed; look for the next connected trait card.';
+        return tr.s('Next: trait payoff landed; look for the next connected trait card.');
     }
 
     if (
@@ -308,35 +309,35 @@ export const getVisualHudAnnouncementFollowup = ({
             normalizedAnnouncement.includes('penalties applied') ||
             normalizedAnnouncement.includes('no match'))
     ) {
-        return 'Next: multiple trait penalties landed; use the safest confirmed pair before touching that cluster again.';
+        return tr.s('Next: multiple trait penalties landed; use the safest confirmed pair before touching that cluster again.');
     }
 
     if (normalizedAnnouncement.includes('combo cascade') || normalizedAnnouncement.includes('combo burst')) {
-        return 'Next: combo burst landed; cash the safest remaining payoff before the chain cools.';
+        return tr.s('Next: combo burst landed; cash the safest remaining payoff before the chain cools.');
     }
 
     if (normalizedAnnouncement.includes('stack cashout')) {
-        return 'Next: stacked payoff banked; protect the streak with a confirmed pair.';
+        return tr.s('Next: stacked payoff banked; protect the streak with a confirmed pair.');
     }
 
     if (normalizedAnnouncement.includes('reward cascade') || normalizedAnnouncement.includes('reward burst')) {
-        return 'Next: reward burst landed; keep the payoff loop alive with a safe match.';
+        return tr.s('Next: reward burst landed; keep the payoff loop alive with a safe match.');
     }
 
     if (normalizedAnnouncement.includes('trait surge') || normalizedAnnouncement.includes('trait combo surge')) {
-        return 'Next: trait surge landed; look for the next multi-trait route.';
+        return tr.s('Next: trait surge landed; look for the next multi-trait route.');
     }
 
     if (normalizedAnnouncement.includes('trait routes')) {
         return normalizedAnnouncement.includes('complete')
-            ? 'Next: route cashout banked; spend it when the board gets risky.'
-            : 'Next: line up another trait interaction before the floor ends.';
+            ? tr.s('Next: route cashout banked; spend it when the board gets risky.')
+            : tr.s('Next: line up another trait interaction before the floor ends.');
     }
 
     // The line after a miss (thesis §67): the cards reset, pick a remembered pair, and nothing about
     // what it cost, because it cost nothing.
     if (normalizedAnnouncement.includes('no match')) {
-        return 'Next: cards reset; pick a remembered pair.';
+        return tr.s('Next: cards reset; pick a remembered pair.');
     }
 
 
@@ -345,7 +346,7 @@ export const getVisualHudAnnouncementFollowup = ({
 
 
     if (normalizedAnnouncement.includes('pin lattice')) {
-        return 'Next: planning paid out; preserve pins for uncertain pairs.';
+        return tr.s('Next: planning paid out; preserve pins for uncertain pairs.');
     }
 
 
@@ -355,34 +356,34 @@ export const getVisualHudAnnouncementFollowup = ({
 
 
     if (normalizedAnnouncement.includes('claimed:')) {
-        return 'Next: pickup reward applied; keep clearing confirmed pairs.';
+        return tr.s('Next: pickup reward applied; keep clearing confirmed pairs.');
     }
 
     if (normalizedAnnouncement.includes('recall broken') || normalizedAnnouncement.includes('memory aid used')) {
-        return 'Next: rebuild recall with a confirmed pair.';
+        return tr.s('Next: rebuild recall with a confirmed pair.');
     }
 
     if (normalizedAnnouncement.includes('chain times')) {
-        return 'Next: preserve the streak with the best safe match.';
+        return tr.s('Next: preserve the streak with the best safe match.');
     }
 
     if (normalizedAnnouncement.includes('trait resolved') || normalizedAnnouncement.includes('trait penalty')) {
         return normalizedAnnouncement.includes('penalty')
-            ? 'Next: trait penalty landed; rebuild from a confirmed pair.'
-            : 'Next: trait payoff landed; look for the next chainable interaction.';
+            ? tr.s('Next: trait penalty landed; rebuild from a confirmed pair.')
+            : tr.s('Next: trait payoff landed; look for the next chainable interaction.');
     }
 
 
     if (normalizedAnnouncement.includes('match resolved')) {
-        return `Next: ${remainingPairCount} ${remainingPairCount === 1 ? 'pair' : 'pairs'} left.`;
+        return tr`Next: ${plural(remainingPairCount, { one: '{0} pair', other: '{0} pairs' })} left.`;
     }
 
     if (normalizedAnnouncement.includes('gambit')) {
-        return 'Next: take the third flip only if the wager is worth it.';
+        return tr.s('Next: take the third flip only if the wager is worth it.');
     }
 
     if (priority === 'error') {
-        return 'Next: cards reset; pick a remembered pair.';
+        return tr.s('Next: cards reset; pick a remembered pair.');
     }
 
     return null;

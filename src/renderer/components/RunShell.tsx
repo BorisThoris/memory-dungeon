@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 import { memo, useCallback, useEffect, useRef, useState, useSyncExternalStore, type CSSProperties, type ReactElement } from 'react';
 import { rememberToolCharges, risenToolCharges, toolChargeBaseline, TOOL_FRESH_MS } from './runShellFreshTools';
 import { keyCodeLabel, TOOL_KEY_ACTIONS, toolSlotForCode } from '../../shared/key-bindings';
@@ -58,7 +59,7 @@ const dreadEyeOpen = (tierId: string): number => Math.max(0, DREAD_TIERS.findInd
 const ELEMENT_BY_NAME = new Map<string, TileSuit>([
     ...(Object.entries(ELEMENT_NAMES) as [TileSuit, string][]).map(([suit, name]) => [name, suit] as [string, TileSuit]),
     // The calm goal says Ice for the frost element.
-    ['Ice', 'bone']
+    [tr.s('Ice'), 'bone']
 ]);
 const recipeWords = (recipe: string): ReactElement[] =>
     recipe.split(new RegExp(`(\\b(?:${[...ELEMENT_BY_NAME.keys()].join('|')})\\b)`, 'u')).filter(Boolean).map((part, index) => {
@@ -481,7 +482,7 @@ const RunShell = ({
         if (risen.length === 0) return;
         // The counts are read against a baseline outside React (it outlives the remount between floors),
         // so the glow is set from the effect that compares them, once per rise.
-        // eslint-disable-next-line react-hooks/set-state-in-effect
+         
         setFreshTools((current) => new Set([...current, ...risen]));
         const timer = setTimeout(() => {
             freshTimers.current.delete(timer);
@@ -652,7 +653,7 @@ const RunShell = ({
             style={{ '--combo-heat': heat.heat, '--combo-aura': heat.aura, '--combo-hue': `${heat.hueDeg}deg`, '--combo-flame': temper.colors[heat.stageIndex], '--combo-surge': heat.surge } as CSSProperties}
         >
             <header className={styles.head} data-testid="game-hud">
-                <div className={styles.stats} role="group" aria-label="Run stats">
+                <div className={styles.stats} role="group" aria-label={tr.s("Run stats")}>
                     <div className={styles.identity}>
                         {/* A shared game runs to an agreed number of floors, so the floor count is a
                             progress reading rather than a depth reading. */}
@@ -661,7 +662,7 @@ const RunShell = ({
                             data-personal-best={personalBestDepth ? 'true' : undefined}
                             data-testid="hud-floor"
                         >
-                            <span className={styles.floorWord}>Floor</span>{' '}
+                            <span className={styles.floorWord}>{tr.s("Floor")}</span>{' '}
                             <span className={styles.floorNumber}>
                                 {isPassAndPlayRun(run.passAndPlay)
                                     ? PASS_AND_PLAY_COPY.floorProgress(run.board?.level ?? 1, PASS_AND_PLAY_FLOORS)
@@ -741,7 +742,7 @@ const RunShell = ({
                             <span className={styles.lives} data-testid="hud-misses-left"
                                 data-low={missesRemaining <= 1 ? 'true' : undefined}
                                 data-miss-earned={missesEarned > 0 ? 'true' : undefined}
-                                role="img" aria-label={`${missesRemaining} ${missesRemaining === 1 ? 'life' : 'lives'} left`}
+                                role="img" aria-label={tr`${plural(missesRemaining, { one: '{0} life', other: '{0} lives' })} left`}
                                 title={MISS_BANK_TITLE}>
                                 <svg aria-hidden="true" viewBox="0 0 32 36" data-life-icon="relic-heart">
                                     <path d="m16 33-12-13-2-10 5-6 5-1 4 5 4-5 5 1 5 6-2 10Z" fill="#2b1c20" stroke="#ae8247" strokeWidth="1.5" strokeLinejoin="round" />
@@ -754,7 +755,7 @@ const RunShell = ({
                                     <path d="m16 1 1.5 2L16 5l-1.5-2Z" fill="#edc58a" />
                                 </svg>
                                 <span className={styles.lifeCount}>{missesRemaining}</span>
-                                <span className={styles.lifeLabel}>{missesRemaining === 1 ? 'life' : 'lives'}</span>
+                                <span className={styles.lifeLabel}>{missesRemaining === 1 ? tr.s('life') : tr.s('lives')}</span>
                                 {missesEarned > 0 ? <span className={styles.parEarned} data-testid="hud-miss-earned">{RUN_SHELL_PAR_COPY.earned(missesEarned)}</span> : null}
                             </span>
                         ) : null}
@@ -772,7 +773,7 @@ const RunShell = ({
                             event.currentTarget.open = false;
                             event.currentTarget.querySelector('summary')?.focus();
                         }}>
-                            <summary tabIndex={0} aria-label="Run details" title="Turns, realm and modifiers"><span aria-hidden="true">···</span></summary>
+                            <summary tabIndex={0} aria-label={tr.s("Run details")} title={tr.s("Turns, realm and modifiers")}><span aria-hidden="true">···</span></summary>
                             <div className={styles.contextPanel}>
                                 {/* Secondary run readings remain available without filling the top bar. */}
                                 <span
@@ -830,7 +831,7 @@ const RunShell = ({
                                     </span>
                                 ) : null}
                                 {mutatorTitles.length > 0 && shellLayout !== 'phone-portrait' ? (
-                                    <span className={styles.mutator} data-testid="hud-mutators" title="Mutator">
+                                    <span className={styles.mutator} data-testid="hud-mutators" title={tr.s("Mutator")}>
                                         {mutatorTitles.join(' · ')}
                                     </span>
                                 ) : null}
@@ -892,8 +893,8 @@ const RunShell = ({
                     </span>
 
                     <span className={styles.score} data-testid="hud-score">
-                        <span className={styles.scoreLabel}>Score</span>
-                        <span className={styles.scoreValue} title={shownScore.toLocaleString()} aria-label={`${shownScore.toLocaleString()} points`}>{formatStat(shownScore)}</span>
+                        <span className={styles.scoreLabel}>{tr.s("Score")}</span>
+                        <span className={styles.scoreValue} title={shownScore.toLocaleString()} aria-label={tr`${shownScore.toLocaleString()} points`}>{formatStat(shownScore)}</span>
                         {/* The purse (run-store-rules.ts), beside the score it is earned with. */}
                         <span className={styles.gold} data-testid="hud-gold" title={RUN_SHELL_LABELS.goldTitle}>
                             <span className={styles.goldValue} title={runGold(run).toLocaleString()}>{formatStat(runGold(run))}</span>{' '}
@@ -931,7 +932,7 @@ const RunShell = ({
                             {rung('fever', CHAIN_TIER_LABELS.fever, '100%')}
                             {rung('sharp', CHAIN_TIER_LABELS.sharp, 'var(--chain-meter-sharp)')}
                             {rung('clean', CHAIN_TIER_LABELS.clean, 'var(--chain-meter-clean)')}
-                            {rung('none', 'Lone', '0%')}
+                            {rung('none', tr.s('Lone'), '0%')}
                             <span className={styles.ladderFlames} data-testid="hud-chain-flames" />
                             {/* The beam of plasma up the rail (`PlasmaRail.tsx`). */}
                             <PlasmaRail colour={temper.colors[heat.stageIndex] ?? '#ffb34b'} combo={chain} fill={meter.fill} reduceMotion={reduceMotion} />
@@ -953,7 +954,7 @@ const RunShell = ({
                                 <span className={styles.comboLabel}>
                                     <span data-testid="hud-combo-stage">
                                         {/* The stage and its numeral wrap as one: "Legendary" then a lone "II" read as two things. */}
-                                        {stageWords[heat.stage] ? <>Combo · <span className={styles.comboStageWord}>{comboStageLabel(stageWords, chain)}</span></> : 'Combo'}
+                                        {stageWords[heat.stage] ? <>{tr.s("Combo ·")} <span className={styles.comboStageWord}>{comboStageLabel(stageWords, chain)}</span></> : tr.s('Combo')}
                                     </span>
                                     {isZoneActive(run) ? (
                                         <span className={styles.comboPerks} data-perks-active="true" data-testid="hud-zone">
@@ -966,7 +967,7 @@ const RunShell = ({
                                 <span
                                     aria-label={
                                         paysMatch
-                                            ? `Your matches pay ×${matchMultiplier}. ${CHAIN_BEAT_COPY.rungValue(tier, run.board?.floorArchetypeId)}`
+                                            ? tr`Your matches pay ×${matchMultiplier}. ${CHAIN_BEAT_COPY.rungValue(tier, run.board?.floorArchetypeId)}`
                                             : CHAIN_BEAT_COPY.rungValue(tier, run.board?.floorArchetypeId)
                                     }
                                     className={styles.rungValue}
@@ -1016,7 +1017,7 @@ const RunShell = ({
                         style={{ '--memorize-urgency': urgency.level } as CSSProperties}
                     >
                         <span className={styles.memorizeTitle}>
-                            Memorize <span className={styles.memorizeCount}>· {memorize.seconds}</span>
+                            {tr.s("Memorize")} <span className={styles.memorizeCount}>· {memorize.seconds}</span>
                         </span>
                         <span className={styles.memorizeHint}>{MEMORIZE_SKIP_COPY.hint}</span>
                     </div>
@@ -1066,14 +1067,14 @@ const RunShell = ({
                   * nothing.
                   */}
                 <div
-                    aria-label="Game controls"
+                    aria-label={tr.s("Game controls")}
                     className={styles.dock}
                     onKeyDown={handleHorizontalToolbarKeyDown}
                     ref={dockRef}
                     role="toolbar"
                 >
                     {trayOpen ? (
-                        <div aria-label="Items" className={styles.tray} data-testid="tool-tray" id="run-shell-item-tray" role="group">
+                        <div aria-label={tr.s("Items")} className={styles.tray} data-testid="tool-tray" id="run-shell-item-tray" role="group">
                             {trayTools.map(toolButton)}
                         </div>
                     ) : null}
@@ -1082,7 +1083,7 @@ const RunShell = ({
                             <button
                                 aria-controls="run-shell-item-tray"
                                 aria-expanded={trayOpen}
-                                aria-label={armedTool ? `${armedTool.name ?? armedTool.title ?? armedTool.label} is armed. Items` : 'Items'}
+                                aria-label={armedTool ? tr`${armedTool.name ?? armedTool.title ?? armedTool.label} is armed. Items` : tr.s('Items')}
                                 className={`${styles.tool} ${styles.toolTray} ${armedTool ? styles.toolArmed : ''}`.trim()}
                                 data-fresh={trayTools.some((tool) => freshTools.has(tool.id)) ? 'true' : undefined}
                                 data-testid="tool-tray-toggle"
@@ -1090,7 +1091,7 @@ const RunShell = ({
                                 type="button"
                             >
                                 <span className={styles.toolGlyph}>{armedTool ? armedTool.glyph : <GameplayItemsIcon />}</span>
-                                <span className={styles.toolLabel}>{armedTool ? armedTool.label : 'Items'}</span>
+                                <span className={styles.toolLabel}>{armedTool ? armedTool.label : tr.s('Items')}</span>
                                 {usableToolCount > 0 && !armedTool ? (
                                     <span aria-hidden="true" className={styles.toolCount}>
                                         {usableToolCount}
@@ -1108,13 +1109,13 @@ const RunShell = ({
                         className={`${styles.tool} ${styles.toolPause}`}
                         data-testid="game-toolbar-main-menu"
                         onClick={onPause}
-                        title="Pause (P / Esc)"
+                        title={tr.s("Pause (P / Esc)")}
                         type="button"
                     >
                         <span className={styles.toolGlyph}>
                             <GameplayMenuIcon />
                         </span>
-                        <span className={styles.toolLabel}>Pause</span>
+                        <span className={styles.toolLabel}>{tr.s("Pause")}</span>
                     </button>
                 </div>
             </footer>

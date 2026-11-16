@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { BoardState, RealmEvent, RealmId, RealmSeverity, RunState, Tile, TileSuit } from './contracts';
 import { SUIT_REALM, runRealmSway, swayAfterTurn, swayTip, type RealmSway } from './realm-sway-rules';
 import { finishElementCast } from './element-cast-feedback';
@@ -815,10 +816,10 @@ export const resolveRealmTurn = ({
             for (const contact of cast.contacts) if (forged.charged.includes(contact.tileId)) contact.outcome = 'charged';
             const focusCalm = cast.suit === 'bone' ? focusOf(run, 'bone') : 0;
             if (focusCalm > 0) { stillTurns = Math.max(stillTurns, focusCalm); still = true; }
-            const forgeDetail = [focusCalm ? `${focusCalm} calm turns banked by Frost focus` : '', forged.charged.length ? `${forged.charged.length} fires converted to charge` : '',
-                forged.lit.length ? `${forged.lit.length} faces revealed by the current` : '',
-                forged.bloomed.length ? `${forged.bloomed.length} seeds ripened` : ''].filter(Boolean).join(' · ');
-            if (forgeDetail) cast.summary += ` · Focus: ${forgeDetail}`;
+            const forgeDetail = [focusCalm ? tr`${focusCalm} calm turns banked by Frost focus` : '', forged.charged.length ? tr`${forged.charged.length} fires converted to charge` : '',
+                forged.lit.length ? tr`${forged.lit.length} faces revealed by the current` : '',
+                forged.bloomed.length ? tr`${forged.bloomed.length} seeds ripened` : ''].filter(Boolean).join(' · ');
+            if (forgeDetail) cast.summary += tr` · Focus: ${forgeDetail}`;
             pinned.clear();
             for (const id of [...pinnedTileIds, ...groundAnchoredTileIds(tiles, ground)]) pinned.add(id);
             castImpact = {
@@ -845,7 +846,7 @@ export const resolveRealmTurn = ({
         const reaction = resolveElementReaction(definition.kind, potency, tiles, nearest, alchemy);
         for (const id of reaction.touchedTileIds) touchedThisTurn.add(id);
         if (castImpact) {
-            const detail = `Amplified ${definition.name} ×${potency}: ${elementReactionSummary(definition.kind, potency)}`;
+            const detail = tr`Amplified ${definition.name} ×${potency}: ${elementReactionSummary(definition.kind, potency)}`;
             castImpact = { ...castImpact, reaction: definition.name,
                 reactions: [...(castImpact.reactions ?? []), { eventKey: eventKey(run, level, turns, definition.kind), kind: definition.kind, scope: 'streak', potency,
                     sourceCells: group, changes: reaction.changes, gold: reaction.gold, score: reaction.score,

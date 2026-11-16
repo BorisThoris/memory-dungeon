@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 import { useMemo, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { ACHIEVEMENT_BY_ID } from '../../shared/achievements';
@@ -59,7 +60,7 @@ const CollectionScreen = () => {
                 id,
                 title: def?.title ?? id,
                 detail: def?.description ?? '',
-                status: earned ? 'Earned' : 'Locked',
+                status: earned ? tr.s('Earned') : tr.s('Locked'),
                 earned
             };
         });
@@ -67,40 +68,40 @@ const CollectionScreen = () => {
         // Feats (`feat-unlocks.ts`, DGE-024): each says what it asks and what it opens, earned or not.
         const feats: CollectionEntry[] = FEATS.map((feat) => {
             const earned = hasFeat(saveData, feat.id);
-            return { id: feat.id, title: feat.name, detail: `${feat.condition} ${feat.unlocks}`, status: earned ? 'Earned' : 'Locked', earned };
+            return { id: feat.id, title: feat.name, detail: `${feat.condition} ${feat.unlocks}`, status: earned ? tr.s('Earned') : tr.s('Locked'), earned };
         });
 
         const honors: CollectionEntry[] = HONOR_UNLOCK_ORDER.map((id) => {
             const def = HONOR_UNLOCK_CATALOG[id];
             const earned = hasHonorUnlock(saveData, id);
-            return { id, title: def.title, detail: def.description, status: earned ? 'Earned' : 'Locked', earned };
+            return { id, title: def.title, detail: def.description, status: earned ? tr.s('Earned') : tr.s('Locked'), earned };
         });
 
         const cosmetics: CollectionEntry[] = getCosmeticCollectionRows(saveData).map((row) => ({
             id: row.id,
             title: row.title ?? row.label,
             detail: row.description,
-            status: row.equipped ? 'Equipped' : row.status === 'owned' ? 'Owned' : 'Locked',
+            status: row.equipped ? tr.s('Equipped') : row.status === 'owned' ? tr.s('Owned') : tr.s('Locked'),
             earned: row.status === 'owned'
         }));
 
         const upgrades: CollectionEntry[] = getPermanentUpgradeRows(saveData).map((row) => ({
             id: row.id,
             title: row.title,
-            detail: `${row.description} Reward: ${row.reward}.`,
+            detail: tr`${row.description} Reward: ${row.reward}.`,
             status:
                 row.status === 'owned'
-                    ? 'Owned'
-                    : `${row.progress.current}/${row.progress.target} · ${row.cost} marks`,
+                    ? tr.s('Owned')
+                    : tr`${row.progress.current}/${row.progress.target} · ${row.cost} marks`,
             earned: row.status === 'owned'
         }));
 
         return [
-            { id: 'achievements', label: 'Achievements', kicker: 'Achievement', entries: achievements, earnedCount: achievements.filter((row) => row.earned).length },
-            { id: 'feats', label: 'Feats', kicker: 'Feat', entries: feats, earnedCount: feats.filter((row) => row.earned).length },
-            { id: 'honors', label: 'Honors', kicker: 'Honor', entries: honors, earnedCount: honors.filter((row) => row.earned).length },
-            { id: 'cosmetics', label: 'Cosmetics', kicker: 'Cosmetic', entries: cosmetics, earnedCount: cosmetics.filter((row) => row.earned).length },
-            { id: 'upgrades', label: 'Upgrades', kicker: 'Permanent upgrade', entries: upgrades, earnedCount: upgrades.filter((row) => row.earned).length }
+            { id: 'achievements', label: tr.s('Achievements'), kicker: tr.s('Achievement'), entries: achievements, earnedCount: achievements.filter((row) => row.earned).length },
+            { id: 'feats', label: tr.s('Feats'), kicker: tr.s('Feat'), entries: feats, earnedCount: feats.filter((row) => row.earned).length },
+            { id: 'honors', label: tr.s('Honors'), kicker: tr.s('Honor'), entries: honors, earnedCount: honors.filter((row) => row.earned).length },
+            { id: 'cosmetics', label: tr.s('Cosmetics'), kicker: tr.s('Cosmetic'), entries: cosmetics, earnedCount: cosmetics.filter((row) => row.earned).length },
+            { id: 'upgrades', label: tr.s('Upgrades'), kicker: tr.s('Permanent upgrade'), entries: upgrades, earnedCount: upgrades.filter((row) => row.earned).length }
         ];
     }, [saveData]);
 
@@ -110,21 +111,21 @@ const CollectionScreen = () => {
     return (
         <MetaShell
             eyebrow="Archive"
-            label="Collection"
+            label={tr.s("Collection")}
             onBack={() => {
                 resumeUiSfxContext();
                 playUiBackSfx(uiGain);
                 closeSubscreen();
             }}
-            subtitle={`${activeSection.earnedCount} of ${activeSection.entries.length} ${activeSection.label.toLowerCase()} · ${honorMarks} honor ${honorMarks === 1 ? 'mark' : 'marks'} · ${collectionStorageNote({ isAchievements: activeSection.id === 'achievements', steamConnected, desktop: hasDesktopBridge() })}`}
+            subtitle={tr`${activeSection.earnedCount} of ${activeSection.entries.length} ${activeSection.label.toLowerCase()} · ${plural(honorMarks, { one: '{0} honor mark', other: '{0} honor marks' })} · ${collectionStorageNote({ isAchievements: activeSection.id === 'achievements', steamConnected, desktop: hasDesktopBridge() })}`}
             testId="collection-screen"
-            title="Collection"
+            title={tr.s("Collection")}
             toolbar={
                 <SectionRail
                     activeId={activeSectionId}
                     controls="collection-entries"
                     idPrefix="collection-tab"
-                    label="Collection sections"
+                    label={tr.s("Collection sections")}
                     onSelect={(id) => {
                         resumeUiSfxContext();
                         playUiClickSfx(uiGain);
@@ -140,7 +141,7 @@ const CollectionScreen = () => {
         >
             <FittedGrid
                 ariaLabel={activeSection.label}
-                emptyState={`No ${activeSection.label.toLowerCase()} yet. Finish a run to start the archive.`}
+                emptyState={tr`No ${activeSection.label.toLowerCase()} yet. Finish a run to start the archive.`}
                 items={activeSection.entries}
                 itemNoun={activeSection.label.toLowerCase()}
                 keyForItem={(entry) => `${activeSection.id}:${entry.id}`}

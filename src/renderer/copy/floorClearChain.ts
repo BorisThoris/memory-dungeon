@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 import type { LevelResult } from '../../shared/contracts';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { awakeningDefinition, isSnowballRelicId } from '../../shared/snowball-relic-rules';
@@ -7,40 +8,40 @@ import { awakeningDefinition, isSnowballRelicId } from '../../shared/snowball-re
  * it paid and why. One line each, nothing when the result predates the field it reads.
  */
 const TIER_MULT_WORD: Record<NonNullable<LevelResult['momentumBonusTier']>, string> = {
-    none: 'cleared cold',
-    clean: 'Clean ×1.5',
-    sharp: 'Sharp ×2.5',
-    fever: 'Fever ×5'
+    none: tr.s('cleared cold'),
+    clean: tr.s('Clean ×1.5'),
+    sharp: tr.s('Sharp ×2.5'),
+    fever: tr.s('Fever ×5')
 };
 
 export const FLOOR_CLEAR_COPY = {
     /** `Floor 3 cleared`. */
-    titleLine: (level: number): string => `Floor ${runNonNegativeInteger(level)} cleared`,
+    titleLine: (level: number): string => tr`Floor ${runNonNegativeInteger(level)} cleared`,
     /** The marker when the cleared floor is deeper than any the profile has seen. */
-    personalBest: 'New deepest floor',
+    personalBest: tr.s('New deepest floor'),
     /**
      * `Onward to the Thunder Spire`: the realm the next floor opens in, named as its room fades in
      * behind the beat - only when it is another realm than this one.
      */
-    onwardLine: (place: string): string => `Onward to ${place.replace(/^The /u, 'the ')}`,
+    onwardLine: (place: string): string => tr`Onward to ${place.replace(/^The /u, 'the ')}`,
     /** `Three floors to the Keeper of Halls`: the next milestone, in view at the reward (DGE-004). */
     milestoneLine: (name: string, floorsToGo: number): string => {
-        const words = ['No', 'One', 'Two', 'Three', 'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine', 'Ten', 'Eleven', 'Twelve'];
+        const words = [tr.s('No'), tr.s('One'), tr.s('Two'), tr.s('Three'), tr.s('Four'), tr.s('Five'), tr.s('Six'), tr.s('Seven'), tr.s('Eight'), tr.s('Nine'), tr.s('Ten'), tr.s('Eleven'), tr.s('Twelve')];
         const count = runNonNegativeInteger(floorsToGo);
-        const floors = `${words[count] ?? count.toLocaleString()} ${count === 1 ? 'floor' : 'floors'}`;
-        return `${floors} to ${name.replace(/^The /u, 'the ')}`;
+        const floors = `${words[count] ?? count.toLocaleString()} ${count === 1 ? tr.s('floor') : tr.s('floors')}`;
+        return tr`${floors} to ${name.replace(/^The /u, 'the ')}`;
     },
     /** `Awakened: Inferno Heart`: the relics that grow which passed their mark on this clear (rules 103). */
     awakenedLine: (ids: readonly string[]): string =>
-        `Awakened: ${ids.filter(isSnowballRelicId).map((id) => awakeningDefinition(id).title).join(' · ')}`,
+        tr`Awakened: ${ids.filter(isSnowballRelicId).map((id) => awakeningDefinition(id).title).join(' · ')}`,
     /** `+1,234`: what the floor paid, bonus included. */
     scoreLine: (scoreGained: number): string => `+${runNonNegativeInteger(scoreGained).toLocaleString()}`,
-    runTotalLine: (totalScore: number): string => `Run total ${runNonNegativeInteger(totalScore).toLocaleString()}`,
+    runTotalLine: (totalScore: number): string => tr`Run total ${runNonNegativeInteger(totalScore).toLocaleString()}`,
     /** `4 turns, par 5`: the floor's turns against its stated par (thesis §41.3). */
     parLine: (result: LevelResult): string | null => {
         if (result.parTurns == null || result.turnsTaken == null) return null;
         const turns = runNonNegativeInteger(result.turnsTaken);
-        return `${turns} ${turns === 1 ? 'turn' : 'turns'}, par ${runNonNegativeInteger(result.parTurns)}`;
+        return tr`${plural(turns, { one: '{0} turn', other: '{0} turns' })}, par ${runNonNegativeInteger(result.parTurns)}`;
     },
     /**
      * The earned tier, efficiency and gold. The main score already includes the bonus.
@@ -51,11 +52,11 @@ export const FLOOR_CLEAR_COPY = {
         const efficiency = runNonNegativeInteger(result.floorEfficiencyBonus);
         const under = Math.max(0, runNonNegativeInteger(result.parTurns) - runNonNegativeInteger(result.turnsTaken));
         const terms = [tier === 'none' ? null : TIER_MULT_WORD[tier],
-            efficiency > 0 ? `${under} under par` : null].filter(Boolean);
+            efficiency > 0 ? tr`${under} under par` : null].filter(Boolean);
         // The purse (run-store-rules.ts): what this clear paid toward the store.
         const gold = runNonNegativeInteger(result.goldEarned);
         if (gold > 0) {
-            terms.push(result.goldDoubled ? `+${gold} gold (Miser's Purse \u00d72)` : `+${gold} gold`);
+            terms.push(result.goldDoubled ? tr`+${gold} gold (Miser's Purse \u00d72)` : tr`+${gold} gold`);
         }
         return terms.length > 0 ? terms.join(' \u00b7 ') : null;
     }

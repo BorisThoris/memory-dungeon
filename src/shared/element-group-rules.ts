@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { BoardFold } from './board-fold-rules';
 import type { ElementCastImpact, RealmEvent, RealmId, Tile, TileSuit } from './contracts';
 import { orthogonalNeighbourIndices } from './skittish-cards-rules';
@@ -39,10 +40,10 @@ export const elementWashCapacity = (power: ReturnType<typeof elementCastPower>):
     ELEMENT_WASH_CAP + ELEMENT_WASH_PER_TIER * (power.extraReach + power.targets - ELEMENT_HOLD_CAP);
 
 export const ELEMENT_MATCH_RULES: Readonly<Record<TileSuit, string>> = {
-    ember: 'Every match burns vines and seeds, melts ice, then ignites a vulnerable block. Match burning cards for +2 gold; an expired fuse costs 1 gold per card. Steam or Thaw quenches the ignition.',
-    tide: 'Every match douses fires, waters seeds into 2-gold blooms and carries vulnerable, unanchored cards one place along.',
-    bone: 'Every match attempts to freeze vulnerable blocks. Frozen cards cannot turn. Ice lasts 1 turn at base power, 2 at power 3, 3 at power 6. Match nearby or use Fire to break it early. A hold keeps at least two pairs under identical ice and leaves a free pair.',
-    moss: 'Every match attempts to tie down vulnerable blocks with vines. Vined cards cannot turn or drift. Match nearby to cut vines for gold, or use Fire to burn them. Combo 6 or tier 2 grows blooming vines worth 3 gold when cut. Holds keep two pairs together and leave a free pair.'
+    ember: tr.s('Every match burns vines and seeds, melts ice, then ignites a vulnerable block. Match burning cards for +2 gold; an expired fuse costs 1 gold per card. Steam or Thaw quenches the ignition.'),
+    tide: tr.s('Every match douses fires, waters seeds into 2-gold blooms and carries vulnerable, unanchored cards one place along.'),
+    bone: tr.s('Every match attempts to freeze vulnerable blocks. Frozen cards cannot turn. Ice lasts 1 turn at base power, 2 at power 3, 3 at power 6. Match nearby or use Fire to break it early. A hold keeps at least two pairs under identical ice and leaves a free pair.'),
+    moss: tr.s('Every match attempts to tie down vulnerable blocks with vines. Vined cards cannot turn or drift. Match nearby to cut vines for gold, or use Fire to burn them. Combo 6 or tier 2 grows blooming vines worth 3 gold when cut. Holds keep two pairs together and leave a free pair.')
 };
 
 const isReal = (tile: Tile): boolean => !isSingletonUtilityPairKey(tile.pairKey) && !isWildPairKey(tile.pairKey);
@@ -174,8 +175,8 @@ export const castElement = ({
         const tile = tiles[index]!;
         if (!elementWouldLand(tile, suit) || kind === 'wash') continue;
         const attempt = kind === 'scorch' ? 'ignited' : kind === 'freeze' ? 'frozen' : 'entangled';
-        const reason = pinned.has(tile.id) ? 'Pinned card' : kind === 'scorch' && quenchFire ? 'Steam or Thaw quenched the fire'
-            : kind === 'freeze' && tile.vined ? 'Already tied down' : kind !== 'scorch' && tile.rime ? 'Protective rime' : kind === 'entangle' && (tile.frost ?? 0) > 0 ? 'Ice protects this card' : null;
+        const reason = pinned.has(tile.id) ? tr.s('Pinned card') : kind === 'scorch' && quenchFire ? tr.s('Steam or Thaw quenched the fire')
+            : kind === 'freeze' && tile.vined ? tr.s('Already tied down') : kind !== 'scorch' && tile.rime ? tr.s('Protective rime') : kind === 'entangle' && (tile.frost ?? 0) > 0 ? tr.s('Ice protects this card') : null;
         if (reason) { attempts.set(tile.id, attempt); blocked.set(tile.id, reason); }
     }
     // Every reached kin block charges once through the same turn ledger.
@@ -198,7 +199,7 @@ export const castElement = ({
                 const tile = tiles[index]!;
                 attempts.set(tile.id, 'ignited');
                 if (pinned.has(tile.id) || quenchFire) {
-                    blocked.set(tile.id, quenchFire ? 'Steam or Thaw quenched the fire' : 'Pinned card');
+                    blocked.set(tile.id, quenchFire ? tr.s('Steam or Thaw quenched the fire') : tr.s('Pinned card'));
                     continue;
                 }
                 // Calm pauses arena hazards and fuse clocks, not the player's cast.
@@ -206,8 +207,8 @@ export const castElement = ({
                 touched.push(tile.id);
                 ignited += 1;
             }
-            if (cleared) outcomes.push(`${cleared} scorched clear`);
-            if (ignited) outcomes.push(`${ignited} ignited · 3-turn fuse`);
+            if (cleared) outcomes.push(tr`${cleared} scorched clear`);
+            if (ignited) outcomes.push(tr`${ignited} ignited · 3-turn fuse`);
             break;
         }
         case 'wash': {
@@ -223,8 +224,8 @@ export const castElement = ({
                 if (tile.fuse != null) doused += 1;
                 touched.push(tile.id);
             }
-            if (doused) outcomes.push(`${doused} fires doused`);
-            if (nurtured) outcomes.push(`${nurtured} seeds watered into 2-gold blooms`);
+            if (doused) outcomes.push(tr`${doused} fires doused`);
+            if (nurtured) outcomes.push(tr`${nurtured} seeds watered into 2-gold blooms`);
             const carried = reached.filter((index) => !anchored.has(tiles[index]!.id) && !tiles[index]!.rime && !tiles[index]!.vined && !(tiles[index]!.frost ?? 0));
             // Water and grove cards are not carried: the water flows around them.
             const movable = wholeBlockTargets(groups, elementWashCapacity(power), index => carried.includes(index) && elementWouldLand(tiles[index]!, suit));
@@ -235,7 +236,7 @@ export const castElement = ({
                     tiles[index] = moved[(at - 1 + moved.length) % moved.length]!;
                 });
                 for (const tile of moved) { movedIds.add(tile.id); if (!touched.includes(tile.id)) touched.push(tile.id); }
-                outcomes.push(`${moved.length} carried by the current`);
+                outcomes.push(tr`${moved.length} carried by the current`);
             }
             break;
         }
@@ -244,7 +245,7 @@ export const castElement = ({
             for (const index of targets) {
                 const tile = tiles[index]!;
                 attempts.set(tile.id, 'frozen');
-                if (pinned.has(tile.id) || tile.rime) { blocked.set(tile.id, tile.rime ? 'Protective rime' : 'Pinned card'); continue; }
+                if (pinned.has(tile.id) || tile.rime) { blocked.set(tile.id, tile.rime ? tr.s('Protective rime') : tr.s('Pinned card')); continue; }
                 tiles[index] = { ...tile, frost: Math.max(tile.frost ?? 0, 1 + Math.floor(power.targets / 3)) };
                 touched.push(tile.id);
             }
@@ -256,7 +257,7 @@ export const castElement = ({
                 const tile = tiles[index]!;
                 attempts.set(tile.id, 'entangled');
                 if (pinned.has(tile.id) || tile.rime || (tile.frost ?? 0) > 0) {
-                    blocked.set(tile.id, pinned.has(tile.id) ? 'Pinned card' : 'Ice protects this card'); continue;
+                    blocked.set(tile.id, pinned.has(tile.id) ? tr.s('Pinned card') : tr.s('Ice protects this card')); continue;
                 }
                 tiles[index] = { ...tile, vined: true, ...(power.blooming ? { bloom: true } : {}) };
                 touched.push(tile.id);
@@ -285,13 +286,13 @@ export const castElement = ({
             }
         }
         const held = [...attempts].filter(([id]) => !blocked.has(id)).length;
-        outcomes.push(held ? `${held} ${kind === 'freeze' ? 'frozen' : 'tied down'}` : `${attempts.size} hold attempts blocked`);
+        outcomes.push(held ? `${held} ${kind === 'freeze' ? 'frozen' : tr.s('tied down')}` : tr`${attempts.size} hold attempts blocked`);
     }
     const charged = reached.filter(index => alchemy.empowered.includes(before[index]!.id)).length;
     const resisted = reached.filter(index => alchemy.neutralized.includes(before[index]!.id)).length;
-    if (charged) outcomes.push(`${charged} cards charged`);
-    if (resisted) outcomes.push(`${resisted} counter-cards resisted`);
-    if (outcomes.length === 0) outcomes.push(touched.length > 0 ? `${new Set(touched).size} cards affected` : 'No vulnerable cards in reach');
+    if (charged) outcomes.push(tr`${charged} cards charged`);
+    if (resisted) outcomes.push(tr`${resisted} counter-cards resisted`);
+    if (outcomes.length === 0) outcomes.push(touched.length > 0 ? tr`${new Set(touched).size} cards affected` : tr.s('No vulnerable cards in reach'));
     const contacts: ElementCastImpact['contacts'] = [];
     // Cohort completion can reach a partner outside the original wave. It gets a real contact too.
     for (const id of attempts.keys()) {

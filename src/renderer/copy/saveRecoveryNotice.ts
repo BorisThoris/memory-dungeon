@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 /**
  * What a player is told when their save could not be read, and what the way out is called.
  *
@@ -7,8 +8,8 @@
  * autosave silently off.
  */
 export const SAVE_RECOVERY_COPY = {
-    action: 'Start a fresh profile',
+    action: tr.s('Start a fresh profile'),
     /** Sits under the notice so the button is not the only explanation of what it does. */
-    detail: 'Your old save is kept beside the new one, so it can be restored later.',
-    title: 'Save could not be read'
+    detail: tr.s('Your old save is kept beside the new one, so it can be restored later.'),
+    title: tr.s('Save could not be read')
 } as const;

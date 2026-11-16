@@ -1,3 +1,4 @@
+import { plural, startsWithCopyPrefix, tr } from './i18n';
 import type { MutatorId, RunState, RunSummary, SaveData } from './contracts';
 import { getChainTargetFeedback } from './chain-targets';
 import { buildMetaProgressionRunDelta } from './meta-progression-delta';
@@ -17,7 +18,7 @@ export interface GameOverNextRunRow {
 
 const runItBackDetail = (summary: RunSummary | null, run: RunState): string => {
     if (!summary) {
-        return 'Complete a run to unlock a restart recommendation.';
+        return tr.s('Complete a run to unlock a restart recommendation.');
     }
     const pickupClaimed = runNonNegativeInteger(run.findablesClaimedThisFloor);
     const pickupTotal = runNonNegativeInteger(run.findablesTotalThisFloor);
@@ -25,16 +26,16 @@ const runItBackDetail = (summary: RunSummary | null, run: RunState): string => {
     const highestLevel = runNonNegativeInteger(summary.highestLevel);
     const levelsCleared = runNonNegativeInteger(summary.levelsCleared);
     const bestStreak = runNonNegativeInteger(summary.bestStreak);
-    const pickupCopy = pickupTotal > 0 ? ` / pickups ${pickupClaimed}/${pickupTotal}` : '';
-    const chainCopy = bestStreak > 0 ? ` / best chain ${bestStreak} ${bestStreak === 1 ? 'match' : 'matches'}` : ' / chain not started';
-    return `${totalScore.toLocaleString()} score / floor ${highestLevel} / ${levelsCleared} clear(s)${chainCopy}${pickupCopy}`;
+    const pickupCopy = pickupTotal > 0 ? tr` / pickups ${pickupClaimed}/${pickupTotal}` : '';
+    const chainCopy = bestStreak > 0 ? tr` / best chain ${plural(bestStreak, { one: '{0} match', other: '{0} matches' })}` : ' / chain not started';
+    return tr`${totalScore.toLocaleString()} score / floor ${highestLevel} / ${levelsCleared} clear(s)${chainCopy}${pickupCopy}`;
 };
 
 const getChainTargetRow = (summary: RunSummary | null): GameOverNextRunRow => {
     const target = getChainTargetFeedback(summary?.bestStreak, summary?.peakChainTier);
     return {
         id: 'chain_target',
-        title: 'Chain target',
+        title: tr.s('Chain target'),
         value: target.value,
         detail: target.detail,
         actionHint: target.actionHint,
@@ -44,28 +45,28 @@ const getChainTargetRow = (summary: RunSummary | null): GameOverNextRunRow => {
 
 const modeLabel = (summary: RunSummary): string => {
     if (summary.activeContract?.noShuffle) {
-        return 'Scholar Contract';
+        return tr.s('Scholar Contract');
     }
     if (summary.activeContract?.maxPinsTotalRun != null) {
-        return 'Pin Vow';
+        return tr.s('Pin Vow');
     }
     if (summary.wildMenuRun) {
-        return 'Wild Run';
+        return tr.s('Wild Run');
     }
     if (summary.practiceMode) {
-        return 'Practice';
+        return tr.s('Practice');
     }
-    return 'Classic';
+    return tr.s('Classic');
 };
 
 const getFallbackNextGoalRow = (summary: RunSummary | null): GameOverNextRunRow => ({
     id: 'next_goal',
-    title: 'Next goal',
-    value: summary && runNonNegativeInteger(summary.highestLevel) < 5 ? 'Reach floor 5' : 'Push a cleaner run',
+    title: tr.s('Next goal'),
+    value: summary && runNonNegativeInteger(summary.highestLevel) < 5 ? tr.s('Reach floor 5') : tr.s('Push a cleaner run'),
     detail: runNonNegativeInteger(summary?.perfectClears) > 0
-        ? `${runNonNegativeInteger(summary?.perfectClears)} perfect floor(s) logged.`
-        : 'Perfect floors and no-assist runs unlock mastery.',
-    actionHint: 'Play Again starts a fresh run. Rematch repeats this layout so you can use what you learned.',
+        ? tr`${runNonNegativeInteger(summary?.perfectClears)} perfect floor(s) logged.`
+        : tr.s('Perfect floors and no-assist runs unlock mastery.'),
+    actionHint: tr.s('Play Again starts a fresh run. Rematch repeats this layout so you can use what you learned.'),
     localOnly: true
 });
 
@@ -77,7 +78,7 @@ const getMetaNextGoalRow = (save: SaveData, previousSave?: SaveData): GameOverNe
     let detail = `${progression.motivationCopy} ${progression.nextMilestoneCopy}`;
 
     if (nextReward?.status === 'available') {
-        value = `${nextReward.title} ready`;
+        value = tr`${nextReward.title} ready`;
     }
     if (delta?.changed === true) {
         value = delta.headline;
@@ -91,54 +92,54 @@ const getMetaNextGoalRow = (save: SaveData, previousSave?: SaveData): GameOverNe
         detail =
             next === ''
                 ? delta.summaryCopy
-                : next.startsWith('Next: ')
+                : startsWithCopyPrefix(next, 'Next: {0} ({1}).')
                   ? `${delta.summaryCopy} ${next}`
-                  : `${delta.summaryCopy} Next: ${next}`;
+                  : tr`${delta.summaryCopy} Next: ${next}`;
     }
 
     return {
         id: 'next_goal',
-        title: 'Next goal',
+        title: tr.s('Next goal'),
         value,
         detail,
-        actionHint: 'Use Profile for reward status and Choose Your Path for the next attempt.',
+        actionHint: tr.s('Use Profile for reward status and Choose Your Path for the next attempt.'),
         localOnly: true
     };
 };
 
 export const getGameOverNextRunRows = (run: RunState, save?: SaveData, previousSave?: SaveData): GameOverNextRunRow[] => {
     const summary = run.lastRunSummary;
-    const runLabel = summary ? modeLabel(summary) : 'No completed run';
+    const runLabel = summary ? modeLabel(summary) : tr.s('No completed run');
     const mutatorCount = runArray<MutatorId>(summary ? summary.activeMutators : run.activeMutators).length;
-    const buildCount = `${mutatorCount} mutator(s)`;
+    const buildCount = tr`${mutatorCount} mutator(s)`;
     const activeContract = summary?.activeContract ?? run.activeContract;
     const buildDetail = activeContract
-        ? 'Contract rules shaped this run.'
-        : 'No contract constraints on this run.';
+        ? tr.s('Contract rules shaped this run.')
+        : tr.s('No contract constraints on this run.');
     return [
         {
             id: 'run_it_back',
-            title: 'Run it back',
+            title: tr.s('Run it back'),
             value: runLabel,
             detail: runItBackDetail(summary, run),
-            actionHint: 'Play Again restarts the current mode locally; Main Menu returns to the hub.',
+            actionHint: tr.s('Play Again restarts the current mode locally; Main Menu returns to the hub.'),
             localOnly: true
         },
         getChainTargetRow(summary),
         {
             id: 'build_recap',
-            title: 'Build recap',
+            title: tr.s('Build recap'),
             value: buildCount,
             detail: buildDetail,
-            actionHint: 'Review Inventory/Codex for build rules before the next attempt.',
+            actionHint: tr.s('Review Inventory/Codex for build rules before the next attempt.'),
             localOnly: true
         },
         {
             id: 'local_share',
-            title: 'Local share',
-            value: summary ? buildRunHistoryExportString(run) : 'No export yet',
-            detail: 'Share strings stay offline-safe: no account, PII, or online rank.',
-            actionHint: 'Use this as a readable recap until clipboard/export UI is expanded.',
+            title: tr.s('Local share'),
+            value: summary ? buildRunHistoryExportString(run) : tr.s('No export yet'),
+            detail: tr.s('Share strings stay offline-safe: no account, PII, or online rank.'),
+            actionHint: tr.s('Use this as a readable recap until clipboard/export UI is expanded.'),
             localOnly: true
         },
         save ? getMetaNextGoalRow(save, previousSave) : getFallbackNextGoalRow(summary)

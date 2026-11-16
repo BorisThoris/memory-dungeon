@@ -1,3 +1,4 @@
+import { plural, tr } from './i18n';
 import type { RealmEvent, RunState, Tile } from './contracts';
 import { isRealmHeld } from './odd-card-rules';
 import { callRealmWeather } from './realm-weather-rules';
@@ -72,7 +73,7 @@ export const applyStillBell = (run: RunState): StillBellResult | null => {
 
 /** What the bell did, in a line for the screen reader and the feedback stamp. */
 export const stillBellFeedbackLine = (freed: number, answer: string | null, left: number): string => {
-    const spent = `${left} ${left === 1 ? 'bell' : 'bells'} left`;
-    const answered = answer ? `, and the realm answered with ${answer}` : '';
-    return `The still bell rang: ${freed} held ${freed === 1 ? 'card' : 'cards'} let go${answered}; ${spent}.`;
+    const spent = tr`${plural(left, { one: '{0} bell', other: '{0} bells' })} left`;
+    const answered = answer ? tr`, and the realm answered with ${answer}` : '';
+    return plural(freed, { one: 'The still bell rang: {0} held card let go{1}; {2}.', other: 'The still bell rang: {0} held cards let go{1}; {2}.' }, answered, spent);
 };

@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import {
     BOSS_FLOOR_SCORE_MULTIPLIER,
     type FloorArchetypeId,
@@ -32,8 +33,8 @@ export const paletteMechanicLine = (floorArchetypeId: FloorArchetypeId | null | 
     // 2026-09-23: the break is capped by rung, so the palette no longer changes what a pop takes.
     // A narrow palette is three suits and a chain that is easier to keep; a wide one is more map.
     return narrow
-        ? `Three-suit deal: a card of your kind is never far, so a chain is easier to keep.`
-        : `${suits}-suit deal: more map to read; a pop takes what it touches, whatever the palette.`;
+        ? tr`Three-suit deal: a card of your kind is never far, so a chain is easier to keep.`
+        : tr`${suits}-suit deal: more map to read; a pop takes what it touches, whatever the palette.`;
 };
 
 export const floorPaletteRead = (
@@ -69,31 +70,31 @@ const PRESENTATION_SLOTS: readonly BossElitePresentationSlot[] = [
     {
         slot: 'icon',
         placeholderNeeded: false,
-        fallback: 'Reuse existing floor tag pill / route node glyph.'
+        fallback: tr.s('Reuse existing floor tag pill / route node glyph.')
     },
     {
         slot: 'key_art',
         placeholderNeeded: true,
-        fallback: 'Use current chapter panel gradient and procedural frame.'
+        fallback: tr.s('Use current chapter panel gradient and procedural frame.')
     },
     {
         slot: 'audio_stinger',
         placeholderNeeded: true,
-        fallback: 'Silence; do not block local/offline play.'
+        fallback: tr.s('Silence; do not block local/offline play.')
     },
     {
         slot: 'fx_burst',
         placeholderNeeded: true,
-        fallback: 'Existing HUD pulse / reduced-motion safe CSS transition.'
+        fallback: tr.s('Existing HUD pulse / reduced-motion safe CSS transition.')
     }
 ] as const;
 
 const mechanicCopy = (mutators: readonly MutatorId[], floorArchetypeId: FloorArchetypeId | null): string[] => {
-    const rows = mutators.map((mutator) => `Mutator: ${mutator.replace(/_/g, ' ')}.`);
+    const rows = mutators.map((mutator) => tr`Mutator: ${mutator.replace(/_/g, ' ')}.`);
     if (floorArchetypeId) {
-        rows.unshift(`Chapter identity: ${floorArchetypeId.replace(/_/g, ' ')}.`);
+        rows.unshift(tr`Chapter identity: ${floorArchetypeId.replace(/_/g, ' ')}.`);
     }
-    return rows.length > 0 ? rows : ['No extra mutator; identity comes from route risk and reward pacing.'];
+    return rows.length > 0 ? rows : [tr.s('No extra mutator; identity comes from route risk and reward pacing.')];
 };
 
 /*
@@ -106,16 +107,16 @@ const mechanicCopy = (mutators: readonly MutatorId[], floorArchetypeId: FloorArc
 export const BOSS_ENCOUNTER_IDENTITY: BossEliteEncounterIdentity = {
     kind: 'boss',
     id: 'boss_floor_identity',
-    label: 'Keystone Warden',
-    readRule: 'Boss floors must display the Keystone Warden tag, a chapter/risk note, and at least one named pressure mechanic before or during play.',
+    label: tr.s('Keystone Warden'),
+    readRule: tr.s('Boss floors must display the Keystone Warden tag, a chapter/risk note, and at least one named pressure mechanic before or during play.'),
     mechanics: [
-        'Keystone Warden boss tag.',
-        'Chapter schedule pressure mutators.',
-        'Featured objective bonus.',
-        'Scattered suit deal: short chains, many small pops.'
+        tr.s('Keystone Warden boss tag.'),
+        tr.s('Chapter schedule pressure mutators.'),
+        tr.s('Featured objective bonus.'),
+        tr.s('Scattered suit deal: short chains, many small pops.')
     ],
-    rewardHook: `Every point on the floor is worth ${BOSS_FLOOR_SCORE_MULTIPLIER}x, the chain bonus included.`,
-    scoreRule: `${BOSS_FLOOR_SCORE_MULTIPLIER}x score multiplier after floor subtotal bonuses.`,
+    rewardHook: tr`Every point on the floor is worth ${BOSS_FLOOR_SCORE_MULTIPLIER}x, the chain bonus included.`,
+    scoreRule: tr`${BOSS_FLOOR_SCORE_MULTIPLIER}x score multiplier after floor subtotal bonuses.`,
     presentationSlots: [...PRESENTATION_SLOTS],
     offlineOnly: true
 };
@@ -130,13 +131,13 @@ export const getBossEncounterIdentityForFloor = (
     return {
         ...BOSS_ENCOUNTER_IDENTITY,
         presentationSlots: BOSS_ENCOUNTER_IDENTITY.presentationSlots.map((slot) => ({ ...slot })),
-        readabilityChecklist: `${BOSS_ENCOUNTER_IDENTITY.readRule} Pending presentation slots: ${BOSS_ENCOUNTER_IDENTITY.presentationSlots
+        readabilityChecklist: tr`${BOSS_ENCOUNTER_IDENTITY.readRule} Pending presentation slots: ${BOSS_ENCOUNTER_IDENTITY.presentationSlots
             .filter((slot) => slot.placeholderNeeded)
             .map((slot) => slot.slot.replace(/_/g, ' '))
             .join(', ')}.`,
-        payoffCopy: `Boss pressure: ${BOSS_ENCOUNTER_IDENTITY.scoreRule} ${BOSS_ENCOUNTER_IDENTITY.rewardHook} Offline-safe fallback art and audio keep the encounter readable.`,
+        payoffCopy: tr`Boss pressure: ${BOSS_ENCOUNTER_IDENTITY.scoreRule} ${BOSS_ENCOUNTER_IDENTITY.rewardHook} Offline-safe fallback art and audio keep the encounter readable.`,
         mechanics: [
-            `${BOSS_ENCOUNTER_IDENTITY.label} boss tag.`,
+            tr`${BOSS_ENCOUNTER_IDENTITY.label} boss tag.`,
             ...mechanicCopy(entry.mutators, entry.floorArchetypeId),
             /*
              * Gen 213: this line was 'Keystone Pair board anchor.' - the same phantom the comment
@@ -151,7 +152,7 @@ export const getBossEncounterIdentityForFloor = (
              * reach a pop gets. Read off the archetype now (`floorPaletteRead`).
              */
             paletteMechanicLine(entry.floorArchetypeId),
-            entry.riskProfile ? `Risk read: ${entry.riskProfile}` : 'Risk read: boss pressure.'
+            entry.riskProfile ? tr`Risk read: ${entry.riskProfile}` : tr.s('Risk read: boss pressure.')
         ]
     };
 };
@@ -162,7 +163,7 @@ export const getBossFloorHudTitle = (
     const identity = getBossEncounterIdentityForFloor('boss', entry);
     return identity
         ? `${identity.label}: ${identity.scoreRule} ${identity.rewardHook}`
-        : 'Keystone Warden scoring';
+        : tr.s('Keystone Warden scoring');
 };
 
 export interface EncounterIdentityRow {
@@ -189,7 +190,7 @@ export interface FloorIdentityContract {
 }
 
 const objectiveSuffix = (featuredObjectiveLabel?: string | null): string =>
-    featuredObjectiveLabel ? ` Objective: ${featuredObjectiveLabel}.` : '';
+    featuredObjectiveLabel ? tr` Objective: ${featuredObjectiveLabel}.` : '';
 
 /*
  * Gen 201 rewrote every sentence below.
@@ -221,12 +222,12 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'spiral_hall') {
         return {
             id: 'spiral',
-            label: 'The Spiral',
-            teachingSentence: `Survive to par. Clear the outer ring and it seals, and fresh pairs are dealt inside it; the floor ends at par, not when the board is empty.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'Score is the goal: chain while the turns last, and clear the outside first to see what the inside deals.',
-            floorClearSentence: 'The Spiral is survived. The turns ran out before you did.',
-            atmosphericFeedback: 'The rings stop closing, and the floor lets you go.',
-            activeReminder: 'Spiral: survive to par; a cleared outer ring seals.',
+            label: tr.s('The Spiral'),
+            teachingSentence: tr`Survive to par. Clear the outer ring and it seals, and fresh pairs are dealt inside it; the floor ends at par, not when the board is empty.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('Score is the goal: chain while the turns last, and clear the outside first to see what the inside deals.'),
+            floorClearSentence: tr.s('The Spiral is survived. The turns ran out before you did.'),
+            atmosphericFeedback: tr.s('The rings stop closing, and the floor lets you go.'),
+            activeReminder: tr.s('Spiral: survive to par; a cleared outer ring seals.'),
             warningLevel: 'danger',
             tokens: ['hidden_known', 'risk', 'objective']
         };
@@ -236,12 +237,12 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'cartographer_hall') {
         return {
             id: 'cartographer',
-            label: 'The Cartographer',
-            teachingSentence: `Two decks deep, and the study window charts the lower deck's elements. Every third match it turns a quarter, clockwise.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'Read the deck beneath as a map while it is charted, and count your matches; a pinned card keeps what lies under it.',
-            floorClearSentence: 'The Cartographer falls. The Deep is behind you.',
-            atmosphericFeedback: 'The chart rolls up, and the floor lies still beneath you.',
-            activeReminder: 'Cartographer: every third match the deck beneath turns.',
+            label: tr.s('The Cartographer'),
+            teachingSentence: tr`Two decks deep, and the study window charts the lower deck's elements. Every third match it turns a quarter, clockwise.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('Read the deck beneath as a map while it is charted, and count your matches; a pinned card keeps what lies under it.'),
+            floorClearSentence: tr.s('The Cartographer falls. The Deep is behind you.'),
+            atmosphericFeedback: tr.s('The chart rolls up, and the floor lies still beneath you.'),
+            activeReminder: tr.s('Cartographer: every third match the deck beneath turns.'),
             warningLevel: 'danger',
             tokens: ['hidden_known', 'risk', 'objective']
         };
@@ -251,12 +252,12 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'keeper_hall') {
         return {
             id: 'keeper',
-            label: 'The Keeper of Halls',
-            teachingSentence: `Two rooms and a doorway, and every fourth turn the rooms swap sides: each card keeps its place inside its room.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'Learn each room as a room, not as a side; a pinned card stays where it is, and so does the card across from it.',
-            floorClearSentence: 'The Keeper of Halls falls. The Living Dungeon is behind you.',
-            atmosphericFeedback: 'The halls settle where they are, and stay.',
-            activeReminder: 'Keeper: every fourth turn the rooms swap sides.',
+            label: tr.s('The Keeper of Halls'),
+            teachingSentence: tr`Two rooms and a doorway, and every fourth turn the rooms swap sides: each card keeps its place inside its room.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('Learn each room as a room, not as a side; a pinned card stays where it is, and so does the card across from it.'),
+            floorClearSentence: tr.s('The Keeper of Halls falls. The Living Dungeon is behind you.'),
+            atmosphericFeedback: tr.s('The halls settle where they are, and stay.'),
+            activeReminder: tr.s('Keeper: every fourth turn the rooms swap sides.'),
             warningLevel: 'danger',
             tokens: ['hidden_known', 'risk', 'objective']
         };
@@ -266,12 +267,12 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'warden_hall') {
         return {
             id: 'warden',
-            label: 'The Warden',
-            teachingSentence: `Every turn past par takes a miss from your bank, matched or not, and every fifth turn the face-down cards are dealt again.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'Spend the study window and the first turns on the board you can see; pin the card you cannot afford to lose to a re-deal.',
-            floorClearSentence: 'The Warden falls. The Descent is won.',
-            atmosphericFeedback: 'The hall lets go of the cards, and of you.',
-            activeReminder: 'Warden: a miss for every turn past par; re-deal every fifth turn.',
+            label: tr.s('The Warden'),
+            teachingSentence: tr`Every turn past par takes a miss from your bank, matched or not, and every fifth turn the face-down cards are dealt again.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('Spend the study window and the first turns on the board you can see; pin the card you cannot afford to lose to a re-deal.'),
+            floorClearSentence: tr.s('The Warden falls. The Descent is won.'),
+            atmosphericFeedback: tr.s('The hall lets go of the cards, and of you.'),
+            activeReminder: tr.s('Warden: a miss for every turn past par; re-deal every fifth turn.'),
             warningLevel: 'danger',
             tokens: ['hidden_known', 'risk', 'objective']
         };
@@ -281,12 +282,12 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'mirror_hall') {
         return {
             id: 'looking_glass',
-            label: 'Looking-glass hall',
-            teachingSentence: `Every third match turns the board over in a mirror: each card trades places with its reflection.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'What you know stays true, only reflected. Count your matches, and pin the card you most need to keep where it is.',
-            floorClearSentence: 'Looking-glass hall cleared. You held the board in your head and turned it.',
-            atmosphericFeedback: 'The glass goes still, and the hall looks back at you the right way round.',
-            activeReminder: 'Looking glass: every third match mirrors the board.',
+            label: tr.s('Looking-glass hall'),
+            teachingSentence: tr`Every third match turns the board over in a mirror: each card trades places with its reflection.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('What you know stays true, only reflected. Count your matches, and pin the card you most need to keep where it is.'),
+            floorClearSentence: tr.s('Looking-glass hall cleared. You held the board in your head and turned it.'),
+            atmosphericFeedback: tr.s('The glass goes still, and the hall looks back at you the right way round.'),
+            activeReminder: tr.s('Looking glass: every third match mirrors the board.'),
             warningLevel: 'danger',
             tokens: ['hidden_known', 'risk', 'objective']
         };
@@ -298,20 +299,20 @@ export const getFloorIdentityContract = ({
         const keystone = floorPaletteRead(floorArchetypeId);
         return {
             id: 'boss_trophy_moment',
-            label: 'Keystone chamber',
+            label: tr.s('Keystone chamber'),
             teachingSentence: keystone.narrow
-                ? `A keystone floor deals three suits, so the card you need is never far to look for and the chain is easier to keep.${objectiveSuffix(featuredObjectiveLabel)}`
-                : `This keystone deals the full ${keystone.suits} suits: more map to read, and the pressure is the board's size rather than the chain.${objectiveSuffix(featuredObjectiveLabel)}`,
+                ? tr`A keystone floor deals three suits, so the card you need is never far to look for and the chain is easier to keep.${objectiveSuffix(featuredObjectiveLabel)}`
+                : tr`This keystone deals the full ${keystone.suits} suits: more map to read, and the pressure is the board's size rather than the chain.${objectiveSuffix(featuredObjectiveLabel)}`,
             counterplaySentence: mutators.includes('short_memorize')
-                ? 'The study window is short here: learn the board in one look, then let the tools carry the floor rather than the memory.'
-                : 'Take the pairs whose suit still has neighbours first; the isolated ones pay the same whenever you take them.',
+                ? tr.s('The study window is short here: learn the board in one look, then let the tools carry the floor rather than the memory.')
+                : tr.s('Take the pairs whose suit still has neighbours first; the isolated ones pay the same whenever you take them.'),
             floorClearSentence: keystone.narrow
-                ? 'Keystone cleared. On three suits the chain was easy to keep; what you chose was the order.'
-                : `Keystone cleared. On ${keystone.suits} suits the score came from the chain you kept rather than from any one pop.`,
-            atmosphericFeedback: 'The Keystone chamber goes quiet, but the last matched pair still hangs in the air.',
+                ? tr.s('Keystone cleared. On three suits the chain was easy to keep; what you chose was the order.')
+                : tr`Keystone cleared. On ${keystone.suits} suits the score came from the chain you kept rather than from any one pop.`,
+            atmosphericFeedback: tr.s('The Keystone chamber goes quiet, but the last matched pair still hangs in the air.'),
             activeReminder: keystone.narrow
-                ? 'Keystone: three suits, a chain that is easy to keep.'
-                : `Keystone: ${keystone.suits} suits, read the map.`,
+                ? tr.s('Keystone: three suits, a chain that is easy to keep.')
+                : tr`Keystone: ${keystone.suits} suits, read the map.`,
             warningLevel: 'danger',
             tokens: ['objective', 'risk', 'reward', 'momentum']
         };
@@ -320,12 +321,12 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'trap_hall' || floorArchetypeId === 'speed_trial') {
         return {
             id: 'narrow_palette_hall',
-            label: floorArchetypeId === 'speed_trial' ? 'Speed trial' : 'Narrow hall',
-            teachingSentence: `Three suits on this floor, so a card of your own kind is never far to look for.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'A narrow palette is a chaining floor. Hold a known pair until the chain is at Clean and the pop will take what it touches.',
-            floorClearSentence: 'Cleared. On a three-suit floor the chain is easy to keep; what you choose is the order.',
-            atmosphericFeedback: 'The chalk rings fade one at a time, in the order you found them.',
-            activeReminder: 'Three suits: the chain is easy to keep here.',
+            label: floorArchetypeId === 'speed_trial' ? tr.s('Speed trial') : tr.s('Narrow hall'),
+            teachingSentence: tr`Three suits on this floor, so a card of your own kind is never far to look for.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('A narrow palette is a chaining floor. Hold a known pair until the chain is at Clean and the pop will take what it touches.'),
+            floorClearSentence: tr.s('Cleared. On a three-suit floor the chain is easy to keep; what you choose is the order.'),
+            atmosphericFeedback: tr.s('The chalk rings fade one at a time, in the order you found them.'),
+            activeReminder: tr.s('Three suits: the chain is easy to keep here.'),
             warningLevel: 'warning',
             tokens: ['risk', 'reward', 'resolved', 'momentum']
         };
@@ -334,12 +335,12 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'spotlight_hunt') {
         return {
             id: 'two_suit_hunt',
-            label: 'Spotlight hunt',
-            teachingSentence: `Three suits, whatever the board's size - the narrowest palette the deal gives you past the first floor.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'This is the floor to chain on. Hold a known pair back until the chain is at Clean and the pop will take what it touches.',
-            floorClearSentence: 'Spotlight cleared. Three suits is the narrowest palette a floor gets, and the easiest chain to keep.',
-            atmosphericFeedback: 'The spotlight swings off the last pair and the hall goes even.',
-            activeReminder: 'Three suits: the easiest chains of the run live here.',
+            label: tr.s('Spotlight hunt'),
+            teachingSentence: tr`Three suits, whatever the board's size - the narrowest palette the deal gives you past the first floor.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('This is the floor to chain on. Hold a known pair back until the chain is at Clean and the pop will take what it touches.'),
+            floorClearSentence: tr.s('Spotlight cleared. Three suits is the narrowest palette a floor gets, and the easiest chain to keep.'),
+            atmosphericFeedback: tr.s('The spotlight swings off the last pair and the hall goes even.'),
+            activeReminder: tr.s('Three suits: the easiest chains of the run live here.'),
             warningLevel: 'reward',
             tokens: ['reward', 'momentum', 'objective']
         };
@@ -349,12 +350,12 @@ export const getFloorIdentityContract = ({
         const dense = mutators.includes('findables_floor');
         return {
             id: dense ? 'pickup_gallery_dense' : 'pickup_gallery',
-            label: dense ? 'Dense gallery' : 'Gallery',
-            teachingSentence: `Pickup pairs are shuffled in with everything else, so a pop can spill a glint you have not found yet.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'Matching a carrier pair claims its glint; a break that takes the carrier spills it and pays it anyway. Either way the score arrives.',
-            floorClearSentence: 'Gallery cleared. Claimed glints and spilled ones are worth the same, which is why the chain never costs you a pickup.',
-            atmosphericFeedback: 'The gallery shutters click shut behind the weight of what you carried out.',
-            activeReminder: 'Gallery: glints pay whether you claim them or pop them.',
+            label: dense ? tr.s('Dense gallery') : tr.s('Gallery'),
+            teachingSentence: tr`Pickup pairs are shuffled in with everything else, so a pop can spill a glint you have not found yet.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('Matching a carrier pair claims its glint; a break that takes the carrier spills it and pays it anyway. Either way the score arrives.'),
+            floorClearSentence: tr.s('Gallery cleared. Claimed glints and spilled ones are worth the same, which is why the chain never costs you a pickup.'),
+            atmosphericFeedback: tr.s('The gallery shutters click shut behind the weight of what you carried out.'),
+            activeReminder: tr.s('Gallery: glints pay whether you claim them or pop them.'),
             warningLevel: 'reward',
             tokens: ['reward', 'resolved', 'momentum']
         };
@@ -371,18 +372,18 @@ export const getFloorIdentityContract = ({
         const rest = floorPaletteRead(floorArchetypeId);
         return {
             id: 'recovery_study_room',
-            label: 'Recovery study',
+            label: tr.s('Recovery study'),
             teachingSentence: rest.narrow
-                ? `A breather asks for less and deals three suits, and every break here takes a pair more than it would elsewhere, so a broken chain is cheap to rebuild.${objectiveSuffix(featuredObjectiveLabel)}`
-                : `A breather asks for less, and this one deals the full ${rest.suits} suits, so the floor is a place to bank rather than to chain.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'Charges do not carry a premium for being saved. Spend them on the floor that is easy to read and bank the score.',
+                ? tr`A breather asks for less and deals three suits, and every break here takes a pair more than it would elsewhere, so a broken chain is cheap to rebuild.${objectiveSuffix(featuredObjectiveLabel)}`
+                : tr`A breather asks for less, and this one deals the full ${rest.suits} suits, so the floor is a place to bank rather than to chain.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('Charges do not carry a premium for being saved. Spend them on the floor that is easy to read and bank the score.'),
             floorClearSentence: rest.narrow
-                ? 'Breather cleared. The breaks ran a pair deeper here, and the floor never pushed back.'
-                : `Breather cleared. ${rest.suits} suits, and the floor never pushed back.`,
-            atmosphericFeedback: 'The study lamps keep burning after you leave, holding the next route in soft focus.',
+                ? tr.s('Breather cleared. The breaks ran a pair deeper here, and the floor never pushed back.')
+                : tr`Breather cleared. ${rest.suits} suits, and the floor never pushed back.`,
+            atmosphericFeedback: tr.s('The study lamps keep burning after you leave, holding the next route in soft focus.'),
             activeReminder: rest.narrow
-                ? 'Breather: three suits, breaks a pair deeper, cheap floor to rebuild a chain on.'
-                : `Breather: ${rest.suits} suits, cheap floor to bank on.`,
+                ? tr.s('Breather: three suits, breaks a pair deeper, cheap floor to rebuild a chain on.')
+                : tr`Breather: ${rest.suits} suits, cheap floor to bank on.`,
             warningLevel: 'safe',
             tokens: ['safe', 'hidden_known', 'reward', 'momentum']
         };
@@ -391,12 +392,12 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'lantern_hall') {
         return {
             id: 'lantern_light',
-            label: 'Lantern hall',
-            teachingSentence: `Every match lights up to three of the face-down cards touching it, until you turn the next card.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'Match in the middle of what you have not read: a pair at the edge lights little, one in the dark lights the most.',
-            floorClearSentence: 'Lantern hall cleared. You went where the light would help.',
-            atmosphericFeedback: 'The lanterns gutter out one by one behind you.',
-            activeReminder: 'Lantern hall: a match lights its neighbours. Read them before the next flip.',
+            label: tr.s('Lantern hall'),
+            teachingSentence: tr`Every match lights up to three of the face-down cards touching it, until you turn the next card.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('Match in the middle of what you have not read: a pair at the edge lights little, one in the dark lights the most.'),
+            floorClearSentence: tr.s('Lantern hall cleared. You went where the light would help.'),
+            atmosphericFeedback: tr.s('The lanterns gutter out one by one behind you.'),
+            activeReminder: tr.s('Lantern hall: a match lights its neighbours. Read them before the next flip.'),
             warningLevel: 'reward',
             tokens: ['reward', 'hidden_known', 'momentum']
         };
@@ -405,12 +406,12 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'skittish_hall') {
         return {
             id: 'skittish_cards',
-            label: 'Skittish hall',
-            teachingSentence: `Miss, and the two cards you just saw each flinch one step - up, down, left or right.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'A card you missed is next to where it was: check its neighbours before the rest of the board, and pin what you cannot afford to lose - a pinned card never moves.',
-            floorClearSentence: 'Skittish hall cleared. You kept track of cards that would not keep still.',
-            atmosphericFeedback: 'The cards settle into their cells and stop twitching.',
-            activeReminder: 'Skittish hall: a missed card moves one step. Look beside it.',
+            label: tr.s('Skittish hall'),
+            teachingSentence: tr`Miss, and the two cards you just saw each flinch one step - up, down, left or right.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('A card you missed is next to where it was: check its neighbours before the rest of the board, and pin what you cannot afford to lose - a pinned card never moves.'),
+            floorClearSentence: tr.s('Skittish hall cleared. You kept track of cards that would not keep still.'),
+            atmosphericFeedback: tr.s('The cards settle into their cells and stop twitching.'),
+            activeReminder: tr.s('Skittish hall: a missed card moves one step. Look beside it.'),
             warningLevel: 'warning',
             tokens: ['hidden_known', 'risk', 'objective']
         };
@@ -419,13 +420,13 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'anchor_chain') {
         return {
             id: 'anchor_floor',
-            label: 'Anchor chain',
-            teachingSentence: `After a match the floor marks one face-down card: match it with its partner for an extra chain link.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'The marked card is half the answer. Remember where its partner was, and take the anchor before two other matches move it on.',
-            floorClearSentence: 'Anchor floor cleared. The pairs the floor pointed at were the ones worth taking.',
-            atmosphericFeedback: 'The mortar settles, and the pair the room kept asking for goes quiet with it.',
+            label: tr.s('Anchor chain'),
+            teachingSentence: tr`After a match the floor marks one face-down card: match it with its partner for an extra chain link.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('The marked card is half the answer. Remember where its partner was, and take the anchor before two other matches move it on.'),
+            floorClearSentence: tr.s('Anchor floor cleared. The pairs the floor pointed at were the ones worth taking.'),
+            atmosphericFeedback: tr.s('The mortar settles, and the pair the room kept asking for goes quiet with it.'),
             warningLevel: 'warning',
-            activeReminder: 'Anchor floor: find the marked card’s partner for an extra link.',
+            activeReminder: tr.s('Anchor floor: find the marked card’s partner for an extra link.'),
             tokens: ['objective', 'cost', 'safe']
         };
     }
@@ -433,12 +434,12 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'restless_hall') {
         return {
             id: 'restless_floor',
-            label: 'Restless hall',
-            teachingSentence: `Every third turn the floor shifts: hidden cards trade places, one pair at first and up to three once you linger.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'Clear the pairs you know before the clock ticks, and pin the card you cannot afford to lose - a pinned card never moves.',
-            floorClearSentence: 'Restless hall cleared. The floor moved and you moved faster.',
-            atmosphericFeedback: 'The flagstones settle. Whatever was still shifting under the cards has gone quiet.',
-            activeReminder: 'Restless hall: the board drifts every third turn. Pin what matters.',
+            label: tr.s('Restless hall'),
+            teachingSentence: tr`Every third turn the floor shifts: hidden cards trade places, one pair at first and up to three once you linger.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('Clear the pairs you know before the clock ticks, and pin the card you cannot afford to lose - a pinned card never moves.'),
+            floorClearSentence: tr.s('Restless hall cleared. The floor moved and you moved faster.'),
+            atmosphericFeedback: tr.s('The flagstones settle. Whatever was still shifting under the cards has gone quiet.'),
+            activeReminder: tr.s('Restless hall: the board drifts every third turn. Pin what matters.'),
             warningLevel: 'warning',
             tokens: ['hidden_known', 'risk', 'objective']
         };
@@ -447,12 +448,12 @@ export const getFloorIdentityContract = ({
     if (floorArchetypeId === 'shadow_read') {
         return {
             id: 'scout_read_floor',
-            label: 'Shadow read',
-            teachingSentence: `The cards are harder to read here, but the suit on every back still tells you what a match would take.${objectiveSuffix(featuredObjectiveLabel)}`,
-            counterplaySentence: 'Read the suit on the back rather than trying to hold the face. Contact is what the pop cares about, not identity.',
-            floorClearSentence: 'Read floor cleared. Suit on the back was enough; the faces were never the whole puzzle.',
-            atmosphericFeedback: 'The remaining shadows keep their names, but the route you proved stays legible.',
-            activeReminder: 'Read floor: play the suits on the backs.',
+            label: tr.s('Shadow read'),
+            teachingSentence: tr`The cards are harder to read here, but the suit on every back still tells you what a match would take.${objectiveSuffix(featuredObjectiveLabel)}`,
+            counterplaySentence: tr.s('Read the suit on the back rather than trying to hold the face. Contact is what the pop cares about, not identity.'),
+            floorClearSentence: tr.s('Read floor cleared. Suit on the back was enough; the faces were never the whole puzzle.'),
+            atmosphericFeedback: tr.s('The remaining shadows keep their names, but the route you proved stays legible.'),
+            activeReminder: tr.s('Read floor: play the suits on the backs.'),
             warningLevel: 'warning',
             tokens: ['hidden_known', 'risk', 'objective']
         };
@@ -460,12 +461,12 @@ export const getFloorIdentityContract = ({
 
     return {
         id: 'baseline_floor',
-        label: 'Baseline descent',
-        teachingSentence: `No twist on this floor: clear the board, and take the matches that touch their own kind first.${objectiveSuffix(featuredObjectiveLabel)}`,
-        counterplaySentence: 'A tool spent here is a tool not spent on a harder floor, but an unspent charge scores nothing either.',
-        floorClearSentence: 'Floor cleared. The board is empty, which is the only condition the floor ever had.',
-        atmosphericFeedback: 'The corridor remembers the clean pairs first and lets the rest fade into the stone.',
-        activeReminder: 'Baseline: clear the board, chain where you can.',
+        label: tr.s('Baseline descent'),
+        teachingSentence: tr`No twist on this floor: clear the board, and take the matches that touch their own kind first.${objectiveSuffix(featuredObjectiveLabel)}`,
+        counterplaySentence: tr.s('A tool spent here is a tool not spent on a harder floor, but an unspent charge scores nothing either.'),
+        floorClearSentence: tr.s('Floor cleared. The board is empty, which is the only condition the floor ever had.'),
+        atmosphericFeedback: tr.s('The corridor remembers the clean pairs first and lets the rest fade into the stone.'),
+        activeReminder: tr.s('Baseline: clear the board, chain where you can.'),
         warningLevel: 'baseline',
         tokens: ['objective', 'safe', 'reward']
     };
@@ -473,11 +474,11 @@ export const getFloorIdentityContract = ({
 
 const rowFromIdentity = (identity: BossEliteEncounterIdentity): EncounterIdentityRow => ({
     encounterRank: identity.kind,
-    label: 'Boss encounter',
-    scoreRule: 'Applies the boss floor score multiplier after bonuses.',
+    label: tr.s('Boss encounter'),
+    scoreRule: tr.s('Applies the boss floor score multiplier after bonuses.'),
     mechanics: identity.mechanics,
     placeholderNeeded: identity.presentationSlots.some((slot) => slot.placeholderNeeded),
-    placeholderSlots: ['boss intro stinger', 'boss key art panel', 'boss FX burst']
+    placeholderSlots: [tr.s('boss intro stinger'), tr.s('boss key art panel'), tr.s('boss FX burst')]
 });
 
 export const getEncounterIdentityForFloor = (

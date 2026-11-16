@@ -1,3 +1,5 @@
+import { COMPONENT_PROSE } from '../copy/componentProse';
+import { tr } from '../../shared/i18n';
 import type { SaveData } from '../../shared/contracts';
 import { getProfileSummaryRows } from '../../shared/profile-summary';
 import { useRef, useState, type CSSProperties } from 'react';
@@ -94,12 +96,12 @@ const MainMenu = ({
     const bestScore = profileRows.find((row) => row.id === 'best_score')?.value ?? '0';
     const lastRun = saveData.lastRunSummary;
     const entries = [
-        { label: 'Tutorial Hall', note: 'Learn by playing', onClick: () => openTutorial?.() },
-        { label: 'Collection', note: 'Achievements and unlocks', onClick: onOpenCollection },
-        { label: 'Profile', note: 'Marks and records', onClick: onOpenProfile },
-        { label: 'Inventory', note: 'What you carry', onClick: onOpenInventory },
-        { label: 'Codex', note: 'How the dungeon works', onClick: onOpenCodex },
-        { label: 'Settings', note: 'Sound, motion, display', onClick: onOpenSettings }
+        { label: tr.s('Tutorial Hall'), note: tr.s('Learn by playing'), onClick: () => openTutorial?.() },
+        { label: tr.s('Collection'), note: tr.s('Achievements and unlocks'), onClick: onOpenCollection },
+        { label: tr.s('Profile'), note: tr.s('Marks and records'), onClick: onOpenProfile },
+        { label: tr.s('Inventory'), note: tr.s('What you carry'), onClick: onOpenInventory },
+        { label: tr.s('Codex'), note: tr.s('How the dungeon works'), onClick: onOpenCodex },
+        { label: tr.s('Settings'), note: tr.s('Sound, motion, display'), onClick: onOpenSettings }
     ];
     const uiGain = uiSfxGainFromSettings(saveData.settings.masterVolume, saveData.settings.sfxVolume);
     // The nave leans in with the player: while Play has the pointer or the focus its candles burn up.
@@ -133,7 +135,7 @@ const MainMenu = ({
                     <div className={styles.note} role="alert">
                         <span>{persistenceWriteNotice}</span>
                         <button className={styles.noteAction} type="button" onClick={clearPersistenceWriteNotice}>
-                            Dismiss
+                            {tr.s("Dismiss")}
                         </button>
                     </div>
                 ) : null}
@@ -165,7 +167,7 @@ const MainMenu = ({
                     <div className={styles.note} role="status">
                         <span>{achievementBridgeNotice}</span>
                         <button className={styles.noteAction} type="button" onClick={clearAchievementBridgeNotice}>
-                            Dismiss
+                            {tr.s("Dismiss")}
                         </button>
                     </div>
                 ) : null}
@@ -176,7 +178,7 @@ const MainMenu = ({
                         <span aria-hidden="true" className={styles.crestMount}>
                             <img alt="" className={styles.crest} src={UI_ART.brandCrest} />
                         </span>
-                        <p className={styles.eyebrow}>Seeker of Shards</p>
+                        <p className={styles.eyebrow}>{tr.s("Seeker of Shards")}</p>
                         {/*
                           * The space between the words is real text, not a gap the layout draws.
                           * The two spans stack because `.title` is a column flex container, which
@@ -186,23 +188,23 @@ const MainMenu = ({
                           * had been red on main long enough for nobody to notice.
                           */}
                         <h1 className={styles.title}>
-                            <span>Memory</span>{' '}
-                            <span>Dungeon</span>
+                            <span>{tr.s("Memory")}</span>{' '}
+                            <span>{tr.s("Dungeon")}</span>
                         </h1>
                         <span aria-hidden="true" className={styles.rule} />
-                        <p className={styles.tagline}>Test your mind. Conquer the depths.</p>
+                        <p className={styles.tagline}>{COMPONENT_PROSE.mainMenuTestYourMindConquer}</p>
                         <GlobalRecordBadge onChallenge={() => { playMenuOpen(); onPlay(); }} />
                     </header>
 
                     <main className={styles.contents} data-testid="main-menu-primary-meta-frame">
-                        <p className={styles.contentsHead}>Contents</p>
-                        <div aria-label="Primary actions" className={styles.ladder} role="group">
+                        <p className={styles.contentsHead}>{tr.s("Contents")}</p>
+                        <div aria-label={tr.s("Primary actions")} className={styles.ladder} role="group">
                             {suspendedRun ? (
                                 // A run put down mid-way (`suspendedRun.ts`) is the first thing on the page: it picks
                                 // up paused where it was left. A new run beside it starts over, and replaces it.
                                 <div className={styles.playRow} data-testid="main-menu-continue-row">
                                     <button
-                                        aria-label="Continue"
+                                        aria-label={tr.s("Continue")}
                                         className={`${styles.entry} ${styles.entryPlay}`}
                                         data-testid="main-menu-continue"
                                         type="button"
@@ -216,12 +218,12 @@ const MainMenu = ({
                                         }}
                                     >
                                         <span className={styles.numeral} translate="no">{NUMERALS[0]}</span>
-                                        <span className={styles.entryTitle}>Continue</span>
+                                        <span className={styles.entryTitle}>{tr.s("Continue")}</span>
                                         <span aria-hidden="true" className={styles.leader} />
                                         <span className={styles.entryNote}>{SUSPENDED_RUN_COPY.note(suspendedRun)}</span>
                                     </button>
                                     <button
-                                        aria-label="New run"
+                                        aria-label={tr.s("New run")}
                                         className={`${styles.entry} ${styles.entryQuiet} ${styles.entryNewRun}`}
                                         type="button"
                                         onClick={() => {
@@ -229,14 +231,14 @@ const MainMenu = ({
                                             onPlay();
                                         }}
                                     >
-                                        <span className={styles.entryTitle}>New run</span>
+                                        <span className={styles.entryTitle}>{tr.s("New run")}</span>
                                     </button>
                                 </div>
                             ) : null}
                             {suspendedRun ? null : (
                             <div className={styles.playRow}>
                                 <button
-                                    aria-label="Play"
+                                    aria-label={tr.s("Play")}
                                     className={`${styles.entry} ${styles.entryPlay}`}
                                     type="button"
                                     onBlur={() => setPlayWarm(false)}
@@ -249,10 +251,10 @@ const MainMenu = ({
                                     }}
                                 >
                                     <span className={styles.numeral} translate="no">{NUMERALS[0]}</span>
-                                    <span className={styles.entryTitle}>Play</span>
+                                    <span className={styles.entryTitle}>{tr.s("Play")}</span>
                                     <span aria-hidden="true" className={styles.leader} />
                                     <span className={styles.entryNote}>
-                                        {lastRun ? `Floor ${lastRun.highestLevel} last time` : 'Begin the descent'}
+                                        {lastRun ? tr`Floor ${lastRun.highestLevel} last time` : tr.s('Begin the descent')}
                                     </span>
                                 </button>
                             </div>
@@ -278,7 +280,7 @@ const MainMenu = ({
                                 ))}
                                 {hasDesktopBridge() ? (
                                     <button
-                                        aria-label="Exit Game"
+                                        aria-label={tr.s("Exit Game")}
                                         className={`${styles.entry} ${styles.entryQuiet}`}
                                         type="button"
                                         onClick={() => {
@@ -287,9 +289,9 @@ const MainMenu = ({
                                         }}
                                     >
                                         <span className={styles.numeral} translate="no">{NUMERALS[entries.length + 1]}</span>
-                                        <span className={styles.entryTitle}>Exit Game</span>
+                                        <span className={styles.entryTitle}>{tr.s("Exit Game")}</span>
                                         <span aria-hidden="true" className={styles.leader} />
-                                        <span className={styles.entryNote}>Close the book</span>
+                                        <span className={styles.entryNote}>{tr.s("Close the book")}</span>
                                     </button>
                                 ) : null}
                             </div>
@@ -298,13 +300,13 @@ const MainMenu = ({
                 </div>
 
                 <footer className={styles.colophon} data-testid="main-menu-colophon">
-                    <span>Level {profileLevel}</span>
+                    <span>{tr.s("Level")} {profileLevel}</span>
                     <span aria-hidden="true">·</span>
-                    <span>Best {bestScore}</span>
+                    <span>{tr.s("Best")} {bestScore}</span>
                     {lastRun ? (
                         <>
                             <span aria-hidden="true">·</span>
-                            <span>Last descent to floor {lastRun.highestLevel}</span>
+                            <span>{tr.s("Last descent to floor")} {lastRun.highestLevel}</span>
                         </>
                     ) : null}
                 </footer>

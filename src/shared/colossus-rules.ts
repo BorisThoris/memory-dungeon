@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { BoardState, ColossusEvent, ColossusState, RunState, Tile, TileSuit } from './contracts';
 import { atomicVariantForPairKey } from './board-tile-generation-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
@@ -180,7 +181,7 @@ const splitInto = (board: BoardState, colossus: ColossusState, want: number): { 
     const newPairKeys: string[] = [];
     let reused = 0;
     for (let slot = 0; slot < want; slot += 1) {
-        const face = fresh[slot] ?? { symbol: `C${slot + 1}`, label: `Shard ${slot + 1}` };
+        const face = fresh[slot] ?? { symbol: `C${slot + 1}`, label: tr`Shard ${slot + 1}` };
         const pairKey = `${board.level}-colossus-${slot}`;
         const suit = colossus.cycle[(colossus.step + slot) % colossus.cycle.length]!;
         const halves: Tile[] = (['A', 'B'] as const).map((half) => ({

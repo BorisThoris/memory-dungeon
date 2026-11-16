@@ -1,4 +1,4 @@
-export type LocalizationReadinessStatus = 'english_source' | 'deferred' | 'excluded';
+export type LocalizationReadinessStatus = 'english_source' | 'shipping' | 'deferred' | 'excluded';
 
 export interface LocalizationReadinessRow {
     id: 'shipping_locale' | 'copy_modules' | 'shared_catalogs' | 'concat_policy' | 'mechanics_version';
@@ -11,10 +11,10 @@ export interface LocalizationReadinessRow {
 export const LOCALIZATION_READINESS_ROWS: readonly LocalizationReadinessRow[] = [
     {
         id: 'shipping_locale',
-        label: 'Shipping locale',
-        status: 'english_source',
+        label: 'Shipping locales',
+        status: 'shipping',
         owner: 'docs',
-        guidance: 'Steam demo v1 ships English only; UI must not promise non-English locales before an i18n stack exists.'
+        guidance: 'English, Simplified Chinese, Russian, Spanish, Brazilian Portuguese, German and French (owner, 2026-11-16; docs/LOCALIZATION_PLAN.md). Non-English text is machine-drafted and unreviewed; store pages must not claim more.'
     },
     {
         id: 'copy_modules',
@@ -33,9 +33,9 @@ export const LOCALIZATION_READINESS_ROWS: readonly LocalizationReadinessRow[] = 
     {
         id: 'concat_policy',
         label: 'Interpolation policy',
-        status: 'deferred',
+        status: 'shipping',
         owner: 'docs',
-        guidance: 'Avoid complex player-facing string concatenation; future react-i18next keys should use interpolation placeholders.'
+        guidance: 'Player-facing text goes through tr (src/shared/i18n.ts): one template per sentence, placeholders for values, plural() for counts; never build a sentence from translated fragments.'
     },
     {
         id: 'mechanics_version',
@@ -48,14 +48,15 @@ export const LOCALIZATION_READINESS_ROWS: readonly LocalizationReadinessRow[] = 
 
 export const getLocalizationReadinessRows = (): readonly LocalizationReadinessRow[] => LOCALIZATION_READINESS_ROWS;
 
+/** Copy must not promise a language the game does not ship (Japanese, or "more languages soon"). */
 export const localizationReadinessHasNoLocalePromise = (copy: string): boolean =>
-    !/\b(localized|translations?|français|deutsch|español|日本語|coming (?:soon|later) in (?:multiple )?languages)\b/i.test(copy);
+    !/(日本語|한국어|\bcoming (?:soon|later) in (?:multiple |more )?languages\b)/iu.test(copy);
 
 export const LOCALIZATION_FOUNDATION_DECISION = {
-    shippingLocale: 'en',
-    uiPromise: 'english_only_v1',
-    futureStack: 'react-i18next',
-    nonEnglishUiPromised: false
+    sourceLocale: 'en',
+    shippingLocales: ['en', 'zh-Hans', 'ru', 'es', 'pt-BR', 'de', 'fr'],
+    stack: 'tr tagged template, English text as key (src/shared/i18n.ts)',
+    translationsReviewedByNativeSpeakers: false
 } as const;
 
 export interface LocalizationCopySurfaceRow {

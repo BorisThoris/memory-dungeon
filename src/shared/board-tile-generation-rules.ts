@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import { CURIO_RULES_VERSION, curioReplacesGlint } from './curio-rules';
 import { type FindableKind, type MutatorId, type Tile } from './contracts';
 import { getFindableSpawnWeightRows } from './findables';
@@ -93,7 +94,7 @@ export const createTiles = (
             pairKey: WILD_PAIR_KEY,
             state: 'hidden' as const,
             symbol: '?',
-            label: 'Wild',
+            label: tr.s('Wild'),
             atomicVariant: 0
         });
     }

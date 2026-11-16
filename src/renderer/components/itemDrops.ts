@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { FindableKind } from '../../shared/contracts';
 import type { StoreItemId } from '../../shared/run-store-rules';
 import type { CurioItemId } from '../../shared/curio-rules';
@@ -31,11 +32,11 @@ export const ITEM_DROP_RARITY_COLOR: Readonly<Record<ItemDropRarity, string>> = 
 };
 
 export const ITEM_DROP_RARITY_LABEL: Readonly<Record<ItemDropRarity, string>> = {
-    common: 'Common',
-    uncommon: 'Uncommon',
-    rare: 'Rare',
-    epic: 'Epic',
-    legendary: 'Legendary'
+    common: tr.s('Common'),
+    uncommon: tr.s('Uncommon'),
+    rare: tr.s('Rare'),
+    epic: tr.s('Epic'),
+    legendary: tr.s('Legendary')
 };
 
 /** How long a drop holds before it goes by itself; rarer ones longer. */

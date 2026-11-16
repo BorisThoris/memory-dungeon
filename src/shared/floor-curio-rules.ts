@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RunState } from './contracts';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -55,9 +56,9 @@ const NOTHING: FloorCurioEffect = {
 export const FLOOR_CURIOS: readonly FloorCurio[] = [
     {
         id: 'lost_sock',
-        name: 'A lost sock',
-        line: 'There is a sock down here. Just the one. It has been here longer than you have.',
-        effectSummary: 'Does nothing whatsoever.',
+        name: tr.s('A lost sock'),
+        line: tr.s('There is a sock down here. Just the one. It has been here longer than you have.'),
+        effectSummary: tr.s('Does nothing whatsoever.'),
         // Deliberately no effect at all. A cast where everyone changes a number is a stat screen
         // with names on; one resident who is simply present is what makes the others feel like
         // residents rather than modifiers.
@@ -65,40 +66,40 @@ export const FLOOR_CURIOS: readonly FloorCurio[] = [
     },
     {
         id: 'nervous_torchbearer',
-        name: 'A nervous torchbearer',
-        line: 'He will hold the light for you. He would rather not be here, and he is not hiding it.',
-        effectSummary: 'A longer look at the board, and a peek you did not pay for.',
+        name: tr.s('A nervous torchbearer'),
+        line: tr.s('He will hold the light for you. He would rather not be here, and he is not hiding it.'),
+        effectSummary: tr.s('A longer look at the board, and a peek you did not pay for.'),
         effect: { ...NOTHING, memorizeBonusMs: 900, peekCharges: 1 }
     },
     {
         id: 'hoarding_rat',
-        name: 'A hoarding rat',
-        line: 'It has been collecting. Looks. It would prefer that you stopped looking at the pile.',
+        name: tr.s('A hoarding rat'),
+        line: tr.s('It has been collecting. Looks. It would prefer that you stopped looking at the pile.'),
         // Its coins went with the shop (Gen 174) and there was nothing left for them to buy, so
         // what it hoards now is the one thing a memory game has to spare: a look at the board.
-        effectSummary: 'A peek, from a pile of them. It is keeping the rest.',
+        effectSummary: tr.s('A peek, from a pile of them. It is keeping the rest.'),
         effect: { ...NOTHING, peekCharges: 1 }
     },
     {
         id: 'gossiping_skull',
-        name: 'A gossiping skull',
-        line: 'It knew the last three people through here. It would like to tell you about all of them.',
-        effectSummary: 'Talks through the memorize window. You will look away. You will regret it.',
+        name: tr.s('A gossiping skull'),
+        line: tr.s('It knew the last three people through here. It would like to tell you about all of them.'),
+        effectSummary: tr.s('Talks through the memorize window. You will look away. You will regret it.'),
         // The one resident that costs you something, and it costs attention rather than a life.
         effect: { ...NOTHING, memorizeBonusMs: -600 }
     },
     {
         id: 'off_duty_guard',
-        name: 'An off-duty guard',
-        line: 'Not paid enough to fight anything. Very interested in looking the other way.',
-        effectSummary: 'One peek, no questions.',
+        name: tr.s('An off-duty guard'),
+        line: tr.s('Not paid enough to fight anything. Very interested in looking the other way.'),
+        effectSummary: tr.s('One peek, no questions.'),
         effect: { ...NOTHING, peekCharges: 1 }
     },
     {
         id: 'sticky_toffee',
-        name: 'Someone spilled toffee',
-        line: 'It is on the floor. It is on the tiles. It is, now, on you.',
-        effectSummary: 'The tiles stick. One extra shuffle, because you will want it.',
+        name: tr.s('Someone spilled toffee'),
+        line: tr.s('It is on the floor. It is on the tiles. It is, now, on you.'),
+        effectSummary: tr.s('The tiles stick. One extra shuffle, because you will want it.'),
         effect: { ...NOTHING, shuffleCharges: 1 }
     }
 ];

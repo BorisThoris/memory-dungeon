@@ -1,3 +1,5 @@
+import { COMPONENT_PROSE } from '../copy/componentProse';
+import { tr } from '../../shared/i18n';
 import { normalizeDescentRecord } from '../../shared/descent-record';
 import { DEPTH_RUNGS, MAX_DEPTH } from '../../shared/depth-rules';
 import { hasFeatOption } from '../../shared/feat-unlocks';
@@ -193,7 +195,7 @@ const ChooseYourPathScreen = (): ReactElement => {
     }, [playBack]);
 
     const detailActions = (def: RunModeDefinition) => {
-        const close = { label: 'Close', onClick: closeDetail, variant: 'secondary' as const };
+        const close = { label: tr.s('Close'), onClick: closeDetail, variant: 'secondary' as const };
         if (def.availability !== 'available') {
             return [close];
         }
@@ -226,7 +228,7 @@ const ChooseYourPathScreen = (): ReactElement => {
         return [
             close,
             {
-                label: 'Play',
+                label: tr.s('Play'),
                 onClick: (): void => {
                     setDetailMode(null);
                     runModeAction(def);
@@ -241,12 +243,12 @@ const ChooseYourPathScreen = (): ReactElement => {
         const freshClassic = def.id === 'classic' && !saveData.onboardingDismissed;
         const canStart = def.availability === 'available';
         return (
-            <section aria-label="Recommended run" className={styles.launch} data-testid="choose-path-launcher">
+            <section aria-label={tr.s("Recommended run")} className={styles.launch} data-testid="choose-path-launcher">
                 <div className={styles.launchLine}>
                     <span className={styles.numeral} translate="no">{numeral(0)}</span>
                     <h2 className={styles.launchTitle}>{def.title}</h2>
                     <span aria-hidden="true" className={styles.leader} />
-                    <span className={styles.launchNote}>Recommended</span>
+                    <span className={styles.launchNote}>{tr.s("Recommended")}</span>
                 </div>
                 <div className={styles.launchBody}>
                     <p className={styles.launchSummary}>{launchSummary(def, freshClassic)}</p>
@@ -257,7 +259,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                             onClick={() => runModeAction(def)}
                             type="button"
                         >
-                            Start run
+                            {tr.s("Start run")}
                         </button>
                         {/* The door beside Start, not in front of it: the eight retired preset
                             cards live behind this, and a player who just wants to play never has
@@ -285,7 +287,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                                 }}
                                 type="button"
                             >
-                                {browseOpen ? 'Hide modes' : 'Browse modes'}
+                                {browseOpen ? tr.s('Hide modes') : tr.s('Browse modes')}
                             </button>
                         ) : null}
                     </div>
@@ -318,8 +320,8 @@ const ChooseYourPathScreen = (): ReactElement => {
                 <span className={styles.numeral} translate="no">{numeral(index)}</span>
                 <span className={styles.entryTitle}>{def.title}</span>
                 <span aria-hidden="true" className={styles.leader} />
-                <span className={styles.entryNote}>{locked ? 'In the full game' : modeNote(def)}</span>
-                <span className={styles.entryDescription}>{def.id === 'pass_and_play' ? '2–4 players · 3 floors' : def.shortDescription}</span>
+                <span className={styles.entryNote}>{locked ? tr.s('In the full game') : modeNote(def)}</span>
+                <span className={styles.entryDescription}>{def.id === 'pass_and_play' ? tr.s('2–4 players · 3 floors') : def.shortDescription}</span>
             </button>
         );
     };
@@ -328,7 +330,7 @@ const ChooseYourPathScreen = (): ReactElement => {
     const sharedEntryIndex = (launchMode ? 1 : 0) + browseModes.length;
 
     return (
-        <section aria-label="Choose your path" className={styles.screen} role="region" data-testid="choose-path-screen">
+        <section aria-label={tr.s("Choose your path")} className={styles.screen} role="region" data-testid="choose-path-screen">
             {/* The recommended run's poster is the scene behind the page, sunk into the ink as the
                 cathedral is behind the title page; the stage art stands in when there is none. The
                 Classic poster is a living scene (`PortalScene`); the other posters are stills. */}
@@ -369,9 +371,9 @@ const ChooseYourPathScreen = (): ReactElement => {
                         type="button"
                     >
                         <BackChevron />
-                        <span>Back</span>
+                        <span>{tr.s("Back")}</span>
                     </button>
-                    <span className={styles.headKicker}>Chapter One</span>
+                    <span className={styles.headKicker}>{tr.s("Chapter One")}</span>
                     <button
                         className={styles.headWord}
                         data-testid="choose-path-settings"
@@ -381,29 +383,29 @@ const ChooseYourPathScreen = (): ReactElement => {
                         }}
                         type="button"
                     >
-                        Settings
+                        {tr.s("Settings")}
                     </button>
                 </header>
 
                 <div className={styles.spread}>
                     <div className={styles.titleBlock}>
-                        <p className={styles.eyebrow}>Start a run</p>
+                        <p className={styles.eyebrow}>{tr.s("Start a run")}</p>
                         <h1 className={styles.title}>
-                            <span>Choose</span>
-                            <span>Your Path</span>
+                            <span>{tr.s("Choose")}</span>
+                            <span>{tr.s("Your Path")}</span>
                         </h1>
                         <span aria-hidden="true" className={styles.rule} />
-                        <p className={styles.tagline}>Every descent begins with a road taken.</p>
+                        <p className={styles.tagline}>{COMPONENT_PROSE.chooseYourPathScreenEveryDescentBeginsWith}</p>
                     </div>
 
                     <main className={styles.contents}>
-                        <p className={styles.contentsHead}>The runs</p>
+                        <p className={styles.contentsHead}>{tr.s("The runs")}</p>
 
                         {launchMode ? renderLaunch(launchMode) : null}
 
                         {browseOpen ? (
                             <section
-                                aria-label="Browse modes"
+                                aria-label={tr.s("Browse modes")}
                                 className={styles.browse}
                                 data-testid="choose-path-more-modes"
                                 id="choose-path-more-modes"
@@ -412,12 +414,12 @@ const ChooseYourPathScreen = (): ReactElement => {
                                     <>
                                         <div className={styles.browseHead}>
                                             <label className={styles.search}>
-                                                <span className={styles.srOnly}>Filter modes</span>
+                                                <span className={styles.srOnly}>{tr.s("Filter modes")}</span>
                                                 <input
                                                     autoComplete="off"
                                                     id="choose-path-mode-filter"
                                                     onChange={(event) => setQuery(event.target.value)}
-                                                    placeholder="Search modes"
+                                                    placeholder={tr.s("Search modes")}
                                                     type="search"
                                                     value={query}
                                                 />
@@ -468,7 +470,7 @@ const ChooseYourPathScreen = (): ReactElement => {
                                 ) : null}
 
                                 {visibleModes.length > 0 ? (
-                                    <div aria-label="Modes" className={styles.entries} data-testid="choose-path-mode-grid" role="list">
+                                    <div aria-label={tr.s("Modes")} className={styles.entries} data-testid="choose-path-mode-grid" role="list">
                                         {visibleModes.map((def, index) => (
                                             <div key={def.id} role="listitem">
                                                 {renderEntry(def, (launchMode ? 1 : 0) + index)}
@@ -555,12 +557,11 @@ const ChooseYourPathScreen = (): ReactElement => {
                       */}
                     {detailGate && detailGate.status !== 'available' ? (
                         <p className={styles.detailMuted}>
-                            Gate: {detailGate.entryCondition} · {detailGate.progress.current}/{detailGate.progress.target} ·
-                            Locked locally
+                            {tr.s("Gate:")} {detailGate.entryCondition} · {detailGate.progress.current}/{detailGate.progress.target} {tr.s("· Locked locally")}
                         </p>
                     ) : null}
                     {detailMode.availability !== 'available' ? (
-                        <p className={styles.detailMuted}>This mode is intentionally locked in the demo. It ships in the full game.</p>
+                        <p className={styles.detailMuted}>{COMPONENT_PROSE.chooseYourPathScreenThisModeIsIntentionally}</p>
                     ) : null}
                 </OverlayModal>
             ) : null}

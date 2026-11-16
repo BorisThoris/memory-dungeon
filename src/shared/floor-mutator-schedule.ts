@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import { CARTOGRAPHER_RULES_FROM } from './cartographer-rules';
 import { KEEPER_RULES_FROM } from './keeper-rules';
 import type {
@@ -52,127 +53,127 @@ export interface FloorArchetypeDefinition {
 
 export const FLOOR_ARCHETYPE_CATALOG: Record<FloorArchetypeId, FloorArchetypeDefinition> = {
     survey_hall: {
-        title: 'Dungeon Gate',
-        hint: 'First room: read the clumps and the pairs before the descent picks up.',
-        theme: 'Gate',
-        riskProfile: 'Readable opener; clear it under par to set the run\'s pace.'
+        title: tr.s('Dungeon Gate'),
+        hint: tr.s('First room: read the clumps and the pairs before the descent picks up.'),
+        theme: tr.s('Gate'),
+        riskProfile: tr.s('Readable opener; clear it under par to set the run\'s pace.')
     },
     speed_trial: {
-        title: 'Speed Trial',
-        hint: 'The study window is short. Clear with confidence.',
-        theme: 'Speed',
-        riskProfile: 'Short memorize; commit quickly after the reveal.'
+        title: tr.s('Speed Trial'),
+        hint: tr.s('The study window is short. Clear with confidence.'),
+        theme: tr.s('Speed'),
+        riskProfile: tr.s('Short memorize; commit quickly after the reveal.')
     },
     treasure_gallery: {
-        title: 'Treasure Gallery',
-        hint: 'Pickup pairs are dense here. Clean play keeps Scholar style alive.',
-        theme: 'Treasure',
-        riskProfile: 'Pickup-rich breather; the pickups pay on the match, so take the carrier pairs.'
+        title: tr.s('Treasure Gallery'),
+        hint: tr.s('Pickup pairs are dense here. Clean play keeps Scholar style alive.'),
+        theme: tr.s('Treasure'),
+        riskProfile: tr.s('Pickup-rich breather; the pickups pay on the match, so take the carrier pairs.')
     },
     shadow_read: {
-        title: 'Shadow Read',
-        hint: 'Silhouettes hide detail. Leave the cursed pair for last.',
-        theme: 'Shadow',
-        riskProfile: 'Silhouette pressure; identify the cursed pair before clearing.'
+        title: tr.s('Shadow Read'),
+        hint: tr.s('Silhouettes hide detail. Leave the cursed pair for last.'),
+        theme: tr.s('Shadow'),
+        riskProfile: tr.s('Silhouette pressure; identify the cursed pair before clearing.')
     },
     anchor_chain: {
-        title: 'Anchor Chain',
-        hint: 'One card is marked: find its partner and match them for an extra chain link before the anchor moves on.',
-        theme: 'Anchor',
-        riskProfile: 'A standing offer of chain: the marked card tells you half of a pair, your memory has to supply the rest.'
+        title: tr.s('Anchor Chain'),
+        hint: tr.s('One card is marked: find its partner and match them for an extra chain link before the anchor moves on.'),
+        theme: tr.s('Anchor'),
+        riskProfile: tr.s('A standing offer of chain: the marked card tells you half of a pair, your memory has to supply the rest.')
     },
     trap_hall: {
-        title: 'Trap Hall',
-        hint: 'Sticky fingers: every match marks a card beside it that cannot open your next turn. Open elsewhere.',
-        theme: 'Trap',
-        riskProfile: 'Flip-order pressure on a boss budget; the card you remember best is often the one you may not open with.',
+        title: tr.s('Trap Hall'),
+        hint: tr.s('Sticky fingers: every match marks a card beside it that cannot open your next turn. Open elsewhere.'),
+        theme: tr.s('Trap'),
+        riskProfile: tr.s('Flip-order pressure on a boss budget; the card you remember best is often the one you may not open with.'),
         encounterRole: 'boss'
     },
     restless_hall: {
-        title: 'Restless Hall',
-        hint: 'Every third turn the floor shifts under you, and it shifts more the longer you stay. Finish within par.',
-        theme: 'Restless',
-        riskProfile: 'Hidden cards trade places on a clock you are winding; clear what you know before the floor takes it back.'
+        title: tr.s('Restless Hall'),
+        hint: tr.s('Every third turn the floor shifts under you, and it shifts more the longer you stay. Finish within par.'),
+        theme: tr.s('Restless'),
+        riskProfile: tr.s('Hidden cards trade places on a clock you are winding; clear what you know before the floor takes it back.')
     },
     rush_recall: {
-        title: 'Rush Recall',
-        hint: 'Short study and wide recall collide. Boss floors reward sharp clears.',
-        theme: 'Rush',
-        riskProfile: 'Boss pressure with short study and wider recall.',
+        title: tr.s('Rush Recall'),
+        hint: tr.s('Short study and wide recall collide. Boss floors reward sharp clears.'),
+        theme: tr.s('Rush'),
+        riskProfile: tr.s('Boss pressure with short study and wider recall.'),
         encounterRole: 'boss'
     },
     spiral_hall: {
-        title: 'The Spiral',
-        hint: 'Survive to par. Clear the outer ring and it seals, and fresh pairs are dealt inside it. Score, not clearance, is the goal.',
-        theme: 'Spiral',
-        riskProfile: 'An Abyss floor that never empties: the rings close in, and the turns to par are all there is.'
+        title: tr.s('The Spiral'),
+        hint: tr.s('Survive to par. Clear the outer ring and it seals, and fresh pairs are dealt inside it. Score, not clearance, is the goal.'),
+        theme: tr.s('Spiral'),
+        riskProfile: tr.s('An Abyss floor that never empties: the rings close in, and the turns to par are all there is.')
     },
     cartographer_hall: {
-        title: 'The Cartographer',
-        hint: 'Two decks deep, and the lower deck is charted for the study window. Every third match it turns a quarter, clockwise; a pinned card keeps what lies under it.',
-        theme: 'Cartographer',
-        riskProfile: 'The Deep\u2019s boss: the map in your head, both layers of it, turned under you every third match.'
+        title: tr.s('The Cartographer'),
+        hint: tr.s('Two decks deep, and the lower deck is charted for the study window. Every third match it turns a quarter, clockwise; a pinned card keeps what lies under it.'),
+        theme: tr.s('Cartographer'),
+        riskProfile: tr.s('The Deep\u2019s boss: the map in your head, both layers of it, turned under you every third match.')
     },
     keeper_hall: {
-        title: 'The Keeper of Halls',
-        hint: 'Two rooms and a doorway, and every fourth turn the rooms swap sides. Each card keeps its place inside its room; a pinned card stays where it is.',
-        theme: 'Keeper',
-        riskProfile: 'The Living Dungeon\u2019s boss: the Fold, with rooms that will not stay put. What you know stays true, a room\u2019s width over.'
+        title: tr.s('The Keeper of Halls'),
+        hint: tr.s('Two rooms and a doorway, and every fourth turn the rooms swap sides. Each card keeps its place inside its room; a pinned card stays where it is.'),
+        theme: tr.s('Keeper'),
+        riskProfile: tr.s('The Living Dungeon\u2019s boss: the Fold, with rooms that will not stay put. What you know stays true, a room\u2019s width over.')
     },
     warden_hall: {
-        title: "The Warden's Hall",
-        hint: 'Every turn past par takes a miss from your bank, and every fifth turn the face-down cards are dealt again. Clear it and the run is won.',
-        theme: 'Warden',
-        riskProfile: 'The Descent\u2019s last floor and its designed end: a race against par with the board you learned shuffled under you.'
+        title: tr.s("The Warden's Hall"),
+        hint: tr.s('Every turn past par takes a miss from your bank, and every fifth turn the face-down cards are dealt again. Clear it and the run is won.'),
+        theme: tr.s('Warden'),
+        riskProfile: tr.s('The Descent\u2019s last floor and its designed end: a race against par with the board you learned shuffled under you.')
     },
     mirror_hall: {
-        title: 'Looking-Glass Hall',
-        hint: 'Every third match turns the board over in a mirror. Everything you know stays true - reflected.',
-        theme: 'Glass',
-        riskProfile: 'A boss floor that tests the map in your head: the board you learned turns over every third match.'
+        title: tr.s('Looking-Glass Hall'),
+        hint: tr.s('Every third match turns the board over in a mirror. Everything you know stays true - reflected.'),
+        theme: tr.s('Glass'),
+        riskProfile: tr.s('A boss floor that tests the map in your head: the board you learned turns over every third match.')
     },
     lantern_hall: {
-        title: 'Lantern Hall',
-        hint: 'Every match lights the cards beside it until you turn the next one. Match where the dark is.',
-        theme: 'Lantern',
-        riskProfile: 'A reward floor that pays in knowledge: where you match decides how much you get to see.'
+        title: tr.s('Lantern Hall'),
+        hint: tr.s('Every match lights the cards beside it until you turn the next one. Match where the dark is.'),
+        theme: tr.s('Lantern'),
+        riskProfile: tr.s('A reward floor that pays in knowledge: where you match decides how much you get to see.')
     },
     skittish_hall: {
-        title: 'Skittish Hall',
-        hint: 'Miss here and the two cards you saw flinch into a neighbouring cell. Work out which way.',
-        theme: 'Skittish',
-        riskProfile: 'Every miss moves the two faces it showed one step; a clean floor never flinches.'
+        title: tr.s('Skittish Hall'),
+        hint: tr.s('Miss here and the two cards you saw flinch into a neighbouring cell. Work out which way.'),
+        theme: tr.s('Skittish'),
+        riskProfile: tr.s('Every miss moves the two faces it showed one step; a clean floor never flinches.')
     },
     spotlight_hunt: {
-        title: 'Spotlight Hunt',
-        hint: 'Ward and bounty drift after every turn. Save the cursed pair for last.',
-        theme: 'Spotlight',
-        riskProfile: 'Ward/bounty rotation; re-evaluate targets after each resolve.'
+        title: tr.s('Spotlight Hunt'),
+        hint: tr.s('Ward and bounty drift after every turn. Save the cursed pair for last.'),
+        theme: tr.s('Spotlight'),
+        riskProfile: tr.s('Ward/bounty rotation; re-evaluate targets after each resolve.')
     },
     breather: {
-        title: 'Breather',
-        hint: 'A calmer floor to steady the board and rebuild the chain.',
-        theme: 'Breather',
-        riskProfile: 'Lower pressure; rebuild resources and protect streaks.'
+        title: tr.s('Breather'),
+        hint: tr.s('A calmer floor to steady the board and rebuild the chain.'),
+        theme: tr.s('Breather'),
+        riskProfile: tr.s('Lower pressure; rebuild resources and protect streaks.')
     }
 };
 
 export const FEATURED_OBJECTIVE_LABELS: Record<FeaturedObjectiveId, string> = {
-    amplified_reaction: 'Amplified reaction',
-    calm_reaction: 'Calm the realm',
-    scholar_style: 'Scholar style',
-    cursed_last: 'Cursed last',
-    flip_par: 'Flip par'
+    amplified_reaction: tr.s('Amplified reaction'),
+    calm_reaction: tr.s('Calm the realm'),
+    scholar_style: tr.s('Scholar style'),
+    cursed_last: tr.s('Cursed last'),
+    flip_par: tr.s('Flip par')
 };
 
 /** Endless objective pill `title` — align with `isFeaturedObjectiveCompleted` in `game.ts`. */
 export const FEATURED_OBJECTIVE_HUD_TOOLTIPS: Record<FeaturedObjectiveId, string> = {
-    amplified_reaction: 'Match two pairs of one element, then a different element without a miss to trigger an amplified reaction.',
-    calm_reaction: 'Match two Water pairs, then an Ice pair without a miss: Freeze-over holds realm hazards still.',
+    amplified_reaction: tr.s('Match two pairs of one element, then a different element without a miss to trigger an amplified reaction.'),
+    calm_reaction: tr.s('Match two Water pairs, then an Ice pair without a miss: Freeze-over holds realm hazards still.'),
     flip_par:
-        'Turns this floor (each pair of flips resolved, match or miss; the gambit is one turn) must stay at or below the floor par shown on the run bar.',
-    scholar_style: 'Do not use board shuffle or tile swap on this floor.',
-    cursed_last: 'The cursed pair must be the last real pair you clear on this floor (not resolved early).'
+        tr.s('Turns this floor (each pair of flips resolved, match or miss; the gambit is one turn) must stay at or below the floor par shown on the run bar.'),
+    scholar_style: tr.s('Do not use board shuffle or tile swap on this floor.'),
+    cursed_last: tr.s('The cursed pair must be the last real pair you clear on this floor (not resolved early).')
 };
 
 export const getFeaturedObjectiveHudTooltip = (id: FeaturedObjectiveId | null): string | null =>
@@ -217,48 +218,48 @@ export interface ChapterActBiomeDefinition {
 
 const SURVEY_GROUNDS_CHAPTER_ACT_BIOME = {
     actId: 'act_1_survey',
-    actTitle: 'Act I — Survey Grounds',
+    actTitle: tr.s('Act I — Survey Grounds'),
     firstCycleFloor: 1,
     lastCycleFloor: 4,
     biomeId: 'lantern_academy',
-    biomeTitle: 'Lantern Academy',
-    biomeTone: 'Readable halls, early treasure, and silhouette onboarding.',
+    biomeTitle: tr.s('Lantern Academy'),
+    biomeTone: tr.s('Readable halls, early treasure, and silhouette onboarding.'),
     paletteHook: 'warm_lantern_gold',
     audioHook: 'lantern_study_pulse',
-    pressureCue: 'Readable recall pressure with one early reward reset.',
-    routePreview: 'Expect readable halls, a speed check, treasure relief, then silhouette pressure.',
-    gateRule: 'Floors 1-4 of each endless cycle.'
+    pressureCue: tr.s('Readable recall pressure with one early reward reset.'),
+    routePreview: tr.s('Expect readable halls, a speed check, treasure relief, then silhouette pressure.'),
+    gateRule: tr.s('Floors 1-4 of each endless cycle.')
 } as const satisfies ChapterActBiomeDefinition;
 
 export const CHAPTER_ACT_BIOME_STRUCTURE: readonly ChapterActBiomeDefinition[] = [
     SURVEY_GROUNDS_CHAPTER_ACT_BIOME,
     {
         actId: 'act_2_shadow',
-        actTitle: 'Act II — Shadow Archive',
+        actTitle: tr.s('Act II — Shadow Archive'),
         firstCycleFloor: 5,
         lastCycleFloor: 8,
         biomeId: 'shadow_archive',
-        biomeTitle: 'Shadow Archive',
-        biomeTone: 'Anchor tracking, breather recovery, trap boss, and script pressure.',
+        biomeTitle: tr.s('Shadow Archive'),
+        biomeTone: tr.s('Anchor tracking, breather recovery, trap boss, and script pressure.'),
         paletteHook: 'cool_archive_violet',
         audioHook: 'shadow_anchor_tick',
-        pressureCue: 'Anchor tracking rises into a trap boss before script pressure.',
-        routePreview: 'Expect anchor tracking, one breather, a trap boss, then letter-symbol pressure.',
-        gateRule: 'Floors 5-8 of each endless cycle.'
+        pressureCue: tr.s('Anchor tracking rises into a trap boss before script pressure.'),
+        routePreview: tr.s('Expect anchor tracking, one breather, a trap boss, then letter-symbol pressure.'),
+        gateRule: tr.s('Floors 5-8 of each endless cycle.')
     },
     {
         actId: 'act_3_convergence',
-        actTitle: 'Act III — Spire Convergence',
+        actTitle: tr.s('Act III — Spire Convergence'),
         firstCycleFloor: 9,
         lastCycleFloor: 12,
         biomeId: 'spire_convergence',
-        biomeTitle: 'Spire Convergence',
-        biomeTone: 'A second boss floor, a pickup reset, a static hall, and a spotlight finale.',
+        biomeTitle: tr.s('Spire Convergence'),
+        biomeTone: tr.s('A second boss floor, a pickup reset, a static hall, and a spotlight finale.'),
         paletteHook: 'spire_prismatic_alarm',
         audioHook: 'spire_recall_alarm',
-        pressureCue: 'The cycle\'s second boss floor and sustain pressure frame the final read.',
-        routePreview: 'Expect a second boss floor, a pickup reset, a static hall, then spotlight rotation.',
-        gateRule: 'Floors 9-12 of each endless cycle.'
+        pressureCue: tr.s('The cycle\'s second boss floor and sustain pressure frame the final read.'),
+        routePreview: tr.s('Expect a second boss floor, a pickup reset, a static hall, then spotlight rotation.'),
+        gateRule: tr.s('Floors 9-12 of each endless cycle.')
     }
 ] as const;
 
@@ -487,10 +488,10 @@ export interface DescentActDefinition {
  * Keystone Warden identity every boss floor reads (`boss-encounters.ts`) until the act bosses land.
  */
 export const DESCENT_ACTS: readonly DescentActDefinition[] = [
-    { id: 'gate', title: 'The Gate', firstFloor: 1, lastFloor: 12, bossFloor: null, boss: null },
+    { id: 'gate', title: tr.s('The Gate'), firstFloor: 1, lastFloor: 12, bossFloor: null, boss: null },
     {
         id: 'living_dungeon',
-        title: 'The Living Dungeon',
+        title: tr.s('The Living Dungeon'),
         firstFloor: 13,
         lastFloor: 24,
         bossFloor: 24,
@@ -498,7 +499,7 @@ export const DESCENT_ACTS: readonly DescentActDefinition[] = [
     },
     {
         id: 'deep',
-        title: 'The Deep',
+        title: tr.s('The Deep'),
         firstFloor: 25,
         lastFloor: 40,
         bossFloor: 40,
@@ -506,7 +507,7 @@ export const DESCENT_ACTS: readonly DescentActDefinition[] = [
     },
     {
         id: 'abyss',
-        title: 'The Abyss',
+        title: tr.s('The Abyss'),
         firstFloor: 41,
         lastFloor: 60,
         bossFloor: 60,
@@ -661,17 +662,17 @@ const roleForArchetype = (entry: FloorScheduleEntry): FloorArchetypePressureRole
 const budgetExpectationForRole = (role: FloorArchetypePressureRole): string => {
     switch (role) {
         case 'baseline':
-            return 'standard pair budget with readable recall pressure';
+            return tr.s('standard pair budget with readable recall pressure');
         case 'pressure':
-            return 'elevated mutator budget with a normal clear';
+            return tr.s('elevated mutator budget with a normal clear');
         case 'reward':
-            return 'pickup reward budget with reduced pressure';
+            return tr.s('pickup reward budget with reduced pressure');
         case 'recovery':
-            return 'lower pressure budget for resource recovery';
+            return tr.s('lower pressure budget for resource recovery');
         case 'boss':
-            return 'boss-multiplier floor with a trap-style mutator';
+            return tr.s('boss-multiplier floor with a trap-style mutator');
         case 'mystery':
-            return 'information budget with altered tile reading';
+            return tr.s('information budget with altered tile reading');
     }
 };
 
@@ -699,7 +700,7 @@ const progressionRowForEntry = (entry: FloorScheduleEntry): FloorArchetypeProgre
         role,
         budgetExpectation: budgetExpectationForRole(role),
         softlockInvariant:
-            'inspectBoardFairness must report a completion route for generated samples.',
+            tr.s('inspectBoardFairness must report a completion route for generated samples.'),
         actId: entry.actId,
         actTitle: entry.actTitle,
         biomeId: entry.biomeId,

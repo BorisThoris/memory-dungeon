@@ -1,13 +1,14 @@
+import { tr } from './i18n';
 /*
  * The interactions a match can preview. Nineteen tags stood here across nine traits; the trait
  * triage kept four traits, and an interaction survives only when both of its halves did. Every
  * one that remains fires on a clean match - the miss-side tags all belonged to cut traits.
  */
 export const TILE_TRAIT_INTERACTION_TEXT = {
-    'conduit:adjacent-score': 'Conduit: adjacent trait charge',
-    'conduit:echo-peek': 'Conduit + Echo: peek spark',
-    'conduit:stasis-lock': 'Conduit + Stasis: lock pulse',
-    'stasis:nearby-block': 'Stasis: nearby trait blocked'
+    'conduit:adjacent-score': tr.s('Conduit: adjacent trait charge'),
+    'conduit:echo-peek': tr.s('Conduit + Echo: peek spark'),
+    'conduit:stasis-lock': tr.s('Conduit + Stasis: lock pulse'),
+    'stasis:nearby-block': tr.s('Stasis: nearby trait blocked')
 } as const;
 
 export type TileTraitInteractionTag = keyof typeof TILE_TRAIT_INTERACTION_TEXT;

@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { ComboHeatPerks } from '../../shared/combo-heat-perks';
 
 /**
@@ -6,9 +7,9 @@ import type { ComboHeatPerks } from '../../shared/combo-heat-perks';
  */
 export const comboHeatPerksLine = (perks: ComboHeatPerks, nextAt: number | null): string | null => {
     const parts: string[] = [];
-    if (perks.afterglow > 0) parts.push(`Reveal +${perks.afterglow}`);
-    if (perks.breakPairBonus > 0) parts.push(`Pop +${perks.breakPairBonus}`);
-    if (perks.breakReachBonus > 0) parts.push(`Reach +${perks.breakReachBonus}`);
+    if (perks.afterglow > 0) parts.push(tr`Reveal +${perks.afterglow}`);
+    if (perks.breakPairBonus > 0) parts.push(tr`Pop +${perks.breakPairBonus}`);
+    if (perks.breakReachBonus > 0) parts.push(tr`Reach +${perks.breakReachBonus}`);
     if (parts.length > 0) return parts.join(' · ');
-    return nextAt == null ? null : `Reveal at ${nextAt}`;
+    return nextAt == null ? null : tr`Reveal at ${nextAt}`;
 };

@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { BoardState, RunState, Tile, TileSuit } from './contracts';
 import { descentActForFloor } from './floor-mutator-schedule';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
@@ -79,7 +80,7 @@ export const dealLayers = (board: BoardState, { runSeed, rulesVersion }: { runSe
     const beneath: (Tile | null)[] = board.tiles.map(() => null);
     for (let pair = 0; pair < pairs; pair += 1) {
         const pairKey = `${board.level}-deep-${pair}`;
-        const face = faces[pair] ?? { symbol: `D${pair + 1}`, label: `Deep ${pair + 1}` };
+        const face = faces[pair] ?? { symbol: `D${pair + 1}`, label: tr`Deep ${pair + 1}` };
         const suit = palette[pair % palette.length]!;
         const atomicVariant = atomicVariantForPairKey(pairKey);
         for (const half of [0, 1] as const) {

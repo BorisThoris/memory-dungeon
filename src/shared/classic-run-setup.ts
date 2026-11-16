@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { ContractFlags, MutatorId, RunState } from './contracts';
 import type { CreateRunOptions } from './run-creation-rules';
 import { CHAOS_MUTATORS } from './floor-mutator-schedule';
@@ -131,22 +132,22 @@ export const isDefaultClassicRunSetup = (setup: ClassicRunSetup): boolean =>
 export const describeClassicRunSetup = (setup: ClassicRunSetup): string[] => {
     const parts: string[] = [];
     if (setup.vows.includes('scholar')) {
-        parts.push('Scholar vow');
+        parts.push(tr.s('Scholar vow'));
     }
     if (setup.vows.includes('pin_vow')) {
-        parts.push('Pin vow');
+        parts.push(tr.s('Pin vow'));
     }
     if (setup.chaos) {
-        parts.push('Wild');
+        parts.push(tr.s('Wild'));
     }
     if (setup.pacing === 'calm') {
-        parts.push('Calm');
+        parts.push(tr.s('Calm'));
     }
     if (setup.unrecorded) {
-        parts.push('Unrecorded');
+        parts.push(tr.s('Unrecorded'));
     }
     if (setup.depth) {
-        parts.push(`Depth ${setup.depth}`);
+        parts.push(tr`Depth ${setup.depth}`);
     }
     return parts;
 };

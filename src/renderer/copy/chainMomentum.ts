@@ -1,12 +1,13 @@
+import { plural, tr } from '../../shared/i18n';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 
 type ChainMomentumTier = 'building' | 'chain' | 'surge' | 'combo';
 
 interface ChainMilestonePreview {
-    actionLabel: 'Start chain' | 'Push surge' | 'Push combo' | 'Hold combo';
+    actionLabel: string;
     distance: number;
     distanceLabel: string;
-    label: 'Chain tier' | 'Surge tier' | 'Combo tier' | 'Combo max';
+    label: string;
     target: 'x3' | 'x6' | 'x10';
     tone: ChainMomentumTier;
 }
@@ -22,13 +23,13 @@ export const getChainMomentumTier = (streak: number): ChainMomentumTier => {
 export const getChainMomentumLabel = (tier: ChainMomentumTier): string => {
     switch (tier) {
         case 'combo':
-            return 'Combo';
+            return tr.s('Combo');
         case 'surge':
-            return 'Surge';
+            return tr.s('Surge');
         case 'chain':
-            return 'Chain';
+            return tr.s('Chain');
         default:
-            return 'Priming';
+            return tr.s('Priming');
     }
 };
 
@@ -38,33 +39,33 @@ export const getChainMomentumCue = (streak?: number): string => {
         return '';
     }
     if (depth >= 10) {
-        return 'Combo live';
+        return tr.s('Combo live');
     }
     if (depth >= 6) {
         const distance = Math.max(1, 10 - depth);
-        return `${distance} ${distance === 1 ? 'match' : 'matches'} to x10`;
+        return tr`${plural(distance, { one: '{0} match', other: '{0} matches' })} to x10`;
     }
     const distance = Math.max(1, 6 - depth);
-    return `${distance} ${distance === 1 ? 'match' : 'matches'} to x6`;
+    return tr`${plural(distance, { one: '{0} match', other: '{0} matches' })} to x6`;
 };
 
 export const getChainMomentumSubline = (streak: number, traitRouteActive: boolean): string => {
     if (traitRouteActive) {
-        return 'Trait route live';
+        return tr.s('Trait route live');
     }
     const safeStreak = runNonNegativeInteger(streak);
     const earlyDistance = Math.max(1, 3 - safeStreak);
-    return getChainMomentumCue(streak) || `${earlyDistance} ${earlyDistance === 1 ? 'match' : 'matches'} to x3`;
+    return getChainMomentumCue(streak) || tr`${plural(earlyDistance, { one: '{0} match', other: '{0} matches' })} to x3`;
 };
 
 export const getChainMilestonePreview = (streak: number): ChainMilestonePreview => {
     const safeStreak = runNonNegativeInteger(streak);
     if (safeStreak >= 10) {
         return {
-            actionLabel: 'Hold combo',
+            actionLabel: tr.s('Hold combo'),
             distance: 0,
-            distanceLabel: 'Combo max',
-            label: 'Combo max',
+            distanceLabel: tr.s('Combo max'),
+            label: tr.s('Combo max'),
             target: 'x10',
             tone: 'combo'
         };
@@ -72,10 +73,10 @@ export const getChainMilestonePreview = (streak: number): ChainMilestonePreview 
     if (safeStreak >= 6) {
         const distance = Math.max(1, 10 - safeStreak);
         return {
-            actionLabel: 'Push combo',
+            actionLabel: tr.s('Push combo'),
             distance,
-            distanceLabel: `${distance} ${distance === 1 ? 'match' : 'matches'}`,
-            label: 'Combo tier',
+            distanceLabel: `${plural(distance, { one: '{0} match', other: '{0} matches' })}`,
+            label: tr.s('Combo tier'),
             target: 'x10',
             tone: 'surge'
         };
@@ -83,20 +84,20 @@ export const getChainMilestonePreview = (streak: number): ChainMilestonePreview 
     if (safeStreak >= 3) {
         const distance = Math.max(1, 6 - safeStreak);
         return {
-            actionLabel: 'Push surge',
+            actionLabel: tr.s('Push surge'),
             distance,
-            distanceLabel: `${distance} ${distance === 1 ? 'match' : 'matches'}`,
-            label: 'Surge tier',
+            distanceLabel: `${plural(distance, { one: '{0} match', other: '{0} matches' })}`,
+            label: tr.s('Surge tier'),
             target: 'x6',
             tone: 'chain'
         };
     }
     const distance = Math.max(1, 3 - safeStreak);
     return {
-        actionLabel: 'Start chain',
+        actionLabel: tr.s('Start chain'),
         distance,
-        distanceLabel: `${distance} ${distance === 1 ? 'match' : 'matches'}`,
-        label: 'Chain tier',
+        distanceLabel: `${plural(distance, { one: '{0} match', other: '{0} matches' })}`,
+        label: tr.s('Chain tier'),
         target: 'x3',
         tone: 'building'
     };

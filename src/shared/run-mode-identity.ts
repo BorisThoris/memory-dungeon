@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RunState } from './contracts';
 
 /**
@@ -18,7 +19,7 @@ export interface RunModeIdentity {
     readonly detail: string | null;
 }
 
-const CLASSIC: RunModeIdentity = { detail: null, label: 'Classic Dungeon' };
+const CLASSIC: RunModeIdentity = { detail: null, label: tr.s('Classic Dungeon') };
 
 /**
  * The mode name and rule for a live run. Pure: same run, same answer, no store and no clock.
@@ -26,18 +27,18 @@ const CLASSIC: RunModeIdentity = { detail: null, label: 'Classic Dungeon' };
 export const describeRunModeIdentity = (run: RunState): RunModeIdentity => {
     const contract = run.activeContract;
     if (contract?.maxPinsTotalRun != null) {
-        return { detail: `Pins ${contract.maxPinsTotalRun} this run`, label: 'Pin vow' };
+        return { detail: tr`Pins ${contract.maxPinsTotalRun} this run`, label: tr.s('Pin vow') };
     }
     if (run.wildMenuRun) {
-        return { detail: `Wild matches ${run.wildMatchesRemaining}`, label: 'Wild Run' };
+        return { detail: tr`Wild matches ${run.wildMatchesRemaining}`, label: tr.s('Wild Run') };
     }
     if (run.practiceMode) {
-        return { detail: 'Achievements off', label: 'Practice' };
+        return { detail: tr.s('Achievements off'), label: tr.s('Practice') };
     }
     if (contract?.noShuffle === true) {
         // Gen 215: this said "No shuffle, no destroy" - Destroy left in Gen 200, and what the
         // contract flag actually gates is the two shuffle charges, which is what the swap spends.
-        return { detail: 'No shuffle, no swap', label: 'Scholar Contract' };
+        return { detail: tr.s('No shuffle, no swap'), label: tr.s('Scholar Contract') };
     }
     return CLASSIC;
 };

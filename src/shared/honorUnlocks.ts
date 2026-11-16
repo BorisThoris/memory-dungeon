@@ -2,6 +2,7 @@
  * Local-only “honors” (Track 2 meta): titles/badges stored as `saveData.unlocks` tags `honor:<id>`.
  * Does not require Steam Partner slots. See `AchievementId` for Steam trophies.
  */
+import { tr } from './i18n';
 import type { SaveData } from './contracts';
 import { cosmeticUnlockTag, type CosmeticId } from './cosmetics';
 import { HONOR_UNLOCK_IDS, type HonorUnlockId } from './honor-unlock-ids';
@@ -21,23 +22,23 @@ export interface HonorUnlockDefinition {
 export const HONOR_UNLOCK_CATALOG: Record<HonorUnlockId, HonorUnlockDefinition> = {
     honor_sharp_initiate: {
         id: 'honor_sharp_initiate',
-        title: 'Sharp Initiate',
-        description: 'Clear at least one floor whose chain reached Sharp.'
+        title: tr.s('Sharp Initiate'),
+        description: tr.s('Clear at least one floor whose chain reached Sharp.')
     },
     honor_ascendant_5: {
         id: 'honor_ascendant_5',
-        title: 'Ascendant V',
-        description: 'Reach floor five in a run without using disallowed powers (tracked as best no-powers floor).'
+        title: tr.s('Ascendant V'),
+        description: tr.s('Reach floor five in a run without using disallowed powers (tracked as best no-powers floor).')
     },
     honor_ascendant_10: {
         id: 'honor_ascendant_10',
-        title: 'Ascendant X',
-        description: 'Reach floor ten in a run without using disallowed powers.'
+        title: tr.s('Ascendant X'),
+        description: tr.s('Reach floor ten in a run without using disallowed powers.')
     },
     honor_score_maestro: {
         id: 'honor_score_maestro',
-        title: 'Score Maestro',
-        description: 'Reach a best score of at least 2000 across any runs.'
+        title: tr.s('Score Maestro'),
+        description: tr.s('Reach a best score of at least 2000 across any runs.')
     }
 };
 

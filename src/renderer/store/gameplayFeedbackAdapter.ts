@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { RunState } from '../../shared/contracts';
 import {
     gameplayEventSchema,
@@ -69,7 +70,7 @@ const messageFor = (
             event.reason === 'inventory_overflow'
     );
     return overflowScore
-        ? `${feedback.message} Inventory overflow converted to +${overflowScore.amount} score.`
+        ? tr`${feedback.message} Inventory overflow converted to +${overflowScore.amount} score.`
         : feedback.message;
 };
 

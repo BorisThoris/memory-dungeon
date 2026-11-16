@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import {
     GAME_RULES_VERSION,
     type FloorArchetypeId,
@@ -123,7 +124,7 @@ export const getLongRunFatigueRows = (report: BalanceSimulationReport): LongRunS
      * keys had already gone with the dungeon cards.
      */
     return [
-        longRunRow('breather_spacing', 'Average floors between breather floors', breatherSpacing, 3, 5, 'scheduled breather count')
+        longRunRow('breather_spacing', tr.s('Average floors between breather floors'), breatherSpacing, 3, 5, tr.s('scheduled breather count'))
     ];
 };
 
@@ -140,7 +141,7 @@ export const runLongRunSoak = ({
     const rows = getLongRunFatigueRows(report);
     const issues = rows
         .filter((row) => row.status !== 'within_range')
-        .map((row) => `${row.key}:${row.value} outside ${row.targetMin}-${row.targetMax}`);
+        .map((row) => tr`${row.key}:${row.value} outside ${row.targetMin}-${row.targetMax}`);
     return {
         rulesVersion,
         seeds: [...seeds],

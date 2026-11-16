@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import { bankComboPot, comboCashInActive } from './combo-cash-in-rules';
 import { DEPTH_WARDEN_REDEAL_EVERY, depthHas } from './depth-rules';
 import type { BoardState, RunState } from './contracts';
@@ -65,7 +66,7 @@ export const wardenDealsAgain = (board: BoardState, seed: string): BoardState =>
     const faces = freshBoardFaces(board.tiles, board.level);
     const tiles = [...board.tiles];
     cells.forEach((pair, slot) => {
-        const face = faces[slot] ?? { symbol: `W${slot + 1}`, label: `Warden ${slot + 1}` };
+        const face = faces[slot] ?? { symbol: `W${slot + 1}`, label: tr`Warden ${slot + 1}` };
         const pairKey = `${board.level}-warden-${seed.length}-${slot}-${pickRngIndex(rng, 1_000_000)}`;
         const suit = TILE_SUITS[pickRngIndex(rng, TILE_SUITS.length)]!;
         pair.forEach((cell, half) => {

@@ -1,3 +1,4 @@
+import { plural, tr } from './i18n';
 import type { RelicId, RunState } from './contracts';
 import { SNOWBALL_RELICS } from './snowball-relic-rules';
 
@@ -33,20 +34,20 @@ export const LONG_LOOK_MS = 1000;
 export const RELICS: readonly RelicDefinition[] = [
     {
         id: 'deep_pockets',
-        title: 'Deep Pockets',
-        body: 'You can hold five lives instead of four.',
+        title: tr.s('Deep Pockets'),
+        body: tr.s('You can hold five lives instead of four.'),
         price: 9
     },
     {
         id: 'gilded_chain',
-        title: 'Gilded Chain',
-        body: `Every fifth match in a row - the rung that earns a miss - also pays ${GILDED_CHAIN_GOLD} gold.`,
+        title: tr.s('Gilded Chain'),
+        body: tr`Every fifth match in a row - the rung that earns a miss - also pays ${GILDED_CHAIN_GOLD} gold.`,
         price: 8
     },
     {
         id: 'long_look',
-        title: 'Long Look',
-        body: `Every floor's study window lasts a second longer.`,
+        title: tr.s('Long Look'),
+        body: tr`Every floor's study window lasts a second longer.`,
         price: 10
     },
     {
@@ -56,8 +57,8 @@ export const RELICS: readonly RelicDefinition[] = [
          * where to open a floor - in the unread middle, not at the edge.
          */
         id: 'tallow_candle',
-        title: 'Tallow Candle',
-        body: 'Your first match on every floor lights the face-down cards beside it until your next flip.',
+        title: tr.s('Tallow Candle'),
+        body: tr.s('Your first match on every floor lights the face-down cards beside it until your next flip.'),
         price: 8
     },
     {
@@ -67,8 +68,8 @@ export const RELICS: readonly RelicDefinition[] = [
          * fewer. A run that plays it is richer and has less room to be wrong.
          */
         id: 'misers_purse',
-        title: "Miser's Purse",
-        body: 'Every floor clear pays twice the gold. You can hold one life fewer.',
+        title: tr.s("Miser's Purse"),
+        body: tr.s('Every floor clear pays twice the gold. You can hold one life fewer.'),
         price: 0,
         curio: true
     }
@@ -142,8 +143,8 @@ export const gildedChainGold = (run: RelicRun): number => {
     return rank > 0 ? GILDED_CHAIN_GOLD + rank - 1 : 0;
 };
 export const campUpgradeBenefit = (id: CampUpgradeId, rank: number): string => {
-    if (id === 'long_look') return `+${rank} sec to study every floor`;
-    if (id === 'deep_pockets') return `${4 + rank} miss capacity`;
-    if (id === 'tallow_candle') return `Lights the first ${rank} ${rank === 1 ? 'match' : 'matches'} of every floor`;
-    return `${rank ? GILDED_CHAIN_GOLD + rank - 1 : 0} gold per 5 matches in a row`;
+    if (id === 'long_look') return tr`+${rank} sec to study every floor`;
+    if (id === 'deep_pockets') return tr`${4 + rank} miss capacity`;
+    if (id === 'tallow_candle') return tr`Lights the first ${plural(rank, { one: '{0} match', other: '{0} matches' })} of every floor`;
+    return tr`${rank ? GILDED_CHAIN_GOLD + rank - 1 : 0} gold per 5 matches in a row`;
 };

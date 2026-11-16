@@ -1,3 +1,4 @@
+import { plural, tr } from './i18n';
 import { chainRungScoreMultiplier } from './chain-rung-value-rules';
 import { CHAIN_TIER_CLEAN_FROM, getChainTier, type ChainTier } from './chain-tier-rules';
 import { BREAK_PAIR_CAP } from './chunk-break-rules';
@@ -34,7 +35,7 @@ export interface ChainTargetFeedback {
  * "×4", "×8", and "Best chain ×4, at Fever" read as the Sharp multiplier on a Fever run (Gen 263).
  */
 const chainLinks = (bestStreak: number): string =>
-    `Best chain: ${bestStreak} ${bestStreak === 1 ? 'match' : 'matches'} in a row`;
+    tr`Best chain: ${plural(bestStreak, { one: '{0} match', other: '{0} matches' })} in a row`;
 
 export const getChainTargetFeedback = (
     bestStreakInput: number | null | undefined,
@@ -48,45 +49,45 @@ export const getChainTargetFeedback = (
         return {
             band: 'mastery',
             bestStreak,
-            value: 'Hold Fever',
-            detail: `${chainLinks(bestStreak)}, and the ladder reached Fever. The record now is how long you keep it.`,
-            actionHint: 'Bank the pairs you are sure of first, then spend tools to protect the chain.',
-            payoffLabel: 'Chain mastery',
-            payoffValue: 'hold Fever'
+            value: tr.s('Hold Fever'),
+            detail: tr`${chainLinks(bestStreak)}, and the ladder reached Fever. The record now is how long you keep it.`,
+            actionHint: tr.s('Bank the pairs you are sure of first, then spend tools to protect the chain.'),
+            payoffLabel: tr.s('Chain mastery'),
+            payoffValue: tr.s('hold Fever')
         };
     }
     if (tier === 'sharp') {
         return {
             band: 'combo',
             bestStreak,
-            value: 'Reach Fever',
+            value: tr.s('Reach Fever'),
             detail: `${chainLinks(bestStreak)}. Fever can pop up to ${BREAK_PAIR_CAP.fever} extra pairs and bridge into a neighbouring suit. Popped pairs score ×${feverPays} before ripple bonuses.`,
-            actionHint: 'Hold the chain through the clumps you know; peek before you guess.',
-            payoffLabel: 'Chain chase',
-            payoffValue: 'Fever next'
+            actionHint: tr.s('Hold the chain through the clumps you know; peek before you guess.'),
+            payoffLabel: tr.s('Chain chase'),
+            payoffValue: tr.s('Fever next')
         };
     }
     if (tier === 'clean') {
         return {
             band: 'reward',
             bestStreak,
-            value: 'Reach Sharp',
+            value: tr.s('Reach Sharp'),
             detail: `${chainLinks(bestStreak)}. Sharp can pop up to ${BREAK_PAIR_CAP.sharp} extra pairs and ripple through the same suit. Popped pairs score ×${sharpPays} before ripple bonuses.`,
-            actionHint: 'Build momentum with pairs you remember, then match beside a same-suit clump.',
-            payoffLabel: 'Chain chase',
-            payoffValue: 'Sharp next'
+            actionHint: tr.s('Build momentum with pairs you remember, then match beside a same-suit clump.'),
+            payoffLabel: tr.s('Chain chase'),
+            payoffValue: tr.s('Sharp next')
         };
     }
     return {
         band: 'seed',
         bestStreak,
-        value: 'Reach Clean',
+        value: tr.s('Reach Clean'),
         detail:
             bestStreak > 0
                 ? `${chainLinks(bestStreak)}. ${CHAIN_TIER_CLEAN_FROM} momentum reaches Clean, where a match can pop a nearby pair of the same suit.`
-                : `No chain yet. ${CHAIN_TIER_CLEAN_FROM} momentum reaches Clean, where a match can pop a nearby pair of the same suit.`,
-        actionHint: 'Memorize one clump first, then clear those pairs before exploring.',
-        payoffLabel: 'Chain chase',
-        payoffValue: 'Clean next'
+                : tr`No chain yet. ${CHAIN_TIER_CLEAN_FROM} momentum reaches Clean, where a match can pop a nearby pair of the same suit.`,
+        actionHint: tr.s('Memorize one clump first, then clear those pairs before exploring.'),
+        payoffLabel: tr.s('Chain chase'),
+        payoffValue: tr.s('Clean next')
     };
 };

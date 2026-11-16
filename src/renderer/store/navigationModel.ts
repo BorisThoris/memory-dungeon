@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { RunStatus, SubscreenReturnView, ViewState } from '../../shared/contracts';
 import { isResumableLifecycleState, lifecycleStateFromRunStatus } from '../../shared/run-lifecycle-machine';
 
@@ -174,33 +175,33 @@ export const getNavigationRouteContract = (
 export const getNavigationShellChromeRows = (): NavigationShellChromeRow[] => [
     {
         id: 'page_back',
-        label: 'Page Back',
-        route: 'modeSelect/collection/profile/inventory/codex/settings → menu',
-        chrome: 'Full meta destination with visible Back button.',
+        label: tr.s('Page Back'),
+        route: tr.s('modeSelect/collection/profile/inventory/codex/settings → menu'),
+        chrome: tr.s('Full meta destination with visible Back button.'),
         preservesRun: false,
         localOnly: true
     },
     {
         id: 'in_run_meta',
-        label: 'In-run meta overlay',
-        route: 'playing → inventory/codex/settings → playing',
-        chrome: 'Gameplay remains mounted underneath desk/modal chrome; run timers freeze and resume.',
+        label: tr.s('In-run meta overlay'),
+        route: tr.s('playing → inventory/codex/settings → playing'),
+        chrome: tr.s('Gameplay remains mounted underneath desk/modal chrome; run timers freeze and resume.'),
         preservesRun: true,
         localOnly: true
     },
     {
         id: 'null_run_recovery',
-        label: 'Null-run recovery',
-        route: 'inventory/codex/settings with missing run → menu',
-        chrome: 'Return pointers normalize to menu so no blank playing shell appears.',
+        label: tr.s('Null-run recovery'),
+        route: tr.s('inventory/codex/settings with missing run → menu'),
+        chrome: tr.s('Return pointers normalize to menu so no blank playing shell appears.'),
         preservesRun: false,
         localOnly: true
     },
     {
         id: 'game_over_return',
-        label: 'Game-over return',
-        route: 'gameOver → menu or restart',
-        chrome: 'Post-run page owns its action dock; no browser history or online route required.',
+        label: tr.s('Game-over return'),
+        route: tr.s('gameOver → menu or restart'),
+        chrome: tr.s('Post-run page owns its action dock; no browser history or online route required.'),
         preservesRun: false,
         localOnly: true
     }
@@ -249,21 +250,21 @@ export const getNavigationShellChromeContract = ({
     view: ViewState;
 }): NavigationShellChromeContract => {
     if (view === 'boot') {
-        return { visualView: 'boot', shellChrome: 'boot', boardMounted: false, fallbackView: 'menu', reason: 'Hydration/intro shell.' };
+        return { visualView: 'boot', shellChrome: 'boot', boardMounted: false, fallbackView: 'menu', reason: tr.s('Hydration/intro shell.') };
     }
     if (view === 'gameOver') {
-        return { visualView: 'gameOver', shellChrome: 'post_run', boardMounted: false, fallbackView: 'menu', reason: 'Post-run shell owns next actions.' };
+        return { visualView: 'gameOver', shellChrome: 'post_run', boardMounted: false, fallbackView: 'menu', reason: tr.s('Post-run shell owns next actions.') };
     }
     if (view === 'playing') {
-        return { visualView: runPresent ? 'playing' : 'menu', shellChrome: runPresent ? 'gameplay' : 'menu_hub', boardMounted: runPresent, fallbackView: 'menu', reason: runPresent ? 'Active gameplay shell.' : 'No run; fall back to menu.' };
+        return { visualView: runPresent ? 'playing' : 'menu', shellChrome: runPresent ? 'gameplay' : 'menu_hub', boardMounted: runPresent, fallbackView: 'menu', reason: runPresent ? tr.s('Active gameplay shell.') : tr.s('No run; fall back to menu.') };
     }
     if (view === 'settings' && settingsReturnView === 'playing') {
-        return { visualView: runPresent ? 'playing' : 'menu', shellChrome: runPresent ? 'gameplay_modal' : 'menu_hub', boardMounted: runPresent, fallbackView: 'menu', reason: 'Run settings overlays gameplay and freezes timers.' };
+        return { visualView: runPresent ? 'playing' : 'menu', shellChrome: runPresent ? 'gameplay_modal' : 'menu_hub', boardMounted: runPresent, fallbackView: 'menu', reason: tr.s('Run settings overlays gameplay and freezes timers.') };
     }
     if (isInRunMetaView(view) && subscreenReturnView === 'playing') {
-        return { visualView: runPresent ? 'playing' : 'menu', shellChrome: runPresent ? 'gameplay_modal' : 'menu_hub', boardMounted: runPresent, fallbackView: 'menu', reason: 'In-run meta overlays keep gameplay mounted.' };
+        return { visualView: runPresent ? 'playing' : 'menu', shellChrome: runPresent ? 'gameplay_modal' : 'menu_hub', boardMounted: runPresent, fallbackView: 'menu', reason: tr.s('In-run meta overlays keep gameplay mounted.') };
     }
-    return { visualView: view, shellChrome: view === 'menu' ? 'menu_hub' : 'meta_page', boardMounted: false, fallbackView: 'menu', reason: 'Full-page menu/meta destination.' };
+    return { visualView: view, shellChrome: view === 'menu' ? 'menu_hub' : 'meta_page', boardMounted: false, fallbackView: 'menu', reason: tr.s('Full-page menu/meta destination.') };
 };
 
 export type StoreNavigationAction =

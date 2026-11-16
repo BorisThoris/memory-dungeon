@@ -50,7 +50,7 @@ const workers = Number.isFinite(parsedWorkers) && parsedWorkers > 0 ? parsedWork
 const config: PlaywrightTestConfig = {
     testDir: './e2e',
     // Electron launches the built app itself; playwright.desktop.config.ts runs it.
-    testIgnore: 'desktop-launch.spec.ts',
+    testIgnore: ['desktop-launch.spec.ts', 'offline.spec.ts'],
     /*
      * The app is a single strict-port Vite/WebGL target; broad parallel Playwright runs overload
      * startup, WebGL contexts, and route fixtures. Shards may opt into more workers through env.

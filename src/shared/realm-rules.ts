@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import {
     REALM_IDS,
     type BoardState,
@@ -64,80 +65,80 @@ export interface RealmDefinition {
 export const REALMS: Readonly<Record<RealmId, RealmDefinition>> = {
     frost: {
         id: 'frost',
-        title: 'Frost',
-        place: 'The Frozen Reach',
-        weather: 'Blizzard',
+        title: tr.s('Frost'),
+        place: tr.s('The Frozen Reach'),
+        weather: tr.s('Blizzard'),
         interval: 4,
         rules: [
-            'A miss can freeze a cohort for two turns: at least two complete pairs, with another pair free.',
-            'Blizzards slide a row with the wind and snow over the backs.'
+            tr.s('A miss can freeze a cohort for two turns: at least two complete pairs, with another pair free.'),
+            tr.s('Blizzards slide a row with the wind and snow over the backs.')
         ],
-        peak: 'Whiteout',
-        peakRule: 'Every face-down card is snowed over: no suit on the board can be read.',
+        peak: tr.s('Whiteout'),
+        peakRule: tr.s('Every face-down card is snowed over: no suit on the board can be read.'),
         hueDeg: 170,
         saturate: 0.7,
         color: '#9fdcff'
     },
     ember: {
         id: 'ember',
-        title: 'Ember',
-        place: 'The Cinder Deep',
-        weather: 'Wildfire',
+        title: tr.s('Ember'),
+        place: tr.s('The Cinder Deep'),
+        weather: tr.s('Wildfire'),
         interval: 3,
         rules: [
-            'Wildfire lights a card on a three-turn fuse. Match it in time: doused, gold.',
-            'A fuse that runs out burns a gold and spreads to a neighbour.'
+            tr.s('Wildfire lights a card on a three-turn fuse. Match it in time: doused, gold.'),
+            tr.s('A fuse that runs out burns a gold and spreads to a neighbour.')
         ],
-        peak: 'Firestorm',
-        peakRule: 'A new fire, and every fire on the board spreads to a neighbour at once.',
+        peak: tr.s('Firestorm'),
+        peakRule: tr.s('A new fire, and every fire on the board spreads to a neighbour at once.'),
         hueDeg: -12,
         saturate: 1.35,
         color: '#ff8a3d'
     },
     tide: {
         id: 'tide',
-        title: 'Tide',
-        place: 'The Drowned Vault',
-        weather: 'Current',
+        title: tr.s('Tide'),
+        place: tr.s('The Drowned Vault'),
+        weather: tr.s('Current'),
         interval: 3,
         rules: [
-            'The current runs one column down a step, and sweeps across the room.',
-            'Watch the column it names: the cards in it all move together.'
+            tr.s('The current runs one column down a step, and sweeps across the room.'),
+            tr.s('Watch the column it names: the cards in it all move together.')
         ],
-        peak: 'Spring Tide',
-        peakRule: 'Two columns run at once.',
+        peak: tr.s('Spring Tide'),
+        peakRule: tr.s('Two columns run at once.'),
         hueDeg: 150,
         saturate: 1.05,
         color: '#4fd6c8'
     },
     storm: {
         id: 'storm',
-        title: 'Storm',
-        place: 'The Thunder Spire',
-        weather: 'Lightning',
+        title: tr.s('Storm'),
+        place: tr.s('The Thunder Spire'),
+        weather: tr.s('Lightning'),
         interval: 4,
         rules: [
-            'Lightning swaps two hidden cards and leaves both lit until your next flip.',
-            'What it shows you is where they landed. Look fast.'
+            tr.s('Lightning swaps two hidden cards and leaves both lit until your next flip.'),
+            tr.s('What it shows you is where they landed. Look fast.')
         ],
-        peak: 'Thunderclap',
-        peakRule: 'A whole row of face-down cards is lit until your next flip. Nothing moves.',
+        peak: tr.s('Thunderclap'),
+        peakRule: tr.s('A whole row of face-down cards is lit until your next flip. Nothing moves.'),
         hueDeg: -70,
         saturate: 1.1,
         color: '#b69bff'
     },
     grove: {
         id: 'grove',
-        title: 'Grove',
-        place: 'The Overgrown Crypt',
-        weather: 'Overgrowth',
+        title: tr.s('Grove'),
+        place: tr.s('The Overgrown Crypt'),
+        weather: tr.s('Overgrowth'),
         interval: 3,
         rules: [
-            'Vines hold at least two complete pairs together, leaving another pair free. Breaking a cohort releases it.',
-            'A match beside vines cuts them, a gold for every vine.'
+            tr.s('Vines hold at least two complete pairs together, leaving another pair free. Breaking a cohort releases it.'),
+            tr.s('A match beside vines cuts them, a gold for every vine.')
         ],
-        peak: 'Bloom',
-        peakRule: 'The vines flower: every bloom cut pays three gold.',
+        peak: tr.s('Bloom'),
+        peakRule: tr.s('The vines flower: every bloom cut pays three gold.'),
         hueDeg: 60,
         saturate: 1.15,
         color: '#8fd66a'
@@ -156,9 +157,9 @@ export interface RealmSeverityDefinition {
 }
 
 export const REALM_SEVERITIES: Readonly<Record<RealmSeverity, RealmSeverityDefinition>> = {
-    calm: { id: 'calm', title: 'Calm', intervalDelta: 1, goldMultiplier: 1, reach: 1 },
-    wild: { id: 'wild', title: 'Wild', intervalDelta: 0, goldMultiplier: 1.25, reach: 1 },
-    raging: { id: 'raging', title: 'Raging', intervalDelta: -1, goldMultiplier: 1.5, reach: 2 }
+    calm: { id: 'calm', title: tr.s('Calm'), intervalDelta: 1, goldMultiplier: 1, reach: 1 },
+    wild: { id: 'wild', title: tr.s('Wild'), intervalDelta: 0, goldMultiplier: 1.25, reach: 1 },
+    raging: { id: 'raging', title: tr.s('Raging'), intervalDelta: -1, goldMultiplier: 1.5, reach: 2 }
 };
 
 export const isRealmId = (value: unknown): value is RealmId =>

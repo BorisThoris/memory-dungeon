@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 import type { RunHistoryRecord } from '../../shared/contracts';
 
 /**
@@ -8,18 +9,18 @@ import type { RunHistoryRecord } from '../../shared/contracts';
  */
 
 export const RUN_HISTORY_COPY = {
-    copy: 'Copy',
+    copy: tr.s('Copy'),
     copyAriaLabel: (record: RunHistoryRecord): string =>
-        `Copy the key for the ${record.mode} run that reached floor ${record.highestLevel}`,
-    copyDone: 'Copied',
-    copyFailed: 'Failed',
-    best: 'Best',
-    bestAriaLabel: 'Your highest scoring recorded run',
-    empty: 'Finished runs are recorded here.',
-    label: 'Recent runs',
+        tr`Copy the key for the ${record.mode} run that reached floor ${record.highestLevel}`,
+    copyDone: tr.s('Copied'),
+    copyFailed: tr.s('Failed'),
+    best: tr.s('Best'),
+    bestAriaLabel: tr.s('Your highest scoring recorded run'),
+    empty: tr.s('Finished runs are recorded here.'),
+    label: tr.s('Recent runs'),
     /** `Floor 12 · 3,400` — the two numbers a player compares runs by. */
     result: (record: RunHistoryRecord): string =>
-        `Floor ${record.highestLevel} · ${record.totalScore.toLocaleString('en-US')}`
+        tr`Floor ${record.highestLevel} · ${record.totalScore.toLocaleString('en-US')}`
 } as const;
 
 /** `4 Sep 2026`, in the player's own locale ordering. An unreadable instant reads as blank. */
@@ -36,18 +37,18 @@ export const formatRunHistoryDate = (endedAtIso: string): string => {
  * question: not "what did I do lately" but "how well have I ever done at this".
  */
 export const MODE_RECORDS_COPY = {
-    empty: 'A record appears here for each mode you finish a run in.',
-    label: 'Records by mode',
+    empty: tr.s('A record appears here for each mode you finish a run in.'),
+    label: tr.s('Records by mode'),
     /** `2,200 · floor 12` — the record itself. */
     result: (totalScore: number, highestLevel: number): string =>
-        `${totalScore.toLocaleString('en-US')} · floor ${highestLevel}`,
+        tr`${totalScore.toLocaleString('en-US')} · floor ${highestLevel}`,
     /** `4 runs` under the record, so a one-off does not read like a long campaign. */
-    runs: (runs: number): string => `${runs} ${runs === 1 ? 'run' : 'runs'}`,
+    runs: (runs: number): string => `${plural(runs, { one: '{0} run', other: '{0} runs' })}`,
     /** `Chain ×12 · chunk of 7` — the chain's own records for the mode; nothing when the mode has none. */
     chain: (bestChain: number, biggestChunk: number): string | null => {
         const parts = [
-            bestChain > 0 ? `Chain ×${bestChain}` : null,
-            biggestChunk > 0 ? `chunk of ${biggestChunk}` : null
+            bestChain > 0 ? tr`Chain ×${bestChain}` : null,
+            biggestChunk > 0 ? tr`chunk of ${biggestChunk}` : null
         ].filter((part): part is string => part !== null);
         return parts.length === 0 ? null : parts.join(' · ');
     }
@@ -67,11 +68,11 @@ export const PROFILE_LEDGER_VIEWS = ['progress', 'runs', 'records'] as const;
 export type ProfileLedgerView = (typeof PROFILE_LEDGER_VIEWS)[number];
 
 export const PROFILE_LEDGER_COPY = {
-    label: 'Your record',
+    label: tr.s('Your record'),
     tab: {
-        progress: 'In progress',
-        records: 'By mode',
-        runs: 'Recent runs'
+        progress: tr.s('In progress'),
+        records: tr.s('By mode'),
+        runs: tr.s('Recent runs')
     } satisfies Record<ProfileLedgerView, string>,
-    tabAriaLabel: 'Which part of your record to show'
+    tabAriaLabel: tr.s('Which part of your record to show')
 } as const;

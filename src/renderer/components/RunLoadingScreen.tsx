@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { useEffect, useState, type CSSProperties } from 'react';
 import { subscribeRunAssetProgress, type RunAssetProgress } from '../assets/preloadRunAssets';
 import type { GraphicsQualityPreset, RunState } from '../../shared/contracts';
@@ -30,7 +31,7 @@ export const RunLoadingScreen = ({ quality = 'medium', reduceMotion = false, run
     const floor = run?.board?.level ?? 1;
     // No run, or a run without a mode, both mean there is no name to show — say what is happening
     // instead. Defaulting to a mode id would print that id when the catalog has no title for it.
-    const label = run?.gameMode ? modeTitle(run.gameMode) : 'Descending';
+    const label = run?.gameMode ? modeTitle(run.gameMode) : tr.s('Descending');
     // What is still being loaded, if anything: the rail fills with it and the status says which step landed last.
     const [progress, setProgress] = useState<RunAssetProgress | null>(null);
     useEffect(() => subscribeRunAssetProgress(setProgress), []);
@@ -51,7 +52,7 @@ export const RunLoadingScreen = ({ quality = 'medium', reduceMotion = false, run
             </div>
             <div className={styles.panel}>
                 <p className={styles.eyebrow}>{label}</p>
-                <p className={styles.floor}>Floor {floor}</p>
+                <p className={styles.floor}>{tr.s("Floor")} {floor}</p>
 
                 <div aria-hidden="true" className={styles.deck}>
                     {Array.from({ length: DEALT_CARD_COUNT }, (_unused, index) => (
@@ -67,7 +68,7 @@ export const RunLoadingScreen = ({ quality = 'medium', reduceMotion = false, run
                 />
                 {/* The only part a screen reader needs; everything above is the same fact, drawn. */}
                 <p className={styles.status} data-testid="run-loading-status">
-                    {progress && progress.completed < progress.total ? progress.label : 'Dealing the board…'}
+                    {progress && progress.completed < progress.total ? progress.label : tr.s('Dealing the board…')}
                 </p>
             </div>
         </div>

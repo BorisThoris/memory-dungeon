@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 export type UiStateKind = 'empty' | 'loading' | 'error' | 'locked';
 
 export interface UiStateCopyRow {
@@ -25,10 +26,10 @@ export interface UiStateCopyRow {
 const DEFAULT_UI_STATE_COPY_ROW: UiStateCopyRow = {
     id: 'inventory_no_run',
     kind: 'empty',
-    title: 'No active expedition',
-    body: "Your charges, run upgrades and the floor's mutators show here once a descent is under way.",
-    actionLabel: 'Start a run',
-    action: 'Start a run from Choose Your Path',
+    title: tr.s('No active expedition'),
+    body: tr.s("Your charges, run upgrades and the floor's mutators show here once a descent is under way."),
+    actionLabel: tr.s('Start a run'),
+    action: tr.s('Start a run from Choose Your Path'),
     localOnly: true,
     onlineAssumption: false
 };
@@ -38,80 +39,80 @@ export const UI_STATE_COPY_ROWS: readonly UiStateCopyRow[] = [
     {
         id: 'inventory_no_relics',
         kind: 'empty',
-        title: 'No relics claimed yet',
-        body: 'Reach milestone floors to draft relics and turn a run into a build.',
-        actionLabel: 'Reach a milestone',
-        action: 'Keep clearing local floors',
+        title: tr.s('No relics claimed yet'),
+        body: tr.s('Reach milestone floors to draft relics and turn a run into a build.'),
+        actionLabel: tr.s('Reach a milestone'),
+        action: tr.s('Keep clearing local floors'),
         localOnly: true,
         onlineAssumption: false
     },
     {
         id: 'inventory_no_mutators',
         kind: 'empty',
-        title: 'No mutators on this run',
-        body: 'Classic early floors can start clean; daily, wild, and later floors introduce pressure.',
-        actionLabel: 'Try a challenge',
-        action: 'Try Daily or Wild for authored pressure',
+        title: tr.s('No mutators on this run'),
+        body: tr.s('Classic early floors can start clean; daily, wild, and later floors introduce pressure.'),
+        actionLabel: tr.s('Try a challenge'),
+        action: tr.s('Try Daily or Wild for authored pressure'),
         localOnly: true,
         onlineAssumption: false
     },
     {
         id: 'inventory_no_contract',
         kind: 'empty',
-        title: 'No scholar contract',
-        body: 'Contract flags appear here when a mode or vow adds local constraints.',
-        actionLabel: 'Choose a vow',
-        action: 'Choose Scholar or Pin vow to add a contract',
+        title: tr.s('No scholar contract'),
+        body: tr.s('Contract flags appear here when a mode or vow adds local constraints.'),
+        actionLabel: tr.s('Choose a vow'),
+        action: tr.s('Choose Scholar or Pin vow to add a contract'),
         localOnly: true,
         onlineAssumption: false
     },
     {
         id: 'codex_filter_empty',
         kind: 'empty',
-        title: 'No Codex topics match',
-        body: 'Clear the filter or switch between Guides and Tables; the Codex is a local reference and never needs a network call.',
-        actionLabel: 'Clear filter',
-        action: 'Clear search or change tab',
+        title: tr.s('No Codex topics match'),
+        body: tr.s('Clear the filter or switch between Guides and Tables; the Codex is a local reference and never needs a network call.'),
+        actionLabel: tr.s('Clear filter'),
+        action: tr.s('Clear search or change tab'),
         localOnly: true,
         onlineAssumption: false
     },
     {
         id: 'choose_path_locked',
         kind: 'locked',
-        title: 'Mode staged for later',
-        body: 'Locked mode cards state whether the ruleset is future content or gated by local save progress.',
-        actionLabel: 'Pick another mode',
-        action: 'Start a Classic run, or set one up from the sheet',
+        title: tr.s('Mode staged for later'),
+        body: tr.s('Locked mode cards state whether the ruleset is future content or gated by local save progress.'),
+        actionLabel: tr.s('Pick another mode'),
+        action: tr.s('Start a Classic run, or set one up from the sheet'),
         localOnly: true,
         onlineAssumption: false
     },
     {
         id: 'startup_loading',
         kind: 'loading',
-        title: 'Preparing intro assets',
-        body: 'Startup keeps readable copy while assets load and can fall back safely.',
-        actionLabel: 'Wait or skip',
-        action: 'Wait or skip when ready',
+        title: tr.s('Preparing intro assets'),
+        body: tr.s('Startup keeps readable copy while assets load and can fall back safely.'),
+        actionLabel: tr.s('Wait or skip'),
+        action: tr.s('Wait or skip when ready'),
         localOnly: true,
         onlineAssumption: false
     },
     {
         id: 'collection_locked_reward',
         kind: 'locked',
-        title: 'Reward not earned yet',
-        body: 'Locked collection entries explain the local run, daily, honor, or mastery source instead of implying purchases.',
-        actionLabel: 'Play local modes',
-        action: 'Play local modes to progress',
+        title: tr.s('Reward not earned yet'),
+        body: tr.s('Locked collection entries explain the local run, daily, honor, or mastery source instead of implying purchases.'),
+        actionLabel: tr.s('Play local modes'),
+        action: tr.s('Play local modes to progress'),
         localOnly: true,
         onlineAssumption: false
     },
     {
         id: 'save_error_recovery',
         kind: 'error',
-        title: 'Local save needs attention',
-        body: 'Save warnings focus on local retry, export, or support steps; they do not blame offline play or require accounts.',
-        actionLabel: 'Retry or export',
-        action: 'Retry local save or export data',
+        title: tr.s('Local save needs attention'),
+        body: tr.s('Save warnings focus on local retry, export, or support steps; they do not blame offline play or require accounts.'),
+        actionLabel: tr.s('Retry or export'),
+        action: tr.s('Retry local save or export data'),
         localOnly: true,
         onlineAssumption: false
     }

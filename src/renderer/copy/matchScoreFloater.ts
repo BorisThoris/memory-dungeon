@@ -2,6 +2,7 @@
  * Match-score floater copy. The live region says exactly what the floater shows: what happened,
  * what it was worth, and the one reason worth naming. Centralized for a11y review and i18n.
  */
+import { plural, tr } from '../../shared/i18n';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
 import { getChainMomentumCue } from './chainMomentum';
 import { CHAIN_TIER_LABELS } from './chainBeat';
@@ -21,7 +22,7 @@ export function matchScoreFloaterLiveRegionText(
     { chainDepth, headline, reason }: MatchScoreFloaterLiveOptions = {}
 ): string {
     const lead = headline ? `${headline}. ` : '';
-    const points = `Plus ${runNonNegativeInteger(amount).toLocaleString()} points`;
+    const points = tr`Plus ${runNonNegativeInteger(amount).toLocaleString()} points`;
     const depth = chainDepth == null ? 0 : runNonNegativeInteger(chainDepth);
     const streak = depth >= 3 ? `. ${depth} match streak` : '';
     const detail = reason ? `. ${reason.replace(/[.!?]+$/u, '')}` : '';
@@ -38,16 +39,16 @@ const formatMultiplier = (factor: number): string =>
  */
 export function scoreTermLabel(term: ScoreTerm): string {
     if (term.id === 'pairs') {
-        return `${term.factor} ${term.factor === 1 ? 'pair' : 'pairs'}`;
+        return `${plural(term.factor, { one: '{0} pair', other: '{0} pairs' })}`;
     }
     if (term.id === 'tier') {
         return `${CHAIN_TIER_LABELS[term.tier ?? 'none']} ×${formatMultiplier(term.factor)}`;
     }
-    return `Ripple ×${formatMultiplier(term.factor)}`;
+    return tr`Ripple ×${formatMultiplier(term.factor)}`;
 }
 
 /** The whole line, for a screen reader: the terms in order, and what they came to. */
 export function scoreTermsLiveRegionText(breakdown: BreakScoreBreakdown): string {
     const terms = breakdown.terms.map(scoreTermLabel).join(' times ');
-    return `Break score: ${terms}, ${breakdown.total.toLocaleString()} points.`;
+    return tr`Break score: ${terms}, ${breakdown.total.toLocaleString()} points.`;
 }

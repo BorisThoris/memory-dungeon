@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { Tile, TileSuit } from './contracts';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
 
@@ -42,10 +43,10 @@ export const ELEMENT_NEUTRALIZES: Readonly<Record<TileSuit, TileSuit>> = {
 
 /** The element names the player reads, by suit. */
 export const ELEMENT_NAMES: Readonly<Record<TileSuit, string>> = {
-    ember: 'Fire',
-    tide: 'Water',
-    bone: 'Frost',
-    moss: 'Grove'
+    ember: tr.s('Fire'),
+    tide: tr.s('Water'),
+    bone: tr.s('Frost'),
+    moss: tr.s('Grove')
 };
 
 /** Charges a matched card pays a gold for. */

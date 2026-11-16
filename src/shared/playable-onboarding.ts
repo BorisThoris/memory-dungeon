@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { BoardState, RunState, SaveData } from './contracts';
 import { runArrayCount } from './run-array-guards';
 import { runNonNegativeInteger } from './run-number-guards';
@@ -67,22 +68,22 @@ const getStepCopy = (
     if (step.id === 'recovery') {
         if (run.turnsThisFloor === 0 && run.board?.tiles.some((tile) => tile.state === 'removed')) {
             return {
-                title: 'One pair cleared',
-                prompt: 'Match the next marked pair',
-                detail: 'Bomb used no turn. Match the marked pair next.'
+                title: tr.s('One pair cleared'),
+                prompt: tr.s('Match the next marked pair'),
+                detail: tr.s('Bomb used no turn. Match the marked pair next.')
             };
         }
         if (stats.mismatches > 0) {
             return {
-                title: 'Recover and continue',
-                prompt: 'Stabilize the next pair',
-                detail: 'Match the marked pair to rebuild your combo.'
+                title: tr.s('Recover and continue'),
+                prompt: tr.s('Stabilize the next pair'),
+                detail: tr.s('Match the marked pair to rebuild your combo.')
             };
         }
         return {
-            title: 'First reward banked',
-            prompt: 'Keep the streak clean',
-            detail: 'One more match builds your combo.'
+            title: tr.s('First reward banked'),
+            prompt: tr.s('Keep the streak clean'),
+            detail: tr.s('One more match builds your combo.')
         };
     }
 
@@ -100,22 +101,22 @@ const getStepCopy = (
         runNonNegativeInteger(run.board?.matchedPairs) === 0
     ) {
         return {
-            title: 'Recover from the miss',
-            prompt: 'Use the marked pair to stabilize',
-            detail: 'Try the marked pair.'
+            title: tr.s('Recover from the miss'),
+            prompt: tr.s('Use the marked pair to stabilize'),
+            detail: tr.s('Try the marked pair.')
         };
     }
     if (flippedCount === 1) {
         return {
-            title: 'Find its twin',
-            prompt: 'Pick the matching tile',
-            detail: 'Its matching card is highlighted.'
+            title: tr.s('Find its twin'),
+            prompt: tr.s('Pick the matching tile'),
+            detail: tr.s('Its matching card is highlighted.')
         };
     }
     return {
         title: step.title,
-        prompt: 'Flip a marked tile',
-        detail: 'Turn both highlighted cards.'
+        prompt: tr.s('Flip a marked tile'),
+        detail: tr.s('Turn both highlighted cards.')
     };
 };
 
@@ -144,24 +145,24 @@ export const getPlayableOnboardingScenario = ({
     const steps: OnboardingStepRow[] = [
         {
             id: 'first_match',
-            title: 'Make your first match',
-            body: 'Flip the highlighted pair.',
+            title: tr.s('Make your first match'),
+            body: tr.s('Flip the highlighted pair.'),
             status: activeId === 'first_match' ? 'active' : stepIndex > 0 ? 'complete' : 'locked',
             targetTileIds,
             mobilePlacement: 'bottom'
         },
         {
             id: 'recovery',
-            title: 'Use recovery tools',
-            body: 'Peek and shuffle help you recover after the board gets harder.',
+            title: tr.s('Use recovery tools'),
+            body: tr.s('Peek and shuffle help you recover after the board gets harder.'),
             status: activeId === 'recovery' ? 'active' : stepIndex > 1 ? 'complete' : 'locked',
             targetTileIds,
             mobilePlacement: 'bottom'
         },
         {
             id: 'handoff',
-            title: 'You have control',
-            body: 'Practise more in the Tutorial Hall.',
+            title: tr.s('You have control'),
+            body: tr.s('Practise more in the Tutorial Hall.'),
             status: activeId === 'handoff' ? 'active' : 'locked',
             targetTileIds: [],
             mobilePlacement: 'top'

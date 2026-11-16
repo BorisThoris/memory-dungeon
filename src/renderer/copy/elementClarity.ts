@@ -1,17 +1,18 @@
+import { plural, tr } from '../../shared/i18n';
 import type { RealmId, TileSuit } from '../../shared/contracts';
 
 /** Short outcomes for decisions; exact rules remain in the optional guide. */
 export const ELEMENT_ACTION: Record<TileSuit, string> = {
-    ember: 'Burn vines · Melt ice', tide: 'Douse fire · Move cards',
-    bone: 'Freeze nearby cards', moss: 'Bind nearby cards'
+    ember: tr.s('Burn vines · Melt ice'), tide: tr.s('Douse fire · Move cards'),
+    bone: tr.s('Freeze nearby cards'), moss: tr.s('Bind nearby cards')
 };
 export const ARENA_ACTION: Record<RealmId, string> = {
-    ember: 'Hot ground · Water makes steam', tide: 'Wet ground · Fire makes steam',
-    frost: 'Ice anchors cards', grove: 'Rooted ground · +1 gold on match',
-    storm: 'Every cast reveals a nearby card'
+    ember: tr.s('Hot ground · Water makes steam'), tide: tr.s('Wet ground · Fire makes steam'),
+    frost: tr.s('Ice anchors cards'), grove: tr.s('Rooted ground · +1 gold on match'),
+    storm: tr.s('Every cast reveals a nearby card')
 };
 
 export const focusSummary = (suit: TileSuit, rank: number): string => ({
-    ember: `Charge ${rank} burning ${rank === 1 ? 'card' : 'cards'}`, tide: `Reveal ${rank} ${rank === 1 ? 'card' : 'cards'}`,
-    bone: `Every Frost cast: ${rank} calm ${rank === 1 ? 'turn' : 'turns'}`, moss: `Ripen ${rank} ${rank === 1 ? 'seed' : 'seeds'} into 2-gold blooms`
+    ember: tr`Charge ${plural(rank, { one: '{0} burning card', other: '{0} burning cards' })}`, tide: tr`Reveal ${plural(rank, { one: '{0} card', other: '{0} cards' })}`,
+    bone: tr`Every Frost cast: ${plural(rank, { one: '{0} calm turn', other: '{0} calm turns' })}`, moss: tr`Ripen ${plural(rank, { one: '{0} seed', other: '{0} seeds' })} into 2-gold blooms`
 })[suit];

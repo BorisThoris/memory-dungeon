@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 /**
  * What the magpie says when it visits.
  *
@@ -10,10 +11,10 @@
  */
 export const MAGPIE_BEAT_COPY = {
     /** Shown on the board the moment a pair is lifted. */
-    theftTitle: 'The magpie has been',
-    theftBody: 'A pair you had cleared is face down again, somewhere else.',
+    theftTitle: tr.s('The magpie has been'),
+    theftBody: tr.s('A pair you had cleared is face down again, somewhere else.'),
     /** The run line, which is one sentence and has to carry the whole event. */
-    theftLine: 'The magpie took a pair you had already found.',
+    theftLine: tr.s('The magpie took a pair you had already found.'),
     /** Spoken to a screen reader, where nothing on the board is visible to lean on. */
-    theftAnnouncement: 'The magpie took back a pair you had already matched and hid it somewhere else on the board.'
+    theftAnnouncement: tr.s('The magpie took back a pair you had already matched and hid it somewhere else on the board.')
 } as const;

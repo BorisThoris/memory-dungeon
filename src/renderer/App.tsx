@@ -1,3 +1,4 @@
+import { tr } from '../shared/i18n';
 import { lazy, Suspense, useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { createPortal } from 'react-dom';
 import { useShallow } from 'zustand/react/shallow';
@@ -38,6 +39,8 @@ import {
     type PlayablePathFixtureId
 } from '../shared/playable-path-fixtures';
 import { useAppStore } from './store/useAppStore';
+import { hasDesktopBridge } from './desktop-client';
+import { useHardwareBack } from './hooks/useHardwareBack';
 import { preloadRunAssets } from './assets/preloadRunAssets';
 import { getNavigationShellChromeContract } from './store/navigationModel';
 
@@ -137,6 +140,8 @@ const App = () => {
             view: state.view
         }))
     );
+    // Android and browser back answer as Escape away from the menu (useHardwareBack.ts).
+    useHardwareBack(view, hydrated && !hasDesktopBridge());
     /*
      * The scale the app applies, and whether this window lays out roomy or compact. Both used to be
      * three literals here behind a variable called `safeUiScale` that nothing checked; they live in
@@ -422,21 +427,21 @@ const App = () => {
                     focusAppMainLandmark();
                 }}
             >
-                Skip to main content
+                {tr.s("Skip to main content")}
             </a>
             <div className={styles.ambientGlow} />
             <UiInteractionParticles reduceMotion={reduceMotion} lowQuality={settings.graphicsQuality === 'low'} />
             <main className={styles.content} data-app-scrollport id={APP_MAIN_LANDMARK_ID} tabIndex={-1}>
                 {tutorial ? (
-                    <Suspense fallback={<div role="status">Opening Tutorial Hall…</div>}>
+                    <Suspense fallback={<div role="status">{tr.s("Opening Tutorial Hall…")}</div>}>
                         <TutorialHall initialLessonId={tutorial.lessonId} onClose={closeTutorial} reduceMotion={reduceMotion} graphicsQuality={settings.graphicsQuality} />
                     </Suspense>
                 ) : showDevBlueprintExplorer && DevBlueprintExplorer ? (
-                    <Suspense fallback={<div role="status">Loading blueprint explorer...</div>}>
+                    <Suspense fallback={<div role="status">{tr.s("Loading blueprint explorer...")}</div>}>
                         <DevBlueprintExplorer />
                     </Suspense>
                 ) : showDevTestHall && DevTestHall ? (
-                    <Suspense fallback={<div role="status">Loading the test hall...</div>}>
+                    <Suspense fallback={<div role="status">{tr.s("Loading the test hall...")}</div>}>
                         <DevTestHall />
                     </Suspense>
                 ) : (

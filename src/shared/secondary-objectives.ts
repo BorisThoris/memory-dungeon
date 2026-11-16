@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { FeaturedObjectiveId, LevelResult, RunState } from './contracts';
 import { getFeaturedObjectiveLabel } from './floor-mutator-schedule';
 import { runArrayCount } from './run-array-guards';
@@ -33,53 +34,53 @@ export interface SecondaryObjectiveProgress {
 }
 
 export const LEVEL_RESULT_TAG_DEFINITIONS: Record<LevelResultTagId, LevelResultTagDefinition> = {
-    amplified_reaction: { id: 'amplified_reaction', label: 'Amplified reaction', shortCopy: 'Reaction triggered.', journalCopy: 'Triggered a primed elemental reaction.', priority: 55, rewardBearing: true },
-    calm_reaction: { id: 'calm_reaction', label: 'Calm the realm', shortCopy: 'Freeze-over calmed hazards.', journalCopy: 'Held realm hazards still with Freeze-over.', priority: 55, rewardBearing: true },
+    amplified_reaction: { id: 'amplified_reaction', label: tr.s('Amplified reaction'), shortCopy: tr.s('Reaction triggered.'), journalCopy: tr.s('Triggered a primed elemental reaction.'), priority: 55, rewardBearing: true },
+    calm_reaction: { id: 'calm_reaction', label: tr.s('Calm the realm'), shortCopy: tr.s('Freeze-over calmed hazards.'), journalCopy: tr.s('Held realm hazards still with Freeze-over.'), priority: 55, rewardBearing: true },
     scholar_style: {
         id: 'scholar_style',
-        label: 'Scholar style',
-        shortCopy: 'No shuffle and no swap.',
-        journalCopy: 'Cleared without spending a shuffle or a swap.',
+        label: tr.s('Scholar style'),
+        shortCopy: tr.s('No shuffle and no swap.'),
+        journalCopy: tr.s('Cleared without spending a shuffle or a swap.'),
         priority: 60,
         rewardBearing: true
     },
     cursed_last: {
         id: 'cursed_last',
-        label: 'Cursed last',
-        shortCopy: 'Cursed pair last.',
-        journalCopy: 'Matched the cursed pair last among real pairs.',
+        label: tr.s('Cursed last'),
+        shortCopy: tr.s('Cursed pair last.'),
+        journalCopy: tr.s('Matched the cursed pair last among real pairs.'),
         priority: 55,
         rewardBearing: true
     },
     flip_par: {
         id: 'flip_par',
-        label: 'Flip par',
-        shortCopy: 'Cleared within par.',
-        journalCopy: 'Cleared the floor within its par of turns.',
+        label: tr.s('Flip par'),
+        shortCopy: tr.s('Cleared within par.'),
+        journalCopy: tr.s('Cleared the floor within its par of turns.'),
         priority: 55,
         rewardBearing: true
     },
     objective_streak: {
         id: 'objective_streak',
-        label: 'Objective streak',
-        shortCopy: 'Streak bonus.',
-        journalCopy: 'Featured-objective streak paid an additional score bonus.',
+        label: tr.s('Objective streak'),
+        shortCopy: tr.s('Streak bonus.'),
+        journalCopy: tr.s('Featured-objective streak paid an additional score bonus.'),
         priority: 70,
         rewardBearing: true
     },
     boss_floor: {
         id: 'boss_floor',
-        label: 'Boss floor',
-        shortCopy: 'Boss multiplier.',
-        journalCopy: 'Boss floor score multiplier applied after bonuses.',
+        label: tr.s('Boss floor'),
+        shortCopy: tr.s('Boss multiplier.'),
+        journalCopy: tr.s('Boss floor score multiplier applied after bonuses.'),
         priority: 80,
         rewardBearing: true
     },
     perfect_scout: {
         id: 'perfect_scout',
-        label: 'Perfect scout',
-        shortCopy: 'Perfect scout.',
-        journalCopy: 'Cleared with no mistakes, no peek reveal, and no shuffle or swap.',
+        label: tr.s('Perfect scout'),
+        shortCopy: tr.s('Perfect scout.'),
+        journalCopy: tr.s('Cleared with no mistakes, no peek reveal, and no shuffle or swap.'),
         priority: 65,
         rewardBearing: false
     }
@@ -131,9 +132,9 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
             label,
             status: state,
             state,
-            condition: state === 'completed' ? 'Objective completed on floor clear.' : 'Objective missed on floor clear.',
-            detail: state === 'completed' ? `${label} completed.` : `${label} missed.`,
-            failureReason: state === 'failed' ? 'Objective missed before floor clear.' : null,
+            condition: state === 'completed' ? tr.s('Objective completed on floor clear.') : tr.s('Objective missed on floor clear.'),
+            detail: state === 'completed' ? tr`${label} completed.` : tr`${label} missed.`,
+            failureReason: state === 'failed' ? tr.s('Objective missed before floor clear.') : null,
             reward
         };
     }
@@ -142,36 +143,36 @@ export const getSecondaryObjectiveProgress = (run: RunState): SecondaryObjective
         case 'amplified_reaction':
         case 'calm_reaction':
             state = (id === 'amplified_reaction' ? run.amplifiedGoalThisFloor : run.calmGoalThisFloor) ? 'completed' : 'active';
-            condition = id === 'amplified_reaction' ? 'Match two pairs of one element, then another element without a miss.' : 'Match two Water pairs, then an Ice pair without a miss to hold hazards still.';
-            detail = state === 'completed' ? 'Goal secured; clear the floor for the reward.' : condition;
+            condition = id === 'amplified_reaction' ? tr.s('Match two pairs of one element, then another element without a miss.') : tr.s('Match two Water pairs, then an Ice pair without a miss to hold hazards still.');
+            detail = state === 'completed' ? tr.s('Goal secured; clear the floor for the reward.') : condition;
             break;
         case 'scholar_style':
             state = run.shuffleUsedThisFloor ? 'failed' : 'active';
-            condition = 'Clear without a shuffle or a swap.';
-            failureReason = state === 'failed' ? 'A shuffle or a swap was used this floor.' : null;
-            detail = state === 'failed' ? `Failed: ${failureReason}` : 'Do not use a shuffle or a swap this floor.';
+            condition = tr.s('Clear without a shuffle or a swap.');
+            failureReason = state === 'failed' ? tr.s('A shuffle or a swap was used this floor.') : null;
+            detail = state === 'failed' ? tr`Failed: ${failureReason}` : tr.s('Do not use a shuffle or a swap this floor.');
             break;
         case 'cursed_last':
             state = run.cursedMatchedEarlyThisFloor ? 'failed' : 'active';
-            condition = 'Clear the cursed pair last among real pairs.';
-            failureReason = state === 'failed' ? 'The cursed pair was matched early.' : null;
-            detail = state === 'failed' ? `Failed: ${failureReason}` : 'Clear the cursed pair last among real pairs.';
+            condition = tr.s('Clear the cursed pair last among real pairs.');
+            failureReason = state === 'failed' ? tr.s('The cursed pair was matched early.') : null;
+            detail = state === 'failed' ? tr`Failed: ${failureReason}` : tr.s('Clear the cursed pair last among real pairs.');
             break;
         case 'flip_par': {
             const par = parTurnsForBoard(board);
             const turns = turnsTakenThisFloor(run);
             state = turns > par ? 'failed' : 'active';
-            condition = `Clear within par (${turns}/${par} turns).`;
-            failureReason = state === 'failed' ? `Par exceeded (${turns}/${par} turns).` : null;
+            condition = tr`Clear within par (${turns}/${par} turns).`;
+            failureReason = state === 'failed' ? tr`Par exceeded (${turns}/${par} turns).` : null;
             detail =
                 state === 'failed'
-                    ? `Failed: ${failureReason}`
-                    : `Clear the floor within ${turns}/${par} turns.`;
+                    ? tr`Failed: ${failureReason}`
+                    : tr`Clear the floor within ${turns}/${par} turns.`;
             break;
         }
         default:
-            condition = 'Complete the featured objective before clearing the floor.';
-            detail = 'Complete the featured objective before clearing the floor.';
+            condition = tr.s('Complete the featured objective before clearing the floor.');
+            detail = tr.s('Complete the featured objective before clearing the floor.');
             break;
     }
 
@@ -199,8 +200,8 @@ export const formatLevelResultObjectiveLine = (result: LevelResult): string | nu
     const label = getFeaturedObjectiveLabel(result.featuredObjectiveId) ?? result.featuredObjectiveId;
     if (result.featuredObjectiveCompleted) {
         const objectiveBonusScore = runNonNegativeInteger(result.objectiveBonusScore);
-        const bonus = objectiveBonusScore > 0 ? ` (+${objectiveBonusScore} score)` : '';
-        return `${label}: Complete${bonus}`;
+        const bonus = objectiveBonusScore > 0 ? tr` (+${objectiveBonusScore} score)` : '';
+        return tr`${label}: Complete${bonus}`;
     }
-    return `${label}: Missed — no objective bonus.`;
+    return tr`${label}: Missed — no objective bonus.`;
 };

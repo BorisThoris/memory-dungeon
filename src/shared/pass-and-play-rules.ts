@@ -16,6 +16,7 @@
  * keeps the command journal, replay and every determinism test untouched by multiplayer.
  */
 
+import { tr } from './i18n';
 import type { PassAndPlaySeat, PassAndPlayState } from './contracts';
 
 export type { PassAndPlaySeat, PassAndPlayState };
@@ -55,7 +56,7 @@ export const createPassAndPlayState = (seatCount: number = PASS_AND_PLAY_MIN_SEA
     handoffChainLost: 0,
     seats: Array.from({ length: clampSeatCount(seatCount) }, (_unused, index) => ({
         id: `seat-${index + 1}`,
-        label: `Player ${index + 1}`,
+        label: tr`Player ${index + 1}`,
         matches: 0,
         score: 0,
         turns: 0,

@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { ReactNode } from 'react';
 import { useEscapeLeaves } from '../hooks/useEscapeLeaves';
 import Eyebrow from './Eyebrow';
@@ -32,7 +33,7 @@ export interface MetaShellProps {
 }
 
 const MetaShell = ({
-    backLabel = 'Back',
+    backLabel = tr.s('Back'),
     children,
     className,
     eyebrow,

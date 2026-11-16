@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { useRef } from 'react';
 import type { RunState } from '../../shared/contracts';
 import { getFloorCurio, type FloorCurioId } from '../../shared/floor-curio-rules';
@@ -28,19 +29,19 @@ export default function FloorResident({ run, onGreet }: { run: RunState; onGreet
     return (
         <details className={styles.resident} data-testid="floor-resident" ref={detailsRef}
             onKeyDown={event => { if (event.key === 'Escape') { event.stopPropagation(); close(); } }}>
-            <summary aria-label={`Meet ${curio.name.toLowerCase()}`} className={styles.summary}>
+            <summary aria-label={tr`Meet ${curio.name.toLowerCase()}`} className={styles.summary}>
                 <svg aria-hidden="true" className={styles.portrait} viewBox="0 0 42 42" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d={portraitPaths[curio.id]} /></svg>
                 <span className={styles.name}>{curio.name}</span>
             </summary>
             <div className={styles.conversation} data-testid="resident-conversation">
-                <p className={styles.eyebrow}>On this floor</p>
+                <p className={styles.eyebrow}>{tr.s("On this floor")}</p>
                 <h2 className={styles.title}>{curio.name}</h2>
                 <p>{curio.line}</p>
                 {run.board && run.board.level > 1 ? <p className={styles.gift}>{curio.effectSummary}</p> : null}
                 {run.floorCurioGreeted ? <div data-testid="resident-reply"><p>{floorCurioGreetingReply(greeting, run)}</p><p className={styles.gift}>{greeting.gained}</p></div> : null}
                 <div className={styles.actions}>
-                    {!run.floorCurioGreeted ? <button data-testid="tool-greet" disabled={!canGreetFloorCurio(run)} onClick={onGreet} type="button">Say hello · free</button> : null}
-                    <button onClick={close} type="button">Back to cards</button>
+                    {!run.floorCurioGreeted ? <button data-testid="tool-greet" disabled={!canGreetFloorCurio(run)} onClick={onGreet} type="button">{tr.s("Say hello · free")}</button> : null}
+                    <button onClick={close} type="button">{tr.s("Back to cards")}</button>
                 </div>
             </div>
         </details>

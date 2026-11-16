@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { SaveData } from './contracts';
 import {
     getMetaProgressionDifficultyTierLabel,
@@ -46,13 +47,13 @@ const rowForMode = (_save: SaveData, mode: RunModeDefinition): ChallengeModeGate
         title: mode.title,
         gateId,
         status: mode.availability === 'locked' ? 'locked' : 'available',
-        entryCondition: 'Available from local mode select in v1.',
-        lockoutReason: mode.availability === 'locked' ? (mode.availabilityDetail ?? 'Mode locked.') : null,
+        entryCondition: tr.s('Available from local mode select in v1.'),
+        lockoutReason: mode.availability === 'locked' ? (mode.availabilityDetail ?? tr.s('Mode locked.')) : null,
         progress: { current: mode.availability === 'locked' ? 0 : 1, target: 1 },
-        saveFields: mode.id === 'scholar' || mode.id === 'pin_vow' ? ['activeContract at run start'] : ['none'],
+        saveFields: mode.id === 'scholar' || mode.id === 'pin_vow' ? [tr.s('activeContract at run start')] : ['none'],
         offlineOnly: true,
         onlineRequired: false,
-        qaRoute: 'Open Choose Your Path and verify action availability matches this row.'
+        qaRoute: tr.s('Open Choose Your Path and verify action availability matches this row.')
     };
 };
 
@@ -116,15 +117,15 @@ const progressionStatus = (row: ChallengeModeGateRow): ChallengeProgressionStatu
 
 const challengeMotivationCopy = (row: ChallengeModeGateRow, status: ChallengeProgressionStatus): string => {
     if (status === 'unlocked') {
-        return `${row.title} is ready for local play.`;
+        return tr`${row.title} is ready for local play.`;
     }
     if (status === 'in_progress') {
-        return `${row.title}: ${row.progress.current}/${row.progress.target} toward ${row.entryCondition}`;
+        return tr`${row.title}: ${row.progress.current}/${row.progress.target} toward ${row.entryCondition}`;
     }
     if (status === 'deferred') {
-        return row.lockoutReason ?? `${row.title} is deferred in this build.`;
+        return row.lockoutReason ?? tr`${row.title} is deferred in this build.`;
     }
-    return row.lockoutReason ?? `${row.title} is locked.`;
+    return row.lockoutReason ?? tr`${row.title} is locked.`;
 };
 
 export const getChallengeModeProgressionRows = (save: SaveData): ChallengeModeProgressionRow[] =>
@@ -185,8 +186,8 @@ export const getChallengeModeMotivationSummary = (save: SaveData): ChallengeMode
         rows.find((row) => row.status !== 'unlocked') ??
         null;
     const nextChallengeCopy = nextRecommendedRow
-        ? `${nextRecommendedRow.title} sits as ${tierArticle(nextRecommendedRow.recommendedTierLabel)} ${nextRecommendedRow.recommendedTierLabel} goal; ${nextRecommendedRow.motivationCopy}`
-        : 'All visible challenge lanes are in the active profile tier.';
+        ? tr`${nextRecommendedRow.title} sits as ${tierArticle(nextRecommendedRow.recommendedTierLabel)} ${nextRecommendedRow.recommendedTierLabel} goal; ${nextRecommendedRow.motivationCopy}`
+        : tr.s('All visible challenge lanes are in the active profile tier.');
 
     return {
         profileTier: feedback.difficultyTier,

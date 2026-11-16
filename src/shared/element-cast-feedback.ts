@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { ElementCastImpact, Tile } from './contracts';
 import { ELEMENT_NAMES } from './element-alchemy-rules';
 
@@ -10,7 +11,7 @@ export const finishElementCast = (cast: ElementCastImpact, tiles: readonly Tile[
             : tile?.fuse != null ? 'ignited' : tile?.rime ? 'rimed' : tile?.seeded ? 'seeded' : 'cleared';
         const landed = contact.attempt === 'entangled' ? tile?.vined : contact.attempt === 'frozen' ? (tile?.frost ?? 0) > 0 : tile?.fuse != null;
         if (contact.attempt && contact.outcome === 'affected' && !landed) {
-            return { ...contact, cell, effect, outcome: 'blocked' as const, reason: 'Released by a reaction or board protection' };
+            return { ...contact, cell, effect, outcome: 'blocked' as const, reason: tr.s('Released by a reaction or board protection') };
         }
         return { ...contact, cell, effect };
     }) as ElementCastImpact['contacts'];
@@ -20,18 +21,18 @@ export const finishElementCast = (cast: ElementCastImpact, tiles: readonly Tile[
     const blocked = contacts.filter(c => c.outcome === 'blocked');
     const charged = contacts.filter(c => c.outcome === 'charged').length;
     const resisted = contacts.filter(c => c.outcome === 'neutralized').length;
-    const verb = { ember: 'burning', tide: 'moved', bone: 'frozen', moss: 'tied down' }[cast.suit];
-    const action = count ? `${count} ${verb}` : blocked.length ? 'cast blocked' : changed.length ? `${changed.length} affected` : resisted ? `${resisted} resisted` : charged ? `${charged} charged` : 'no targets';
+    const verb = { ember: 'burning', tide: 'moved', bone: 'frozen', moss: tr.s('tied down') }[cast.suit];
+    const action = count ? `${count} ${verb}` : blocked.length ? tr.s('cast blocked') : changed.length ? tr`${changed.length} affected` : resisted ? tr`${resisted} resisted` : charged ? tr`${charged} charged` : tr.s('no targets');
     const headline = `${ELEMENT_NAMES[cast.suit]}: ${action}`;
     const consequence = count ? {
-        ember: 'Match burning cards for +2 gold; expired fuses cost 1 gold each',
-        tide: 'The current changes card positions',
-        bone: 'Frozen cards cannot turn until they thaw or a nearby match breaks the ice',
-        moss: 'Vines prevent turning; match nearby or burn them to release the cards'
+        ember: tr.s('Match burning cards for +2 gold; expired fuses cost 1 gold each'),
+        tide: tr.s('The current changes card positions'),
+        bone: tr.s('Frozen cards cannot turn until they thaw or a nearby match breaks the ice'),
+        moss: tr.s('Vines prevent turning; match nearby or burn them to release the cards')
     }[cast.suit] : '';
     const detail = [headline, consequence,
-        blocked.length ? `${blocked.length} attempts blocked: ${[...new Set(blocked.map(c => c.reason ?? 'Protected'))].join('; ')}` : '',
-        resisted ? `${resisted} counter-cards resisted` : '', charged ? `${charged} cards charged` : '', cast.detail
+        blocked.length ? tr`${blocked.length} attempts blocked: ${[...new Set(blocked.map(c => c.reason ?? tr.s('Protected')))].join('; ')}` : '',
+        resisted ? tr`${resisted} counter-cards resisted` : '', charged ? tr`${charged} cards charged` : '', cast.detail
     ].filter(Boolean).join(' · ');
     return { ...cast, headline, contacts, detail };
 };

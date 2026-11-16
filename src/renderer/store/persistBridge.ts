@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { SaveData, Settings } from '../../shared/contracts';
 import { normalizeUnknownSaveDataOrThrow, normalizeUnknownSettingsOrThrow } from '../../shared/save-data';
 import { desktopClient } from '../desktop-client';
@@ -33,9 +34,9 @@ const notifyWriteFailure = (detail: WriteFailDetail): void => {
 };
 
 const SHORT_NOTICE =
-    'Save write failed. Current progress remains in memory, but may not persist after closing until the next successful save.';
+    tr.s('Save write failed. Current progress remains in memory, but may not persist after closing until the next successful save.');
 const REPEATED_NOTICE =
-    'Save keeps failing. Keep the app open; progress and setting changes may not persist after closing. Check disk space or file permissions, close programs locking the save, then trigger another save.';
+    tr.s('Save keeps failing. Keep the app open; progress and setting changes may not persist after closing. Check disk space or file permissions, close programs locking the save, then trigger another save.');
 
 const resetSaveHealth = (): void => {
     consecutiveWriteFailures = 0;
@@ -67,7 +68,7 @@ export const saveHealthCopyForSnapshot = (snapshot: SaveHealthSnapshot): string 
         ? REPEATED_NOTICE
         : snapshot.status === 'transient_write_failed'
           ? SHORT_NOTICE
-          : 'Save system healthy.';
+          : tr.s('Save system healthy.');
 
 export const persistSaveData = async (saveData: SaveData): Promise<SaveData> => {
     try {

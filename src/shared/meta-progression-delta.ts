@@ -1,3 +1,4 @@
+import { plural, tr } from './i18n';
 import type { SaveData } from './contracts';
 import {
     getMetaHonorMarkSourceRows,
@@ -48,9 +49,9 @@ const tierRank: Record<MetaProgressionDifficultyTier, number> = {
 };
 
 const honorSourceUnitCopy: Record<MetaHonorMarkSourceId, string> = {
-    achievements: 'achievement progress',
-    sharp_floors: 'Sharp floor progress',
-    no_powers_mastery: 'no-powers mastery'
+    achievements: tr.s('achievement progress'),
+    sharp_floors: tr.s('Sharp floor progress'),
+    no_powers_mastery: tr.s('no-powers mastery')
 };
 
 const statusCopy = (status: MetaProgressionStatus): string => {
@@ -81,10 +82,10 @@ export const buildMetaProgressionRunDelta = (before: SaveData, after: SaveData):
         rows.push({
             id: 'profile_level',
             kind: 'profile_level',
-            title: 'Profile level up',
+            title: tr.s('Profile level up'),
             before: String(beforeBoard.level),
             after: String(afterBoard.level),
-            body: `${afterBoard.summary.honorMarks} honor marks total. ${afterFeedback.nextMilestoneCopy}`,
+            body: tr`${afterBoard.summary.honorMarks} honor marks total. ${afterFeedback.nextMilestoneCopy}`,
             priority: 100,
             progress: afterBoard.levelProgress
         });
@@ -94,10 +95,10 @@ export const buildMetaProgressionRunDelta = (before: SaveData, after: SaveData):
         rows.push({
             id: 'difficulty_tier',
             kind: 'difficulty_tier',
-            title: 'Difficulty tier reached',
+            title: tr.s('Difficulty tier reached'),
             before: getMetaProgressionDifficultyTierLabel(beforeFeedback.difficultyTier),
             after: getMetaProgressionDifficultyTierLabel(afterFeedback.difficultyTier),
-            body: `${afterFeedback.difficultyTierLabel} is now the active profile tier.`,
+            body: tr`${afterFeedback.difficultyTierLabel} is now the active profile tier.`,
             priority: 90
         });
     }
@@ -112,10 +113,10 @@ export const buildMetaProgressionRunDelta = (before: SaveData, after: SaveData):
         rows.push({
             id: `honor_source_${afterSource.id}`,
             kind: 'honor_source',
-            title: `${afterSource.label} advanced`,
-            before: `${beforeSource.marks} marks`,
-            after: `${afterSource.marks} marks`,
-            body: `+${gained} honor mark${gained === 1 ? '' : 's'} from ${honorSourceUnitCopy[afterSource.id]}.`,
+            title: tr`${afterSource.label} advanced`,
+            before: tr`${beforeSource.marks} marks`,
+            after: tr`${afterSource.marks} marks`,
+            body: tr`${plural(gained, { one: '+{0} honor mark', other: '+{0} honor marks' })} from ${honorSourceUnitCopy[afterSource.id]}.`,
             priority: 70,
             progress: afterSource.progress
         });
@@ -130,13 +131,13 @@ export const buildMetaProgressionRunDelta = (before: SaveData, after: SaveData):
         rows.push({
             id: `reward_${afterRow.id}`,
             kind: 'reward_status',
-            title: afterRow.status === 'owned' ? `${afterRow.title} owned` : `${afterRow.title} ready`,
+            title: afterRow.status === 'owned' ? tr`${afterRow.title} owned` : tr`${afterRow.title} ready`,
             before: statusCopy(beforeRow.status),
             after: statusCopy(afterRow.status),
             body:
                 afterRow.status === 'owned'
-                    ? `${sentenceStart(afterRow.reward)} is now active where its mode rule allows it.`
-                    : `${sentenceStart(afterRow.reward)} can be unlocked from Profile.`,
+                    ? tr`${sentenceStart(afterRow.reward)} is now active where its mode rule allows it.`
+                    : tr`${sentenceStart(afterRow.reward)} can be unlocked from Profile.`,
             priority: afterRow.status === 'owned' ? 85 : 80,
             progress: afterRow.progress
         });
@@ -148,12 +149,12 @@ export const buildMetaProgressionRunDelta = (before: SaveData, after: SaveData):
         rows.push({
             id: 'milestone_reached',
             kind: 'milestone',
-            title: 'Milestone reached',
+            title: tr.s('Milestone reached'),
             before: beforeFeedback.nextMilestoneCopy,
             after: afterFeedback.nextMilestoneCopy,
             body: afterFeedback.nextMilestone
-                ? `Next milestone: ${afterFeedback.nextMilestoneCopy}`
-                : 'All visible profile milestones are reached.',
+                ? tr`Next milestone: ${afterFeedback.nextMilestoneCopy}`
+                : tr.s('All visible profile milestones are reached.'),
             priority: 75,
             progress: afterBoard.levelProgress
         });
@@ -163,7 +164,7 @@ export const buildMetaProgressionRunDelta = (before: SaveData, after: SaveData):
     const headline =
         sortedRows[0]?.title ??
         (afterFeedback.nextHonorMarkSource?.nextMarkCopy
-            ? `No new meta unlocks. ${afterFeedback.nextHonorMarkSource.nextMarkCopy}`
+            ? tr`No new meta unlocks. ${afterFeedback.nextHonorMarkSource.nextMarkCopy}`
             : afterFeedback.motivationCopy);
     const summaryCopy = sortedRows.length > 0 ? buildDeltaSummaryCopy(sortedRows) : headline;
 

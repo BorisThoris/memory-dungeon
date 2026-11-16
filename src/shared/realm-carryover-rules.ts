@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { BoardState, RealmId, RunState, Tile } from './contracts';
 import { isSingletonUtilityPairKey } from './tile-identity';
 import { createMulberry32, hashStringToSeed, shuffleWithRng } from './rng';
@@ -67,11 +68,11 @@ export const realmResonanceBonus = (depth: number): number => Math.floor(runNonN
 
 /** Each realm's measure of a clean floor: the thing that realm punishes, not done. */
 export const REALM_CLEAN_MEASURE: Readonly<Record<RealmId, string>> = {
-    frost: 'no card frozen',
-    ember: 'no fire burnt out',
-    tide: 'cleared within par',
-    storm: 'cleared within par',
-    grove: 'two vines cut'
+    frost: tr.s('no card frozen'),
+    ember: tr.s('no fire burnt out'),
+    tide: tr.s('cleared within par'),
+    storm: tr.s('cleared within par'),
+    grove: tr.s('two vines cut')
 };
 
 export const realmFloorWasClean = (

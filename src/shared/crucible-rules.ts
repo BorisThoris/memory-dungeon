@@ -1,3 +1,4 @@
+import { plural, tr } from './i18n';
 import { promoteRunBeneath } from './board-layers-rules';
 import type { RunState, Tile, TileSuit } from './contracts';
 import { atomicVariantForPairKey } from './board-tile-generation-rules';
@@ -98,7 +99,7 @@ export const applyCrucible = (run: RunState, tileId: string): CrucibleResult | n
     const recastCells: number[] = [];
     [...cellsByPair.values()].forEach((cells, slot) => {
         // Past the gallery, a name no earlier crucible used: this one's use and slot.
-        const face = fresh[slot] ?? { symbol: `C${uses + 1}.${slot + 1}`, label: `Recast ${uses + 1}.${slot + 1}` };
+        const face = fresh[slot] ?? { symbol: `C${uses + 1}.${slot + 1}`, label: tr`Recast ${uses + 1}.${slot + 1}` };
         const pairKey = `${board.level}-crucible-${uses}-${slot}`;
         const atomicVariant = atomicVariantForPairKey(pairKey);
         cells.forEach((cell) => {
@@ -162,7 +163,7 @@ export const applyCrucible = (run: RunState, tileId: string): CrucibleResult | n
 
 /** What the Crucible did, in a line for the screen reader and the feedback stamp. */
 export const crucibleFeedbackLine = (fromSuit: TileSuit | null, toSuit: TileSuit | null, recastPairs: number, left: number): string => {
-    const spent = `${left} ${left === 1 ? 'crucible' : 'crucibles'} left`;
-    if (!fromSuit || !toSuit || recastPairs === 0) return `The crucible melted that card and its twin; ${spent}.`;
-    return `The crucible melted that pair and recast ${recastPairs} ${ELEMENT_NAMES[fromSuit]} ${recastPairs === 1 ? 'pair' : 'pairs'} as ${ELEMENT_NAMES[toSuit]}, new faces in new places; ${spent}.`;
+    const spent = tr`${plural(left, { one: '{0} crucible', other: '{0} crucibles' })} left`;
+    if (!fromSuit || !toSuit || recastPairs === 0) return tr`The crucible melted that card and its twin; ${spent}.`;
+    return tr`The crucible melted that pair and recast ${recastPairs} ${ELEMENT_NAMES[fromSuit]} ${recastPairs === 1 ? tr.s('pair') : tr.s('pairs')} as ${ELEMENT_NAMES[toSuit]}, new faces in new places; ${spent}.`;
 };

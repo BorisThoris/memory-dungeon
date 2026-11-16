@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { RunEndReason, RunSummary } from '../../shared/contracts';
 import { COMBO_HEAT_STAGE_FROM, comboAscension, comboAscensionCallout, comboHeatStageIndex, type ComboHeatTheme } from '../../shared/combo-heat-rules';
 
@@ -7,28 +8,28 @@ import { COMBO_HEAT_STAGE_FROM, comboAscension, comboAscensionCallout, comboHeat
  * sentence, and never a verdict on the player. Then the choices, as stamps you can press.
  */
 export const RUN_END_VERDICT: Record<RunEndReason, string> = {
-    miss_budget: 'JOURNEY OVER',
-    turn_ceiling: "TIME'S UP",
-    quit: 'UNTIL NEXT TIME',
-    contract: 'CONTRACT SEALED',
-    pass_and_play_final_floor: 'TABLE SETTLED',
+    miss_budget: tr.s('JOURNEY OVER'),
+    turn_ceiling: tr.s("TIME'S UP"),
+    quit: tr.s('UNTIL NEXT TIME'),
+    contract: tr.s('CONTRACT SEALED'),
+    pass_and_play_final_floor: tr.s('TABLE SETTLED'),
     // The Warden cleared (DGE-005): the Descent's one win, never read as a death.
-    warden_cleared: 'THE WARDEN FALLS',
+    warden_cleared: tr.s('THE WARDEN FALLS'),
     // Endless's rent (DGE-006): the floor paid less than it owed.
-    rent_unpaid: 'THE DEPTHS COLLECT',
+    rent_unpaid: tr.s('THE DEPTHS COLLECT'),
     // The crawl (rules 104, retired in 105): the hero's health ran out.
     slain: 'SLAIN'
 };
 
 /** A summary from before the reason was recorded gets the old title, as a stamp. */
-export const RUN_END_VERDICT_UNKNOWN = 'EXPEDITION OVER';
+export const RUN_END_VERDICT_UNKNOWN = tr.s('EXPEDITION OVER');
 
 export const runEndVerdict = (reason: RunEndReason | null | undefined): string =>
     reason ? RUN_END_VERDICT[reason] : RUN_END_VERDICT_UNKNOWN;
 
 /** The line under the verdict: the number the run was for, and how far it went. */
 export const runEndScoreLine = (totalScore: number, highestLevel: number): string =>
-    `${totalScore.toLocaleString()} · Floor ${highestLevel}`;
+    tr`${totalScore.toLocaleString()} · Floor ${highestLevel}`;
 
 /**
  * The flourish: a second, smaller stamp for the one thing worth a second stamp. A new record
@@ -38,10 +39,10 @@ export const runEndFlourish = (
     summary: Pick<RunSummary, 'bestStreak'>,
     personalBest: 'beaten' | 'matched' | null
 ): { text: string; tone: 'gold' | 'legendary' | 'inferno' | 'blazing' } | null => {
-    if (personalBest === 'beaten') return { text: 'NEW RECORD!', tone: 'gold' };
-    if (summary.bestStreak >= COMBO_HEAT_STAGE_FROM.legendary) return { text: 'LEGENDARY RUN', tone: 'legendary' };
-    if (summary.bestStreak >= COMBO_HEAT_STAGE_FROM.inferno) return { text: 'INFERNO RUN', tone: 'inferno' };
-    if (summary.bestStreak >= COMBO_HEAT_STAGE_FROM.blazing) return { text: 'BLAZING RUN', tone: 'blazing' };
+    if (personalBest === 'beaten') return { text: tr.s('NEW RECORD!'), tone: 'gold' };
+    if (summary.bestStreak >= COMBO_HEAT_STAGE_FROM.legendary) return { text: tr.s('LEGENDARY RUN'), tone: 'legendary' };
+    if (summary.bestStreak >= COMBO_HEAT_STAGE_FROM.inferno) return { text: tr.s('INFERNO RUN'), tone: 'inferno' };
+    if (summary.bestStreak >= COMBO_HEAT_STAGE_FROM.blazing) return { text: tr.s('BLAZING RUN'), tone: 'blazing' };
     return null;
 };
 
@@ -74,13 +75,13 @@ export const runEndComboReplay = (bestStreak: number, temper: Pick<ComboHeatThem
 };
 
 /** The line the replay lands on. */
-export const runEndComboLine = (bestStreak: number): string => `Best combo ×${bestStreak}`;
+export const runEndComboLine = (bestStreak: number): string => tr`Best combo ×${bestStreak}`;
 
 export const RUN_END_STAMP_COPY = {
-    kicker: 'Expedition over',
-    playAgain: 'PLAY AGAIN',
+    kicker: tr.s('Expedition over'),
+    playAgain: tr.s('PLAY AGAIN'),
     rematch: 'REMATCH',
-    mainMenu: 'MAIN MENU',
+    mainMenu: tr.s('MAIN MENU'),
     record: 'RESULTS',
-    skipHint: 'Press anything to continue'
+    skipHint: tr.s('Press anything to continue')
 } as const;

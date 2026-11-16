@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 import { SKITTISH_FLINCH_ANNOUNCEMENT } from '../copy/skittishCardsBeat';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { runNonNegativeInteger, runNonNegativeIntegerWithFallback } from '../../shared/run-number-guards';
@@ -8,8 +9,7 @@ import { GAMBIT_OPPORTUNITY_HINT_LINE } from '../copy/gameplayHints';
 import type { GameplayFeedbackPresentation } from '../store/gameplayFeedbackAdapter';
 import {
     tileTraitKindLabels,
-    joinReadableList,
-    pluralize
+    joinReadableList
 } from '../copy/hudActionFeedback';
 
 export { formatHudActionFeedbackText, getFindableToastText } from '../copy/hudActionFeedback';
@@ -367,40 +367,40 @@ export const useHudPoliteLiveAnnouncement = ({
             // what a sighted player reads - so it says where to look instead of the generic advice.
             // This is the one place the flinch is said: the turn line leaves it out.
             const flinched = turnFacts != null && turnFacts.skittishFlinchesAfter > turnFacts.skittishFlinchesBefore;
-            lines.push(flinched ? `No match. ${SKITTISH_FLINCH_ANNOUNCEMENT} Chain reset.` : 'No match. Recover with a safe match. Chain reset.');
+            lines.push(flinched ? tr`No match. ${SKITTISH_FLINCH_ANNOUNCEMENT} Chain reset.` : tr.s('No match. Recover with a safe match. Chain reset.'));
         }
 
         if (recallMistakeDelta > 0) {
             const forgottenCount = forgottenTileCountThisFloor;
             lines.push(
                 forgottenCount > 0
-                    ? `Recall broken. ${forgottenCount} ${forgottenCount === 1 ? 'tile memory is' : 'tile memories are'} unstable.`
-                    : 'Recall broken. Focus lost.'
+                    ? tr`Recall broken. ${forgottenCount} ${forgottenCount === 1 ? tr.s('tile memory is') : tr.s('tile memories are')} unstable.`
+                    : tr.s('Recall broken. Focus lost.')
             );
         } else if (forgottenDelta > 0 || (recallFocusLost && matchDelta <= 0)) {
             const forgottenCount = Math.max(forgottenDelta, forgottenTileCountThisFloor);
             lines.push(
                 forgottenCount > 0
-                    ? `Memory aid used. Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}; ${forgottenCount} ${forgottenCount === 1 ? 'tile memory is' : 'tile memories are'} unstable.`
-                    : `Memory aid used. Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}.`
+                    ? tr`Memory aid used. Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}; ${forgottenCount} ${forgottenCount === 1 ? tr.s('tile memory is') : tr.s('tile memories are')} unstable.`
+                    : tr`Memory aid used. Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}.`
             );
         }
 
         if (matchDelta > 0) {
             const pairTotal = Math.max(turnFacts?.pairTotal ?? 0, turnFacts?.matchedPairsAfter ?? 0);
-            lines.push(`Match resolved. ${turnFacts?.matchedPairsAfter ?? 0}/${pairTotal} pairs cleared.`);
+            lines.push(tr`Match resolved. ${turnFacts?.matchedPairsAfter ?? 0}/${pairTotal} pairs cleared.`);
             if (traitMatchLabels.length > 0) {
                 lines.push(
                     traitMatchLabels.length >= 2
-                        ? `Trait combo surge: ${joinReadableList(traitMatchLabels)} resolved.`
-                        : `${joinReadableList(traitMatchLabels)} trait resolved.`
+                        ? tr`Trait combo surge: ${joinReadableList(traitMatchLabels)} resolved.`
+                        : tr`${joinReadableList(traitMatchLabels)} trait resolved.`
                 );
             }
             if (regionShuffleChargeDelta > 0) {
-                lines.push(`${pluralize(regionShuffleChargeDelta, 'row/swap charge')} gained.`);
+                lines.push(plural(regionShuffleChargeDelta, { one: '{0} row/swap charge gained.', other: '{0} row/swap charges gained.' }));
             }
             if (shuffleChargeDelta > 0) {
-                lines.push(`${pluralize(shuffleChargeDelta, 'full shuffle charge')} gained.`);
+                lines.push(plural(shuffleChargeDelta, { one: '{0} full shuffle charge gained.', other: '{0} full shuffle charges gained.' }));
             }
             if (stasisLocked) {
                 /*
@@ -412,21 +412,21 @@ export const useHudPoliteLiveAnnouncement = ({
                 const byTrait = (turnFacts?.matchedTraitKinds ?? []).some((kind) => kind === 'stasis' || kind === 'conduit');
                 lines.push(
                     byTrait
-                        ? 'Stasis blocked a nearby trait tile from opening first next turn.'
-                        : 'Sticky fingers: the marked card beside that match cannot open your next turn.'
+                        ? tr.s('Stasis blocked a nearby trait tile from opening first next turn.')
+                        : tr.s('Sticky fingers: the marked card beside that match cannot open your next turn.')
                 );
             }
             if (recallMatchDelta > 0) {
                 lines.push(
                     recallBonusDelta > 0
-                        ? `Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}; +${recallBonusDelta} memory score.`
-                        : `Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}.`
+                        ? tr`Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}; +${recallBonusDelta} memory score.`
+                        : tr`Recall focus ${normalizedRecallFocusValue}/${normalizedRecallFocusMax}.`
                 );
             }
             if (forgottenDelta < 0) {
                 const settledCount = Math.abs(forgottenDelta);
                 lines.push(
-                    `${settledCount} ${settledCount === 1 ? 'unstable tile memory' : 'unstable tile memories'} stabilized.`
+                    tr`${settledCount} ${settledCount === 1 ? tr.s('unstable tile memory') : tr.s('unstable tile memories')} stabilized.`
                 );
             }
         }
@@ -434,8 +434,8 @@ export const useHudPoliteLiveAnnouncement = ({
         if (traitMismatchLabels.length > 0) {
             lines.push(
                 traitMismatchLabels.length >= 2
-                    ? `Trait surge: ${traitMismatchLabels.length} penalties applied: ${joinReadableList(traitMismatchLabels)}.`
-                    : `${joinReadableList(traitMismatchLabels)} trait penalty applied.`
+                    ? tr`Trait surge: ${traitMismatchLabels.length} penalties applied: ${joinReadableList(traitMismatchLabels)}.`
+                    : tr`${joinReadableList(traitMismatchLabels)} trait penalty applied.`
             );
         }
 

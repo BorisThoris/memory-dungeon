@@ -1,3 +1,4 @@
+import { plural, tr } from './i18n';
 import type { RealmEvent, RunState } from './contracts';
 import { callRealmWeather } from './realm-weather-rules';
 import { runRealmId } from './realm-rules';
@@ -59,8 +60,8 @@ export const applyStormGlass = (run: RunState): StormGlassResult | null => {
 
 /** What the storm did, in a line for the screen reader and the feedback stamp. */
 export const stormGlassFeedbackLine = (kind: string, touched: number, lit: number, left: number): string => {
-    const spent = `${left} storm ${left === 1 ? 'glass' : 'glasses'} left`;
-    const shown = lit > 0 ? `; ${lit} ${lit === 1 ? 'card it moved is' : 'cards it moved are'} lit until your next flip` : '';
-    const what = kind === 'empowered' ? 'the fire fed its own cards' : kind;
-    return `The storm glass broke: ${what} on ${touched} ${touched === 1 ? 'card' : 'cards'}${shown}; ${spent}.`;
+    const spent = tr`${plural(left, { one: '{0} storm glass', other: '{0} storm glasses' })} left`;
+    const shown = lit > 0 ? tr`; ${lit} ${lit === 1 ? tr.s('card it moved is') : tr.s('cards it moved are')} lit until your next flip` : '';
+    const what = kind === 'empowered' ? tr.s('the fire fed its own cards') : kind;
+    return tr`The storm glass broke: ${what} on ${plural(touched, { one: '{0} card', other: '{0} cards' })}${shown}; ${spent}.`;
 };

@@ -13,6 +13,7 @@
  * The stages are the combo alone, not the floor: a floor's rungs decide what a break takes, this
  * decides only how the run looks and sounds. Nothing here is read by a rule.
  */
+import { tr } from './i18n';
 import { runNonNegativeInteger } from './run-number-guards';
 import { createMulberry32, hashStringToSeed } from './rng';
 
@@ -160,10 +161,10 @@ export interface ComboHeatTheme {
 export const COMBO_HEAT_THEMES: readonly ComboHeatTheme[] = [
     {
         id: 'ember',
-        title: 'Ember',
+        title: tr.s('Ember'),
         rare: false,
         weight: 70,
-        labels: { cold: '', warm: 'Warm', hot: 'Hot', blazing: 'Blazing', inferno: 'Inferno', legendary: 'Legendary' },
+        labels: { cold: '', warm: tr.s('Warm'), hot: tr.s('Hot'), blazing: tr.s('Blazing'), inferno: tr.s('Inferno'), legendary: tr.s('Legendary') },
         callouts: { hot: 'HOT!', blazing: 'BLAZING!', inferno: 'INFERNO!', legendary: 'LEGENDARY!' },
         colors: ['#e1ad66', '#e1ad66', '#ffa24f', '#ff7a3d', '#ff4d5e', '#e2b3ff'],
         emberMode: 'rise',
@@ -172,11 +173,11 @@ export const COMBO_HEAT_THEMES: readonly ComboHeatTheme[] = [
     },
     {
         id: 'frost',
-        title: 'Frost',
+        title: tr.s('Frost'),
         rare: false,
         weight: 18,
-        labels: { cold: '', warm: 'Chill', hot: 'Cold', blazing: 'Frozen', inferno: 'Glacial', legendary: 'Absolute Zero' },
-        callouts: { hot: 'COLD!', blazing: 'FROZEN!', inferno: 'GLACIAL!', legendary: 'ABSOLUTE ZERO!' },
+        labels: { cold: '', warm: tr.s('Chill'), hot: tr.s('Cold'), blazing: tr.s('Frozen'), inferno: tr.s('Glacial'), legendary: tr.s('Absolute Zero') },
+        callouts: { hot: 'COLD!', blazing: 'FROZEN!', inferno: 'GLACIAL!', legendary: tr.s('ABSOLUTE ZERO!') },
         colors: ['#bfe3f7', '#bfe3f7', '#8fdcff', '#5fc3ff', '#b9a6ff', '#ffffff'],
         emberMode: 'fall',
         arcTints: ['#cfefff', '#8fdcff', '#5fc3ff', '#ffffff'],
@@ -184,10 +185,10 @@ export const COMBO_HEAT_THEMES: readonly ComboHeatTheme[] = [
     },
     {
         id: 'storm',
-        title: 'Storm',
+        title: tr.s('Storm'),
         rare: false,
         weight: 10,
-        labels: { cold: '', warm: 'Charged', hot: 'Sparking', blazing: 'Storm', inferno: 'Tempest', legendary: 'Godlike' },
+        labels: { cold: '', warm: tr.s('Charged'), hot: tr.s('Sparking'), blazing: tr.s('Storm'), inferno: tr.s('Tempest'), legendary: tr.s('Godlike') },
         callouts: { hot: 'SPARKING!', blazing: 'STORM!', inferno: 'TEMPEST!', legendary: 'GODLIKE!' },
         colors: ['#c9c2ff', '#c9c2ff', '#a78bff', '#8a5cff', '#d94dff', '#f6f0ff'],
         emberMode: 'spark',
@@ -196,10 +197,10 @@ export const COMBO_HEAT_THEMES: readonly ComboHeatTheme[] = [
     },
     {
         id: 'prismatic',
-        title: 'Prismatic',
+        title: tr.s('Prismatic'),
         rare: true,
         weight: 2,
-        labels: { cold: '', warm: 'Shimmer', hot: 'Gleam', blazing: 'Radiant', inferno: 'Prismatic', legendary: 'Mythic' },
+        labels: { cold: '', warm: tr.s('Shimmer'), hot: tr.s('Gleam'), blazing: tr.s('Radiant'), inferno: tr.s('Prismatic'), legendary: tr.s('Mythic') },
         callouts: { hot: 'GLEAM!', blazing: 'RADIANT!', inferno: 'PRISMATIC!', legendary: 'MYTHIC!' },
         colors: ['#ffd27a', '#ffd27a', '#7dffc4', '#7ec8ff', '#ff8ae2', '#ffffff'],
         emberMode: 'rise',
@@ -216,10 +217,10 @@ export const COMBO_HEAT_THEMES: readonly ComboHeatTheme[] = [
 export const REALM_HEAT_THEMES: readonly ComboHeatTheme[] = [
     {
         id: 'tide',
-        title: 'Tide',
+        title: tr.s('Tide'),
         rare: false,
         weight: 0,
-        labels: { cold: '', warm: 'Ripple', hot: 'Swell', blazing: 'Surge', inferno: 'Torrent', legendary: 'Tsunami' },
+        labels: { cold: '', warm: tr.s('Ripple'), hot: tr.s('Swell'), blazing: tr.s('Surge'), inferno: tr.s('Torrent'), legendary: tr.s('Tsunami') },
         callouts: { hot: 'SWELL!', blazing: 'SURGE!', inferno: 'TORRENT!', legendary: 'TSUNAMI!' },
         colors: ['#9fe8dc', '#9fe8dc', '#4fd6c8', '#2fb6d8', '#3a8cff', '#e8fffb'],
         emberMode: 'fall',
@@ -228,10 +229,10 @@ export const REALM_HEAT_THEMES: readonly ComboHeatTheme[] = [
     },
     {
         id: 'grove',
-        title: 'Grove',
+        title: tr.s('Grove'),
         rare: false,
         weight: 0,
-        labels: { cold: '', warm: 'Sprout', hot: 'Bloom', blazing: 'Overgrown', inferno: 'Primeval', legendary: 'Worldtree' },
+        labels: { cold: '', warm: tr.s('Sprout'), hot: tr.s('Bloom'), blazing: tr.s('Overgrown'), inferno: tr.s('Primeval'), legendary: tr.s('Worldtree') },
         callouts: { hot: 'BLOOM!', blazing: 'OVERGROWN!', inferno: 'PRIMEVAL!', legendary: 'WORLDTREE!' },
         colors: ['#c8e6a0', '#c8e6a0', '#8fd66a', '#5fbf4a', '#d6e04a', '#f4ffe0'],
         emberMode: 'rise',
@@ -289,7 +290,7 @@ export const comboMilestoneReached = (comboBefore: number, comboAfter: number): 
 };
 
 export const COMBO_MILESTONE_CALLOUT = (milestone: number): string =>
-    milestone === 100 ? 'CENTURY!' : `${milestone} COMBO!`;
+    milestone === 100 ? 'CENTURY!' : tr`${milestone} COMBO!`;
 
 
 export interface ComboHeatLevels {

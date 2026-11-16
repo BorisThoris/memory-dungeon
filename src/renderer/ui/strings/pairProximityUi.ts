@@ -1,14 +1,15 @@
+import { tr } from '../../../shared/i18n';
 /**
  * Pair-distance assist copy (centralized for future i18n).
  * @see REF-081
  */
 export const pairProximityUiStrings = {
-    settingsLabel: 'Pair distance hints',
+    settingsLabel: tr.s('Pair distance hints'),
     settingsHint:
-        'On a flip, shows grid steps (Manhattan) to the nearest tile that can complete the pair. Off for a purer memory read.',
+        tr.s('On a flip, shows grid steps (Manhattan) to the nearest tile that can complete the pair. Off for a purer memory read.'),
     /** Announced with focused tile when assist is on (matches WebGL badge). */
     focusPairSteps: (steps: number): string =>
-        ` Pair distance: ${steps} grid steps to the nearest tile that can complete the pair.`
+        tr` Pair distance: ${steps} grid steps to the nearest tile that can complete the pair.`
 } as const;
 
 /**

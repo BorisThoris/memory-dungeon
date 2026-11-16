@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 import { SLEEPER_CHAIN_HOLDS, SLEEPER_WAKE_TURNS } from '../../shared/sleeper-rules';
 import type { HourglassEvent, Tile, TileSuit } from '../../shared/contracts';
 import { ELEMENT_NAMES } from '../../shared/element-alchemy-rules';
@@ -12,32 +13,32 @@ import { WANDERER_STEP_EVERY_TURNS } from '../../shared/wanderer-rules';
  * the mark means - and for a screen reader, which has no mark to look at.
  */
 export const ODD_CARD_COPY = {
-    turncoatName: 'Turncoat',
-    hourglassName: 'Hourglass',
-    caughtTitle: 'HOURGLASS CAUGHT',
-    spentAnnouncement: 'The hourglass ran out. Its pair is a plain pair now.'
+    turncoatName: tr.s('Turncoat'),
+    hourglassName: tr.s('Hourglass'),
+    caughtTitle: tr.s('HOURGLASS CAUGHT'),
+    spentAnnouncement: tr.s('The hourglass ran out. Its pair is a plain pair now.')
 } as const;
 
 /** The Wanderers (`wanderer-rules.ts`): the key's line, and what a screen reader hears on a card. */
 export const WANDERER_COPY = {
-    name: 'Wanderers',
-    line: `Some cards step one cell every ${WANDERER_STEP_EVERY_TURNS}rd turn, trading places, and leave a footprint where they stood.`,
-    footprintLabel: ', footprint: a Wanderer stepped out of this cell last turn',
-    wandererLabel: `, a Wanderer: every ${WANDERER_STEP_EVERY_TURNS}rd turn it steps a cell`
+    name: tr.s('Wanderers'),
+    line: tr`Some cards step one cell every ${WANDERER_STEP_EVERY_TURNS}rd turn, trading places, and leave a footprint where they stood.`,
+    footprintLabel: tr.s(', footprint: a Wanderer stepped out of this cell last turn'),
+    wandererLabel: tr`, a Wanderer: every ${WANDERER_STEP_EVERY_TURNS}rd turn it steps a cell`
 } as const;
 
 /** Sleepers (`sleeper-rules.ts`): the key's line, and what a screen reader hears on a face. */
 export const SLEEPER_COPY = {
-    name: 'Sleepers',
-    line: `Some pairs sleep: matched on a chain under ${SLEEPER_CHAIN_HOLDS}, they come back face down ${SLEEPER_WAKE_TURNS} turns later, somewhere else.`,
-    sleeperLabel: `, a Sleeper: matched on a chain under ${SLEEPER_CHAIN_HOLDS}, it comes back`
+    name: tr.s('Sleepers'),
+    line: tr`Some pairs sleep: matched on a chain under ${SLEEPER_CHAIN_HOLDS}, they come back face down ${SLEEPER_WAKE_TURNS} turns later, somewhere else.`,
+    sleeperLabel: tr`, a Sleeper: matched on a chain under ${SLEEPER_CHAIN_HOLDS}, it comes back`
 } as const;
 
 /** The Fold (`board-fold-rules.ts`): its line in the key while the floor is two rooms. */
 export const FOLD_LEGEND_ENTRY: OddCardLegendEntry = {
     id: 'fold',
-    name: 'The Fold',
-    line: 'Two rooms and a wall. Match in the doorway and the pop goes through; anywhere else it stays on its side.',
+    name: tr.s('The Fold'),
+    line: tr.s('Two rooms and a wall. Match in the doorway and the pop goes through; anywhere else it stays on its side.'),
     suit: null,
     sand: null
 };
@@ -45,25 +46,25 @@ export const FOLD_LEGEND_ENTRY: OddCardLegendEntry = {
 /** Layers (`board-layers-rules.ts`): its line in the key while anything waits beneath. */
 export const LAYERS_LEGEND_ENTRY: OddCardLegendEntry = {
     id: 'layers',
-    name: 'Layers',
-    line: 'Some cells hide a second card. When the card on top leaves, the one beneath rises face down.',
+    name: tr.s('Layers'),
+    line: tr.s('Some cells hide a second card. When the card on top leaves, the one beneath rises face down.'),
     suit: null,
     sand: null
 };
 
-const turns = (n: number): string => `${n} ${n === 1 ? 'turn' : 'turns'}`;
+const turns = (n: number): string => `${plural(n, { one: '{0} turn', other: '{0} turns' })}`;
 
 /** The Turncoat's line in the legend: what it is now and next. */
 export const turncoatLegend = (now: TileSuit, next: TileSuit): string =>
-    now === next ? `A pair that changes element every turn. ${ELEMENT_NAMES[now]} now.` : `A pair that changes element every turn. ${ELEMENT_NAMES[now]} now, ${ELEMENT_NAMES[next]} next.`;
+    now === next ? tr`A pair that changes element every turn. ${ELEMENT_NAMES[now]} now.` : tr`A pair that changes element every turn. ${ELEMENT_NAMES[now]} now, ${ELEMENT_NAMES[next]} next.`;
 
 /** The Hourglass's line in the legend: the prize and the sand. */
-export const hourglassLegend = (sand: number): string => `Match its pair within ${turns(sand)} for ${HOURGLASS_GOLD} gold and bonus score.`;
+export const hourglassLegend = (sand: number): string => tr`Match its pair within ${turns(sand)} for ${HOURGLASS_GOLD} gold and bonus score.`;
 
-export const hourglassCalloutSub = (event: HourglassEvent): string => `+${event.gold} gold, +${event.score} score`;
+export const hourglassCalloutSub = (event: HourglassEvent): string => tr`+${event.gold} gold, +${event.score} score`;
 
 export const hourglassAnnouncement = (event: HourglassEvent): string =>
-    event.kind === 'caught' ? `Hourglass caught: ${event.gold} gold and ${event.score} score.` : ODD_CARD_COPY.spentAnnouncement;
+    event.kind === 'caught' ? tr`Hourglass caught: ${event.gold} gold and ${event.score} score.` : ODD_CARD_COPY.spentAnnouncement;
 
 export interface OddCardLegendEntry {
     /** The odd cards, and the looking glass's clock, which shares their key above the board. */

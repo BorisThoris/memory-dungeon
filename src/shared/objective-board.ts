@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RunState, SaveData } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -29,27 +30,27 @@ export const buildObjectiveBoardRows = (save: SaveData): ObjectiveBoardRow[] => 
     return [
         {
             id: 'first_clear',
-            title: 'First clear',
-            description: 'Clear any floor of any run.',
+            title: tr.s('First clear'),
+            description: tr.s('Clear any floor of any run.'),
             status: save.achievements.ACH_FIRST_CLEAR ? 'completed' : 'active',
             progress: save.achievements.ACH_FIRST_CLEAR ? '1/1' : '0/1',
-            reward: 'First Lantern achievement'
+            reward: tr.s('First Lantern achievement')
         },
         {
             id: 'no_powers_floor_5',
-            title: 'No-powers floor 5',
-            description: 'Reach floor 5 without disqualifying assist powers.',
+            title: tr.s('No-powers floor 5'),
+            description: tr.s('Reach floor 5 without disqualifying assist powers.'),
             status: bestNoPowers >= 5 ? 'completed' : save.achievements.ACH_FIRST_CLEAR ? 'active' : 'locked',
             progress: `${Math.min(bestNoPowers, 5)}/5`,
-            reward: 'Ascendant honor'
+            reward: tr.s('Ascendant honor')
         },
         {
             id: 'sharp_floor',
-            title: 'Sharp floor',
-            description: 'Clear a floor whose chain reached Sharp.',
+            title: tr.s('Sharp floor'),
+            description: tr.s('Clear a floor whose chain reached Sharp.'),
             status: sharpFloors >= 1 ? 'completed' : save.achievements.ACH_FIRST_CLEAR ? 'active' : 'locked',
             progress: `${Math.min(sharpFloors, 1)}/1`,
-            reward: 'Sharp rhythm honor progress'
+            reward: tr.s('Sharp rhythm honor progress')
         }
     ];
 };
@@ -62,27 +63,27 @@ export const getObjectiveBoardItems = (save: SaveData): ObjectiveBoardItem[] => 
     return [
         {
             id: 'first_clear',
-            title: 'First clear',
-            description: 'Clear any floor of any run.',
+            title: tr.s('First clear'),
+            description: tr.s('Clear any floor of any run.'),
             status: firstClear ? 'completed' : 'active',
             progress: { current: firstClear ? 1 : 0, target: 1 },
-            reward: 'First Lantern achievement'
+            reward: tr.s('First Lantern achievement')
         },
         {
             id: 'no_powers_floor_5',
-            title: 'No-powers floor 5',
-            description: 'Reach floor 5 without disqualifying assist powers.',
+            title: tr.s('No-powers floor 5'),
+            description: tr.s('Reach floor 5 without disqualifying assist powers.'),
             status: bestNoPowers >= 5 ? 'completed' : 'active',
             progress: { current: Math.min(bestNoPowers, 5), target: 5 },
-            reward: 'Ascendant honor'
+            reward: tr.s('Ascendant honor')
         },
         {
             id: 'sharp_three',
-            title: 'Sharp rhythm',
-            description: 'Clear three floors whose chain reached Sharp.',
+            title: tr.s('Sharp rhythm'),
+            description: tr.s('Clear three floors whose chain reached Sharp.'),
             status: sharpFloors >= 3 ? 'completed' : 'active',
             progress: { current: Math.min(sharpFloors, 3), target: 3 },
-            reward: 'Sharp rhythm honor progress'
+            reward: tr.s('Sharp rhythm honor progress')
         }
     ];
 };
@@ -111,7 +112,7 @@ export const buildRunObjectiveProgressRows = (run: RunState): RunObjectiveProgre
     if (run.board?.featuredObjectiveId) {
         rows.push({
             id: `featured_${run.board.featuredObjectiveId}`,
-            label: 'Featured objective',
+            label: tr.s('Featured objective'),
             state: run.lastLevelResult?.featuredObjectiveCompleted === false ? 'failed' : 'active',
             detail: run.board.featuredObjectiveId
         });
@@ -120,9 +121,9 @@ export const buildRunObjectiveProgressRows = (run: RunState): RunObjectiveProgre
         const failed = run.shuffleUsedThisFloor;
         rows.push({
             id: 'scholar_contract',
-            label: 'Scholar contract',
+            label: tr.s('Scholar contract'),
             state: failed ? 'failed' : 'active',
-            detail: failed ? 'Shuffle/swap/destroy used this floor' : 'No shuffle, swap, or destroy'
+            detail: failed ? tr.s('Shuffle/swap/destroy used this floor') : tr.s('No shuffle, swap, or destroy')
         });
     }
     if (run.activeContract?.maxPinsTotalRun != null) {
@@ -130,9 +131,9 @@ export const buildRunObjectiveProgressRows = (run: RunState): RunObjectiveProgre
         const maxPinsTotalRun = runNonNegativeInteger(run.activeContract.maxPinsTotalRun);
         rows.push({
             id: 'pin_vow',
-            label: 'Pin vow',
+            label: tr.s('Pin vow'),
             state: pinsPlacedCountThisRun > maxPinsTotalRun ? 'failed' : 'active',
-            detail: `${pinsPlacedCountThisRun}/${maxPinsTotalRun} pins`
+            detail: tr`${pinsPlacedCountThisRun}/${maxPinsTotalRun} pins`
         });
     }
     return rows;

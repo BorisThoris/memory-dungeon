@@ -193,6 +193,9 @@
     text-transform: uppercase;
     color: var(--margin-paper);
     text-wrap: balance;
+    /* EINSTELLUNGEN is one long word: let the language's own hyphenation break it inside the rail. */
+    hyphens: auto;
+    overflow-wrap: anywhere;
 }
 
 .categoryNav {
@@ -1226,4 +1229,20 @@
     overflow: hidden;
     clip-path: inset(50%);
     white-space: nowrap;
+}
+
+/* The language choice (LanguageRow.tsx): one select with its own hint underneath. */
+.languageRow {
+    display: grid;
+    gap: 0.35rem;
+    min-width: 0;
+}
+
+.languageLabel {
+    font-weight: 600;
+}
+
+.languageHint {
+    font-size: 0.9rem;
+    opacity: 0.78;
 }

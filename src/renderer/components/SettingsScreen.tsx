@@ -1,3 +1,5 @@
+import { COMPONENT_PROSE } from '../copy/componentProse';
+import { tr } from '../../shared/i18n';
 import { useEffect, useId, useRef, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
@@ -39,6 +41,7 @@ import packageJson from '../../../package.json';
 import { GAMEPLAY_VISUAL_CSS_VARS } from './gameplayVisualConfig';
 import OverlayModal from './OverlayModal';
 import { ABOUT_COPY, CREDIT_GROUPS, PRIVACY_POLICY_URL, SOFTWARE_LICENCES } from '../copy/aboutCopy';
+import { buildSupportMailto, currentSupportContext } from '../supportReport';
 import { downloadSaveExport, parseSaveExport } from '../saveTransfer';
 import { DEFAULT_KEY_BINDINGS, keyCodeLabel } from '../../shared/key-bindings';
 import { KEY_BINDINGS_COPY } from '../copy/keyBindingsCopy';
@@ -47,6 +50,7 @@ import KeyBindingsEditor from './KeyBindingsEditor';
 import type { SaveData } from '../../shared/contracts';
 import { DIAGNOSTICS_COPY, SAVE_FILE_COPY } from '../copy/diagnosticsSettings';
 import { SETTINGS_FOOTER_HINT, SETTINGS_HINTS } from '../copy/settingsHints';
+import { LanguageRow } from './LanguageRow';
 import { SegmentedControl, SettingsSection, SliderRow, ToggleRow } from './SettingsControls';
 import {
     DEFAULT_SUBSECTION_BY_CATEGORY,
@@ -115,8 +119,8 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
     const modalShellRef = useRef<HTMLElement | null>(null);
     const { height: viewportHeight, width: viewportWidth } = useViewportSize();
     const titleId = useId();
-    const title = isModal ? 'Run Settings' : 'Settings';
-    const eyebrow = isModal ? 'Paused' : 'Preferences';
+    const title = isModal ? tr.s('Run Settings') : tr.s('Settings');
+    const eyebrow = isModal ? tr.s('Paused') : tr.s('Preferences');
     const profileSummaryRows = getProfileSummaryRows(saveData);
     const saveTrustRows = getSaveTrustRows(saveData);
     const premiumEconomyRows = getPremiumEconomyPolicyRows();
@@ -228,7 +232,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                         className={styles.persistWriteBannerDismiss}
                         onClick={clearPersistenceWriteNotice}
                     >
-                        Dismiss
+                        {tr.s("Dismiss")}
                     </button>
                 </div>
             ) : null}
@@ -295,7 +299,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
 
                                     {/* Phones get the same choice as one menu row instead of six stacked cards. */}
                                     <label className={styles.categoryMenu}>
-                                        <span className={styles.srOnly}>Settings category</span>
+                                        <span className={styles.srOnly}>{tr.s("Settings category")}</span>
                                         <select
                                             className={styles.categorySelect}
                                             data-testid="settings-category-menu"
@@ -331,7 +335,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
 
                                     {showSubsectionNav ? (
                                         <div
-                                            aria-label={`${activeCategoryMeta.label} sections`}
+                                            aria-label={tr`${activeCategoryMeta.label} sections`}
                                             className={styles.subsectionNav}
                                             data-testid="settings-subsection-nav"
                                             role="group"
@@ -355,27 +359,27 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
 
                                     <div className={styles.contentScroll}>
                                         {activeCategory === 'gameplay' && showSubsection('board') ? (
-                                            <SettingsSection title="Board Presentation">
+                                            <SettingsSection title={tr.s("Board Presentation")}>
                                                 <div className={styles.boardPresentationPair}>
                                                     <SegmentedControl<BoardPresentationMode>
                                                         hint={SETTINGS_HINTS.boardPresentation}
-                                                        label="Layout Style"
+                                                        label={tr.s("Layout Style")}
                                                         onChange={(next) => patchSettings('boardPresentation', next)}
                                                         options={[
-                                                            { label: 'Standard', value: 'standard' },
-                                                            { label: 'Flat', value: 'spaghetti' },
-                                                            { label: 'Breathing', value: 'breathing' }
+                                                            { label: tr.s('Standard'), value: 'standard' },
+                                                            { label: tr.s('Flat'), value: 'spaghetti' },
+                                                            { label: tr.s('Breathing'), value: 'breathing' }
                                                         ]}
                                                         value={draft.boardPresentation}
                                                     />
                                                     <SegmentedControl<CameraViewportModePreference>
                                                         hint={SETTINGS_HINTS.cameraViewportModePreference}
-                                                        label="Small-Screen View"
+                                                        label={tr.s("Small-Screen View")}
                                                         onChange={(next) => patchSettings('cameraViewportModePreference', next)}
                                                         options={[
-                                                            { label: 'Auto', value: 'auto' },
-                                                            { label: 'Always', value: 'always' },
-                                                            { label: 'Never', value: 'never' }
+                                                            { label: tr.s('Auto'), value: 'auto' },
+                                                            { label: tr.s('Always'), value: 'always' },
+                                                            { label: tr.s('Never'), value: 'never' }
                                                         ]}
                                                         value={draft.cameraViewportModePreference}
                                                     />
@@ -384,10 +388,10 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         ) : null}
 
                                         {activeCategory === 'gameplay' && showSubsection('timing') ? (
-                                            <SettingsSection title="Run Timing">
+                                            <SettingsSection title={tr.s("Run Timing")}>
                                                 <SliderRow
                                                     hint={SETTINGS_HINTS.resolveDelayMultiplier}
-                                                    label="Resolve Delay"
+                                                    label={tr.s("Resolve Delay")}
                                                     max={SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.max}
                                                     min={SETTINGS_NUMERIC_RANGES.resolveDelayMultiplier.min}
                                                     onChange={(next) => patchSettings('resolveDelayMultiplier', next)}
@@ -397,11 +401,11 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 />
                                                 <SegmentedControl<WeakerShuffleMode>
                                                     hint={SETTINGS_HINTS.weakerShuffleMode}
-                                                    label="Shuffle Strength"
+                                                    label={tr.s("Shuffle Strength")}
                                                     onChange={(next) => patchSettings('weakerShuffleMode', next)}
                                                     options={[
-                                                        { label: 'Full Shuffle', value: 'full' },
-                                                        { label: 'Rows Only', value: 'rows_only' }
+                                                        { label: tr.s('Full Shuffle'), value: 'full' },
+                                                        { label: tr.s('Rows Only'), value: 'rows_only' }
                                                     ]}
                                                     value={draft.weakerShuffleMode}
                                                 />
@@ -409,18 +413,18 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         ) : null}
 
                                         {activeCategory === 'gameplay' && showSubsection('assist') ? (
-                                            <SettingsSection title="Assist Layers">
+                                            <SettingsSection title={tr.s("Assist Layers")}>
                                                 <div className={styles.toggleStack}>
                                                     <ToggleRow
                                                         checked={draft.tileFocusAssist}
                                                         hint={SETTINGS_HINTS.tileFocusAssist}
-                                                        label="Focus Assist"
+                                                        label={tr.s("Focus Assist")}
                                                         onChange={(next) => patchSettings('tileFocusAssist', next)}
                                                     />
                                                     <ToggleRow
                                                         checked={draft.echoFeedbackEnabled}
                                                         hint={SETTINGS_HINTS.echoFeedbackEnabled}
-                                                        label="Echo Feedback"
+                                                        label={tr.s("Echo Feedback")}
                                                         onChange={(next) => patchSettings('echoFeedbackEnabled', next)}
                                                     />
                                                     <ToggleRow
@@ -432,13 +436,13 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     <ToggleRow
                                                         checked={draft.distractionChannelEnabled}
                                                         hint={SETTINGS_HINTS.distractionChannelEnabled}
-                                                        label="Distraction Channel"
+                                                        label={tr.s("Distraction Channel")}
                                                         onChange={(next) => patchSettings('distractionChannelEnabled', next)}
                                                     />
                                                     <ToggleRow
                                                         checked={draft.shuffleScoreTaxEnabled}
                                                         hint={SETTINGS_HINTS.shuffleScorePenalty}
-                                                        label="Shuffle Score Tax"
+                                                        label={tr.s("Shuffle Score Tax")}
                                                         onChange={(next) => patchSettings('shuffleScoreTaxEnabled', next)}
                                                     />
                                                 </div>
@@ -446,10 +450,10 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         ) : null}
 
                                         {activeCategory === 'controls' && showSubsection('input') ? (
-                                            <SettingsSection title="Input">
+                                            <SettingsSection title={tr.s("Input")}>
                                                 <p className={styles.headerCopy}>
-                                                    Tap two cards to match. Arrow keys move focus; Enter flips.{' '}
-                                                    {draftKeyBindings.pause ? `${keyCodeLabel(draftKeyBindings.pause)} pauses.` : 'Escape pauses.'}
+                                                    {COMPONENT_PROSE.settingsScreenTapTwoCardsTo}{' '}
+                                                    {draftKeyBindings.pause ? tr`${keyCodeLabel(draftKeyBindings.pause)} pauses.` : tr.s('Escape pauses.')}
                                                 </p>
                                             </SettingsSection>
                                         ) : null}
@@ -464,10 +468,10 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         ) : null}
 
                                         {activeCategory === 'audio' && showSubsection('volume') ? (
-                                            <SettingsSection title="Volume">
+                                            <SettingsSection title={tr.s("Volume")}>
                                                 <SliderRow
                                                     hint={SETTINGS_HINTS.masterVolume}
-                                                    label="Master Volume"
+                                                    label={tr.s("Master Volume")}
                                                     max={SETTINGS_NUMERIC_RANGES.masterVolume.max}
                                                     min={SETTINGS_NUMERIC_RANGES.masterVolume.min}
                                                     onChange={(next) => patchSettings('masterVolume', next)}
@@ -477,7 +481,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 />
                                                 <SliderRow
                                                     hint={SETTINGS_HINTS.musicVolume}
-                                                    label="Music"
+                                                    label={tr.s("Music")}
                                                     max={SETTINGS_NUMERIC_RANGES.musicVolume.max}
                                                     min={SETTINGS_NUMERIC_RANGES.musicVolume.min}
                                                     onChange={(next) => patchSettings('musicVolume', next)}
@@ -488,7 +492,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 <ToggleRow
                                                     checked={draft.dailyMusicEnabled}
                                                     hint={SETTINGS_HINTS.dailyMusicEnabled}
-                                                    label="Today's Music"
+                                                    label={tr.s("Today's Music")}
                                                     onChange={(next) => patchSettings('dailyMusicEnabled', next)}
                                                 />
                                                 <SliderRow
@@ -505,20 +509,26 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         ) : null}
 
                                         {activeCategory === 'video' && showSubsection('display') ? (
-                                            <SettingsSection title="Display">
+                                            <SettingsSection title={tr.s('Language')}>
+                                                <LanguageRow inRun={isModal} />
+                                            </SettingsSection>
+                                        ) : null}
+
+                                        {activeCategory === 'video' && showSubsection('display') ? (
+                                            <SettingsSection title={tr.s("Display")}>
                                                 <SegmentedControl<DisplayMode>
                                                     hint={SETTINGS_HINTS.displayMode}
-                                                    label="Window Mode"
+                                                    label={tr.s("Window Mode")}
                                                     onChange={(next) => patchSettings('displayMode', next)}
                                                     options={[
-                                                        { label: 'Windowed', value: 'windowed' },
-                                                        { label: 'Fullscreen', value: 'fullscreen' }
+                                                        { label: tr.s('Windowed'), value: 'windowed' },
+                                                        { label: tr.s('Fullscreen'), value: 'fullscreen' }
                                                     ]}
                                                     value={draft.displayMode}
                                                 />
                                                 <SliderRow
                                                     hint={SETTINGS_HINTS.uiScale}
-                                                    label="UI Scale"
+                                                    label={tr.s("UI Scale")}
                                                     max={SETTINGS_NUMERIC_RANGES.uiScale.max}
                                                     min={SETTINGS_NUMERIC_RANGES.uiScale.min}
                                                     onChange={(next) => patchSettings('uiScale', next)}
@@ -530,15 +540,15 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         ) : null}
 
                                         {activeCategory === 'video' && showSubsection('graphics') ? (
-                                            <SettingsSection title="Graphics">
+                                            <SettingsSection title={tr.s("Graphics")}>
                                                 <SegmentedControl<GraphicsQualityPreset>
                                                     hint={SETTINGS_HINTS.graphicsQuality}
-                                                    label="Graphics quality"
+                                                    label={tr.s("Graphics quality")}
                                                     onChange={(next) => patchSettings('graphicsQuality', next)}
                                                     options={[
-                                                        { label: 'Low', value: 'low' },
-                                                        { label: 'Medium', value: 'medium' },
-                                                        { label: 'High', value: 'high' }
+                                                        { label: tr.s('Low'), value: 'low' },
+                                                        { label: tr.s('Medium'), value: 'medium' },
+                                                        { label: tr.s('High'), value: 'high' }
                                                     ]}
                                                     value={draft.graphicsQuality}
                                                 />
@@ -547,19 +557,19 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         checked={draft.boardBloomEnabled}
                                                         disabled={draft.graphicsQuality === 'low'}
                                                         hint={SETTINGS_HINTS.boardBloomEnabled}
-                                                        label="Board bloom"
+                                                        label={tr.s("Board bloom")}
                                                         onChange={(next) => patchSettings('boardBloomEnabled', next)}
                                                     />
                                                 </div>
                                                 <SegmentedControl<BoardScreenSpaceAA>
                                                     hint={SETTINGS_HINTS.boardScreenSpaceAA}
-                                                    label="Board anti-aliasing"
+                                                    label={tr.s("Board anti-aliasing")}
                                                     onChange={(next) => patchSettings('boardScreenSpaceAA', next)}
                                                     options={[
-                                                        { label: 'Auto', value: 'auto' },
-                                                        { label: 'Native', value: 'smaa' },
+                                                        { label: tr.s('Auto'), value: 'auto' },
+                                                        { label: tr.s('Native'), value: 'smaa' },
                                                         { label: 'MSAA', value: 'msaa' },
-                                                        { label: 'Off', value: 'off' }
+                                                        { label: tr.s('Off'), value: 'off' }
                                                     ]}
                                                     value={draft.boardScreenSpaceAA}
                                                 />
@@ -567,7 +577,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         ) : null}
 
                                         {activeCategory === 'accessibility' && showSubsection('accessibility') ? (
-                                            <SettingsSection title="Accessibility">
+                                            <SettingsSection title={tr.s("Accessibility")}>
                                                 {/* Every market leader names its colour-blind support; this game's is built in, so it is said, not switched. */}
                                                 <p className={styles.headerCopy} data-testid="settings-colour-vision">
                                                     {SETTINGS_HINTS.colourVision}
@@ -576,30 +586,30 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     <ToggleRow
                                                         checked={draft.reduceMotion}
                                                         hint={SETTINGS_HINTS.reduceMotion}
-                                                        label="Reduce Motion"
+                                                        label={tr.s("Reduce Motion")}
                                                         onChange={(next) => patchSettings('reduceMotion', next)}
                                                     />
                                                     <SliderRow
                                                         disabled={draft.reduceMotion}
                                                         hint={SETTINGS_HINTS.screenShakeIntensity}
-                                                        label="Screen shake"
+                                                        label={tr.s("Screen shake")}
                                                         max={SETTINGS_NUMERIC_RANGES.screenShakeIntensity.max}
                                                         min={SETTINGS_NUMERIC_RANGES.screenShakeIntensity.min}
                                                         onChange={(next) => patchSettings('screenShakeIntensity', next)}
                                                         step={0.05}
                                                         value={draft.screenShakeIntensity}
-                                                        valueLabel={draft.reduceMotion ? 'Off' : `${Math.round(draft.screenShakeIntensity * 100)}%`}
+                                                        valueLabel={draft.reduceMotion ? tr.s('Off') : `${Math.round(draft.screenShakeIntensity * 100)}%`}
                                                     />
                                                     <ToggleRow
                                                         checked={draft.highContrast ?? false}
                                                         hint={SETTINGS_HINTS.highContrast}
-                                                        label="High Contrast"
+                                                        label={tr.s("High Contrast")}
                                                         onChange={(next) => patchSettings('highContrast', next)}
                                                     />
                                                     <ToggleRow
                                                         checked={draft.tileFocusAssist}
                                                         hint={SETTINGS_HINTS.tileFocusAssistRepeat}
-                                                        label="Board Focus Assist"
+                                                        label={tr.s("Board Focus Assist")}
                                                         onChange={(next) => patchSettings('tileFocusAssist', next)}
                                                     />
                                                 </div>
@@ -607,9 +617,9 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         ) : null}
 
                                         {activeCategory === 'dev' ? (
-                                            <SettingsSection title="Visual effects">
+                                            <SettingsSection title={tr.s("Visual effects")}>
                                                 <ToggleRow
-                                                    label="Combo pop effects"
+                                                    label={tr.s("Combo pop effects")}
                                                     hint={SETTINGS_HINTS.comboPopEffects}
                                                     checked={comboPopEffects}
                                                     onChange={setComboPopEffects}
@@ -618,15 +628,14 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         ) : null}
 
                                         {activeCategory === 'about' && showSubsection('build') ? (
-                                            <SettingsSection title="Memory Dungeon">
-                                                <p className={styles.headerCopy}>Version {packageJson.version}.</p>
+                                            <SettingsSection title={tr.s("Memory Dungeon")}>
+                                                <p className={styles.headerCopy}>{tr.s("Version")} {packageJson.version}.</p>
                                                 <p className={styles.headerCopy}>
-                                                    Nothing about how you play is sent anywhere. If you claim the world
-                                                    record, the name and score you enter go to the record board.
+                                                    {COMPONENT_PROSE.settingsScreenNothingAboutHowYou}
                                                 </p>
                                                 {!FEATURE_CLOUD_SAVE ? (
                                                     <p className={styles.headerCopy}>
-                                                        Saves stay on this device; there is no cloud sync in this build.
+                                                        {COMPONENT_PROSE.settingsScreenSavesStayOnThis}
                                                     </p>
                                                 ) : null}
                                                 {/*
@@ -675,6 +684,18 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         title={ABOUT_COPY.privacyHint}
                                                     >
                                                         {ABOUT_COPY.privacyLink}
+                                                    </a>
+                                                </p>
+                                                <p className={styles.headerCopy}>
+                                                    <a
+                                                        className={styles.word}
+                                                        data-testid="settings-report-problem"
+                                                        href={buildSupportMailto(currentSupportContext())}
+                                                        rel="noopener noreferrer"
+                                                        target="_blank"
+                                                        title={ABOUT_COPY.reportHint}
+                                                    >
+                                                        {ABOUT_COPY.reportLink}
                                                     </a>
                                                 </p>
                                                 <div className={styles.profileSummaryGrid} data-testid="settings-premium-economy-policy">
@@ -778,13 +799,12 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                         ) : null}
 
                                         {activeCategory === 'about' && showSubsection('reset') ? (
-                                            <SettingsSection title="Reset">
+                                            <SettingsSection title={tr.s("Reset")}>
                                                 <p className={styles.headerCopy}>
-                                                    Puts every setting back to its default. Your saves, profile level,
-                                                    history, honors and cosmetics are kept.
+                                                    {COMPONENT_PROSE.settingsScreenPutsEverySettingBack}
                                                 </p>
                                                 <button className={styles.word} onClick={handleResetToDefaults} type="button">
-                                                    Reset to defaults
+                                                    {tr.s("Reset to defaults")}
                                                 </button>
                                             </SettingsSection>
                                         ) : null}
@@ -811,13 +831,13 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                             actionClassName={styles.footerWord}
                                             actions={[
                                                 {
-                                                    label: 'Back',
+                                                    label: tr.s('Back'),
                                                     onClick: handleBack,
                                                     variant: 'secondary'
                                                 },
                                                 {
                                                     disabled: !isDirty,
-                                                    label: 'Save',
+                                                    label: tr.s('Save'),
                                                     onClick: handleSave,
                                                     variant: 'primary'
                                                 }
@@ -898,7 +918,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                 <OverlayModal
                     actions={[
                         {
-                            label: 'Save',
+                            label: tr.s('Save'),
                             onClick: () => {
                                 playUiConfirm();
                                 runPersistenceInBackground(() => updateSettings(draft));
@@ -908,7 +928,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                             variant: 'primary'
                         },
                         {
-                            label: 'Discard',
+                            label: tr.s('Discard'),
                             onClick: () => {
                                 playUiBack();
                                 setUnsavedBackOpen(false);
@@ -917,7 +937,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                             variant: 'danger'
                         },
                         {
-                            label: 'Cancel',
+                            label: tr.s('Cancel'),
                             onClick: () => {
                                 playUiBack();
                                 setUnsavedBackOpen(false);
@@ -931,7 +951,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                     }}
                     subtitle={SETTINGS_FOOTER_HINT}
                     testId="settings-unsaved-back-modal"
-                    title="Unsaved settings"
+                    title={tr.s("Unsaved settings")}
                 />
             ) : null}
         </>

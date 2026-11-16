@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { useEffect, useMemo, useState, type ReactNode } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import {
@@ -141,18 +142,18 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
 
     const sections = useMemo((): CodexSection[] => {
         const entriesById: Record<string, { kicker: string; entries: readonly CodexEntry[] }> = {
-            core: { kicker: 'Core system', entries: CODEX_CORE_TOPICS },
-            powers: { kicker: 'Power', entries: ENCYCLOPEDIA_POWER_TOPICS },
-            scoring: { kicker: 'Scoring', entries: ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS },
-            settings: { kicker: 'Assist', entries: ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS },
-            pickups: { kicker: 'Board', entries: ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS },
-            traits: { kicker: 'Trait', entries: [...getTileTraitCodexRows(), ...getTileTraitInteractionCodexRows()] },
-            residents: { kicker: 'Resident', entries: buildCodexResidentRows() },
-            contracts: { kicker: 'Contract', entries: ENCYCLOPEDIA_CONTRACT_TOPICS },
-            'featured-runs': { kicker: 'Featured run', entries: ENCYCLOPEDIA_FEATURED_RUN_TOPICS },
-            modes: { kicker: 'Mode', entries: buildCodexModeRows() },
-            achievements: { kicker: 'Achievement', entries: ACHIEVEMENTS },
-            mutators: { kicker: 'Mutator', entries: buildCodexMutatorRows() }
+            core: { kicker: tr.s('Core system'), entries: CODEX_CORE_TOPICS },
+            powers: { kicker: tr.s('Power'), entries: ENCYCLOPEDIA_POWER_TOPICS },
+            scoring: { kicker: tr.s('Scoring'), entries: ENCYCLOPEDIA_SCORING_AND_SURVIVAL_TOPICS },
+            settings: { kicker: tr.s('Assist'), entries: ENCYCLOPEDIA_SETTINGS_AND_ASSISTS_TOPICS },
+            pickups: { kicker: tr.s('Board'), entries: ENCYCLOPEDIA_PICKUP_AND_BOARD_TOPICS },
+            traits: { kicker: tr.s('Trait'), entries: [...getTileTraitCodexRows(), ...getTileTraitInteractionCodexRows()] },
+            residents: { kicker: tr.s('Resident'), entries: buildCodexResidentRows() },
+            contracts: { kicker: tr.s('Contract'), entries: ENCYCLOPEDIA_CONTRACT_TOPICS },
+            'featured-runs': { kicker: tr.s('Featured run'), entries: ENCYCLOPEDIA_FEATURED_RUN_TOPICS },
+            modes: { kicker: tr.s('Mode'), entries: buildCodexModeRows() },
+            achievements: { kicker: tr.s('Achievement'), entries: ACHIEVEMENTS },
+            mutators: { kicker: tr.s('Mutator'), entries: buildCodexMutatorRows() }
         };
         return CODEX_TOC.map((item) => {
             const id = sectionIdFromHref(item.href);
@@ -182,7 +183,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
         <MetaShell
             className={stackedOnGameplay ? styles.codexInRunShell : undefined}
             eyebrow="Reference"
-            label="Codex"
+            label={tr.s("Codex")}
             onBack={() => {
                 resumeUiSfxContext();
                 playUiBackSfx(uiGain);
@@ -194,14 +195,14 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                 isDemoBuild() ? CODEX_SCREEN_COPY.demoSubtitle : CODEX_SCREEN_COPY.subtitle(ENCYCLOPEDIA_VERSION)
             }
             testId="codex-screen"
-            title="Codex"
+            title={tr.s("Codex")}
             toolbar={
                 <>
                     <SectionRail
                         activeId={activeSectionId}
                         controls="codex-entries"
                         idPrefix="codex-tab"
-                        label="Codex sections"
+                        label={tr.s("Codex sections")}
                         onSelect={(id) => {
                             playUiClick();
                             setActiveSectionId(id);
@@ -215,7 +216,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                         }))}
                     />
                     <label className={styles.filter}>
-                        <span className={styles.srOnly}>Filter topics</span>
+                        <span className={styles.srOnly}>{tr.s("Filter topics")}</span>
                         <input
                             aria-controls="codex-entries"
                             autoComplete="off"
@@ -225,7 +226,7 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                                 setFilterQuery(e.target.value);
                                 setOpenEntryKey(null);
                             }}
-                            placeholder="Filter every section…"
+                            placeholder={tr.s("Filter every section…")}
                             type="search"
                             value={filterQuery}
                         />
@@ -252,12 +253,12 @@ const CodexScreen = ({ stackedOnGameplay = false }: CodexScreenProps) => {
                         type="button"
                         variant="secondary"
                     >
-                        Back to {openEntry.section.label}
+                        {tr.s("Back to")} {openEntry.section.label}
                     </UiButton>
                 </article>
             ) : (
                 <FittedGrid
-                    ariaLabel={filtering ? `Entries matching ${debouncedFilterQuery.trim()}` : activeSection.label}
+                    ariaLabel={filtering ? tr`Entries matching ${debouncedFilterQuery.trim()}` : activeSection.label}
                     emptyState={`${filterEmptyCopy.message} ${filterEmptyCopy.actionLabel}.`}
                     items={visible}
                     itemNoun="entries"

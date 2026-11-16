@@ -1,3 +1,5 @@
+import { COMPONENT_PROSE } from '../copy/componentProse';
+import { plural, tr } from '../../shared/i18n';
 import { useEffect, useId, useRef, type CSSProperties, type ReactElement, type ReactNode } from 'react';
 import type { RealmDoor, RealmId } from '../../shared/contracts';
 import { ARENA_ACTION } from '../copy/elementClarity';
@@ -110,29 +112,29 @@ const RealmTravel = ({ attunement, doors, endedIn, floorsIn, onChoose, summary, 
                                     {REALM_TRAVEL_COPY.depthWarning(door, attunement[door.realmId] ?? 0)}
                                 </span>
                             ) : null}
-                            <span className={styles.sectionLabel}>Clear reward</span>
+                            <span className={styles.sectionLabel}>{tr.s("Clear reward")}</span>
                             <span className={styles.severity} data-severity={door.severity}>
                                 {REALM_TRAVEL_COPY.severityLine(door)}
                             </span>
                             {bossReward ? (
                                 <>
-                                    <span className={styles.sectionLabel}>Boss reward</span>
+                                    <span className={styles.sectionLabel}>{tr.s("Boss reward")}</span>
                                     <span className={styles.severity} data-severity={door.severity} data-testid={`realm-door-${index}-boss-reward`}>
                                         {bossReward(door)}
                                     </span>
                                 </>
                             ) : null}
-                            <span className={styles.sectionLabel}>Weather</span>
+                            <span className={styles.sectionLabel}>{tr.s("Weather")}</span>
                             <span className={styles.weather}>{REALM_TRAVEL_COPY.weatherLine(door)}</span>
                             <span className={styles.rules} id={`realm-choice-${index}`}>
-                                <span className={styles.sectionLabel}>Your matches change the arena</span>
+                                <span className={styles.sectionLabel}>{COMPONENT_PROSE.realmTravelYourMatchesChangeThe}</span>
                                 <span className={styles.rule}>{ARENA_ACTION[door.realmId]}</span>
                                 {door.confluence ? <span className={styles.rule}>{ARENA_ACTION[door.confluence]}</span> : null}
                                 {REALM_TRAVEL_COPY.risk(door, attunement[door.realmId] ?? 0) ? <span className={styles.rule}>{REALM_TRAVEL_COPY.risk(door, attunement[door.realmId] ?? 0)}</span> : null}
                             </span>
-                            <span className={styles.enter}>Enter {realm.title} <span aria-hidden="true">→</span></span>
+                            <span className={styles.enter}>{tr.s("Enter")} {realm.title} <span aria-hidden="true">→</span></span>
                             {/* Always a line, so every door's Enter sits at the same height (the playtest's travel shot, 2026-11-13). */}
-                            <span className={styles.been}>{been > 0 ? `${been} ${been === 1 ? 'floor' : 'floors'} here this run` : 'Not visited yet this run'}</span>
+                            <span className={styles.been}>{been > 0 ? tr`${plural(been, { one: '{0} floor', other: '{0} floors' })} here this run` : tr.s('Not visited yet this run')}</span>
                         </button>
                     );
                 })}

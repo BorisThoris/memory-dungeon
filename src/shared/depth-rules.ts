@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RunState } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -44,26 +45,26 @@ export interface DepthRung {
 }
 
 export const DEPTH_RUNGS: readonly DepthRung[] = [
-    { depth: 1, id: 'short_study', name: 'Short study', line: 'The study window is a quarter shorter.' },
-    { depth: 2, id: 'no_misses_sold', name: 'No misses sold', line: 'The store sells no misses.' },
-    { depth: 3, id: 'two_to_open', name: 'Two to open', line: 'The miss bank opens with two misses, not three.' },
-    { depth: 4, id: 'no_calm_door', name: 'No calm door', line: 'Before an act boss, no door is calm.' },
-    { depth: 5, id: 'bank_cap_down', name: 'A smaller bank', line: 'The miss bank holds one fewer.' },
-    { depth: 6, id: 'dearer_store', name: 'Dearer camp', line: 'Everything at the store costs a quarter more.' },
-    { depth: 7, id: 'wanderers_early', name: 'Early Wanderers', line: 'Wanderers walk from floor 7, not 13.' },
-    { depth: 8, id: 'keeper_fast', name: 'A restless Keeper', line: 'The Keeper of Halls swaps its rooms every third turn.' },
-    { depth: 9, id: 'cartographer_fast', name: 'A restless Cartographer', line: 'The Cartographer turns its lower deck every second match.' },
-    { depth: 10, id: 'warden_fast', name: 'A restless Warden', line: 'The Warden deals the face-down cards again every fourth turn.' },
-    { depth: 11, id: 'masks_early', name: 'Early masks', line: 'Masks are worn from floor 13, not 25.' },
-    { depth: 12, id: 'sleepers_early', name: 'Early Sleepers', line: 'Sleepers sleep from floor 25, not 41.' },
-    { depth: 13, id: 'hold_seven', name: 'A deeper Hold', line: 'The Hold arms at seven links, not six.' },
-    { depth: 14, id: 'carve_three', name: 'A dearer Carve', line: 'A carve costs three links, not two.' },
-    { depth: 15, id: 'no_shuffle_start', name: 'No shuffle', line: 'The run starts with no shuffle charge.' },
-    { depth: 16, id: 'sleepers_three', name: 'More Sleepers', line: 'Three pairs a floor sleep.' },
-    { depth: 17, id: 'masks_three', name: 'More masks', line: 'Three cards a floor wear masks.' },
-    { depth: 18, id: 'learned_early', name: 'It learns sooner', line: 'The dungeon learns you from floor 25, not 41.' },
-    { depth: 19, id: 'wanderers_three', name: 'More Wanderers', line: 'Three Wanderers walk on every floor that has any.' },
-    { depth: 20, id: 'warden_always', name: 'The Warden complete', line: 'Behind every door, the Warden falls only to a Hold of twelve.' }
+    { depth: 1, id: 'short_study', name: tr.s('Short study'), line: tr.s('The study window is a quarter shorter.') },
+    { depth: 2, id: 'no_misses_sold', name: tr.s('No misses sold'), line: tr.s('The store sells no misses.') },
+    { depth: 3, id: 'two_to_open', name: tr.s('Two to open'), line: tr.s('The miss bank opens with two misses, not three.') },
+    { depth: 4, id: 'no_calm_door', name: tr.s('No calm door'), line: tr.s('Before an act boss, no door is calm.') },
+    { depth: 5, id: 'bank_cap_down', name: tr.s('A smaller bank'), line: tr.s('The miss bank holds one fewer.') },
+    { depth: 6, id: 'dearer_store', name: tr.s('Dearer camp'), line: tr.s('Everything at the store costs a quarter more.') },
+    { depth: 7, id: 'wanderers_early', name: tr.s('Early Wanderers'), line: tr.s('Wanderers walk from floor 7, not 13.') },
+    { depth: 8, id: 'keeper_fast', name: tr.s('A restless Keeper'), line: tr.s('The Keeper of Halls swaps its rooms every third turn.') },
+    { depth: 9, id: 'cartographer_fast', name: tr.s('A restless Cartographer'), line: tr.s('The Cartographer turns its lower deck every second match.') },
+    { depth: 10, id: 'warden_fast', name: tr.s('A restless Warden'), line: tr.s('The Warden deals the face-down cards again every fourth turn.') },
+    { depth: 11, id: 'masks_early', name: tr.s('Early masks'), line: tr.s('Masks are worn from floor 13, not 25.') },
+    { depth: 12, id: 'sleepers_early', name: tr.s('Early Sleepers'), line: tr.s('Sleepers sleep from floor 25, not 41.') },
+    { depth: 13, id: 'hold_seven', name: tr.s('A deeper Hold'), line: tr.s('The Hold arms at seven links, not six.') },
+    { depth: 14, id: 'carve_three', name: tr.s('A dearer Carve'), line: tr.s('A carve costs three links, not two.') },
+    { depth: 15, id: 'no_shuffle_start', name: tr.s('No shuffle'), line: tr.s('The run starts with no shuffle charge.') },
+    { depth: 16, id: 'sleepers_three', name: tr.s('More Sleepers'), line: tr.s('Three pairs a floor sleep.') },
+    { depth: 17, id: 'masks_three', name: tr.s('More masks'), line: tr.s('Three cards a floor wear masks.') },
+    { depth: 18, id: 'learned_early', name: tr.s('It learns sooner'), line: tr.s('The dungeon learns you from floor 25, not 41.') },
+    { depth: 19, id: 'wanderers_three', name: tr.s('More Wanderers'), line: tr.s('Three Wanderers walk on every floor that has any.') },
+    { depth: 20, id: 'warden_always', name: tr.s('The Warden complete'), line: tr.s('Behind every door, the Warden falls only to a Hold of twelve.') }
 ];
 
 export const MAX_DEPTH = DEPTH_RUNGS.length;

@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 /**
  * What the lantern says when it lights.
  *
@@ -9,5 +10,5 @@ const COUNT_WORDS = ['one', 'two', 'three'] as const;
 export const lanternLitAnnouncement = (count: number): string => {
     const n = Math.max(1, Math.floor(count));
     const word = COUNT_WORDS[n - 1] ?? String(n);
-    return `The lantern lit ${word} ${n === 1 ? 'card' : 'cards'} beside the pair, until you turn the next one.`;
+    return tr`The lantern lit ${word} ${n === 1 ? tr.s('card') : tr.s('cards')} beside the pair, until you turn the next one.`;
 };

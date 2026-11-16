@@ -3,6 +3,7 @@
  *
  * Symbol band floor thresholds and balance process: `docs/BALANCE_NOTES.md` (section *Symbol band thresholds*).
  */
+import { tr } from './i18n';
 import { runNonNegativeInteger } from './run-number-guards';
 
 /** Inclusive last floor level for the numeric (two-digit rank) symbol band. See `docs/BALANCE_NOTES.md`. */
@@ -68,36 +69,36 @@ export const NUMBER_SYMBOLS: TileSymbolEntry[] = Array.from({ length: 30 }, (_va
 });
 
 export const CALLSIGN_SYMBOLS: TileSymbolEntry[] = [
-    ['AL', 'Alder'],
-    ['BR', 'Briar'],
-    ['CR', 'Crown'],
-    ['DK', 'Dusk'],
-    ['EL', 'Ember'],
-    ['FL', 'Flare'],
-    ['GL', 'Gale'],
-    ['HR', 'Harbor'],
-    ['IV', 'Ivory'],
-    ['JN', 'Juniper'],
-    ['KT', 'Kestrel'],
-    ['LN', 'Lantern'],
-    ['MR', 'Meteor'],
-    ['NV', 'Nova'],
-    ['OR', 'Oracle'],
-    ['PR', 'Prism'],
-    ['QT', 'Quartz'],
-    ['RV', 'Raven'],
-    ['SL', 'Signal'],
-    ['TR', 'Torrent'],
-    ['UL', 'Umber'],
-    ['VL', 'Velvet'],
-    ['WR', 'Whisper'],
-    ['XR', 'Xylo'],
-    ['YS', 'Yonder'],
-    ['ZT', 'Zephyr'],
-    ['C1', 'Cipher'],
-    ['D2', 'Drift'],
-    ['E3', 'Echo'],
-    ['F4', 'Fathom']
+    ['AL', tr.s('Alder')],
+    ['BR', tr.s('Briar')],
+    ['CR', tr.s('Crown')],
+    ['DK', tr.s('Dusk')],
+    ['EL', tr.s('Ember')],
+    ['FL', tr.s('Flare')],
+    ['GL', tr.s('Gale')],
+    ['HR', tr.s('Harbor')],
+    ['IV', tr.s('Ivory')],
+    ['JN', tr.s('Juniper')],
+    ['KT', tr.s('Kestrel')],
+    ['LN', tr.s('Lantern')],
+    ['MR', tr.s('Meteor')],
+    ['NV', tr.s('Nova')],
+    ['OR', tr.s('Oracle')],
+    ['PR', tr.s('Prism')],
+    ['QT', tr.s('Quartz')],
+    ['RV', tr.s('Raven')],
+    ['SL', tr.s('Signal')],
+    ['TR', tr.s('Torrent')],
+    ['UL', tr.s('Umber')],
+    ['VL', tr.s('Velvet')],
+    ['WR', tr.s('Whisper')],
+    ['XR', tr.s('Xylo')],
+    ['YS', tr.s('Yonder')],
+    ['ZT', tr.s('Zephyr')],
+    ['C1', tr.s('Cipher')],
+    ['D2', tr.s('Drift')],
+    ['E3', tr.s('Echo')],
+    ['F4', tr.s('Fathom')]
 ].map(([symbol, label]) => ({ symbol, label }));
 
 /**
@@ -139,32 +140,32 @@ export const getSymbolSetForLevel = (level: number): readonly TileSymbolEntry[] 
 export const SYMBOL_BAND_READABILITY_PROFILES: readonly SymbolBandReadabilityProfile[] = [
     {
         id: 'numeric',
-        title: 'Numeric ranks',
+        title: tr.s('Numeric ranks'),
         levelRange: `1-${SYMBOL_BAND_LAST_LEVEL_NUMERIC}`,
         difficulty: 'early_readable',
-        purpose: 'Low-language, high-contrast two-digit ranks for early floors and mobile tile sizes.',
-        mobileReadability: 'Two glyphs, numeric silhouette, short label; intended to remain legible on small boards.',
-        distractorPolicy: 'Dense but ordered; avoid single-digit O/0 or I/1 ambiguity by padding to two digits.',
+        purpose: tr.s('Low-language, high-contrast two-digit ranks for early floors and mobile tile sizes.'),
+        mobileReadability: tr.s('Two glyphs, numeric silhouette, short label; intended to remain legible on small boards.'),
+        distractorPolicy: tr.s('Dense but ordered; avoid single-digit O/0 or I/1 ambiguity by padding to two digits.'),
         maxRecommendedLabelLength: 2
     },
     {
         id: 'letter_hybrid',
-        title: 'Letter / digit hybrid',
+        title: tr.s('Letter / digit hybrid'),
         levelRange: `${SYMBOL_BAND_LAST_LEVEL_NUMERIC + 1}-${SYMBOL_BAND_LAST_LEVEL_LETTER}`,
         difficulty: 'mid_discrimination',
-        purpose: 'Step-up band that mixes letters and a few digits before callsign labels arrive.',
-        mobileReadability: 'Single glyph label keeps tile faces large; confusable glyphs are known pressure, not color-only.',
-        distractorPolicy: 'Contains intentional letter/digit distractors by design; this band is what floors 9-16 deal.',
+        purpose: tr.s('Step-up band that mixes letters and a few digits before callsign labels arrive.'),
+        mobileReadability: tr.s('Single glyph label keeps tile faces large; confusable glyphs are known pressure, not color-only.'),
+        distractorPolicy: tr.s('Contains intentional letter/digit distractors by design; this band is what floors 9-16 deal.'),
         maxRecommendedLabelLength: 1
     },
     {
         id: 'callsign',
-        title: 'Callsign pairs',
+        title: tr.s('Callsign pairs'),
         levelRange: `${SYMBOL_BAND_LAST_LEVEL_LETTER + 1}+`,
         difficulty: 'late_callsign',
-        purpose: 'Late-run semantic labels add memory load without increasing pair count alone.',
-        mobileReadability: 'Two-character symbol plus short word label; labels should stay compact and pronounceable.',
-        distractorPolicy: 'Avoid same-prefix words with identical silhouette when adding new callsigns.',
+        purpose: tr.s('Late-run semantic labels add memory load without increasing pair count alone.'),
+        mobileReadability: tr.s('Two-character symbol plus short word label; labels should stay compact and pronounceable.'),
+        distractorPolicy: tr.s('Avoid same-prefix words with identical silhouette when adding new callsigns.'),
         maxRecommendedLabelLength: 8
     }
 ];
@@ -208,7 +209,7 @@ export const auditSymbolBandReadability = (): SymbolBandReadabilityIssue[] => {
             issues.push({
                 bandId,
                 severity: 'error',
-                message: 'Duplicate symbols would make pair identity ambiguous.',
+                message: tr.s('Duplicate symbols would make pair identity ambiguous.'),
                 symbols: duplicateSymbols
             });
         }
@@ -217,7 +218,7 @@ export const auditSymbolBandReadability = (): SymbolBandReadabilityIssue[] => {
             issues.push({
                 bandId,
                 severity: 'error',
-                message: 'Duplicate labels would break screen-reader and memory identity.',
+                message: tr.s('Duplicate labels would break screen-reader and memory identity.'),
                 symbols: duplicateLabels
             });
         }
@@ -228,7 +229,7 @@ export const auditSymbolBandReadability = (): SymbolBandReadabilityIssue[] => {
             issues.push({
                 bandId,
                 severity: 'warning',
-                message: `Labels exceed recommended length ${profile.maxRecommendedLabelLength} for this band.`,
+                message: tr`Labels exceed recommended length ${profile.maxRecommendedLabelLength} for this band.`,
                 symbols: longLabels
             });
         }
@@ -238,7 +239,7 @@ export const auditSymbolBandReadability = (): SymbolBandReadabilityIssue[] => {
                 issues.push({
                     bandId,
                     severity: 'warning',
-                    message: 'Potentially confusable glyphs are present; keep this band intentionally placed and documented.',
+                    message: tr.s('Potentially confusable glyphs are present; keep this band intentionally placed and documented.'),
                     symbols: present
                 });
             }

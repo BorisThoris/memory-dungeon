@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import { isModeAvailableInBuild } from './content-lock-state';
 import { PASS_AND_PLAY_FLOORS } from './pass-and-play-rules';
 /**
@@ -51,21 +52,21 @@ export interface RunModeDefinition {
 export const RUN_MODE_GROUP_ORDER: readonly RunModeGroup[] = ['core'] as const;
 
 export const RUN_MODE_GROUP_LABEL: Record<RunModeGroup, string> = {
-    core: 'Core modes'
+    core: tr.s('Core modes')
 };
 
 export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
     {
         id: 'classic',
-        title: 'Classic Run',
-        shortDescription: 'The endless descent: procedural floors of suits and clumps, the chain and Fever, and pair counts that keep climbing.',
+        title: tr.s('Classic Run'),
+        shortDescription: tr.s('The endless descent: procedural floors of suits and clumps, the chain and Fever, and pair counts that keep climbing.'),
         startContract: {
-            label: 'Start signal',
-            signal: 'The pause menu names the run Classic Dungeon.',
+            label: tr.s('Start signal'),
+            signal: tr.s('The pause menu names the run Classic Dungeon.'),
             testId: 'pause-run-identity'
         },
         availabilityDetail:
-            'This is the live long-run ruleset for v1. It uses the internal endless simulation but is branded Classic until the future ultra-long Endless variant ships.',
+            tr.s('This is the live long-run ruleset for v1. It uses the internal endless simulation but is branded Classic until the future ultra-long Endless variant ships.'),
         group: 'core',
         availability: 'available',
         posterKey: 'classic',
@@ -73,22 +74,22 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
     },
     {
         id: 'pass_and_play',
-        title: 'Pass and Play',
+        title: tr.s('Pass and Play'),
         shortDescription:
-            `Two to four people, one device, ${PASS_AND_PLAY_FLOORS} floors. Find a pair and you go again; miss and it is the next player\u2019s turn.`,
+            tr`Two to four people, one device, ${PASS_AND_PLAY_FLOORS} floors. Find a pair and you go again; miss and it is the next player\u2019s turn.`,
         startContract: {
-            label: 'Start signal',
-            signal: 'The HUD shows a score per player and says whose turn it is.',
+            label: tr.s('Start signal'),
+            signal: tr.s('The HUD shows a score per player and says whose turn it is.'),
             testId: 'hud-pass-and-play'
         },
-        identityTag: 'Same device',
+        identityTag: tr.s('Same device'),
         promise:
-            'The dungeon everyone already knows, played around one screen \u2014 the rule is the one every table already knows.',
+            tr.s('The dungeon everyone already knows, played around one screen \u2014 the rule is the one every table already knows.'),
         eligibilityNote:
-            'A shared game does not set your personal best or write a run to your history: the score on screen belongs to the table, not to this save.',
-        outcomeSummary: `Everyone plays the same ${PASS_AND_PLAY_FLOORS} floors; the higher score wins, and a draw is reported as a draw.`,
+            tr.s('A shared game does not set your personal best or write a run to your history: the score on screen belongs to the table, not to this save.'),
+        outcomeSummary: tr`Everyone plays the same ${PASS_AND_PLAY_FLOORS} floors; the higher score wins, and a draw is reported as a draw.`,
         availabilityDetail:
-            'Offline and local. It needs no account, no second device, and nothing online \u2014 the same board, taking turns.',
+            tr.s('Offline and local. It needs no account, no second device, and nothing online \u2014 the same board, taking turns.'),
         group: 'core',
         availability: 'available',
         posterKey: 'pass_and_play',
@@ -100,7 +101,7 @@ export const RUN_MODE_CATALOG: readonly RunModeDefinition[] = [
 /** A catalog mode as this build flavour ships it: locked modes stay visible and say why. */
 export const applyContentLockToRunMode = (mode: RunModeDefinition): RunModeDefinition =>
     mode.availability === 'available' && !isModeAvailableInBuild(mode.id)
-        ? { ...mode, availability: 'locked', availabilityDetail: 'In the full game.' }
+        ? { ...mode, availability: 'locked', availabilityDetail: tr.s('In the full game.') }
         : mode;
 
 /** The catalog as the active build flavour ships it. Read modes through this, not RUN_MODE_CATALOG. */

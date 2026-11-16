@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import { FINDABLE_KIND_SPAWN_WEIGHTS, FINDABLE_MATCH_SCORE, type FindableKind } from './contracts';
 
 export interface FindableRewardRow {
@@ -15,22 +16,22 @@ const FINDABLE_REWARD_ROW_ORDER = ['score_glint', 'meteor_shard', 'curio'] as co
 
 const FINDABLE_REWARD_ROW_BY_KIND = {
     curio: {
-        kind: 'curio', label: 'Curio', marker: 'Violet keyhole corner glyph',
-        rewardText: 'a curio item in your hand', claimRule: 'Match the carrier pair; the item waits in the dock until you use it.',
-        breakRule: 'A break that takes the carrier smashes the curio; nothing is kept.'
+        kind: 'curio', label: tr.s('Curio'), marker: tr.s('Violet keyhole corner glyph'),
+        rewardText: tr.s('a curio item in your hand'), claimRule: tr.s('Match the carrier pair; the item waits in the dock until you use it.'),
+        breakRule: tr.s('A break that takes the carrier smashes the curio; nothing is kept.')
     },
     meteor_shard: {
-        kind: 'meteor_shard', label: 'Meteor shard', marker: 'Amber meteor corner glyph',
-        rewardText: '+1 meteor in your inventory', claimRule: 'Match the carrier pair, then call the meteor yourself.',
-        breakRule: 'Destroyed shards are lost; meteors never refill themselves.'
+        kind: 'meteor_shard', label: tr.s('Meteor shard'), marker: tr.s('Amber meteor corner glyph'),
+        rewardText: tr.s('+1 meteor in your inventory'), claimRule: tr.s('Match the carrier pair, then call the meteor yourself.'),
+        breakRule: tr.s('Destroyed shards are lost; meteors never refill themselves.')
     },
     score_glint: {
         kind: 'score_glint',
-        label: 'Score glint',
-        marker: 'Cyan ring corner glyph',
-        rewardText: `+${FINDABLE_MATCH_SCORE.score_glint} score`,
-        claimRule: 'Match the carrier pair.',
-        breakRule: 'A break that takes the carrier spills the glint and pays it anyway.'
+        label: tr.s('Score glint'),
+        marker: tr.s('Cyan ring corner glyph'),
+        rewardText: tr`+${FINDABLE_MATCH_SCORE.score_glint} score`,
+        claimRule: tr.s('Match the carrier pair.'),
+        breakRule: tr.s('A break that takes the carrier spills the glint and pays it anyway.')
     }
 } as const satisfies Record<FindableKind, FindableRewardRow>;
 
@@ -45,7 +46,7 @@ export const getFindableKindLabel = (kind: FindableKind): string => getFindableR
 export const getFindableRewardCopy = (kind: FindableKind): string => getFindableRewardRow(kind).rewardText;
 
 export const getFindableRewardText = (kind: FindableKind): string =>
-    `${getFindableKindLabel(kind)} pickup: ${getFindableRewardRow(kind).rewardText}.`;
+    tr`${getFindableKindLabel(kind)} pickup: ${getFindableRewardRow(kind).rewardText}.`;
 
 export const getFindableRows = () =>
     FINDABLE_REWARD_ROWS.map((row) => ({

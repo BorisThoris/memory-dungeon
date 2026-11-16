@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RunHistoryRecord, RunState, SaveData, RunSummary } from './contracts';
 import { describeRunModeIdentity } from './run-mode-identity';
 import { describeRunShareKey, encodeRunShareKey } from './run-share-key';
@@ -99,12 +100,12 @@ export const describeRematchComparison = (run: RunState, history: readonly RunHi
     const previous = history.find(record => record.shareKey != null && record.shareKey === current.shareKey);
     if (!previous) return null;
     const delta = (value: number) => value > 0 ? `+${value}` : String(value);
-    const rows = [`floor ${previous.highestLevel} → ${current.highestLevel}`];
-    if (previous.missesSpent !== undefined) rows.push(`misses spent ${previous.missesSpent} → ${current.missesSpent}`);
+    const rows = [tr`floor ${previous.highestLevel} → ${current.highestLevel}`];
+    if (previous.missesSpent !== undefined) rows.push(tr`misses spent ${previous.missesSpent} → ${current.missesSpent}`);
     const previousPace = previous.clearedTurnsRelativeToPar;
     const currentPace = current.clearedTurnsRelativeToPar;
-    rows.push(`cleared turns vs par ${previousPace === undefined ? 'unavailable' : delta(previousPace)} → ${currentPace === undefined ? 'unavailable' : delta(currentPace)}`);
-    if (previous.strongestReaction !== undefined) rows.push(`reaction ×${previous.strongestReaction} → ×${current.strongestReaction}`);
-    if (previous.bestChain !== undefined) rows.push(`chain ${previous.bestChain} → ${current.bestChain ?? 0}`);
-    return `Previous attempt → this attempt: ${rows.join(' · ')}.`;
+    rows.push(tr`cleared turns vs par ${previousPace === undefined ? 'unavailable' : delta(previousPace)} → ${currentPace === undefined ? 'unavailable' : delta(currentPace)}`);
+    if (previous.strongestReaction !== undefined) rows.push(tr`reaction ×${previous.strongestReaction} → ×${current.strongestReaction}`);
+    if (previous.bestChain !== undefined) rows.push(tr`chain ${previous.bestChain} → ${current.bestChain ?? 0}`);
+    return tr`Previous attempt → this attempt: ${rows.join(' · ')}.`;
 };

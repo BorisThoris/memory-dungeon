@@ -1,3 +1,4 @@
+import { plural, tr } from './i18n';
 import { getSafeBoardColumns } from './board-grid-dimensions';
 import type { RunState } from './contracts';
 import { runStringArray } from './run-array-guards';
@@ -87,7 +88,7 @@ export const getHeldPairSpan = (run: Pick<RunState, 'board' | 'pinnedTileIds'>):
 export const describeHeldPair = (run: Pick<RunState, 'board' | 'pinnedTileIds'>, maxPins: number): string => {
     const span = getHeldPairSpan(run);
     if (span == null) {
-        return `Pin up to ${maxPins} tiles`;
+        return tr`Pin up to ${maxPins} tiles`;
     }
-    return `Holding a pair, ${span} ${span === 1 ? 'step' : 'steps'} apart. A third pin lets it go.`;
+    return tr`Holding a pair, ${plural(span, { one: '{0} step', other: '{0} steps' })} apart. A third pin lets it go.`;
 };

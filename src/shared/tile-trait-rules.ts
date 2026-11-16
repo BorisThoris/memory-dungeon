@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import { type BoardState, type RunState, type Tile, type TileTraitKind } from './contracts';
 import {
     createGameplayDefinitionCommand,
@@ -35,24 +36,24 @@ import { boardTileIndex, getBoardReadIndex } from './board-read-index';
  */
 export const TILE_TRAIT_COPY: Record<TileTraitKind, { label: string; match: string; mismatch: string }> = {
     echo: {
-        label: 'Echo',
-        match: 'Clean match grants +1 peek charge.',
-        mismatch: 'No extra miss penalty.'
+        label: tr.s('Echo'),
+        match: tr.s('Clean match grants +1 peek charge.'),
+        mismatch: tr.s('No extra miss penalty.')
     },
     heavy: {
-        label: 'Heavy',
-        match: 'Clean match grants +35 score.',
-        mismatch: 'A miss costs one more from the bank.'
+        label: tr.s('Heavy'),
+        match: tr.s('Clean match grants +35 score.'),
+        mismatch: tr.s('A miss costs one more from the bank.')
     },
     conduit: {
-        label: 'Conduit',
-        match: 'Clean match converts nearby traits into score; adjacent Echo adds a peek charge, adjacent Stasis a lock pulse.',
-        mismatch: 'No extra miss penalty.'
+        label: tr.s('Conduit'),
+        match: tr.s('Clean match converts nearby traits into score; adjacent Echo adds a peek charge, adjacent Stasis a lock pulse.'),
+        mismatch: tr.s('No extra miss penalty.')
     },
     stasis: {
-        label: 'Stasis',
-        match: 'Clean match locks a nearby trait tile from being opened first next turn when completion remains safe.',
-        mismatch: 'No extra miss penalty.'
+        label: tr.s('Stasis'),
+        match: tr.s('Clean match locks a nearby trait tile from being opened first next turn when completion remains safe.'),
+        mismatch: tr.s('No extra miss penalty.')
     }
 };
 
@@ -393,7 +394,7 @@ export const getTileTraitText = (tile: Tile): string => {
     const copy = TILE_TRAIT_COPY[tile.tileTraitKind];
     // The mark is said out loud too: a screen reader gets the same second channel the board draws.
     const mark = describeTraitMark(tileTraitMark(tile.tileTraitKind));
-    return ` Trait: ${copy.label} (${mark}). ${copy.match} ${copy.mismatch}`;
+    return tr` Trait: ${copy.label} (${mark}). ${copy.match} ${copy.mismatch}`;
 };
 
 export const tileTraitKindsInTiles = (

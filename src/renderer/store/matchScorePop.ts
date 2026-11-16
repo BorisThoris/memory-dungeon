@@ -1,3 +1,4 @@
+import { englishOf } from '../../shared/i18n';
 import { formatTileTraitInteractionTags } from '../../shared/tile-trait-rules';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import type { BoardTurnAnnouncementFacts } from '../../shared/board-turn-event-facts';
@@ -134,7 +135,7 @@ export const BOARD_FLOATER_POP_CLEAR = {
 
 const matchScoreChainDepth = (chainDepth: number): number => Math.max(1, runNonNegativeInteger(chainDepth));
 
-const isRewardPerkInteractionText = (text: string): boolean => text.startsWith('Perk pop: ');
+const isRewardPerkInteractionText = (text: string): boolean => englishOf(text).startsWith('Perk pop: ');
 
 const isRewardPerkOnlyTraitBurst = (traitInteractionTexts: readonly string[]): boolean =>
     traitInteractionTexts.length > 0 && traitInteractionTexts.every(isRewardPerkInteractionText);

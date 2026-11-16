@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { FusionId, RelicId, RunState, TileSuit } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 
@@ -50,14 +51,14 @@ export interface SnowballRelicDefinition {
 }
 
 export const SNOWBALL_RELICS: readonly SnowballRelicDefinition[] = [
-    { id: 'cinder_heart', title: 'Cinder Heart', body: `Every Ember match this run adds ${pct(HEART_STEP)} to the score of every match.`, price: 9 },
-    { id: 'tide_heart', title: 'Tide Heart', body: `Every Tide match this run adds ${pct(HEART_STEP)} to the score of every match.`, price: 9 },
-    { id: 'moss_heart', title: 'Moss Heart', body: `Every Moss match this run adds ${pct(HEART_STEP)} to the score of every match.`, price: 9 },
-    { id: 'bone_heart', title: 'Bone Heart', body: `Every Bone match this run adds ${pct(HEART_STEP)} to the score of every match.`, price: 9 },
-    { id: 'minted_halo', title: 'Minted Halo', body: `Every gold you hold adds ${pct(HALO_STEP)} to every match's score, up to ×${1 + HALO_CAP}.`, price: 7 },
-    { id: 'frenzy_dial', title: 'Frenzy Dial', body: `Every pair grabbed in a Flurry this run adds ${pct(DIAL_STEP)} to the score of every match.`, price: 8 },
-    { id: 'glass_crown', title: 'Glass Crown', body: `Every floor in a row cleared without a miss adds ${pct(CROWN_STEP)} to every match's score. You can hold one life fewer.`, price: 10 },
-    { id: 'interest_coin', title: 'Interest Coin', body: `At every stop, 1 gold for every ${INTEREST_PER} you hold, up to ${INTEREST_CAP}.`, price: 6 }
+    { id: 'cinder_heart', title: tr.s('Cinder Heart'), body: tr`Every Ember match this run adds ${pct(HEART_STEP)} to the score of every match.`, price: 9 },
+    { id: 'tide_heart', title: tr.s('Tide Heart'), body: tr`Every Tide match this run adds ${pct(HEART_STEP)} to the score of every match.`, price: 9 },
+    { id: 'moss_heart', title: tr.s('Moss Heart'), body: tr`Every Moss match this run adds ${pct(HEART_STEP)} to the score of every match.`, price: 9 },
+    { id: 'bone_heart', title: tr.s('Bone Heart'), body: tr`Every Bone match this run adds ${pct(HEART_STEP)} to the score of every match.`, price: 9 },
+    { id: 'minted_halo', title: tr.s('Minted Halo'), body: tr`Every gold you hold adds ${pct(HALO_STEP)} to every match's score, up to ×${1 + HALO_CAP}.`, price: 7 },
+    { id: 'frenzy_dial', title: tr.s('Frenzy Dial'), body: tr`Every pair grabbed in a Flurry this run adds ${pct(DIAL_STEP)} to the score of every match.`, price: 8 },
+    { id: 'glass_crown', title: tr.s('Glass Crown'), body: tr`Every floor in a row cleared without a miss adds ${pct(CROWN_STEP)} to every match's score. You can hold one life fewer.`, price: 10 },
+    { id: 'interest_coin', title: tr.s('Interest Coin'), body: tr`At every stop, 1 gold for every ${INTEREST_PER} you hold, up to ${INTEREST_CAP}.`, price: 6 }
 ];
 
 export const SNOWBALL_RELIC_IDS: readonly SnowballRelicId[] = SNOWBALL_RELICS.map((relic) => relic.id);
@@ -155,10 +156,10 @@ export interface FusionDefinition {
 }
 
 export const FUSIONS: readonly FusionDefinition[] = [
-    { id: 'twin_hearts', title: 'Twin Hearts', from: 'Two Hearts', body: 'Every Heart you hold counts the matches of every Heart’s element.', ready: (run) => heldHeartSuits(run).length >= 2 },
-    { id: 'gilded_heart', title: 'Gilded Heart', from: 'A Heart and the Minted Halo', body: `Every match of a held Heart’s element pays ${GILDED_HEART_GOLD} gold.`, ready: (run) => heldHeartSuits(run).length >= 1 && holds(run, 'minted_halo') },
-    { id: 'storm_crown', title: 'Storm Crown', from: 'The Glass Crown and the Frenzy Dial', body: 'A floor of one miss keeps the Crown’s streak, and the miss bank has its slot back.', ready: (run) => holds(run, 'glass_crown') && holds(run, 'frenzy_dial') },
-    { id: 'compound_coin', title: 'Compound Coin', from: 'The Interest Coin and the Minted Halo', body: `At every stop, 1 gold for every ${COMPOUND_INTEREST_PER} you hold, up to ${COMPOUND_INTEREST_CAP}.`, ready: (run) => holds(run, 'interest_coin') && holds(run, 'minted_halo') }
+    { id: 'twin_hearts', title: tr.s('Twin Hearts'), from: tr.s('Two Hearts'), body: tr.s('Every Heart you hold counts the matches of every Heart’s element.'), ready: (run) => heldHeartSuits(run).length >= 2 },
+    { id: 'gilded_heart', title: tr.s('Gilded Heart'), from: tr.s('A Heart and the Minted Halo'), body: tr`Every match of a held Heart’s element pays ${GILDED_HEART_GOLD} gold.`, ready: (run) => heldHeartSuits(run).length >= 1 && holds(run, 'minted_halo') },
+    { id: 'storm_crown', title: tr.s('Storm Crown'), from: tr.s('The Glass Crown and the Frenzy Dial'), body: tr.s('A floor of one miss keeps the Crown’s streak, and the miss bank has its slot back.'), ready: (run) => holds(run, 'glass_crown') && holds(run, 'frenzy_dial') },
+    { id: 'compound_coin', title: tr.s('Compound Coin'), from: tr.s('The Interest Coin and the Minted Halo'), body: tr`At every stop, 1 gold for every ${COMPOUND_INTEREST_PER} you hold, up to ${COMPOUND_INTEREST_CAP}.`, ready: (run) => holds(run, 'interest_coin') && holds(run, 'minted_halo') }
 ];
 
 export const fusionDefinition = (id: FusionId): FusionDefinition => FUSIONS.find((fusion) => fusion.id === id)!;
@@ -213,20 +214,20 @@ export interface AwakeningDefinition {
 const heartAwakening = (id: Extract<SnowballRelicId, `${string}_heart`>, title: string, element: string): AwakeningDefinition => ({
     id,
     title,
-    mark: `Awakens at ${HEART_AWAKENS_AT} ${element} matches.`,
-    body: `Every ${element} match adds ${pct(HEART_STEP * 2)} to the score of every match.`,
+    mark: tr`Awakens at ${HEART_AWAKENS_AT} ${element} matches.`,
+    body: tr`Every ${element} match adds ${pct(HEART_STEP * 2)} to the score of every match.`,
     reached: (run) => runNonNegativeInteger(run.elementMatchesThisRun?.[HEART_SUIT[id]]) >= HEART_AWAKENS_AT
 });
 
 export const AWAKENINGS: readonly AwakeningDefinition[] = [
-    heartAwakening('cinder_heart', 'Inferno Heart', 'Ember'),
-    heartAwakening('tide_heart', 'Deluge Heart', 'Tide'),
-    heartAwakening('moss_heart', 'Wildwood Heart', 'Moss'),
-    heartAwakening('bone_heart', 'Ossuary Heart', 'Bone'),
-    { id: 'minted_halo', title: 'Sovereign Halo', mark: `Awakens holding ${HALO_AWAKENS_AT} gold.`, body: `Every gold you hold adds ${pct(HALO_STEP)} to every match's score, up to ×${1 + AWAKENED_HALO_CAP}.`, reached: (run) => runNonNegativeInteger(run.gold) >= HALO_AWAKENS_AT },
-    { id: 'frenzy_dial', title: 'Riot Dial', mark: `Awakens at ${DIAL_AWAKENS_AT} Flurry grabs.`, body: `Every pair grabbed in a Flurry adds ${pct(DIAL_STEP * 2)} to the score of every match.`, reached: (run) => runNonNegativeInteger(run.flurryGrabsThisRun) >= DIAL_AWAKENS_AT },
-    { id: 'glass_crown', title: 'Diamond Crown', mark: `Awakens at ${CROWN_AWAKENS_AT} clean floors in a row.`, body: `A floor with a miss halves the streak instead of breaking it.`, reached: (run) => runNonNegativeInteger(run.cleanFloorStreak) >= CROWN_AWAKENS_AT },
-    { id: 'interest_coin', title: 'Treasury Coin', mark: `Awakens holding ${COIN_AWAKENS_AT} gold.`, body: `Interest pays up to ${AWAKENED_INTEREST_BONUS} gold more at every stop.`, reached: (run) => runNonNegativeInteger(run.gold) >= COIN_AWAKENS_AT }
+    heartAwakening('cinder_heart', tr.s('Inferno Heart'), tr.s('Ember')),
+    heartAwakening('tide_heart', tr.s('Deluge Heart'), tr.s('Tide')),
+    heartAwakening('moss_heart', tr.s('Wildwood Heart'), tr.s('Moss')),
+    heartAwakening('bone_heart', tr.s('Ossuary Heart'), tr.s('Bone')),
+    { id: 'minted_halo', title: tr.s('Sovereign Halo'), mark: tr`Awakens holding ${HALO_AWAKENS_AT} gold.`, body: tr`Every gold you hold adds ${pct(HALO_STEP)} to every match's score, up to ×${1 + AWAKENED_HALO_CAP}.`, reached: (run) => runNonNegativeInteger(run.gold) >= HALO_AWAKENS_AT },
+    { id: 'frenzy_dial', title: tr.s('Riot Dial'), mark: tr`Awakens at ${DIAL_AWAKENS_AT} Flurry grabs.`, body: tr`Every pair grabbed in a Flurry adds ${pct(DIAL_STEP * 2)} to the score of every match.`, reached: (run) => runNonNegativeInteger(run.flurryGrabsThisRun) >= DIAL_AWAKENS_AT },
+    { id: 'glass_crown', title: tr.s('Diamond Crown'), mark: tr`Awakens at ${CROWN_AWAKENS_AT} clean floors in a row.`, body: tr`A floor with a miss halves the streak instead of breaking it.`, reached: (run) => runNonNegativeInteger(run.cleanFloorStreak) >= CROWN_AWAKENS_AT },
+    { id: 'interest_coin', title: tr.s('Treasury Coin'), mark: tr`Awakens holding ${COIN_AWAKENS_AT} gold.`, body: tr`Interest pays up to ${AWAKENED_INTEREST_BONUS} gold more at every stop.`, reached: (run) => runNonNegativeInteger(run.gold) >= COIN_AWAKENS_AT }
 ];
 
 export const awakeningDefinition = (id: SnowballRelicId): AwakeningDefinition => AWAKENINGS.find((entry) => entry.id === id)!;

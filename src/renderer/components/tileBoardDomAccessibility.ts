@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 import { WANDERER_COPY, SLEEPER_COPY } from '../copy/oddCardBeat';
 import type { BoardState, RunStatus, Tile } from '../../shared/contracts';
 import { getFindableRewardText } from '../../shared/findables';
@@ -46,8 +47,8 @@ export const getTileTraitPreviewText = (board: BoardState, tile: Tile): string =
     }
     const comboSurge = opportunity != null && getTraitComboSurgeTileIds(board).has(tile.id);
     return opportunity
-        ? ` ${comboSurge ? 'Combo-surge' : 'Chain-ready'} trait card. Match now: ${unique.slice(0, 2).join('; ')}.`
-        : ` Nearby trait interaction: ${unique.slice(0, 2).join('; ')}.`;
+        ? tr` ${comboSurge ? tr.s('Combo-surge') : tr.s('Chain-ready')} trait card. Match now: ${unique.slice(0, 2).join('; ')}.`
+        : tr` Nearby trait interaction: ${unique.slice(0, 2).join('; ')}.`;
 };
 
 export const getTileBeatAccessibilityText = (
@@ -83,16 +84,16 @@ export const getTileBeatAccessibilityText = (
     const detail =
         traitRouteCadence === 'cashout'
             ? isTraitComboBack
-                ? 'Hit this route now.'
-                : 'Reward lane is hot.'
+                ? tr.s('Hit this route now.')
+                : tr.s('Reward lane is hot.')
             : traitRouteCadence === 'surge'
-              ? 'Multiple trait routes are live.'
+              ? tr.s('Multiple trait routes are live.')
               : traitRouteCadence === 'follow-up'
-                ? 'Tap next to keep the route moving.'
+                ? tr.s('Tap next to keep the route moving.')
                 : traitRouteCadence === 'route'
-                  ? 'Match to build chain.'
-                  : 'Set this route up.';
-    return ` Beat: ${traitRouteCadence}. Action: ${getTraitRouteCadenceAction(traitRouteCadence)}. ${beatCount}-beat pulse. ${detail}`;
+                  ? tr.s('Match to build chain.')
+                  : tr.s('Set this route up.');
+    return tr` Beat: ${traitRouteCadence}. Action: ${getTraitRouteCadenceAction(traitRouteCadence)}. ${beatCount}-beat pulse. ${detail}`;
 };
 
 export const getBoardChainAccessibilitySummary = (
@@ -155,32 +156,32 @@ export const getBoardChainAccessibilitySummary = (
                   ? 'setup'
                   : 'idle';
     const parts = [
-        readyCount > 0 ? `${readyCount} chain-ready card${readyCount === 1 ? '' : 's'}` : null,
-        followupCount > 0 ? `${followupCount} selected follow-up${followupCount === 1 ? '' : 's'}` : null,
-        surgeCount > 0 ? `${surgeCount} surge card${surgeCount === 1 ? '' : 's'}` : null,
-        payoffStackCount > 0 ? `${payoffStackCount} payoff-stack card${payoffStackCount === 1 ? '' : 's'}` : null,
-        rewardHotCount > 0 ? `${rewardHotCount} reward-hot card${rewardHotCount === 1 ? '' : 's'}` : null,
-        setupCount > 0 ? `${setupCount} prime target${setupCount === 1 ? '' : 's'}` : null
+        readyCount > 0 ? `${plural(readyCount, { one: '{0} chain-ready card', other: '{0} chain-ready cards' })}` : null,
+        followupCount > 0 ? `${plural(followupCount, { one: '{0} selected follow-up', other: '{0} selected follow-ups' })}` : null,
+        surgeCount > 0 ? `${plural(surgeCount, { one: '{0} surge card', other: '{0} surge cards' })}` : null,
+        payoffStackCount > 0 ? `${plural(payoffStackCount, { one: '{0} payoff-stack card', other: '{0} payoff-stack cards' })}` : null,
+        rewardHotCount > 0 ? `${plural(rewardHotCount, { one: '{0} reward-hot card', other: '{0} reward-hot cards' })}` : null,
+        setupCount > 0 ? `${plural(setupCount, { one: '{0} prime target', other: '{0} prime targets' })}` : null
     ].filter((part): part is string => Boolean(part));
     const action =
         payoffStackCount > 0
-            ? routeSetupContext.rewardHotText ?? 'cash stacked trait routes'
+            ? routeSetupContext.rewardHotText ?? tr.s('cash stacked trait routes')
         : rewardHotCount > 0
-            ? routeSetupContext.rewardHotText ?? 'cash out the next chain reward'
+            ? routeSetupContext.rewardHotText ?? tr.s('cash out the next chain reward')
             : followupCount > 0
-              ? `follow up the marked mate${highlight.active && highlight.primaryLine ? `: ${highlight.primaryLine}` : ''}`
+              ? tr`follow up the marked mate${highlight.active && highlight.primaryLine ? `: ${highlight.primaryLine}` : ''}`
             : highlight.active && highlight.tone !== 'idle'
               ? `${highlight.headline}: ${highlight.primaryLine}`
               : readyCount > 0
-                ? 'match a lit trait route'
+                ? tr.s('match a lit trait route')
                 : setupCount > 0
-                  ? routeSetupContext.hintText ?? 'move traits together'
-                  : 'no chain routes are lit';
+                  ? routeSetupContext.hintText ?? tr.s('move traits together')
+                  : tr.s('no chain routes are lit');
     return {
-        label: `Chain board: ${parts.length > 0 ? parts.join(', ') : 'no lit cards'}. Next: ${action}.${
+        label: tr`Chain board: ${parts.length > 0 ? parts.join(', ') : tr.s('no lit cards')}. Next: ${action}.${
             routeSetupContext.sequenceText ? ` ${routeSetupContext.sequenceText}.` : ''
         }`,
-        primaryLine: followupCount > 0 ? `${followupCount} selected follow-up${followupCount === 1 ? '' : 's'}` : highlight.primaryLine,
+        primaryLine: followupCount > 0 ? `${plural(followupCount, { one: '{0} selected follow-up', other: '{0} selected follow-ups' })}` : highlight.primaryLine,
         secondaryLine: highlight.secondaryLine,
         tone,
         readyCount,
@@ -209,26 +210,26 @@ export const getTileAriaLabel = (
     clumpReadContext: ClumpReadContext = { chain: 1, run: { floorCurioId: null } }
 ): string => {
     const base = faceUp
-        ? `Tile ${tile.label}, row ${row}, column ${column}`
-        : `Hidden tile, row ${row}, column ${column}`;
+        ? tr`Tile ${tile.label}, row ${row}, column ${column}`
+        : tr`Hidden tile, row ${row}, column ${column}`;
     // The suit is the one thing a face-down tile shows, so it is the one thing its name says.
     // A hidden tile also says how big a clump it stands in: the read a sighted player gets from the
     // outline on the board, and the number the chain is planned against.
     const clump = !faceUp && tile.state === 'hidden' ? getClumpRead(board, tile.id, clumpReadContext) : null;
     const suitNote = tile.suit && tile.state !== 'matched' && tile.state !== 'removed'
         ? clump && clump.size > 1
-            ? ` ${getTileSuit(tile.suit).name} suit, clump of ${clump.size}.`
-            : ` ${getTileSuit(tile.suit).name} suit.`
+            ? tr` ${getTileSuit(tile.suit).name} suit, clump of ${clump.size}.`
+            : tr` ${getTileSuit(tile.suit).name} suit.`
         : '';
     const findableNote = tile.findableKind && faceUp && tile.state !== 'matched' ? ` ${getFindableRewardText(tile.findableKind)}` : '';
     const routeSetupNote = routeSetupContext.targetTileIds?.has(tile.id)
-        ? ` Chain prime target. ${routeSetupContext.hintText ? `${routeSetupContext.hintText}.` : 'Move this card to create a trait route.'}`
+        ? tr` Chain prime target. ${routeSetupContext.hintText ? `${routeSetupContext.hintText}.` : tr.s('Move this card to create a trait route.')}`
         : '';
     const selectedFollowupNote = routeSetupContext.selectedFollowupTileIds?.has(tile.id)
-        ? ' Selected chain follow-up. Match this mate to keep the trait route moving.'
+        ? tr.s(' Selected chain follow-up. Match this mate to keep the trait route moving.')
         : '';
     const rewardHotNote = routeSetupContext.rewardHotTileIds?.has(tile.id)
-        ? ` Best chain play. Chain reward hot. ${routeSetupContext.rewardHotText ?? 'Match this route to cash out the next chain reward.'}`
+        ? tr` Best chain play. Chain reward hot. ${routeSetupContext.rewardHotText ?? tr.s('Match this route to cash out the next chain reward.')}`
         : '';
     const beatNote = getTileBeatAccessibilityText(board, tile, faceUp, {
         rewardHotTileIds: routeSetupContext.rewardHotTileIds,
@@ -236,9 +237,9 @@ export const getTileAriaLabel = (
         targetTileIds: routeSetupContext.targetTileIds
     });
     const ground = readElementalGround(board)[(row - 1) * board.columns + column - 1];
-    const groundNote = ground ? ` ${ELEMENT_NAMES[ground]} ground. ${ELEMENT_GROUND_RULES[ground]}` : '';
-    const coatingNote = tile.rime ? ' Rime: playable, anchored against currents and protected from arena holds. Match to calm the next turn.'
-        : tile.seeded ? ` ${tile.seeded >= 2 ? 'Bloom' : 'Seed'}: playable. Match for ${Math.min(2, tile.seeded)} gold.` : '';
+    const groundNote = ground ? tr` ${ELEMENT_NAMES[ground]} ground. ${ELEMENT_GROUND_RULES[ground]}` : '';
+    const coatingNote = tile.rime ? tr.s(' Rime: playable, anchored against currents and protected from arena holds. Match to calm the next turn.')
+        : tile.seeded ? tr` ${tile.seeded >= 2 ? tr.s('Bloom') : tr.s('Seed')}: playable. Match for ${Math.min(2, tile.seeded)} gold.` : '';
     return `${base}${suitNote}${groundNote}${coatingNote}${findableNote}${getTileTraitText(tile)}${getTileTraitPreviewText(board, tile)}${routeSetupNote}${selectedFollowupNote}${rewardHotNote}${beatNote}`;
 };
 
@@ -253,14 +254,14 @@ export const getPowerTargetAriaText = (
 ): string => {
     if (peekPowerVisualActive) {
         return peekEligibleTileIds.has(tile.id)
-            ? ' Peek target: valid. Reveals this one tile and locks Perfect Memory.'
+            ? tr.s(' Peek target: valid. Reveals this one tile and locks Perfect Memory.')
             : tile.state === 'hidden'
-              ? ' Peek target: invalid or already revealed.'
+              ? tr.s(' Peek target: invalid or already revealed.')
               : '';
     }
     if (tileSwapPowerVisualActive) {
         if (tileSwapFirstTileId === tile.id) {
-            return ' Swap origin selected. Select a different hidden tile to exchange positions.';
+            return tr.s(' Swap origin selected. Select a different hidden tile to exchange positions.');
         }
         const swapTraitPreview =
             board && tileSwapEligibleTileIds.has(tile.id)
@@ -272,11 +273,11 @@ export const getPowerTargetAriaText = (
                   ]
                 : [];
         return tileSwapEligibleTileIds.has(tile.id)
-            ? ` Swap target: valid. Select two hidden tiles to exchange their positions.${
-                  swapTraitPreview.length > 0 ? ` Chain prime target. Swap preview: ${swapTraitPreview.slice(0, 2).join('; ')}.` : ''
+            ? tr` Swap target: valid. Select two hidden tiles to exchange their positions.${
+                  swapTraitPreview.length > 0 ? tr` Chain prime target. Swap preview: ${swapTraitPreview.slice(0, 2).join('; ')}.` : ''
               }`
             : tile.state === 'hidden'
-              ? ' Swap target: invalid for this power.'
+              ? tr.s(' Swap target: invalid for this power.')
               : '';
     }
     return '';

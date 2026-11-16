@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import {
     MEMORIZE_BASE_MS,
     MEMORIZE_DECAY_EVERY_N_LEVELS,
@@ -28,7 +29,7 @@ export interface DifficultyProfileRuleSummary {
 
 export const SHIPPED_FAIR_DIFFICULTY_PROFILE: DifficultyProfileRuleSummary = {
     id: 'shipped_fair',
-    label: 'Standard',
+    label: tr.s('Standard'),
     availability: 'active_default',
     achievementEligible: true,
     dailyComparable: true,
@@ -39,7 +40,7 @@ export const SHIPPED_FAIR_DIFFICULTY_PROFILE: DifficultyProfileRuleSummary = {
         decayEveryNLevels: MEMORIZE_DECAY_EVERY_N_LEVELS
     },
     playerCopy:
-        'Default: every floor states a par, and misses come from one small bank the whole run draws on - it opens with three, a floor clear or five matches in a row earns one, each lasts three floors and it never holds more than four, one more for every six pairs on the floor; a run ends when you stop or when the bank runs dry before a floor is cleared. The Depths, opened by felling the Warden, each add one named rule.'
+        tr.s('Default: every floor states a par, and misses come from one small bank the whole run draws on - it opens with three, a floor clear or five matches in a row earns one, each lasts three floors and it never holds more than four, one more for every six pairs on the floor; a run ends when you stop or when the bank runs dry before a floor is cleared. The Depths, opened by felling the Warden, each add one named rule.')
 } as const;
 
 export const listDifficultyProfiles = (): DifficultyProfileRuleSummary[] => [
@@ -69,31 +70,31 @@ const currentConstants = {
 
 export const getCurrentDifficultyProfile = (): DifficultyProfileRow => ({
     id: 'classic_fair',
-    label: 'Classic fair',
+    label: tr.s('Classic fair'),
     status: 'shipped',
     dailyComparable: true,
     constants: currentConstants,
-    rules: `one curve for everyone: a par per floor, and a run-wide miss bank that opens with ${MISS_BANK_OPENING}, earns ${MISS_BANK_FLOOR_GRANT} a clear and one more per ${MISS_BANK_GRANT_PAIRS} pairs the floor held, and holds ${MISS_BANK_CAP}, one more per ${MISS_BANK_CAP_PAIRS} pairs`
+    rules: tr`one curve for everyone: a par per floor, and a run-wide miss bank that opens with ${MISS_BANK_OPENING}, earns ${MISS_BANK_FLOOR_GRANT} a clear and one more per ${MISS_BANK_GRANT_PAIRS} pairs the floor held, and holds ${MISS_BANK_CAP}, one more per ${MISS_BANK_CAP_PAIRS} pairs`
 });
 
 export const getDifficultyProfileRows = (): DifficultyProfileRow[] => [
     getCurrentDifficultyProfile(),
     {
         id: 'practice_soft',
-        label: 'Practice soft',
+        label: tr.s('Practice soft'),
         status: 'deferred',
         dailyComparable: false,
         constants: currentConstants,
-        rules: 'future accessibility profile; deferred until settings/save schema owns rule variants'
+        rules: tr.s('future accessibility profile; deferred until settings/save schema owns rule variants')
     },
     // The challenge profile the plan deferred is the Depths (`depth-rules.ts`, DGE-025): shipped, chosen in run setup.
     {
         id: 'depths',
-        label: 'The Depths',
+        label: tr.s('The Depths'),
         status: 'shipped',
         dailyComparable: false,
         constants: currentConstants,
-        rules: `${MAX_DEPTH} Depths after the Warden, each one existing rule a step harder and named on the board; a Depth run carries its Depth in the share key, so it is not compared with the daily`
+        rules: tr`${MAX_DEPTH} Depths after the Warden, each one existing rule a step harder and named on the board; a Depth run carries its Depth in the share key, so it is not compared with the daily`
     }
 ];
 

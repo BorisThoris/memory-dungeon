@@ -1,0 +1,139 @@
+/* global self, caches, fetch, Response, Request, URL */
+/*
+ * Memory Dungeon's service worker: the game keeps playing without a connection
+ * (docs/MARKET_FLOW_REVIEW_WIDER.md, P0; registered by src/renderer/serviceWorker.ts).
+ *
+ * - A page load goes to the network first, so a new deploy reaches players at once; with no
+ *   network it is answered from the last copy of the page, never with the browser's error page.
+ * - The build's hashed files (/assets/...) never change under their name: cache first.
+ * - Everything else the game itself loads (fonts, card art, sounds, music) is served from the
+ *   cache and refreshed behind it. The run's loading screen preloads every asset a run uses, so
+ *   one session online leaves the whole game here.
+ * - A media byte range is cut from the whole file in the cache.
+ * - Not cached: other sites (the scores service), and the store trailers and artwork, which the
+ *   game itself never loads.
+ */
+const CACHE = 'memory-dungeon-v1';
+const SHELL = ['/', '/index.html', '/site.webmanifest', '/favicon.svg'];
+const NEVER = /^\/(?:trailers|artwork|wip-assets|privacy)(?:\/|\.|$)/;
+
+self.addEventListener('install', (event) => {
+    event.waitUntil(
+        caches
+            .open(CACHE)
+            .then((cache) => cache.addAll(SHELL))
+            .then(() => self.skipWaiting())
+    );
+});
+
+self.addEventListener('activate', (event) => {
+    event.waitUntil(
+        caches
+            .keys()
+            .then((names) => Promise.all(names.filter((name) => name !== CACHE).map((name) => caches.delete(name))))
+            .then(() => self.clients.claim())
+    );
+});
+
+const put = async (request, response) => {
+    if (response && response.ok && response.type === 'basic') {
+        const cache = await caches.open(CACHE);
+        await cache.put(request, response.clone());
+    }
+    return response;
+};
+
+const pageFromNetwork = async (request) => {
+    try {
+        const response = await fetch(request);
+        // Every route is the same single page; keep the latest copy under one name.
+        if (response.ok) {
+            const cache = await caches.open(CACHE);
+            await cache.put('/index.html', response.clone());
+        }
+        return response;
+    } catch {
+        const cached = (await caches.match('/index.html')) || (await caches.match('/'));
+        return cached || new Response('Memory Dungeon needs one visit online before it can play offline.', {
+            status: 503,
+            headers: { 'Content-Type': 'text/plain; charset=utf-8' }
+        });
+    }
+};
+
+const cacheFirst = async (request) => {
+    const cached = await caches.match(request);
+    if (cached) {
+        return cached;
+    }
+    return put(request, await fetch(request));
+};
+
+const staleWhileRevalidate = async (request) => {
+    const cached = await caches.match(request);
+    const refresh = fetch(request)
+        .then((response) => put(request, response))
+        .catch(() => undefined);
+    if (cached) {
+        return cached;
+    }
+    const fresh = await refresh;
+    return fresh || new Response('', { status: 504 });
+};
+
+/*
+ * Music and some sounds play through a media element, which asks for byte ranges. Answer those
+ * from the whole file in the cache (fetching it whole once if needed) so a song still plays offline.
+ */
+const rangeFromCache = async (request) => {
+    const url = new URL(request.url);
+    const whole = new Request(url.pathname + url.search);
+    let response = await caches.match(whole);
+    if (!response) {
+        response = await put(whole, await fetch(whole));
+    }
+    const body = await response.clone().arrayBuffer();
+    const match = /^bytes=(\d*)-(\d*)$/.exec(request.headers.get('range') || '');
+    if (!match) {
+        return response;
+    }
+    const size = body.byteLength;
+    const start = match[1] === '' ? Math.max(0, size - Number(match[2])) : Number(match[1]);
+    const end = match[1] !== '' && match[2] !== '' ? Math.min(Number(match[2]), size - 1) : size - 1;
+    if (start >= size || start > end) {
+        return new Response('', { status: 416, headers: { 'Content-Range': `bytes */${size}` } });
+    }
+    return new Response(body.slice(start, end + 1), {
+        status: 206,
+        headers: {
+            'Content-Type': response.headers.get('Content-Type') || 'application/octet-stream',
+            'Content-Range': `bytes ${start}-${end}/${size}`,
+            'Content-Length': String(end - start + 1),
+            'Accept-Ranges': 'bytes'
+        }
+    });
+};
+
+self.addEventListener('fetch', (event) => {
+    const { request } = event;
+    if (request.method !== 'GET') {
+        return;
+    }
+    const url = new URL(request.url);
+    if (url.origin !== self.location.origin || NEVER.test(url.pathname) || url.pathname === '/sw.js') {
+        return;
+    }
+    if (request.headers.has('range')) {
+        event.respondWith(rangeFromCache(request));
+        return;
+    }
+    if (request.mode === 'navigate') {
+        event.respondWith(pageFromNetwork(request));
+        return;
+    }
+    if (url.pathname.startsWith('/assets/')) {
+        event.respondWith(cacheFirst(request));
+        return;
+    }
+    event.respondWith(staleWhileRevalidate(request));
+});

@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 /**
  * Board-side coaching for trait routes: what the highlighted cards are asking the player to do.
  *
@@ -8,10 +9,10 @@
  */
 
 export const BOARD_ROUTE_COACHING = {
-    followUp: 'Match the marked follow-up to resolve the trait route.',
-    payoff: 'Two-beat payoff route is primed',
-    pickups: 'Clear pickup-marked pairs before the floor ends.',
-    routeTools: 'Use row/swap tools to connect the marked route cards.',
-    stacked: 'Four-beat stacked route is primed',
-    traitCard: 'Match a highlighted trait card to cash the route.'
+    followUp: tr.s('Match the marked follow-up to resolve the trait route.'),
+    payoff: tr.s('Two-beat payoff route is primed'),
+    pickups: tr.s('Clear pickup-marked pairs before the floor ends.'),
+    routeTools: tr.s('Use row/swap tools to connect the marked route cards.'),
+    stacked: tr.s('Four-beat stacked route is primed'),
+    traitCard: tr.s('Match a highlighted trait card to cash the route.')
 } as const;

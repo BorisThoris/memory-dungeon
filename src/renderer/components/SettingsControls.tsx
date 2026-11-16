@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { CSSProperties, ReactNode } from 'react';
 import styles from './SettingsScreen.module.css';
 
@@ -33,7 +34,7 @@ export const ToggleRow = ({ label, hint, checked, disabled = false, onChange }: 
             />
             <span className={styles.toggleTrack} />
             <span aria-hidden="true" className={styles.toggleState}>
-                {checked ? 'On' : 'Off'}
+                {checked ? tr.s('On') : tr.s('Off')}
             </span>
         </span>
     </label>
@@ -135,13 +136,13 @@ export const PlaceholderControl = ({
             {honestFuturePlaceholder ? (
                 <div className={styles.placeholderLabelRow}>
                     <strong>{label}</strong>
-                    <span className={styles.futurePill}>Coming soon</span>
+                    <span className={styles.futurePill}>{tr.s("Coming soon")}</span>
                 </div>
             ) : (
                 <strong>{label}</strong>
             )}
             <span>{hint}</span>
-            {honestFuturePlaceholder ? <span className={styles.demoScopeNote}>Not in Steam demo.</span> : null}
+            {honestFuturePlaceholder ? <span className={styles.demoScopeNote}>{tr.s("Not in Steam demo.")}</span> : null}
         </div>
         <div className={styles.segmented}>
             {options.map((option) => (

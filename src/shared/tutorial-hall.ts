@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RunState, Tile, TileSuit } from './contracts';
 import { createNewRun, finishMemorizePhase, flipTile, resolveBoardTurn } from './game';
 import { ELEMENT_NAMES, ELEMENT_NEUTRALIZES } from './element-alchemy-rules';
@@ -22,58 +23,58 @@ export interface TutorialLesson {
 }
 
 const pairStep = (pair: string, suit: TileSuit, result: string): TutorialStep => ({
-    cards: [`${pair}-1`, `${pair}-2`], instruction: `Match the highlighted ${ELEMENT_NAMES[suit]} pair.`, result
+    cards: [`${pair}-1`, `${pair}-2`], instruction: tr`Match the highlighted ${ELEMENT_NAMES[suit]} pair.`, result
 });
 const castResults: Record<TileSuit, string> = {
-    ember: 'Fire burns nearby cards and clears vines or ice.',
-    tide: 'Water douses fire and moves nearby cards.',
-    bone: 'Frost holds nearby cards in ice.',
-    moss: 'Grove holds nearby cards in vines.'
+    ember: tr.s('Fire burns nearby cards and clears vines or ice.'),
+    tide: tr.s('Water douses fire and moves nearby cards.'),
+    bone: tr.s('Frost holds nearby cards in ice.'),
+    moss: tr.s('Grove holds nearby cards in vines.')
 };
 const reactionResults: Record<ElementReactionKind, string> = {
-    steam: 'Steam! Nearby faces are revealed.', blaze: 'Blaze! Vines burn away and you gain gold.',
-    melt: 'Thaw! Ice melts and you earn bonus score.', freezeover: 'Freeze-over! The arena stays calm for a few turns.',
-    flood: 'Flood! Water and Grove gain resonance.', frostbloom: 'Frostbloom! Nearby cards gain a charge.'
+    steam: tr.s('Steam! Nearby faces are revealed.'), blaze: tr.s('Blaze! Vines burn away and you gain gold.'),
+    melt: tr.s('Thaw! Ice melts and you earn bonus score.'), freezeover: tr.s('Freeze-over! The arena stays calm for a few turns.'),
+    flood: tr.s('Flood! Water and Grove gain resonance.'), frostbloom: tr.s('Frostbloom! Nearby cards gain a charge.')
 };
 
 export const TUTORIAL_LESSONS: readonly TutorialLesson[] = [
-    { id: 'pairs', title: 'Your first pair', category: 'Essentials', elements: ['ember', 'tide'],
-        outcome: 'Turn two matching cards.', steps: [pairStep('a', 'ember', 'A pair clears. Your combo starts at 1.'), pairStep('c', 'tide', 'Another pair. The combo keeps growing.')] },
-    { id: 'combo', title: 'Keep the combo', category: 'Essentials', elements: ['ember', 'tide'],
-        outcome: 'Matches build it. A miss breaks it.', steps: [pairStep('a', 'ember', 'Combo 1. Keep matching.'), pairStep('b', 'ember', 'Combo 2. Now try a deliberate miss.'),
-            { cards: ['e-1', 'f-1'], instruction: 'Turn these two different cards.', result: 'A miss spends one chance and resets the combo.' }] },
-    ...TILE_SUITS.map((suit): TutorialLesson => ({ id: `cast-${suit}`, title: `${ELEMENT_NAMES[suit]} cast`, category: 'Elements', elements: [suit],
+    { id: 'pairs', title: tr.s('Your first pair'), category: 'Essentials', elements: ['ember', 'tide'],
+        outcome: tr.s('Turn two matching cards.'), steps: [pairStep('a', 'ember', tr.s('A pair clears. Your combo starts at 1.')), pairStep('c', 'tide', tr.s('Another pair. The combo keeps growing.'))] },
+    { id: 'combo', title: tr.s('Keep the combo'), category: 'Essentials', elements: ['ember', 'tide'],
+        outcome: tr.s('Matches build it. A miss breaks it.'), steps: [pairStep('a', 'ember', tr.s('Combo 1. Keep matching.')), pairStep('b', 'ember', tr.s('Combo 2. Now try a deliberate miss.')),
+            { cards: ['e-1', 'f-1'], instruction: tr.s('Turn these two different cards.'), result: tr.s('A miss spends one chance and resets the combo.') }] },
+    ...TILE_SUITS.map((suit): TutorialLesson => ({ id: `cast-${suit}`, title: tr`${ELEMENT_NAMES[suit]} cast`, category: 'Elements', elements: [suit],
         outcome: castResults[suit], steps: [pairStep('a', suit, castResults[suit])] })),
     ...Object.values(ELEMENT_REACTIONS).map((reaction): TutorialLesson => {
         const [first, second] = reaction.elements;
         return { id: reaction.kind, title: reaction.name, category: 'Combinations', elements: reaction.elements, reaction: reaction.kind,
             outcome: reactionResults[reaction.kind], steps: [
-                pairStep('a', first, `${ELEMENT_NAMES[first]} ×1. Match that element once more.`),
-                pairStep('b', first, `${ELEMENT_NAMES[first]} ×2 — primed. Switch to ${ELEMENT_NAMES[second]}.`),
+                pairStep('a', first, tr`${ELEMENT_NAMES[first]} ×1. Match that element once more.`),
+                pairStep('b', first, tr`${ELEMENT_NAMES[first]} ×2 — primed. Switch to ${ELEMENT_NAMES[second]}.`),
                 pairStep('c', second, reactionResults[reaction.kind])
             ] };
     }),
     ...TILE_SUITS.map((suit): TutorialLesson => {
         const counter = TILE_SUITS.find(candidate => ELEMENT_NEUTRALIZES[candidate] === suit)!;
-        return { id: `counter-${suit}`, title: `${ELEMENT_NAMES[suit]}: counter & charge`, category: 'Interactions', elements: [suit, counter], counter,
-            outcome: `${ELEMENT_NAMES[counter]} resists ${ELEMENT_NAMES[suit]}. ${ELEMENT_NAMES[suit]} absorbs it.`, steps: [
-                pairStep('a', suit, `${ELEMENT_NAMES[counter]} resisted. The other ${ELEMENT_NAMES[suit]} cards gained a charge.`),
-                pairStep('b', suit, `Those charges paid out: +3 ${ELEMENT_NAMES[suit]} resonance from this pair.`)
+        return { id: `counter-${suit}`, title: tr`${ELEMENT_NAMES[suit]}: counter & charge`, category: 'Interactions', elements: [suit, counter], counter,
+            outcome: tr`${ELEMENT_NAMES[counter]} resists ${ELEMENT_NAMES[suit]}. ${ELEMENT_NAMES[suit]} absorbs it.`, steps: [
+                pairStep('a', suit, tr`${ELEMENT_NAMES[counter]} resisted. The other ${ELEMENT_NAMES[suit]} cards gained a charge.`),
+                pairStep('b', suit, tr`Those charges paid out: +3 ${ELEMENT_NAMES[suit]} resonance from this pair.`)
             ] };
     }),
-    { id: 'cultivation', title: 'Water, then harvest', category: 'Interactions', elements: ['tide', 'ember'],
-        outcome: 'Ripen seeds, then match them for gold.', steps: [
-            pairStep('a', 'tide', 'The two seeds ripened. Follow the highlighted cards.'),
-            pairStep('e', 'ember', 'Harvest collected: 2 gold from each ripe card.')
+    { id: 'cultivation', title: tr.s('Water, then harvest'), category: 'Interactions', elements: ['tide', 'ember'],
+        outcome: tr.s('Ripen seeds, then match them for gold.'), steps: [
+            pairStep('a', 'tide', tr.s('The two seeds ripened. Follow the highlighted cards.')),
+            pairStep('e', 'ember', tr.s('Harvest collected: 2 gold from each ripe card.'))
         ] },
-    { id: 'ground-chemistry', title: 'The ground reacts', category: 'Interactions', elements: ['ember', 'tide'],
-        outcome: 'Terrain can react before a streak is primed.', steps: [
-            pairStep('a', 'ember', 'Fire met Water ground: Steam on your first match.')
+    { id: 'ground-chemistry', title: tr.s('The ground reacts'), category: 'Interactions', elements: ['ember', 'tide'],
+        outcome: tr.s('Terrain can react before a streak is primed.'), steps: [
+            pairStep('a', 'ember', tr.s('Fire met Water ground: Steam on your first match.'))
         ] },
-    { id: 'ice-anchors', title: 'Ice holds position', category: 'Interactions', elements: ['tide', 'ember'],
-        outcome: 'Ice ground stops drift, but still allows flips.', steps: [
-            pairStep('a', 'tide', 'The cards on ice stayed put while the current moved others.'),
-            pairStep('e', 'ember', 'You can still match them. Fire turns the icy ground into Thaw.')
+    { id: 'ice-anchors', title: tr.s('Ice holds position'), category: 'Interactions', elements: ['tide', 'ember'],
+        outcome: tr.s('Ice ground stops drift, but still allows flips.'), steps: [
+            pairStep('a', 'tide', tr.s('The cards on ice stayed put while the current moved others.')),
+            pairStep('e', 'ember', tr.s('You can still match them. Fire turns the icy ground into Thaw.'))
         ] }
 ];
 
@@ -118,9 +119,9 @@ export const tutorialTarget = (session: TutorialSession): string | null => sessi
 
 export function selectTutorialTile(session: TutorialSession, tileId: string): TutorialSession {
     if (session.phase !== 'select') return session;
-    if (tileId !== tutorialTarget(session)) return { ...session, hint: 'Try the highlighted card.' };
+    if (tileId !== tutorialTarget(session)) return { ...session, hint: tr.s('Try the highlighted card.') };
     const tile = session.run.board?.tiles.find(candidate => candidate.id === tileId);
-    if (!tile || tile.state !== 'hidden' || isTileFlipBlocked(tile)) return { ...session, hint: 'This card is held. Restart this lesson to try again.' };
+    if (!tile || tile.state !== 'hidden' || isTileFlipBlocked(tile)) return { ...session, hint: tr.s('This card is held. Restart this lesson to try again.') };
     const run = flipTile(session.run, tileId);
     if (run === session.run) return session;
     return { ...session, run, half: 1, hint: '', phase: session.half === 0 ? 'select' : 'resolve' };

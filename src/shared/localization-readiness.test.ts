@@ -6,13 +6,13 @@ import {
     LOCALIZATION_FOUNDATION_DECISION,
     localizationReadyForNewCopy
 } from './localization-readiness';
+import { SHIPPING_LOCALES } from './i18n';
 
 describe('REG-055 localization extraction foundation', () => {
-    it('keeps English-only v1 while documenting future stack and copy homes', () => {
-        expect(LOCALIZATION_FOUNDATION_DECISION.shippingLocale).toBe('en');
-        expect(LOCALIZATION_FOUNDATION_DECISION.uiPromise).toBe('english_only_v1');
-        expect(LOCALIZATION_FOUNDATION_DECISION.futureStack).toBe('react-i18next');
-        expect(LOCALIZATION_FOUNDATION_DECISION.nonEnglishUiPromised).toBe(false);
+    it('ships the owner\'s seven languages from one stack, and says they are unreviewed', () => {
+        expect(LOCALIZATION_FOUNDATION_DECISION.sourceLocale).toBe('en');
+        expect([...LOCALIZATION_FOUNDATION_DECISION.shippingLocales]).toEqual([...SHIPPING_LOCALES]);
+        expect(LOCALIZATION_FOUNDATION_DECISION.translationsReviewedByNativeSpeakers).toBe(false);
     });
 
     it('routes new player-facing copy into stable shared or renderer copy modules', () => {

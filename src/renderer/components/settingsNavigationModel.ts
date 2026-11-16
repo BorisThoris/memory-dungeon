@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 export type SettingsCategory = 'gameplay' | 'audio' | 'video' | 'accessibility' | 'controls' | 'about' | 'dev';
 
 export type SettingsSubsection =
@@ -18,13 +19,13 @@ export type SettingsSubsection =
     | 'effects';
 
 export const SETTINGS_CATEGORIES: ReadonlyArray<{ id: SettingsCategory; label: string; note: string }> = [
-    { id: 'gameplay', label: 'Gameplay', note: 'Run rules, board flow, and helper systems.' },
-    { id: 'controls', label: 'Controls', note: 'Pointer, touch, and keys.' },
-    { id: 'audio', label: 'Audio', note: 'Master, music, and effect mix.' },
-    { id: 'video', label: 'Video', note: 'Display mode and interface scale.' },
-    { id: 'accessibility', label: 'Accessibility', note: 'Motion and clarity.' },
-    { id: 'about', label: 'About', note: 'Build info, what’s new, credits, and reset.' },
-    { id: 'dev', label: 'Effects', note: 'Extra visual effects. Applies immediately.' }
+    { id: 'gameplay', label: tr.s('Gameplay'), note: tr.s('Run rules, board flow, and helper systems.') },
+    { id: 'controls', label: tr.s('Controls'), note: tr.s('Pointer, touch, and keys.') },
+    { id: 'audio', label: tr.s('Audio'), note: tr.s('Master, music, and effect mix.') },
+    { id: 'video', label: tr.s('Video'), note: tr.s('Display mode and interface scale.') },
+    { id: 'accessibility', label: tr.s('Accessibility'), note: tr.s('Motion and clarity.') },
+    { id: 'about', label: tr.s('About'), note: tr.s('Build info, what’s new, credits, and reset.') },
+    { id: 'dev', label: tr.s('Effects'), note: tr.s('Extra visual effects. Applies immediately.') }
 ];
 
 export const SETTINGS_SUBSECTIONS: Record<
@@ -32,27 +33,27 @@ export const SETTINGS_SUBSECTIONS: Record<
     ReadonlyArray<{ id: SettingsSubsection; label: string }>
 > = {
     gameplay: [
-        { id: 'board', label: 'Board' },
-        { id: 'timing', label: 'Timing' },
-        { id: 'assist', label: 'Assist' }
+        { id: 'board', label: tr.s('Board') },
+        { id: 'timing', label: tr.s('Timing') },
+        { id: 'assist', label: tr.s('Assist') }
     ],
     controls: [
-        { id: 'input', label: 'Input' },
-        { id: 'keys', label: 'Keys' }
+        { id: 'input', label: tr.s('Input') },
+        { id: 'keys', label: tr.s('Keys') }
     ],
-    audio: [{ id: 'volume', label: 'Volume' }],
+    audio: [{ id: 'volume', label: tr.s('Volume') }],
     video: [
-        { id: 'display', label: 'Display' },
-        { id: 'graphics', label: 'Graphics' }
+        { id: 'display', label: tr.s('Display') },
+        { id: 'graphics', label: tr.s('Graphics') }
     ],
-    accessibility: [{ id: 'accessibility', label: 'Accessibility' }],
-    dev: [{ id: 'effects', label: 'Effects' }],
+    accessibility: [{ id: 'accessibility', label: tr.s('Accessibility') }],
+    dev: [{ id: 'effects', label: tr.s('Effects') }],
     about: [
-        { id: 'build', label: 'Build' },
-        { id: 'whatsNew', label: 'What’s new' },
-        { id: 'credits', label: 'Credits' },
-        { id: 'transfer', label: 'Move progress' },
-        { id: 'reset', label: 'Reset' }
+        { id: 'build', label: tr.s('Build') },
+        { id: 'whatsNew', label: tr.s('What’s new') },
+        { id: 'credits', label: tr.s('Credits') },
+        { id: 'transfer', label: tr.s('Move progress') },
+        { id: 'reset', label: tr.s('Reset') }
     ]
 };
 

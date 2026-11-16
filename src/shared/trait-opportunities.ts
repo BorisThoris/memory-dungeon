@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { BoardState, RunState, TileTraitKind } from './contracts';
 import { boardTileIndex } from './board-read-index';
 import {
@@ -136,7 +137,7 @@ export const getTraitOpportunitySummary = (board: BoardState | null | undefined)
     const interactionLines = boardInteractionLines.length > 0
         ? boardInteractionLines
         : unique(tiles.flatMap((tile) => tile.previewLines)).slice(0, 4);
-    const reason = interactionLines.length > 0 ? `Offered for current trait route: ${interactionLines[0]}` : null;
+    const reason = interactionLines.length > 0 ? tr`Offered for current trait route: ${interactionLines[0]}` : null;
 
     return finish({ tiles, interactionLines, reason });
 };
@@ -164,12 +165,12 @@ export const getTraitOpportunityHighlight = (board: BoardState | null | undefine
     const surgeTileIds = getTraitComboSurgeTileIds(board);
     if (summary.interactionLines.length > 0) {
         const tone = surgeTileIds.size > 0 ? 'surge' : 'ready';
-        const primaryLine = summary.interactionLines[0] ?? 'Match or move traits together to light a route.';
-        const buildLabel = summary.tiles.length > 0 ? `${summary.tiles.length} combo-ready cards` : 'Trait route';
+        const primaryLine = summary.interactionLines[0] ?? tr.s('Match or move traits together to light a route.');
+        const buildLabel = summary.tiles.length > 0 ? tr`${summary.tiles.length} combo-ready cards` : tr.s('Trait route');
         return {
             active: true,
             buildLabel,
-            headline: tone === 'surge' ? 'Combo surge ready' : 'Chain route ready',
+            headline: tone === 'surge' ? tr.s('Combo surge ready') : tr.s('Chain route ready'),
             primaryLine,
             secondaryLine: summary.interactionLines[1] ?? null,
             tileIds: summary.tiles.map((tile) => tile.tileId),
@@ -181,8 +182,8 @@ export const getTraitOpportunityHighlight = (board: BoardState | null | undefine
     if (setupHint) {
         return {
             active: true,
-            buildLabel: 'Route prime',
-            headline: 'One swap primes route',
+            buildLabel: tr.s('Route prime'),
+            headline: tr.s('One swap primes route'),
             primaryLine: setupHint.text,
             secondaryLine: setupHint.createdLines[1] ?? null,
             tileIds: [setupHint.firstTileId, setupHint.secondTileId],
@@ -192,9 +193,9 @@ export const getTraitOpportunityHighlight = (board: BoardState | null | undefine
 
     return {
         active: false,
-        buildLabel: 'No route',
-        headline: 'No chain route lit',
-        primaryLine: 'Match or move traits together to light a route.',
+        buildLabel: tr.s('No route'),
+        headline: tr.s('No chain route lit'),
+        primaryLine: tr.s('Match or move traits together to light a route.'),
         secondaryLine: null,
         tileIds: [],
         tone: 'idle'
@@ -258,7 +259,7 @@ export const getTraitSwapRouteHints = (
                 secondLabel: second.label,
                 createdLines,
                 brokenLines: preview.brokenLines,
-                text: `Swap ${first.label} with ${second.label}: ${createdLines.join('; ')}`,
+                text: tr`Swap ${first.label} with ${second.label}: ${createdLines.join('; ')}`,
                 order
             });
             order += 1;
@@ -297,20 +298,20 @@ export const getTraitOpportunityHudModel = (
         ? getTraitSwapRouteHints(board, 1)[0] ?? null
         : null;
     const active = routeCount > 0 || swapHint != null;
-    const buildLabel = summary.tiles.length > 0 ? `${summary.tiles.length} combo-ready cards` : 'Route prime';
-    const primaryLine = summary.interactionLines[0] ?? swapHint?.text ?? 'No trait route primed yet';
+    const buildLabel = summary.tiles.length > 0 ? tr`${summary.tiles.length} combo-ready cards` : tr.s('Route prime');
+    const primaryLine = summary.interactionLines[0] ?? swapHint?.text ?? tr.s('No trait route primed yet');
     const rowSwapLine = runTools.activeContract?.noShuffle
         ? 'locked'
         : `${runTools.regionShuffleCharges}`;
-    const toolLine = `Tools: row/swap ${rowSwapLine}, peek ${runTools.peekCharges}, shuffle ${runTools.shuffleCharges}`;
+    const toolLine = tr`Tools: row/swap ${rowSwapLine}, peek ${runTools.peekCharges}, shuffle ${runTools.shuffleCharges}`;
     const routeCountLabel = routeCount === 0 && swapHint
         ? 'setup'
         : routeCount === 1
-          ? '1 route'
-          : `${routeCount} routes`;
+          ? tr.s('1 route')
+          : tr`${routeCount} routes`;
     const title = [
-        routeCount > 0 ? `Routes: ${summary.interactionLines.slice(0, 3).join('; ')}.` : null,
-        swapHint ? `Swap hint: ${swapHint.text}.` : null,
+        routeCount > 0 ? tr`Routes: ${summary.interactionLines.slice(0, 3).join('; ')}.` : null,
+        swapHint ? tr`Swap hint: ${swapHint.text}.` : null,
         `${toolLine}.`
     ]
         .filter(Boolean)
@@ -373,11 +374,11 @@ const getTraitSwapOpportunityPreviewWithContext = (
     const unchangedLines = traitInteractionPreviewKeyLines([...afterKeys].filter((key) => context.beforeKeys.has(key)));
     const routeText =
         createdLines.length > 0
-            ? `Creates trait route: ${createdLines.slice(0, 2).join('; ')}`
+            ? tr`Creates trait route: ${createdLines.slice(0, 2).join('; ')}`
             : brokenLines.length > 0
-              ? `Breaks trait route: ${brokenLines.slice(0, 2).join('; ')}`
+              ? tr`Breaks trait route: ${brokenLines.slice(0, 2).join('; ')}`
               : unchangedLines.length > 0
-                ? `Keeps trait route: ${unchangedLines.slice(0, 2).join('; ')}`
+                ? tr`Keeps trait route: ${unchangedLines.slice(0, 2).join('; ')}`
                 : null;
 
     return {

@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { GAME_MODE_CODEX, getMutatorCatalogRows } from '../../shared/game-catalog';
 import { FLOOR_CURIOS } from '../../shared/floor-curio-rules';
 import { codexResidentDescription, FLOOR_CURIO_COPY } from '../copy/floorCurioBeat';
@@ -11,18 +12,18 @@ export type CodexTab = 'all' | 'guides' | 'tables';
 type TocKind = 'guide' | 'table';
 
 export const CODEX_TOC: { href: string; label: string; kind: TocKind }[] = [
-    { href: '#codex-core', label: 'Core', kind: 'guide' },
-    { href: '#codex-powers', label: 'Powers', kind: 'guide' },
-    { href: '#codex-scoring', label: 'Scoring', kind: 'guide' },
-    { href: '#codex-settings', label: 'Settings', kind: 'guide' },
-    { href: '#codex-pickups', label: 'Pickups', kind: 'guide' },
-    { href: '#codex-traits', label: 'Traits', kind: 'guide' },
-    { href: '#codex-residents', label: 'Residents', kind: 'guide' },
-    { href: '#codex-contracts', label: 'Contracts', kind: 'guide' },
-    { href: '#codex-featured-runs', label: 'Featured', kind: 'guide' },
-    { href: '#codex-modes', label: 'Modes', kind: 'guide' },
-    { href: '#codex-achievements', label: 'Achievements', kind: 'table' },
-    { href: '#codex-mutators', label: 'Mutators', kind: 'table' }
+    { href: '#codex-core', label: tr.s('Core'), kind: 'guide' },
+    { href: '#codex-powers', label: tr.s('Powers'), kind: 'guide' },
+    { href: '#codex-scoring', label: tr.s('Scoring'), kind: 'guide' },
+    { href: '#codex-settings', label: tr.s('Settings'), kind: 'guide' },
+    { href: '#codex-pickups', label: tr.s('Pickups'), kind: 'guide' },
+    { href: '#codex-traits', label: tr.s('Traits'), kind: 'guide' },
+    { href: '#codex-residents', label: tr.s('Residents'), kind: 'guide' },
+    { href: '#codex-contracts', label: tr.s('Contracts'), kind: 'guide' },
+    { href: '#codex-featured-runs', label: tr.s('Featured'), kind: 'guide' },
+    { href: '#codex-modes', label: tr.s('Modes'), kind: 'guide' },
+    { href: '#codex-achievements', label: tr.s('Achievements'), kind: 'table' },
+    { href: '#codex-mutators', label: tr.s('Mutators'), kind: 'table' }
 ];
 
 export const filterTopics = <T extends TextTopic>(topics: readonly T[], query: string): T[] => {

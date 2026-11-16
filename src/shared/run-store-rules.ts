@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import { DEPTH_STORE_PRICE_SHARE, depthHas } from './depth-rules';
 import type { ChainTier } from './chain-tier-rules';
 import type { RunState } from './contracts';
@@ -48,32 +49,32 @@ export interface StoreItemDefinition {
 export const STORE_ITEMS: readonly StoreItemDefinition[] = [
     {
         id: 'miss',
-        title: 'Another life',
-        body: 'One more life before the run ends, good for three floors past this one, up to as many as you can hold.',
+        title: tr.s('Another life'),
+        body: tr.s('One more life before the run ends, good for three floors past this one, up to as many as you can hold.'),
         basePrice: 4,
         priceStep: 2,
         kind: 'consumable'
     },
     {
         id: 'peek',
-        title: 'A peek',
-        body: 'One peek charge: turn a hidden card over and put it back.',
+        title: tr.s('A peek'),
+        body: tr.s('One peek charge: turn a hidden card over and put it back.'),
         basePrice: 3,
         priceStep: 1,
         kind: 'consumable'
     },
     {
         id: 'shuffle',
-        title: 'A shuffle',
-        body: 'One full-board shuffle charge.',
+        title: tr.s('A shuffle'),
+        body: tr.s('One full-board shuffle charge.'),
         basePrice: 3,
         priceStep: 1,
         kind: 'consumable'
     },
     {
         id: 'bomb',
-        title: 'A bomb',
-        body: 'Flip a card, then bomb it: its pair leaves the board. No miss, no turn, the chain stands.',
+        title: tr.s('A bomb'),
+        body: tr.s('Flip a card, then bomb it: its pair leaves the board. No miss, no turn, the chain stands.'),
         basePrice: 4,
         priceStep: 2,
         kind: 'consumable'
@@ -93,22 +94,22 @@ export const STORE_ITEMS: readonly StoreItemDefinition[] = [
 
 /** All four elements are available: the finds constrain the build, not another stock roll. */
 export const ELEMENTAL_STORE_ITEMS: readonly StoreItemDefinition[] = TILE_SUITS.flatMap(suit => [
-    { id: `focus_${suit}` as const, title: `${ELEMENT_NAMES[suit]} focus`,
-        body: `${FOCUS_EFFECTS[suit]} +1 cast tier for reach and targets. Lasts this run.`,
+    { id: `focus_${suit}` as const, title: tr`${ELEMENT_NAMES[suit]} focus`,
+        body: tr`${FOCUS_EFFECTS[suit]} +1 cast tier for reach and targets. Lasts this run.`,
         basePrice: 6, priceStep: 3, kind: 'focus' as const },
-    { id: `prime_${suit}` as const, title: `Bottle ${ELEMENT_NAMES[suit]}`,
-        body: `Prime ${ELEMENT_NAMES[suit]} for the next floor. Match another element to react. A miss breaks it. Replaces your streak; one bottle per stop.`,
+    { id: `prime_${suit}` as const, title: tr`Bottle ${ELEMENT_NAMES[suit]}`,
+        body: tr`Prime ${ELEMENT_NAMES[suit]} for the next floor. Match another element to react. A miss breaks it. Replaces your streak; one bottle per stop.`,
         basePrice: 3, priceStep: 1, kind: 'prime' as const }
 ]);
 /** Always available at camp: build a run, or spend on immediate help. */
 export const CAMP_ITEMS: readonly StoreItemDefinition[] = [
-    { id: 'long_look', title: 'Long Look', body: 'More time to memorize every board.', basePrice: 8, priceStep: 6, kind: 'relic' },
-    { id: 'deep_pockets', title: 'Deep Pockets', body: 'Also restores 1 miss now, lasting three floors.', basePrice: 8, priceStep: 6, kind: 'relic' },
-    { id: 'gilded_chain', title: 'Gilded Chain', body: 'Earn extra gold as you keep matching without a miss.', basePrice: 6, priceStep: 5, kind: 'relic' },
+    { id: 'long_look', title: tr.s('Long Look'), body: tr.s('More time to memorize every board.'), basePrice: 8, priceStep: 6, kind: 'relic' },
+    { id: 'deep_pockets', title: tr.s('Deep Pockets'), body: tr.s('Also restores 1 miss now, lasting three floors.'), basePrice: 8, priceStep: 6, kind: 'relic' },
+    { id: 'gilded_chain', title: tr.s('Gilded Chain'), body: tr.s('Earn extra gold as you keep matching without a miss.'), basePrice: 6, priceStep: 5, kind: 'relic' },
     ...STORE_ITEMS.filter(item => ['miss', 'peek', 'bomb'].includes(item.id))
 ];
 /** From rules 77 the camp sells the Tallow Candle in ranks too (DGE-014). */
-const CANDLE_CAMP_ITEM: StoreItemDefinition = { id: 'tallow_candle', title: 'Tallow Candle', body: 'Lights the cards beside a floor\u2019s first matches.', basePrice: 8, priceStep: 6, kind: 'relic' };
+const CANDLE_CAMP_ITEM: StoreItemDefinition = { id: 'tallow_candle', title: tr.s('Tallow Candle'), body: tr.s('Lights the cards beside a floor\u2019s first matches.'), basePrice: 8, priceStep: 6, kind: 'relic' };
 export const campItemsFor = (rulesVersion: number | undefined): readonly StoreItemDefinition[] =>
     (rulesVersion ?? 0) >= CANDLE_RANKS_FROM ? [...CAMP_ITEMS.slice(0, 3), CANDLE_CAMP_ITEM, ...CAMP_ITEMS.slice(3)] : CAMP_ITEMS;
 const ALL_STORE_ITEMS = [...STORE_ITEMS, ...ELEMENTAL_STORE_ITEMS];
@@ -209,7 +210,7 @@ export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
             essenceHeld = essenceOf(run.elementalEssence, suit);
             if (item.kind === 'prime' && run.elementalPrimeFloor === run.board?.level) blocked = 'prepared';
             else if (essenceHeld < essenceCost) blocked = 'essence';
-            if (item.kind === 'focus') body = `Rank ${focusOf(run, suit)} → ${focusOf(run, suit) + 1}. ${body}`;
+            if (item.kind === 'focus') body = tr`Rank ${focusOf(run, suit)} → ${focusOf(run, suit) + 1}. ${body}`;
         }
         if (item.id === 'miss') {
             const left = missesLeft(run);
@@ -219,10 +220,10 @@ export const storeOffer = (run: StoreRun): StoreOfferRow[] =>
         const rank = usesCampUpgrades(run) && isCampUpgrade(item.id) ? relicRank(run, item.id) : undefined;
         if (rank !== undefined && isCampUpgrade(item.id)) {
             body = rank >= CAMP_UPGRADE_MAX_RANK ? `${campUpgradeBenefit(item.id, rank)}. Maximum rank.`
-                : item.id === 'long_look' ? `Study time: +${rank} → +${rank + 1} seconds on every floor.`
-                : item.id === 'deep_pockets' ? `Miss capacity: ${4 + rank} → ${5 + rank}. Restores 1 miss now, lasting three floors.`
-                : item.id === 'tallow_candle' ? `Lights the cards beside the first ${rank} → ${rank + 1} matches of every floor.`
-                : `Combo payout: ${rank ? rank + 1 : 0} → ${rank + 2} gold every 5 matches in a row.`;
+                : item.id === 'long_look' ? tr`Study time: +${rank} → +${rank + 1} seconds on every floor.`
+                : item.id === 'deep_pockets' ? tr`Miss capacity: ${4 + rank} → ${5 + rank}. Restores 1 miss now, lasting three floors.`
+                : item.id === 'tallow_candle' ? tr`Lights the cards beside the first ${rank} → ${rank + 1} matches of every floor.`
+                : tr`Combo payout: ${rank ? rank + 1 : 0} → ${rank + 2} gold every 5 matches in a row.`;
             if (item.id === 'deep_pockets' && missesLeft(run) == null) blocked = 'no_bank';
             if (rank >= CAMP_UPGRADE_MAX_RANK) blocked = 'max_rank';
         } else if (isRelicId(item.id) && hasRelic(run, item.id)) blocked = 'owned';

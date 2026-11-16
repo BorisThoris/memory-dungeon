@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { BoardState, RunState, Tile } from './contracts';
 import { atomicVariantForPairKey } from './board-tile-generation-rules';
 import { boardRings } from './cartographer-rules';
@@ -84,7 +85,7 @@ export const sealSpiralRings = (
         for (let i = 0; i + 1 < insidePool.length; i += 2) reusable.push([insidePool[i]!, insidePool[i + 1]!]);
         const faces = freshBoardFaces(tiles, board.level);
         reusable.forEach((cells, slot) => {
-            const face = faces[slot] ?? { symbol: `S${slot + 1}`, label: `Spiral ${slot + 1}` };
+            const face = faces[slot] ?? { symbol: `S${slot + 1}`, label: tr`Spiral ${slot + 1}` };
             const pairKey = `${board.level}-spiral-${sealedCount}-${slot}-${pickRngIndex(rng, 1_000_000)}`;
             const suit = TILE_SUITS[pickRngIndex(rng, TILE_SUITS.length)]!;
             // The two cells trade halves at random, so a pair is not dealt where the old one stood in order.

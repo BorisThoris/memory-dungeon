@@ -14,6 +14,7 @@
  * illustration would be. The Codex lists the mapping so it can be learned rather than guessed.
  */
 import type { TileTraitKind } from './contracts';
+import { plural } from './i18n';
 
 export type TraitMarkShape = 'pip' | 'bar';
 export type TraitMarkCount = 1 | 2 | 3;
@@ -42,8 +43,7 @@ export const tileTraitMark = (kind: TileTraitKind): TraitMarkSignature => TILE_T
 
 /** Player-facing description of a mark, for the Codex and for screen readers. */
 export const describeTraitMark = ({ count, shape }: TraitMarkSignature): string => {
-    const noun = shape === 'pip' ? 'dot' : 'bar';
-    return `${count} ${noun}${count === 1 ? '' : 's'}`;
+    return shape === 'pip' ? plural(count, { one: '{0} dot', other: '{0} dots' }) : plural(count, { one: '{0} bar', other: '{0} bars' });
 };
 
 /**

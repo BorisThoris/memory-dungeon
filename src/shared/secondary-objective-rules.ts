@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import {
     type BoardState,
     CURSED_LAST_BONUS_SCORE,
@@ -207,5 +208,5 @@ export const getFloorClearObjectiveResult = (run: RunState, board: BoardState): 
 
 export const getFeaturedObjectiveRewardCopy = (id: FeaturedObjectiveId): string => {
     const score = getFeaturedObjectiveBonusScore(id);
-    return `+${score} score on the clear.`;
+    return tr`+${score} score on the clear.`;
 };

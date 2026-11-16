@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { BoardState, Tile, TileSuit } from './contracts';
 import { COMBO_HEAT_STAGE_FROM } from './combo-heat-rules';
 import { createMulberry32, hashStringToSeed, pickRngIndex } from './rng';
@@ -86,7 +87,7 @@ export const resolveVoidSpew = ({
     const tiles = [...board.tiles];
     const newPairKeys: string[] = [];
     reuse.forEach((oldKey, slot) => {
-        const face = fresh[slot] ?? { symbol: `V${slot + 1}`, label: `Void ${slot + 1}` };
+        const face = fresh[slot] ?? { symbol: `V${slot + 1}`, label: tr`Void ${slot + 1}` };
         const pairKey = `${board.level}-void-${mismatchCount}-${slot}`;
         const suit: TileSuit = TILE_SUITS[pickRngIndex(rng, TILE_SUITS.length)]!;
         const atomicVariant = atomicVariantForPairKey(pairKey);

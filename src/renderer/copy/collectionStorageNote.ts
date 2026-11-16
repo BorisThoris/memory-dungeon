@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 /**
  * The line under the Collection heading that says where this progress actually lives.
  *
@@ -19,12 +20,12 @@ export const collectionStorageNote = ({
     desktop?: boolean;
 }): string => {
     if (!isAchievements) {
-        return 'everything here is stored on this device.';
+        return tr.s('everything here is stored on this device.');
     }
     if (!desktop) {
-        return 'these are saved on this device.';
+        return tr.s('these are saved on this device.');
     }
     return steamConnected
-        ? 'these unlock on Steam as well as on this device.'
-        : 'Steam is not connected, so these stay on this device until it is.';
+        ? tr.s('these unlock on Steam as well as on this device.')
+        : tr.s('Steam is not connected, so these stay on this device until it is.');
 };

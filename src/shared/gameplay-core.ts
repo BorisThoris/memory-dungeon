@@ -1,3 +1,4 @@
+import { plural, tr } from './i18n';
 import { applyStillBell, STILL_BELL_SOURCE_ID, stillBellFeedbackLine } from './still-bell-rules';
 import { missBankCap as purseBankCap, missesLeft as purseMissesLeft } from './miss-bank';
 import { runComboMultiplier } from './combo-pay-rules';
@@ -145,17 +146,17 @@ const tilePlace = (run: RunState, tileId: string): string => {
     const board = run.board;
     const index = board?.tiles.findIndex((tile) => tile.id === tileId) ?? -1;
     if (!board || index < 0) {
-        return 'a tile';
+        return tr.s('a tile');
     }
     const columns = getSafeBoardColumns(board);
-    return `row ${Math.floor(index / columns) + 1}, column ${(index % columns) + 1}`;
+    return tr`row ${Math.floor(index / columns) + 1}, column ${(index % columns) + 1}`;
 };
 
 const tileName = (run: RunState, tileId: string): string =>
-    run.board?.tiles.find((tile) => tile.id === tileId)?.label ?? 'a tile';
+    run.board?.tiles.find((tile) => tile.id === tileId)?.label ?? tr.s('a tile');
 
 const chargesLeft = (count: number, noun: string): string =>
-    count === 1 ? `1 ${noun} remains` : `${count} ${noun}s remain`;
+    count === 1 ? tr`1 ${noun} remains` : tr`${count} ${noun}s remain`;
 
 const applyPinToggleCommand = (
     run: RunState,
@@ -163,7 +164,7 @@ const applyPinToggleCommand = (
 ): GameplayCommandResult => {
     const nextRun = togglePinnedTile(run, command.targetTileId);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Pin toggle is not legal for the current run and target.', command);
+        return rejectedResult(run, command.commandId, tr.s('Pin toggle is not legal for the current run and target.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, PIN_SOURCE, events);
@@ -181,7 +182,7 @@ const applyPinToggleCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.pin.toggled',
-        message: `Tile at ${tilePlace(run, command.targetTileId)} ${pinned ? 'pinned' : 'unpinned'}; ${after.length}/${maxPinnedTilesForRun(nextRun)} pins active.`,
+        message: tr`Tile at ${tilePlace(run, command.targetTileId)} ${pinned ? 'pinned' : 'unpinned'}; ${after.length}/${maxPinnedTilesForRun(nextRun)} pins active.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -193,7 +194,7 @@ const applyPeekCommand = (
 ): GameplayCommandResult => {
     const nextRun = applyPeek(run, command.targetTileId);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Peek is not legal for the current run and target.', command);
+        return rejectedResult(run, command.commandId, tr.s('Peek is not legal for the current run and target.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, PEEK_SOURCE, events);
@@ -219,7 +220,7 @@ const applyPeekCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.peek.used',
-        message: `Peek revealed ${tileName(run, command.targetTileId)} at ${tilePlace(run, command.targetTileId)}; ${chargesLeft(after, 'charge')}.`,
+        message: tr`Peek revealed ${tileName(run, command.targetTileId)} at ${tilePlace(run, command.targetTileId)}; ${chargesLeft(after, 'charge')}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -231,7 +232,7 @@ const applyBombCommand = (
 ): GameplayCommandResult => {
     const nextRun = applyBomb(run, command.targetTileId);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'A bomb needs one card face up whose pair is not the last on the floor.', command);
+        return rejectedResult(run, command.commandId, tr.s('A bomb needs one card face up whose pair is not the last on the floor.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, BOMB_SOURCE, events);
@@ -248,7 +249,7 @@ const applyBombCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.bomb.used',
-        message: `Bomb took that card and its twin off the board; ${chargesLeft(after, 'bomb')}.`,
+        message: tr`Bomb took that card and its twin off the board; ${chargesLeft(after, 'bomb')}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -260,7 +261,7 @@ const applyTakeRelicCommand = (
 ): GameplayCommandResult => {
     const nextRun = takeMisersPurse(run, command.replaceRelicId);
     if (!nextRun) {
-        return rejectedResult(run, command.commandId, "There is no Miser's Purse on offer, or no relic named to make room for it.", command);
+        return rejectedResult(run, command.commandId, tr.s("There is no Miser's Purse on offer, or no relic named to make room for it."), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, MISERS_PURSE_SOURCE, events);
@@ -270,7 +271,7 @@ const applyTakeRelicCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.misers_purse.taken',
-        message: `You took up the Miser's Purse: clears pay double gold, and the bank holds ${purseBankCap(nextRun)}${after < before ? `; ${before - after} miss went to make room` : ''}.`,
+        message: tr`You took up the Miser's Purse: clears pay double gold, and the bank holds ${purseBankCap(nextRun)}${after < before ? tr`; ${before - after} miss went to make room` : ''}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -282,7 +283,7 @@ const applyStillBellCommand = (
 ): GameplayCommandResult => {
     const result = applyStillBell(run);
     if (!result) {
-        return rejectedResult(run, command.commandId, 'A still bell needs a realm floor in play, nothing face up, and a card the realm is holding.', command);
+        return rejectedResult(run, command.commandId, tr.s('A still bell needs a realm floor in play, nothing face up, and a card the realm is holding.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, STILL_BELL_SOURCE, events);
@@ -311,7 +312,7 @@ const applyStormGlassCommand = (
 ): GameplayCommandResult => {
     const result = applyStormGlass(run);
     if (!result) {
-        return rejectedResult(run, command.commandId, 'A storm glass needs a realm floor in play with nothing face up.', command);
+        return rejectedResult(run, command.commandId, tr.s('A storm glass needs a realm floor in play with nothing face up.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, STORM_GLASS_SOURCE, events);
@@ -340,7 +341,7 @@ const applyCrucibleCommand = (
 ): GameplayCommandResult => {
     const result = applyCrucible(run, command.targetTileId);
     if (!result) {
-        return rejectedResult(run, command.commandId, 'A crucible needs one card face up whose pair is not the last on the floor.', command);
+        return rejectedResult(run, command.commandId, tr.s('A crucible needs one card face up whose pair is not the last on the floor.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, CRUCIBLE_SOURCE, events);
@@ -381,7 +382,7 @@ const applyGambitCommitCommand = (
         target.state !== 'hidden' ||
         flippedTileIds.includes(command.targetTileId)
     ) {
-        return rejectedResult(run, command.commandId, 'Gambit cannot commit this third tile.', command);
+        return rejectedResult(run, command.commandId, tr.s('Gambit cannot commit this third tile.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, GAMBIT_SOURCE, events);
@@ -398,7 +399,7 @@ const applyGambitCommitCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.gambit.committed',
-        message: `Gambit committed the tile at ${tilePlace(run, command.targetTileId)} as a three-tile rescue.`,
+        message: tr`Gambit committed the tile at ${tilePlace(run, command.targetTileId)} as a three-tile rescue.`,
         tone: 'warning'
     });
     return { run, command, events, accepted: true };
@@ -410,7 +411,7 @@ const applyShuffleCommand = (
 ): GameplayCommandResult => {
     const nextRun = applyShuffle(run);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Full-board shuffle is not legal for the current run.', command);
+        return rejectedResult(run, command.commandId, tr.s('Full-board shuffle is not legal for the current run.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, SHUFFLE_SOURCE, events);
@@ -436,7 +437,7 @@ const applyShuffleCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.shuffle.used',
-        message: `Full-board shuffle committed; ${chargesLeft(afterCharges, 'charge')}.`,
+        message: tr`Full-board shuffle committed; ${chargesLeft(afterCharges, 'charge')}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -448,7 +449,7 @@ const applyRegionShuffleCommand = (
 ): GameplayCommandResult => {
     const nextRun = applyRegionShuffle(run, command.rowIndex);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Row shuffle is not legal for the current run and row.', command);
+        return rejectedResult(run, command.commandId, tr.s('Row shuffle is not legal for the current run and row.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, REGION_SHUFFLE_SOURCE, events);
@@ -476,7 +477,7 @@ const applyRegionShuffleCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.region_shuffle.used',
-        message: `Row ${command.rowIndex + 1} shuffled; ${chargesLeft(afterCharges, 'row/swap charge')}.`,
+        message: tr`Row ${command.rowIndex + 1} shuffled; ${chargesLeft(afterCharges, tr.s('row/swap charge'))}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -488,7 +489,7 @@ const applyTileSwapCommand = (
 ): GameplayCommandResult => {
     const nextRun = applyTileSwap(run, command.firstTileId, command.secondTileId);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Tile swap is not legal for the current run and targets.', command);
+        return rejectedResult(run, command.commandId, tr.s('Tile swap is not legal for the current run and targets.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, TILE_SWAP_SOURCE, events);
@@ -513,7 +514,7 @@ const applyTileSwapCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.tile_swap.used',
-        message: `Tile at ${tilePlace(run, command.firstTileId)} swapped with tile at ${tilePlace(run, command.secondTileId)}; ${chargesLeft(afterCharges, 'row/swap charge')}.`,
+        message: tr`Tile at ${tilePlace(run, command.firstTileId)} swapped with tile at ${tilePlace(run, command.secondTileId)}; ${chargesLeft(afterCharges, tr.s('row/swap charge'))}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -525,11 +526,11 @@ const applyFlashPairCommand = (
 ): GameplayCommandResult => {
     const nextRun = applyFlashPair(run);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Flash Pair is not legal for the current run.', command);
+        return rejectedResult(run, command.commandId, tr.s('Flash Pair is not legal for the current run.'), command);
     }
     const revealedTileIds = runStringArray(nextRun.flashPairRevealedTileIds);
     if (revealedTileIds.length !== 2) {
-        return rejectedResult(run, command.commandId, 'Flash Pair did not reveal exactly one pair.', command);
+        return rejectedResult(run, command.commandId, tr.s('Flash Pair did not reveal exactly one pair.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, FLASH_PAIR_SOURCE, events);
@@ -555,7 +556,7 @@ const applyFlashPairCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.flash_pair.used',
-        message: `Flash Pair revealed the ${tileName(run, revealedTileIds[0]!)} pair; ${chargesLeft(afterCharges, 'charge')}.`,
+        message: tr`Flash Pair revealed the ${tileName(run, revealedTileIds[0]!)} pair; ${chargesLeft(afterCharges, 'charge')}.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -568,7 +569,7 @@ const applyGreetCurioCommand = (
     const greeting = canGreetFloorCurio(run) ? runFloorCurioGreeting(run) : null;
     const nextRun = greetFloorCurio(run);
     if (!greeting || nextRun === run) {
-        return rejectedResult(run, command.commandId, 'There is nobody on this floor to greet.', command);
+        return rejectedResult(run, command.commandId, tr.s('There is nobody on this floor to greet.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, CURIO_GREET_SOURCE, events);
@@ -596,7 +597,7 @@ const applyUndoResolveCommand = (
     const restoredTileIds = runStringArray(run.board?.flippedTileIds);
     const nextRun = cancelResolvingWithUndo(run);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Undo is not legal for the current resolving turn.', command);
+        return rejectedResult(run, command.commandId, tr.s('Undo is not legal for the current resolving turn.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeEvent = makeEventWriter(command.commandId, UNDO_RESOLVE_SOURCE, events);
@@ -622,7 +623,7 @@ const applyUndoResolveCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'power.undo_resolve.used',
-        message: `Pending flip cancelled; ${chargesLeft(afterUses, 'undo use')} this floor.`,
+        message: tr`Pending flip cancelled; ${chargesLeft(afterUses, tr.s('undo use'))} this floor.`,
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -633,7 +634,7 @@ const applyFloorAdvanceCommand = (
     command: Extract<GameplayCommand, { type: 'floor.advance' }>
 ): GameplayCommandResult => {
     if (run.status !== 'levelComplete' || !run.board) {
-        return rejectedResult(run, command.commandId, 'Floor advancement requires a cleared floor.', command);
+        return rejectedResult(run, command.commandId, tr.s('Floor advancement requires a cleared floor.'), command);
     }
     const fromFloor = run.board.level;
     const events: GameplayEvent[] = [];
@@ -659,8 +660,8 @@ const applyFloorAdvanceCommand = (
         type: 'feedback.requested',
         cue: nextRun.status === 'gameOver' ? 'floor.advance.defeated' : 'floor.advance.ready',
         message: nextRun.status === 'gameOver'
-            ? 'Score Parasite ended the run before the next floor could be prepared.'
-            : `Floor ${fromFloor + 1} is ready to memorize (${nextBoard?.pairCount ?? 0} pairs).`,
+            ? tr.s('Score Parasite ended the run before the next floor could be prepared.')
+            : tr`Floor ${fromFloor + 1} is ready to memorize (${nextBoard?.pairCount ?? 0} pairs).`,
         tone: nextRun.status === 'gameOver' ? 'warning' : 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -758,7 +759,7 @@ const consumeBoardTurnWildMatch = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'wild_joker.match_consumed',
-        message: `Wild Joker bridged ${pairedTile?.label ?? 'a pair'}; ${tokensAfter} wildcard token${tokensAfter === 1 ? '' : 's'} remain.`,
+        message: tr`Wild Joker bridged ${pairedTile?.label ?? tr.s('a pair')}; ${plural(tokensAfter, { one: '{0} wildcard token', other: '{0} wildcard tokens' })} remain.`,
         tone: 'reward'
     });
     return {
@@ -773,13 +774,13 @@ const applyBoardTurnResolveCommand = (
     command: Extract<GameplayCommand, { type: 'board.turn_resolve' }>
 ): GameplayCommandResult => {
     if (!run.board || run.status !== 'resolving') {
-        return rejectedResult(run, command.commandId, 'Board turn is not ready to resolve.', command);
+        return rejectedResult(run, command.commandId, tr.s('Board turn is not ready to resolve.'), command);
     }
     const flippedTileIds = Array.isArray(run.board.flippedTileIds)
         ? run.board.flippedTileIds.filter((tileId): tileId is string => typeof tileId === 'string')
         : [];
     if (flippedTileIds.length !== 2 && flippedTileIds.length !== 3) {
-        return rejectedResult(run, command.commandId, 'Board turn requires exactly two or three flipped tiles.', command);
+        return rejectedResult(run, command.commandId, tr.s('Board turn requires exactly two or three flipped tiles.'), command);
     }
 
     const events: GameplayEvent[] = [];
@@ -798,7 +799,7 @@ const applyBoardTurnResolveCommand = (
         traitInteractionTags
     });
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Board turn produced no transition.', command);
+        return rejectedResult(run, command.commandId, tr.s('Board turn produced no transition.'), command);
     }
 
     const statsBefore = normalizeSessionStats(run.stats);
@@ -871,11 +872,11 @@ const applyWildMatchConsumeCommand = (
         !tilesArePairMatch(wildTile, pairedTile) ||
         tokensBefore <= 0
     ) {
-        return rejectedResult(run, command.commandId, 'Wild match token cannot be consumed for these tiles.', command);
+        return rejectedResult(run, command.commandId, tr.s('Wild match token cannot be consumed for these tiles.'), command);
     }
     const consumed = useRunInventoryItem(run, 'wild_match_token');
     if (!consumed.applied) {
-        return rejectedResult(run, command.commandId, 'Wild match token was unavailable.', command);
+        return rejectedResult(run, command.commandId, tr.s('Wild match token was unavailable.'), command);
     }
     const tokensAfter = getRunInventoryItemQuantity(consumed.run, 'wild_match_token');
     const events: GameplayEvent[] = [];
@@ -899,7 +900,7 @@ const applyWildMatchConsumeCommand = (
     writeEvent({
         type: 'feedback.requested',
         cue: 'wild_joker.match_consumed',
-        message: `Wild Joker bridged ${pairedTile.label}; ${tokensAfter} wildcard token${tokensAfter === 1 ? '' : 's'} remain.`,
+        message: tr`Wild Joker bridged ${pairedTile.label}; ${plural(tokensAfter, { one: '{0} wildcard token', other: '{0} wildcard tokens' })} remain.`,
         tone: 'reward'
     });
     return { run: consumed.run, command, events, accepted: true };
@@ -914,7 +915,7 @@ const applyTileFlipCommand = (
     const flipTileThroughCore = createFlipTileTransition({ finalizeLevel });
     const nextRun = flipTileThroughCore(run, command.targetTileId);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Tile flip is not legal for the current run.', command);
+        return rejectedResult(run, command.commandId, tr.s('Tile flip is not legal for the current run.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeFlipEvent = makeEventWriter(command.commandId, TILE_FLIP_SOURCE, events);
@@ -939,7 +940,7 @@ const applyTileFlipCommand = (
         writeFlipEvent({
             type: 'feedback.requested',
             cue: 'board.tile.flipped',
-            message: 'Tile revealed.',
+            message: tr.s('Tile revealed.'),
             tone: 'information'
         });
     }
@@ -951,11 +952,11 @@ const applyMemorizeCompleteCommand = (
     command: Extract<GameplayCommand, { type: 'phase.memorize_complete' }>
 ): GameplayCommandResult => {
     if (run.status !== 'memorize') {
-        return rejectedResult(run, command.commandId, 'Run is not in the memorize phase.', command);
+        return rejectedResult(run, command.commandId, tr.s('Run is not in the memorize phase.'), command);
     }
     const finished = finishMemorizePhase(run);
     if (finished === run) {
-        return rejectedResult(run, command.commandId, 'Memorize phase could not be completed.', command);
+        return rejectedResult(run, command.commandId, tr.s('Memorize phase could not be completed.'), command);
     }
     /*
      * The study period paid for itself. A player who ended it early handed back clock they had
@@ -992,7 +993,7 @@ const applyPauseCommand = (
 ): GameplayCommandResult => {
     const paused = pauseRun(run);
     if (paused === run) {
-        return rejectedResult(run, command.commandId, 'Run cannot be paused from its current status.', command);
+        return rejectedResult(run, command.commandId, tr.s('Run cannot be paused from its current status.'), command);
     }
     // The snapshot carries the timer values the caller actually measured at
     // command.pausedAtMs. pauseRun only freezes the status, so without applying the
@@ -1018,7 +1019,7 @@ const applyPauseCommand = (
          * reveal. This says what pausing does without naming an internal that has already changed
          * once and can change again.
          */
-        message: 'Run paused. Nothing moves until you resume.',
+        message: tr.s('Run paused. Nothing moves until you resume.'),
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -1030,7 +1031,7 @@ const applyResumeCommand = (
 ): GameplayCommandResult => {
     const nextRun = resumeRun(run);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Run cannot be resumed from its current status.', command);
+        return rejectedResult(run, command.commandId, tr.s('Run cannot be resumed from its current status.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeResumeEvent = makeEventWriter(command.commandId, RUN_TIMER_SOURCE, events);
@@ -1042,7 +1043,7 @@ const applyResumeCommand = (
     writeResumeEvent({
         type: 'feedback.requested',
         cue: 'run.resumed',
-        message: 'Run resumed.',
+        message: tr.s('Run resumed.'),
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -1054,7 +1055,7 @@ const applyDebugRevealActivateCommand = (
 ): GameplayCommandResult => {
     const nextRun = enableDebugPeek(run, command.disableAchievementsOnDebug);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Debug reveal is already active.', command);
+        return rejectedResult(run, command.commandId, tr.s('Debug reveal is already active.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeActivateEvent = makeEventWriter(command.commandId, DEBUG_REVEAL_SOURCE, events);
@@ -1066,7 +1067,7 @@ const applyDebugRevealActivateCommand = (
     writeActivateEvent({
         type: 'feedback.requested',
         cue: 'debug.reveal.activated',
-        message: 'Debug reveal active.',
+        message: tr.s('Debug reveal active.'),
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -1078,7 +1079,7 @@ const applyDebugRevealDeactivateCommand = (
 ): GameplayCommandResult => {
     const nextRun = disableDebugPeek(run);
     if (nextRun === run) {
-        return rejectedResult(run, command.commandId, 'Debug reveal is not active.', command);
+        return rejectedResult(run, command.commandId, tr.s('Debug reveal is not active.'), command);
     }
     const events: GameplayEvent[] = [];
     const writeDeactivateEvent = makeEventWriter(command.commandId, DEBUG_REVEAL_SOURCE, events);
@@ -1086,7 +1087,7 @@ const applyDebugRevealDeactivateCommand = (
     writeDeactivateEvent({
         type: 'feedback.requested',
         cue: `debug.reveal.${command.reason}`,
-        message: 'Debug reveal ended.',
+        message: tr.s('Debug reveal ended.'),
         tone: 'information'
     });
     return { run: nextRun, command, events, accepted: true };
@@ -1095,12 +1096,12 @@ const applyDebugRevealDeactivateCommand = (
 export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCommandResult => {
     const parsed = gameplayCommandSchema.safeParse(input);
     if (!parsed.success) {
-        return rejectedResult(run, 'invalid-command', 'Command failed schema validation.', null);
+        return rejectedResult(run, 'invalid-command', tr.s('Command failed schema validation.'), null);
     }
     const command = parsed.data;
     if (command.type === 'board.final_pair_reveal') {
         const next = revealFinalPair(run);
-        if (next === run) return rejectedResult(run, command.commandId, 'No final pair is ready.', command);
+        if (next === run) return rejectedResult(run, command.commandId, tr.s('No final pair is ready.'), command);
         const events: GameplayEvent[] = [];
         const writeEvent = makeEventWriter(command.commandId, { kind: 'system', id: 'final_pair' }, events);
         let flippedCount = run.board!.tiles.filter(tile => tile.state === 'flipped').length;
@@ -1112,7 +1113,7 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.reflow') {
         const next = reflowRunBoard(run, command.columns);
-        if (next === run) return rejectedResult(run, command.commandId, 'The board cannot change shape now or already has this shape.', command);
+        if (next === run) return rejectedResult(run, command.commandId, tr.s('The board cannot change shape now or already has this shape.'), command);
         const events: GameplayEvent[] = [];
         const writeEvent = makeEventWriter(command.commandId, { kind: 'system', id: 'board_layout' }, events);
         writeEvent({ type: 'board.reflowed', columns: next.board!.columns, rows: next.board!.rows });
@@ -1120,11 +1121,11 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     if (command.type === 'board.meteor') {
         const next = callMeteor(run, command.targetTileId);
-        if (next === run) return rejectedResult(run, command.commandId, 'A meteor needs a stored charge and a living target during play.', command);
+        if (next === run) return rejectedResult(run, command.commandId, tr.s('A meteor needs a stored charge and a living target during play.'), command);
         const events: GameplayEvent[] = [];
         const writeEvent = makeEventWriter(command.commandId, { kind: 'power', id: 'meteor' }, events);
         writeEvent({ type: 'feedback.requested', cue: 'power.meteor.used', tone: 'information',
-            message: `Meteor cleared ${next.board?.meteorImpact?.cards ?? 0} cards; ${chargesLeft(meteorCharges(next), 'meteor')}.` });
+            message: tr`Meteor cleared ${next.board?.meteorImpact?.cards ?? 0} cards; ${chargesLeft(meteorCharges(next), 'meteor')}.` });
         return { run: next, command, events, accepted: true };
     }
     if (command.type === 'board.peek') {
@@ -1198,13 +1199,13 @@ export const reduceGameplayCommand = (run: RunState, input: unknown): GameplayCo
     }
     const definition = getGameplayContentDefinition(command.definitionId);
     if (!definition) {
-        return rejectedResult(run, command.commandId, `Unknown gameplay definition ${command.definitionId}.`, command);
+        return rejectedResult(run, command.commandId, tr`Unknown gameplay definition ${command.definitionId}.`, command);
     }
     if (definition.version !== command.definitionVersion) {
         return rejectedResult(
             run,
             command.commandId,
-            `Definition version mismatch for ${definition.id}: command ${command.definitionVersion}, current ${definition.version}.`,
+            tr`Definition version mismatch for ${definition.id}: command ${command.definitionVersion}, current ${definition.version}.`,
             command
         );
     }

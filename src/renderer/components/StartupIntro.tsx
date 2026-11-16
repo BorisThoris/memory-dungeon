@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import {
     useCallback,
@@ -882,7 +883,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
     return (
         <section
             aria-busy={!assetsReady}
-            aria-label="Startup relic intro"
+            aria-label={tr.s("Startup relic intro")}
             aria-modal="true"
             className={styles.overlay}
             data-assets={overlayContract.assetState}
@@ -916,7 +917,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
                     ) : (
                         <div className={styles.fallbackFrame}>
                             <div aria-hidden="true" className={styles.fallbackAura} />
-                            <img alt="Obsidian relic sigil" className={styles.fallbackImage} src={relicSvgUrl} />
+                            <img alt={tr.s("Obsidian relic sigil")} className={styles.fallbackImage} src={relicSvgUrl} />
                         </div>
                     )}
                 </div>
@@ -933,7 +934,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
                         aria-valuemax={100}
                         aria-valuemin={0}
                         aria-valuenow={overlayContract.progressPercent}
-                        aria-valuetext={`${overlayContract.progressPercent}% loaded`}
+                        aria-valuetext={tr`${overlayContract.progressPercent}% loaded`}
                         className={styles.bootRail}
                         data-testid="startup-intro-progress"
                         role="progressbar"
@@ -954,7 +955,7 @@ const StartupIntro = ({ graphicsQuality, onComplete, reduceMotion }: StartupIntr
                     onPointerDown={(event) => event.stopPropagation()}
                     type="button"
                 >
-                    {skipPending ? 'Opening game…' : 'Continue to game'}
+                    {skipPending ? tr.s('Opening game…') : tr.s('Continue to game')}
                 </button>
             </div>
             {showIntroMotionCta ? (

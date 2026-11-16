@@ -1,3 +1,4 @@
+import { tr } from '../shared/i18n';
 import { NotificationHost } from '@cross-repo-libs/notifications';
 import '@cross-repo-libs/notifications/styles.css';
 import { StrictMode } from 'react';
@@ -38,8 +39,8 @@ const mountRendererApp = (rootElement: HTMLElement): Root => {
             <PlatformTiltProvider>
                 <NotificationHost
                     labels={{
-                        closeAriaLabel: 'Dismiss tip',
-                        regionAriaLabel: 'Memory Dungeon tips'
+                        closeAriaLabel: tr.s('Dismiss tip'),
+                        regionAriaLabel: tr.s('Memory Dungeon tips')
                     }}
                 >
                     <App />

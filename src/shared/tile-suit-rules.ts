@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { BoardState, FloorArchetypeId, Tile, TileSuit } from './contracts';
 import { getSafeBoardColumns } from './board-grid-dimensions';
 import { createMulberry32, hashStringToSeed, pickRngIndex, shuffleWithRng } from './rng';
@@ -35,31 +36,31 @@ export interface TileSuitDefinition {
 export const TILE_SUIT_CATALOG: Readonly<Record<TileSuit, TileSuitDefinition>> = {
     ember: {
         id: 'ember',
-        name: 'Ember',
+        name: tr.s('Ember'),
         rune: '▲',
         hue: '#e0713c',
-        description: 'Warm, restless, and usually in the largest clump on the floor.'
+        description: tr.s('Warm, restless, and usually in the largest clump on the floor.')
     },
     tide: {
         id: 'tide',
-        name: 'Tide',
+        name: tr.s('Tide'),
         rune: '≈',
         hue: '#3f9fd8',
-        description: 'Cool and long: Tide clumps tend to run in lines.'
+        description: tr.s('Cool and long: Tide clumps tend to run in lines.')
     },
     moss: {
         id: 'moss',
-        name: 'Moss',
+        name: tr.s('Moss'),
         rune: '✿',
         hue: '#6fb64a',
-        description: 'Patient. Moss sits in corners and waits to be noticed.'
+        description: tr.s('Patient. Moss sits in corners and waits to be noticed.')
     },
     bone: {
         id: 'bone',
-        name: 'Bone',
+        name: tr.s('Bone'),
         rune: '◆',
         hue: '#d8cfb4',
-        description: 'Pale and scattered. Bone is the suit that breaks the others up.'
+        description: tr.s('Pale and scattered. Bone is the suit that breaks the others up.')
     }
 };
 

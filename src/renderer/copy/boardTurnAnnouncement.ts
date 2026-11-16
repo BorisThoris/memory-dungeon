@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { MAGPIE_BEAT_COPY } from './magpieBeat';
 import { restlessDriftAnnouncement } from './restlessFloorBeat';
 import { lookingGlassAnnouncement } from './lookingGlassBeat';
@@ -25,12 +26,12 @@ export const chainMilestoneAnnouncement = (turnEvent: BoardTurnResolvedEvent): s
     // The rung the rail shows, not a fixed streak mark: see `getChainMilestoneFeedback`.
     const milestone = getChainMilestoneFeedback(chainTierBefore, chainTierAfter);
     if (milestone) {
-        return `${milestone.label}: ${milestone.target} per pair. ${milestone.action}.`;
+        return tr`${milestone.label}: ${milestone.target} per pair. ${milestone.action}.`;
     }
     const crossed = CHAIN_MILESTONE_THRESHOLDS.find(
         (threshold) => currentStreakBefore < threshold && currentStreakAfter >= threshold
     );
-    return crossed === undefined ? null : `Chain times ${crossed} - keep the chain for bigger match payouts.`;
+    return crossed === undefined ? null : tr`Chain times ${crossed} - keep the chain for bigger match payouts.`;
 };
 
 /**
@@ -44,9 +45,9 @@ export const chainBreakAnnouncement = (turnEvent: BoardTurnResolvedEvent): strin
     }
     // A Sharp or Fever chain ending is the beat the table groans at: say which fire went out.
     if (chainTierBefore === 'sharp' || chainTierBefore === 'fever') {
-        return `${CHAIN_TIER_LABELS[chainTierBefore]} chain x${currentStreakBefore} broken - the fire is out. Recover with a remembered pair.`;
+        return tr`${CHAIN_TIER_LABELS[chainTierBefore]} chain x${currentStreakBefore} broken - the fire is out. Recover with a remembered pair.`;
     }
-    return `Chain x${currentStreakBefore} broken - recover with a remembered pair.`;
+    return tr`Chain x${currentStreakBefore} broken - recover with a remembered pair.`;
 };
 
 export interface BoardTurnAnnouncement {

@@ -1,3 +1,5 @@
+import { COMPONENT_PROSE } from '../copy/componentProse';
+import { tr } from '../../shared/i18n';
 import { EVOLUTIONS } from '../../shared/relic-evolution-rules';
 import { AWAKENING_FROM, awakeningDefinition, fusionDefinition, isAwake, relicScoreFactors, SNOWBALL_RELIC_IDS, snowballRelicTitle } from '../../shared/snowball-relic-rules';
 import { runBlueprints } from '../../shared/boss-reward-rules';
@@ -34,14 +36,14 @@ interface InventoryScreenProps {
 }
 
 const CHARGE_ROWS: readonly { id: string; label: string }[] = [
-    { id:'meteor_charge',label:'Meteors' },
-    { id: 'crucible_charge', label: 'Crucibles' },
-    { id: 'storm_glass_charge', label: 'Storm Glasses' },
-    { id: 'still_bell_charge', label: 'Still Bells' },
-    { id: 'shuffle_charge', label: 'Full shuffle' },
-    { id: 'region_shuffle_charge', label: 'Row / swap' },
-    { id: 'peek_charge', label: 'Peek' },
-    { id: 'undo_charge', label: 'Undo this floor' }
+    { id:'meteor_charge',label:tr.s('Meteors') },
+    { id: 'crucible_charge', label: tr.s('Crucibles') },
+    { id: 'storm_glass_charge', label: tr.s('Storm Glasses') },
+    { id: 'still_bell_charge', label: tr.s('Still Bells') },
+    { id: 'shuffle_charge', label: tr.s('Full shuffle') },
+    { id: 'region_shuffle_charge', label: tr.s('Row / swap') },
+    { id: 'peek_charge', label: tr.s('Peek') },
+    { id: 'undo_charge', label: tr.s('Undo this floor') }
 ];
 
 /**
@@ -56,9 +58,9 @@ const INVENTORY_TABS_MAX_WIDTH = 860;
 const INVENTORY_TABS_MAX_HEIGHT = 560;
 type InventoryTab = 'charges' | 'upgrades' | 'mutators';
 const INVENTORY_TAB_LABEL: Readonly<Record<InventoryTab, string>> = {
-    charges: 'Charges',
-    upgrades: 'Upgrades',
-    mutators: 'Mutators'
+    charges: tr.s('Charges'),
+    upgrades: tr.s('Upgrades'),
+    mutators: tr.s('Mutators')
 };
 
 const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) => {
@@ -95,17 +97,17 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
     if (!run) {
         const emptyState = getUiStateCopy('inventory_no_run');
         return (
-            <section aria-label="Inventory" className={shellClassName} role="region">
+            <section aria-label={tr.s("Inventory")} className={shellClassName} role="region">
                 <header className={metaStyles.header}>
                     <div className={metaStyles.headerText}>
-                        <Eyebrow tone="menu">Expedition</Eyebrow>
+                        <Eyebrow tone="menu">{tr.s("Expedition")}</Eyebrow>
                         <ScreenTitle as={titleLevel} role="display">
-                            Inventory
+                            {tr.s("Inventory")}
                         </ScreenTitle>
-                        <p className={metaStyles.subtitle}>No active expedition.</p>
+                        <p className={metaStyles.subtitle}>{tr.s("No active expedition.")}</p>
                     </div>
                     <UiButton size="md" variant="secondary" onClick={handleBack} type="button">
-                        Back
+                        {tr.s("Back")}
                     </UiButton>
                 </header>
                 <div ref={bodyScrollRef} className={metaStyles.body}>
@@ -137,29 +139,29 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
     const quantities = createInventoryQuantityMap(run);
     const floor = run.board?.level ?? run.stats.highestLevel;
     const snapshot = [
-        `Floor ${floor}`,
+        tr`Floor ${floor}`,
         modeTitle(run.gameMode ?? 'classic'),
-        `Score ${run.stats.totalScore.toLocaleString()}`
+        tr`Score ${run.stats.totalScore.toLocaleString()}`
     ].join(' · ');
 
     const upgradesSection = usesCampUpgrades(run) ? (
         <Panel className={panelClassName} padding="lg" variant="default">
-            <section aria-label="Run upgrades" className={styles.section}>
-                <h2 className={styles.sectionTitle}>Run upgrades · {runGold(run)} gold</h2>
-                <p className={styles.upgradesNote}>Gold buys automatic upgrades every 3 floors.</p>
+            <section aria-label={tr.s("Run upgrades")} className={styles.section}>
+                <h2 className={styles.sectionTitle}>{tr.s("Run upgrades ·")} {runGold(run)} gold</h2>
+                <p className={styles.upgradesNote}>{COMPONENT_PROSE.inventoryScreenGoldBuysAutomaticUpgrades}</p>
                 {run.runRulesVersion >= RELIC_SLOTS_FROM ? (
                     <p className={styles.upgradesNote} data-testid="inventory-relic-slots">{RELIC_SLOT_COPY.slotsLine(heldRelicIds(run).length, RELIC_SLOTS)}</p>
                 ) : null}
                 <ul className={styles.chips}>{campUpgradeIdsFor(run).map(id => <li className={styles.chip} key={id}>
-                    <strong>{relicDefinition(id).title} · Rank {relicRank(run, id)}/3</strong>
+                    <strong>{relicDefinition(id).title} {tr.s("· Rank")} {relicRank(run, id)}/3</strong>
                     <span>{campUpgradeBenefit(id, relicRank(run, id))}</span>
                 </li>)}
                 {(run.evolutions ?? []).map((id) => <li className={styles.chip} data-testid={`inventory-evolution-${id}`} key={id}>
-                    <strong><EvolutionGlyph className={styles.chipGlyph} id={id} />{EVOLUTIONS.find((recipe) => recipe.id === id)?.title ?? id} · Evolved</strong>
+                    <strong><EvolutionGlyph className={styles.chipGlyph} id={id} />{EVOLUTIONS.find((recipe) => recipe.id === id)?.title ?? id} {tr.s("· Evolved")}</strong>
                     <span>{EVOLUTION_LINES[id as keyof typeof EVOLUTION_LINES] ?? ''}</span>
                 </li>)}
                 {runBlueprints(run).filter((id) => !(run.evolutions ?? []).includes(id)).map((id) => <li className={styles.chip} data-testid={`inventory-blueprint-${id}`} key={`blueprint-${id}`}>
-                    <strong><EvolutionGlyph className={styles.chipGlyph} id={id} />Blueprint: {EVOLUTIONS.find((recipe) => recipe.id === id)?.title ?? id}</strong>
+                    <strong><EvolutionGlyph className={styles.chipGlyph} id={id} />{tr.s("Blueprint:")} {EVOLUTIONS.find((recipe) => recipe.id === id)?.title ?? id}</strong>
                     <span>{blueprintLine(id)}</span>
                 </li>)}
                 {CURIO_RELIC_IDS.filter((id) => hasRelic(run, id)).map((id) => <li className={styles.chip} data-testid={`inventory-relic-${id}`} key={id}>
@@ -170,13 +172,13 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                 {SNOWBALL_RELIC_IDS.filter((id) => hasRelic(run, id)).map((id) => {
                     const factor = relicScoreFactors(run).find((entry) => entry.id === id)?.factor ?? 1;
                     return <li className={styles.chip} data-testid={`inventory-relic-${id}`} key={id}>
-                        <strong>{snowballRelicTitle(run, id, relicDefinition(id).title)}{isAwake(run, id) ? ' · Awakened' : ''}{id === 'interest_coin' ? '' : ` · ×${factor.toFixed(2)}`}</strong>
+                        <strong>{snowballRelicTitle(run, id, relicDefinition(id).title)}{isAwake(run, id) ? tr.s(' · Awakened') : ''}{id === 'interest_coin' ? '' : ` · ×${factor.toFixed(2)}`}</strong>
                         <span>{isAwake(run, id) ? awakeningDefinition(id).body : (run.runRulesVersion ?? 0) >= AWAKENING_FROM ? `${relicDefinition(id).body} ${awakeningDefinition(id).mark}` : relicDefinition(id).body}</span>
                     </li>;
                 })}
                 {/* Fusions (rules 102): two relics that grow, made one power at the stop. */}
                 {(run.fusions ?? []).map((id) => <li className={styles.chip} data-testid={`inventory-fusion-${id}`} key={`fusion-${id}`}>
-                    <strong>{fusionDefinition(id).title} · Fused</strong>
+                    <strong>{fusionDefinition(id).title} {tr.s("· Fused")}</strong>
                     <span>{fusionDefinition(id).body}</span>
                 </li>)}</ul>
             </section>
@@ -187,7 +189,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
             <Panel className={panelClassName} padding="lg" variant="default">
                 <section aria-labelledby="inventory-mutators-title" className={styles.section}>
                     <h2 className={styles.sectionTitle} id="inventory-mutators-title">
-                        Mutators
+                        {tr.s("Mutators")}
                     </h2>
                     {run.activeMutators.length > 0 ? (
                         <ul className={styles.chips}>
@@ -212,16 +214,16 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
         <Panel className={`${panelClassName} ${styles.supplies}`} padding="lg" variant="default">
             <section aria-labelledby="inventory-charges-title" className={styles.section} data-testid="inventory-charges-panel">
                 <h2 className={styles.sectionTitle} id="inventory-charges-title">
-                    Charges and tokens
+                    {tr.s("Charges and tokens")}
                 </h2>
                 <div className={styles.meteorCallout}>
                     <span className={styles.meteorGlyph} aria-hidden="true">☄</span>
                     <div className={styles.meteorCopy}>
-                        <strong>Meteor strike</strong>
-                        <p>Collect shards, then choose a target.</p>
+                        <strong>{tr.s("Meteor strike")}</strong>
+                        <p>{COMPONENT_PROSE.inventoryScreenCollectShardsThenChoose}</p>
                     </div>
                     <UiButton type="button" variant="primary" disabled={!canAimMeteor({...run,status:run.status==='paused' ? run.timerState.pausedFromStatus ?? 'paused' : run.status})}
-                        onClick={() => useAppStore.getState().armMeteor()}>Call meteor · {meteorCharges(run)}</UiButton>
+                        onClick={() => useAppStore.getState().armMeteor()}>{tr.s("Call meteor ·")} {meteorCharges(run)}</UiButton>
                 </div>
                 <dl className={styles.charges}>
                     {CHARGE_ROWS.map((row) => (
@@ -231,7 +233,7 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
                         </div>
                     ))}
                     <div className={styles.chargeRow}>
-                        <dt>Score multiplier</dt>
+                        <dt>{tr.s("Score multiplier")}</dt>
                         <dd>{run.matchScoreMultiplier.toFixed(2)}&times;</dd>
                     </div>
                 </dl>
@@ -242,25 +244,25 @@ const InventoryScreen = ({ stackedOnGameplay = false }: InventoryScreenProps) =>
     const shownTab = tabs.includes(tab) ? tab : 'charges';
 
     return (
-        <section aria-label="Inventory" className={shellClassName} role="region">
+        <section aria-label={tr.s("Inventory")} className={shellClassName} role="region">
             <header className={metaStyles.header} data-testid="inventory-meta-frame-run">
                 <div className={metaStyles.headerText}>
-                    <Eyebrow tone="menu">Run snapshot</Eyebrow>
+                    <Eyebrow tone="menu">{tr.s("Run snapshot")}</Eyebrow>
                     <ScreenTitle as={titleLevel} role="display">
-                        Inventory
+                        {tr.s("Inventory")}
                     </ScreenTitle>
                     <p className={metaStyles.subtitle} data-testid="inventory-run-line">
                         {snapshot}
                     </p>
                 </div>
                 <UiButton size="md" variant="secondary" onClick={handleBack} type="button">
-                    Back
+                    {tr.s("Back")}
                 </UiButton>
             </header>
 
             {tabbed ? (
                 <div ref={bodyScrollRef} className={`${metaStyles.body} ${styles.tabbed}`} data-testid="inventory-tabbed">
-                    <div aria-label="Inventory sections" className={styles.tabs} role="tablist">
+                    <div aria-label={tr.s("Inventory sections")} className={styles.tabs} role="tablist">
                         {tabs.map((id) => (
                             <button
                                 aria-controls={`inventory-tab-panel-${id}`}

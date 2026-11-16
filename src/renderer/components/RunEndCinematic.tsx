@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { useCallback, useEffect, useState, type CSSProperties } from 'react';
 import type { RunEndReason, RunSummary } from '../../shared/contracts';
 import { comboHeatThemeForSeed } from '../../shared/combo-heat-rules';
@@ -98,7 +99,7 @@ export function RunEndCinematic({ summary, reason, runSeed, personalBest, action
                         <span className={styles.heldLine}>{runEndScoreLine(summary.totalScore, summary.highestLevel)}</span>
                         {comparison ? <p className={styles.comparison} data-testid="rematch-comparison">{comparison}</p> : null}
                     </div>
-                    <div className={styles.choices} data-testid="run-end-cinematic-choices" role="group" aria-label="What next">
+                    <div className={styles.choices} data-testid="run-end-cinematic-choices" role="group" aria-label={tr.s("What next")}>
                         {actions.map((action, index) => (
                             <button
                                 aria-label={action.ariaLabel}

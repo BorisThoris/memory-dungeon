@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 import { bankKeeps } from '../../shared/combo-cash-in-rules';
 import type { RunState } from '../../shared/contracts';
 import { comboMissesEarned } from '../../shared/miss-bank';
@@ -79,35 +80,35 @@ export const deriveTurnCallouts = (
     const rare = temper.rare ? { rare: true } : {};
     const milestone = comboMilestoneReached(before, after);
     if (milestone !== null) {
-        callouts.push({ key: `milestone:${id}`, kind: 'milestone', size: 'major', tone: 'legendary', title: COMBO_MILESTONE_CALLOUT(milestone), sub: `Combo ×${after} · a rare one`, color: temper.colors[5], ...rare });
+        callouts.push({ key: `milestone:${id}`, kind: 'milestone', size: 'major', tone: 'legendary', title: COMBO_MILESTONE_CALLOUT(milestone), sub: tr`Combo ×${after} · a rare one`, color: temper.colors[5], ...rare });
     }
     const ascension = comboAscensionReached(before, after);
     if (ascension !== null) {
-        callouts.push({ key: `ascend:${id}`, kind: 'rank', size: 'major', tone: 'legendary', title: comboAscensionCallout(temper.callouts.legendary, ascension), sub: temper.rare ? `RARE · Combo ×${after}` : `Combo ×${after}`, color: temper.colors[5], ...rare });
+        callouts.push({ key: `ascend:${id}`, kind: 'rank', size: 'major', tone: 'legendary', title: comboAscensionCallout(temper.callouts.legendary, ascension), sub: temper.rare ? tr`RARE · Combo ×${after}` : tr`Combo ×${after}`, color: temper.colors[5], ...rare });
     }
     const stage = comboStageReached(before, after);
     if (stage) {
-        callouts.push({ key: `rank:${id}`, kind: 'rank', size: 'major', tone: stage, title: temper.callouts[stage], sub: temper.rare ? `RARE · Combo ×${after}` : `Combo ×${after}`, color: temper.colors[comboHeatStageIndexOf(stage)], ...rare });
+        callouts.push({ key: `rank:${id}`, kind: 'rank', size: 'major', tone: stage, title: temper.callouts[stage], sub: temper.rare ? tr`RARE · Combo ×${after}` : tr`Combo ×${after}`, color: temper.colors[comboHeatStageIndexOf(stage)], ...rare });
     }
     // The temper shows itself the first time the combo warms: a frost run says it is one, and
     // so does an ember run, so every run names the weather the room has been showing.
     if (comboHeatStage(before) === 'cold' && comboHeatStage(after) !== 'cold') {
-        callouts.push({ key: `temper:${id}`, kind: 'temper', size: 'minor', tone: 'gold', title: `${temper.title.toUpperCase()} RUN`, sub: temper.rare ? 'Rare · one run in fifty' : 'This run\'s temper, from its seed', color: temper.colors[2], ...rare });
+        callouts.push({ key: `temper:${id}`, kind: 'temper', size: 'minor', tone: 'gold', title: tr`${temper.title.toUpperCase()} RUN`, sub: temper.rare ? tr.s('Rare · one run in fifty') : tr.s('This run\'s temper, from its seed'), color: temper.colors[2], ...rare });
     }
     if (isMiss(event)) {
         const lost = before >= COMBO_HEAT_STAGE_FROM.hot;
         const last = missesLeftAfter === 0;
         if (lost) {
-            callouts.push({ key: `broken:${id}`, kind: 'broken', size: 'major', tone: 'miss', title: 'COMBO BROKEN', sub: `×${before} lost${last ? ' · last miss' : ''}` });
+            callouts.push({ key: `broken:${id}`, kind: 'broken', size: 'major', tone: 'miss', title: tr.s('COMBO BROKEN'), sub: tr`×${before} lost${last ? tr.s(' · last miss') : ''}` });
         } else if (last) {
-            callouts.push({ key: `last:${id}`, kind: 'last', size: 'major', tone: 'miss', title: 'LAST MISS!', sub: 'One more ends the run' });
+            callouts.push({ key: `last:${id}`, kind: 'last', size: 'major', tone: 'miss', title: tr.s('LAST MISS!'), sub: tr.s('One more ends the run') });
         } else if (missesLeftAfter !== null) {
-            callouts.push({ key: `miss:${id}`, kind: 'miss', size: 'minor', tone: 'miss', title: 'MISS', sub: `The bank saved it · ${missesLeftAfter} left` });
+            callouts.push({ key: `miss:${id}`, kind: 'miss', size: 'minor', tone: 'miss', title: 'MISS', sub: tr`The bank saved it · ${missesLeftAfter} left` });
         }
     }
     const earned = comboMissesEarned(before, after);
     if (earned > 0) {
-        callouts.push({ key: `banked:${id}`, kind: 'banked', size: 'minor', tone: 'gold', title: 'MISS BANKED', sub: `+${earned} · five in a row` });
+        callouts.push({ key: `banked:${id}`, kind: 'banked', size: 'minor', tone: 'gold', title: tr.s('MISS BANKED'), sub: tr`+${earned} · five in a row` });
     }
     if (event.matchedFindableKind) {
         const kind = event.matchedFindableKind;
@@ -124,38 +125,38 @@ export const deriveTurnCallouts = (
  */
 /** What a realm event is stamped as: the weather's word, and what it did in a line. */
 const REALM_EVENT_STAMPS: Readonly<Record<Exclude<RealmEvent['kind'], 'reaction'>, { title: string; sub: (event: RealmEvent) => string; size: 'major' | 'minor' }>> = {
-    blizzard: { title: 'BLIZZARD!', sub: (e) => `A row slides with the wind · ${e.tileIds.length} cards snowed over`, size: 'major' },
-    frostbite: { title: 'FROSTBITE', sub: () => 'Both cards frozen: wait out the ice', size: 'minor' },
-    wildfire: { title: 'WILDFIRE!', sub: () => 'A card is burning: match it before the fuse runs out', size: 'major' },
-    burnout: { title: 'BURNT OUT', sub: (e) => `${Math.abs(e.gold ?? 0)} gold lost · the fire spreads`, size: 'minor' },
-    doused: { title: 'DOUSED!', sub: (e) => `+${e.gold ?? 0} gold`, size: 'minor' },
-    current: { title: 'THE TIDE TURNS', sub: (e) => `A column runs down a step · ${e.tileIds.length} cards moved`, size: 'major' },
-    lightning: { title: 'LIGHTNING!', sub: () => 'Two cards swapped: they show where they landed', size: 'major' },
-    overgrowth: { title: 'OVERGROWTH', sub: (e) => `Vines take ${e.tileIds.length === 1 ? 'a card' : `${e.tileIds.length} cards`}: match beside them to cut`, size: 'major' },
-    harvest: { title: 'HARVEST!', sub: (e) => `Harvest collected · +${e.gold ?? 0} gold`, size: 'minor' },
-    thaw: { title: 'THE HOLD BREAKS', sub: (e) => `${e.tileIds.length} ${e.tileIds.length === 1 ? 'card' : 'cards'} free again`, size: 'minor' },
-    whiteout: { title: 'WHITEOUT!', sub: () => 'Every back is snowed over: play from memory', size: 'major' },
-    firestorm: { title: 'FIRESTORM!', sub: (e) => `${e.tileIds.length} cards burning: douse what you can`, size: 'major' },
-    springtide: { title: 'SPRING TIDE!', sub: (e) => `Two columns run · ${e.tileIds.length} cards moved`, size: 'major' },
-    thunderclap: { title: 'THUNDERCLAP!', sub: (e) => `A row lit: ${e.tileIds.length} faces until your next flip`, size: 'major' },
-    scald: { title: 'SCALDED!', sub: (e) => `The realm strikes back: ${e.tileIds.length === 1 ? 'a card you missed is' : 'both cards you missed are'} burning, two turns to douse`, size: 'major' },
-    undertow: { title: 'UNDERTOW!', sub: () => 'The realm strikes back: the cards you missed are dragged a step down', size: 'major' },
-    static: { title: 'STATIC!', sub: () => 'The realm strikes back: the cards you missed are thrown across the board', size: 'major' },
-    snare: { title: 'SNARED!', sub: () => 'The realm strikes back: the cards you missed are held in vines', size: 'major' },
-    scorch: { title: 'FIRE!', sub: () => 'Fire burns ice and vines, then ignites cards on 3-turn fuses', size: 'minor' },
-    wash: { title: 'WATER!', sub: () => 'Your water puts out fires and washes the cards around it along', size: 'minor' },
-    freeze: { title: 'FROST!', sub: () => 'Ice freezes cards · match nearby to break it', size: 'minor' },
-    entangle: { title: 'GROVE!', sub: () => 'Vines tie cards down · match nearby to cut them for gold', size: 'minor' },
-    empowered: { title: 'CHARGED!', sub: (e) => `${e.tileIds.length === 1 ? 'A card drinks' : `${e.tileIds.length} cards drink`} its own element · a charge each, resonance when matched`, size: 'minor' },
-    steam: { title: 'STEAM!', sub: (e) => `Fire meets water ×${e.potency ?? 1} · the nearest fire and water burst · faces show until your next flip`, size: 'major' },
-    blaze: { title: 'BLAZE!', sub: (e) => `Fire meets grove ×${e.potency ?? 1} · the nearest fire and grove burst · every vine burns · +${e.gold ?? 0} gold`, size: 'major' },
-    melt: { title: 'THAW!', sub: (e) => `Fire meets frost ×${e.potency ?? 1} · the nearest fire and frost burst · all ice and snow gone · +${25 * (e.potency ?? 1) ** 2} score`, size: 'major' },
-    freezeover: { title: 'FREEZE-OVER!', sub: (e) => `Water meets frost ×${e.potency ?? 1} · the nearest water and frost burst · the floor holds still for ${(e.potency ?? 1) + 1} turns`, size: 'major' },
-    flood: { title: 'FLOOD!', sub: (e) => `Water meets grove ×${e.potency ?? 1} · the nearest water and grove burst · both gain ${e.potency ?? 1} resonance`, size: 'major' },
-    frostbloom: { title: 'FROSTBLOOM!', sub: (e) => `Frost meets grove ×${e.potency ?? 1} · the nearest frost and grove burst · the cards beside them charged`, size: 'major' },
-    neutralized: { title: 'NEUTRALIZED!', sub: (e) => `${e.tileIds.length === 1 ? 'A card puts' : `${e.tileIds.length} cards put`} the element out: nothing lands`, size: 'minor' },
-    released: { title: 'RELEASED!', sub: (e) => `The element they drank pays out · +${e.gold ?? 0} gold`, size: 'minor' },
-    bloom: { title: 'BLOOM!', sub: (e) => `${e.tileIds.length} ${e.tileIds.length === 1 ? 'bloom' : 'blooms'}: three gold for every one you cut`, size: 'major' }
+    blizzard: { title: 'BLIZZARD!', sub: (e) => tr`A row slides with the wind · ${e.tileIds.length} cards snowed over`, size: 'major' },
+    frostbite: { title: 'FROSTBITE', sub: () => tr.s('Both cards frozen: wait out the ice'), size: 'minor' },
+    wildfire: { title: 'WILDFIRE!', sub: () => tr.s('A card is burning: match it before the fuse runs out'), size: 'major' },
+    burnout: { title: tr.s('BURNT OUT'), sub: (e) => tr`${Math.abs(e.gold ?? 0)} gold lost · the fire spreads`, size: 'minor' },
+    doused: { title: 'DOUSED!', sub: (e) => tr`+${e.gold ?? 0} gold`, size: 'minor' },
+    current: { title: tr.s('THE TIDE TURNS'), sub: (e) => tr`A column runs down a step · ${e.tileIds.length} cards moved`, size: 'major' },
+    lightning: { title: 'LIGHTNING!', sub: () => tr.s('Two cards swapped: they show where they landed'), size: 'major' },
+    overgrowth: { title: 'OVERGROWTH', sub: (e) => tr`Vines take ${e.tileIds.length === 1 ? tr.s('a card') : tr`${e.tileIds.length} cards`}: match beside them to cut`, size: 'major' },
+    harvest: { title: 'HARVEST!', sub: (e) => tr`Harvest collected · +${e.gold ?? 0} gold`, size: 'minor' },
+    thaw: { title: tr.s('THE HOLD BREAKS'), sub: (e) => tr`${plural(e.tileIds.length, { one: '{0} card', other: '{0} cards' })} free again`, size: 'minor' },
+    whiteout: { title: 'WHITEOUT!', sub: () => tr.s('Every back is snowed over: play from memory'), size: 'major' },
+    firestorm: { title: 'FIRESTORM!', sub: (e) => tr`${e.tileIds.length} cards burning: douse what you can`, size: 'major' },
+    springtide: { title: tr.s('SPRING TIDE!'), sub: (e) => tr`Two columns run · ${e.tileIds.length} cards moved`, size: 'major' },
+    thunderclap: { title: 'THUNDERCLAP!', sub: (e) => tr`A row lit: ${e.tileIds.length} faces until your next flip`, size: 'major' },
+    scald: { title: 'SCALDED!', sub: (e) => tr`The realm strikes back: ${e.tileIds.length === 1 ? tr.s('a card you missed is') : tr.s('both cards you missed are')} burning, two turns to douse`, size: 'major' },
+    undertow: { title: 'UNDERTOW!', sub: () => tr.s('The realm strikes back: the cards you missed are dragged a step down'), size: 'major' },
+    static: { title: 'STATIC!', sub: () => tr.s('The realm strikes back: the cards you missed are thrown across the board'), size: 'major' },
+    snare: { title: 'SNARED!', sub: () => tr.s('The realm strikes back: the cards you missed are held in vines'), size: 'major' },
+    scorch: { title: 'FIRE!', sub: () => tr.s('Fire burns ice and vines, then ignites cards on 3-turn fuses'), size: 'minor' },
+    wash: { title: 'WATER!', sub: () => tr.s('Your water puts out fires and washes the cards around it along'), size: 'minor' },
+    freeze: { title: 'FROST!', sub: () => tr.s('Ice freezes cards · match nearby to break it'), size: 'minor' },
+    entangle: { title: 'GROVE!', sub: () => tr.s('Vines tie cards down · match nearby to cut them for gold'), size: 'minor' },
+    empowered: { title: 'CHARGED!', sub: (e) => tr`${e.tileIds.length === 1 ? tr.s('A card drinks') : tr`${e.tileIds.length} cards drink`} its own element · a charge each, resonance when matched`, size: 'minor' },
+    steam: { title: 'STEAM!', sub: (e) => tr`Fire meets water ×${e.potency ?? 1} · the nearest fire and water burst · faces show until your next flip`, size: 'major' },
+    blaze: { title: 'BLAZE!', sub: (e) => tr`Fire meets grove ×${e.potency ?? 1} · the nearest fire and grove burst · every vine burns · +${e.gold ?? 0} gold`, size: 'major' },
+    melt: { title: 'THAW!', sub: (e) => tr`Fire meets frost ×${e.potency ?? 1} · the nearest fire and frost burst · all ice and snow gone · +${25 * (e.potency ?? 1) ** 2} score`, size: 'major' },
+    freezeover: { title: 'FREEZE-OVER!', sub: (e) => tr`Water meets frost ×${e.potency ?? 1} · the nearest water and frost burst · the floor holds still for ${(e.potency ?? 1) + 1} turns`, size: 'major' },
+    flood: { title: 'FLOOD!', sub: (e) => tr`Water meets grove ×${e.potency ?? 1} · the nearest water and grove burst · both gain ${e.potency ?? 1} resonance`, size: 'major' },
+    frostbloom: { title: 'FROSTBLOOM!', sub: (e) => tr`Frost meets grove ×${e.potency ?? 1} · the nearest frost and grove burst · the cards beside them charged`, size: 'major' },
+    neutralized: { title: 'NEUTRALIZED!', sub: (e) => tr`${e.tileIds.length === 1 ? tr.s('A card puts') : tr`${e.tileIds.length} cards put`} the element out: nothing lands`, size: 'minor' },
+    released: { title: 'RELEASED!', sub: (e) => tr`The element they drank pays out · +${e.gold ?? 0} gold`, size: 'minor' },
+    bloom: { title: 'BLOOM!', sub: (e) => tr`${plural(e.tileIds.length, { one: '{0} bloom', other: '{0} blooms' })}: three gold for every one you cut`, size: 'major' }
 };
 
 /** The realm whose colour each element cast wears (`element-group-rules.ts`). */
@@ -170,8 +171,8 @@ export const realmEventCallout = (event: RealmEvent, realmColor: string): Screen
             kind: 'realm',
             size: 'major',
             tone: 'legendary',
-            title: `${(event.reaction ?? 'Reaction').toUpperCase()}!`,
-            sub: `Your matches tip the floor into ${to.title}`,
+            title: `${(event.reaction ?? tr.s('Reaction')).toUpperCase()}!`,
+            sub: tr`Your matches tip the floor into ${to.title}`,
             color: to.color
         };
     }
@@ -203,10 +204,10 @@ export const realmEntryCallout = (
     tone: 'legendary',
     title: secondary ? 'CONFLUENCE!' : REALMS[realm].place.toUpperCase(),
     sub: secondary
-        ? `${REALMS[realm].title} meets ${REALMS[secondary].title} · double gold`
+        ? tr`${REALMS[realm].title} meets ${REALMS[secondary].title} · double gold`
         : realmWeatherClockRuns(severity)
-          ? `${REALM_SEVERITIES[severity].title} · ${REALMS[realm].weather} every ${realmIntervalFor(realm, severity)} turns`
-          : `${REALM_SEVERITIES[severity].title} · your matches cast the elements`,
+          ? tr`${REALM_SEVERITIES[severity].title} · ${REALMS[realm].weather} every ${realmIntervalFor(realm, severity)} turns`
+          : tr`${REALM_SEVERITIES[severity].title} · your matches cast the elements`,
     color: REALMS[realm].color
 });
 
@@ -253,13 +254,13 @@ export const deriveCashInCallouts = (
     const callouts: ScreenCallout[] = [];
     const banked = next.lastComboCashIn;
     if (banked && banked.key !== previous?.lastComboCashIn?.key) {
-        callouts.push({ key: banked.key, kind: 'cashin', size: 'major', tone: 'gold', title: 'CASHED IN!',
-            sub: `+${banked.score.toLocaleString()}${banked.gold > 0 ? ` · +${banked.gold} gold` : ''} · combo ${banked.combo} → ${bankKeeps(banked.combo)}` });
+        callouts.push({ key: banked.key, kind: 'cashin', size: 'major', tone: 'gold', title: tr.s('CASHED IN!'),
+            sub: tr`+${banked.score.toLocaleString()}${banked.gold > 0 ? tr` · +${banked.gold} gold` : ''} · combo ${banked.combo} → ${bankKeeps(banked.combo)}` });
     }
     const lost = next.lastComboPotLoss;
     if (lost && lost.key !== previous?.lastComboPotLoss?.key) {
-        callouts.push({ key: lost.key, kind: 'potlost', size: 'minor', tone: 'miss', title: 'POT LOST',
-            sub: `${lost.score.toLocaleString()}${lost.gold > 0 ? ` and ${lost.gold} gold` : ''} gone with the combo` });
+        callouts.push({ key: lost.key, kind: 'potlost', size: 'minor', tone: 'miss', title: tr.s('POT LOST'),
+            sub: tr`${lost.score.toLocaleString()}${lost.gold > 0 ? tr` and ${lost.gold} gold` : ''} gone with the combo` });
     }
     return callouts;
 };
@@ -272,7 +273,7 @@ export const deriveZoneCallouts = (
     const was = previous?.zonesThisRun ?? 0;
     const now = next.zonesThisRun ?? 0;
     for (let count = was + 1; count <= now; count += 1) {
-        callouts.push({ key: `ignite:${count}`, kind: 'ignite', size: 'major', tone: 'inferno', title: 'IGNITION!', sub: 'The Zone is open: nothing resolves until you do' });
+        callouts.push({ key: `ignite:${count}`, kind: 'ignite', size: 'major', tone: 'inferno', title: 'IGNITION!', sub: tr.s('The Zone is open: nothing resolves until you do') });
     }
     const last = next.lastZone;
     if (last && last.key !== previous?.lastZone?.key) {
@@ -282,8 +283,8 @@ export const deriveZoneCallouts = (
             kind: 'zone',
             size: 'major',
             tone: perfect ? 'legendary' : last.missed > 0 ? 'miss' : 'gold',
-            title: perfect ? 'PERFECT ZONE!' : `ZONE ×${last.matched}`,
-            sub: last.missed > 0 ? `+${last.bonus} · ${last.missed} ${last.missed === 1 ? 'miss' : 'misses'} at full price` : `+${last.bonus} · nothing lost`
+            title: perfect ? tr.s('PERFECT ZONE!') : tr`ZONE ×${last.matched}`,
+            sub: last.missed > 0 ? tr`+${last.bonus} · ${plural(last.missed, { one: '{0} miss', other: '{0} misses' })} at full price` : tr`+${last.bonus} · nothing lost`
         });
     }
     return callouts;
@@ -302,7 +303,7 @@ export const deriveRepriseCallouts = (
         size: 'major',
         tone: 'gold',
         title: 'REPRISE!',
-        sub: paid > 0 ? `+${paid.toLocaleString()} · the last turns paid again` : 'The last turns, played again'
+        sub: paid > 0 ? tr`+${paid.toLocaleString()} · the last turns paid again` : tr.s('The last turns, played again')
     }];
 };
 
@@ -322,7 +323,7 @@ export const derivePurchaseCallouts = (
                 size: 'minor',
                 tone: 'gold',
                 title: item.title.toUpperCase(),
-                sub: item.kind === 'focus' ? 'Forged · kept for this run' : item.kind === 'prime' ? 'Primed · match another element' : item.kind === 'relic' ? 'Relic · kept to the end of the run' : 'Bought',
+                sub: item.kind === 'focus' ? tr.s('Forged · kept for this run') : item.kind === 'prime' ? tr.s('Primed · match another element') : item.kind === 'relic' ? tr.s('Relic · kept to the end of the run') : tr.s('Bought'),
                 drop: item.id as StoreItemId
             });
         }

@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { CSSProperties } from 'react';
 import { MATCH_DELAY_MS, RESOLVE_DELAY_MULTIPLIER_MIN } from '../../shared/contracts';
 import { GAMEPLAY_RENDER_PROFILE } from './gameplayRenderProfile';
@@ -100,24 +101,24 @@ export const GAMEPLAY_BOARD_VISUALS = {
     },
     interactionFeedback: {
         match: {
-            material: 'ember-green victory rim + scale pulse',
+            material: tr.s('ember-green victory rim + scale pulse'),
             motionMs: 220,
-            reducedMotion: 'static victory rim + emissive lift'
+            reducedMotion: tr.s('static victory rim + emissive lift')
         },
         mismatch: {
-            material: 'danger tint + short recoil',
+            material: tr.s('danger tint + short recoil'),
             motionMs: 180,
-            reducedMotion: 'danger tint + rim only'
+            reducedMotion: tr.s('danger tint + rim only')
         },
         invalid: {
-            material: 'blocked slot dim + focus ring',
+            material: tr.s('blocked slot dim + focus ring'),
             motionMs: 0,
-            reducedMotion: 'blocked slot dim + focus ring'
+            reducedMotion: tr.s('blocked slot dim + focus ring')
         },
         combo: {
-            material: 'gold emphasis',
+            material: tr.s('gold emphasis'),
             motionMs: 240,
-            reducedMotion: 'gold text/rim emphasis'
+            reducedMotion: tr.s('gold text/rim emphasis')
         }
     },
     matchedEdgeEffect: {
@@ -202,60 +203,60 @@ export const GAMEPLAY_CARD_VISUALS = {
 
 export const CARD_INTERACTION_FEEDBACK = {
     hidden: {
-        material: 'cool lacquered card back',
-        visualCue: 'readable back pattern with tutorial/hover rings when eligible',
+        material: tr.s('cool lacquered card back'),
+        visualCue: tr.s('readable back pattern with tutorial/hover rings when eligible'),
         audioCue: 'none',
         motionMs: 0,
-        reducedMotionCue: 'static pattern and focus outline'
+        reducedMotionCue: tr.s('static pattern and focus outline')
     },
     hover: {
-        material: 'warm lifted gilt edge',
-        visualCue: 'gold rim, slight lift, and warm tint on pickable cards',
+        material: tr.s('warm lifted gilt edge'),
+        visualCue: tr.s('gold rim, slight lift, and warm tint on pickable cards'),
         audioCue: 'none',
         motionMs: 140,
-        reducedMotionCue: 'static gold rim without lift'
+        reducedMotionCue: tr.s('static gold rim without lift')
     },
     flip: {
-        material: 'raised face plate',
-        visualCue: 'short face-up pop with structural lift',
+        material: tr.s('raised face plate'),
+        visualCue: tr.s('short face-up pop with structural lift'),
         audioCue: 'flip',
         motionMs: 220,
-        reducedMotionCue: 'instant face swap with brighter face plate'
+        reducedMotionCue: tr.s('instant face swap with brighter face plate')
     },
     match: {
-        material: 'ember victory rim',
-        visualCue: 'matched edge flame, green-gold glow, and score floater',
+        material: tr.s('ember victory rim'),
+        visualCue: tr.s('matched edge flame, green-gold glow, and score floater'),
         audioCue: 'resolve_match',
         motionMs: 400,
-        reducedMotionCue: 'static success rim and score floater'
+        reducedMotionCue: tr.s('static success rim and score floater')
     },
     mismatch: {
-        material: 'danger recoil face',
-        visualCue: 'red tint, danger rim, short shake, and miss floater',
+        material: tr.s('danger recoil face'),
+        visualCue: tr.s('red tint, danger rim, short shake, and miss floater'),
         audioCue: 'resolve_miss',
         motionMs: 260,
-        reducedMotionCue: 'static danger tint and miss floater'
+        reducedMotionCue: tr.s('static danger tint and miss floater')
     },
     combo: {
-        material: 'streak reward spark',
-        visualCue: 'HUD objective reward copy plus score emphasis',
+        material: tr.s('streak reward spark'),
+        visualCue: tr.s('HUD objective reward copy plus score emphasis'),
         audioCue: 'floor_clear_or_pickup',
         motionMs: 320,
-        reducedMotionCue: 'text reward copy and stable score emphasis'
+        reducedMotionCue: tr.s('text reward copy and stable score emphasis')
     },
     invalid: {
-        material: 'locked dull edge',
-        visualCue: 'dimmed card, blocked live-region copy, no flip',
+        material: tr.s('locked dull edge'),
+        visualCue: tr.s('dimmed card, blocked live-region copy, no flip'),
         audioCue: 'none',
         motionMs: 120,
-        reducedMotionCue: 'static dim and blocked copy'
+        reducedMotionCue: tr.s('static dim and blocked copy')
     },
     disabled: {
-        material: 'unavailable matte card',
-        visualCue: 'dimmed hidden card and no hover lift',
+        material: tr.s('unavailable matte card'),
+        visualCue: tr.s('dimmed hidden card and no hover lift'),
         audioCue: 'none',
         motionMs: 0,
-        reducedMotionCue: 'static dim state'
+        reducedMotionCue: tr.s('static dim state')
     }
 } as const;
 

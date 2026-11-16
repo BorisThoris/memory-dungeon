@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import type { RunState } from '../../shared/contracts';
 
 /**
@@ -59,41 +60,41 @@ export interface RunShellToolSpec {
 }
 
 export const RUN_SHELL_TOOL_CATALOG: readonly RunShellToolSpec[] = [
-    { conditional: false, id: 'shuffle', label: 'Shuffle', spends: 'shuffleCharges' },
-    { conditional: false, id: 'swap', label: 'Swap', spends: 'regionShuffleCharges' },
+    { conditional: false, id: 'shuffle', label: tr.s('Shuffle'), spends: 'shuffleCharges' },
+    { conditional: false, id: 'swap', label: tr.s('Swap'), spends: 'regionShuffleCharges' },
     // Swap and Row spend the same currency; the game calls it "row/swap" everywhere for that reason.
-    { conditional: false, id: 'row', label: 'Row', spends: 'regionShuffleCharges' },
-    { conditional: false, id: 'pin', label: 'Pin', spends: null },
-    { conditional: false, id: 'peek', label: 'Peek', spends: 'peekCharges' },
+    { conditional: false, id: 'row', label: tr.s('Row'), spends: 'regionShuffleCharges' },
+    { conditional: false, id: 'pin', label: tr.s('Pin'), spends: null },
+    { conditional: false, id: 'peek', label: tr.s('Peek'), spends: 'peekCharges' },
     // Bought at the store stop (2026-09-24). Hidden like every tool with no charges left.
-    { conditional: false, id: 'bomb', label: 'Bomb', spends: 'bombCharges' },
-    { conditional: false, id:'meteor',label:'Meteor',spends:'meteorCharges' },
+    { conditional: false, id: 'bomb', label: tr.s('Bomb'), spends: 'bombCharges' },
+    { conditional: false, id:'meteor',label:tr.s('Meteor'),spends:'meteorCharges' },
     // A Curio's item (`curio-rules.ts`): hidden like every tool with no charges left.
     // 'Crucible' ran wider than its button into its neighbours (1024-1366 wide, 2026-10-19): the dock says what it does.
-    { conditional: false, id: 'crucible', label: 'Melt', spends: 'crucibleCharges' },
+    { conditional: false, id: 'crucible', label: tr.s('Melt'), spends: 'crucibleCharges' },
     // One word, like every label on the dock: two would wrap the button taller than its neighbours.
-    { conditional: false, id: 'storm_glass', label: 'Storm', spends: 'stormGlassCharges' },
-    { conditional: false, id: 'still_bell', label: 'Bell', spends: 'stillBellCharges' },
+    { conditional: false, id: 'storm_glass', label: tr.s('Storm'), spends: 'stormGlassCharges' },
+    { conditional: false, id: 'still_bell', label: tr.s('Bell'), spends: 'stillBellCharges' },
     // The Miser's Purse on offer: pressed, it is taken up for the rest of the run.
-    { conditional: false, id: 'misers_purse', label: 'Purse', spends: 'misersPurseOffers' },
+    { conditional: false, id: 'misers_purse', label: tr.s('Purse'), spends: 'misersPurseOffers' },
     // The Zone (`zone-rules.ts`): offered while the combo is at Inferno or better, and while a Zone
     // is open (where it reads Resolve). Not a charge: the combo itself is what it spends.
-    { conditional: true, id: 'ignite', label: 'Ignite', spends: null },
+    { conditional: true, id: 'ignite', label: tr.s('Ignite'), spends: null },
     // Cash in (`combo-cash-in-rules.ts`, `?combo2=1` only): banks the combo's pot and ends the combo.
-    { conditional: true, id: 'cash_in', label: 'Bank', spends: null },
+    { conditional: true, id: 'cash_in', label: tr.s('Bank'), spends: null },
     // The Hold (`hold-rules.ts`): on the dock from floor 13; reads Release while held. Its meter is the chain.
-    { conditional: true, id: 'hold', label: 'Hold', spends: null },
+    { conditional: true, id: 'hold', label: tr.s('Hold'), spends: null },
     // Carve (`carve-rules.ts`): on the dock from floor 25; it spends two links of the Hold's meter, not a charge.
-    { conditional: true, id: 'carve', label: 'Carve', spends: null },
+    { conditional: true, id: 'carve', label: tr.s('Carve'), spends: null },
     // Reprise (`reprise-rules.ts`): on the dock from floor 41, once a floor.
-    { conditional: true, id: 'reprise', label: 'Reprise', spends: null },
+    { conditional: true, id: 'reprise', label: tr.s('Reprise'), spends: null },
     // Only Practice and Wild runs carry flash charges, so the dock hides it elsewhere.
-    { conditional: true, id: 'flash', label: 'Flash', spends: 'flashPairCharges' },
-    { conditional: false, id: 'undo', label: 'Undo', spends: null },
+    { conditional: true, id: 'flash', label: tr.s('Flash'), spends: 'flashPairCharges' },
+    { conditional: false, id: 'undo', label: tr.s('Undo'), spends: null },
     // The camera, not a power: brings a zoomed or panned board back to the screen. Always on the
     // dock and disabled while the board already fits, so a finger that pinched too far has a way
     // back that does not go through the pause menu.
-    { conditional: false, id: 'fit', label: 'Fit', spends: null }
+    { conditional: false, id: 'fit', label: tr.s('Fit'), spends: null }
 ];
 
 export const runShellToolIds = (): RunShellToolId[] => RUN_SHELL_TOOL_CATALOG.map((tool) => tool.id);

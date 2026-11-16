@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 export type MechanicTokenId =
     | 'safe'
     | 'risk'
@@ -22,75 +23,75 @@ export interface MechanicTokenDefinition {
 export const MECHANIC_TOKEN_DEFINITIONS: Record<MechanicTokenId, MechanicTokenDefinition> = {
     safe: {
         id: 'safe',
-        label: 'Safe',
-        purpose: 'Recovery, protection, or lower-variance choices.',
-        a11yHint: 'Identifies a choice or state that reduces danger.'
+        label: tr.s('Safe'),
+        purpose: tr.s('Recovery, protection, or lower-variance choices.'),
+        a11yHint: tr.s('Identifies a choice or state that reduces danger.')
     },
     risk: {
         id: 'risk',
-        label: 'Risk',
-        purpose: 'Danger, volatility, or a choice with a known downside.',
-        a11yHint: 'Identifies a warned danger or risky commitment.'
+        label: tr.s('Risk'),
+        purpose: tr.s('Danger, volatility, or a choice with a known downside.'),
+        a11yHint: tr.s('Identifies a warned danger or risky commitment.')
     },
     reward: {
         id: 'reward',
-        label: 'Reward',
-        purpose: 'Score, pickups, charges, or other gains.',
-        a11yHint: 'Identifies value the player can earn.'
+        label: tr.s('Reward'),
+        purpose: tr.s('Score, pickups, charges, or other gains.'),
+        a11yHint: tr.s('Identifies value the player can earn.')
     },
     armed: {
         id: 'armed',
-        label: 'Armed',
-        purpose: 'An effect is active and can matter on future turns.',
-        a11yHint: 'Identifies an active threat or primed effect.'
+        label: tr.s('Armed'),
+        purpose: tr.s('An effect is active and can matter on future turns.'),
+        a11yHint: tr.s('Identifies an active threat or primed effect.')
     },
     resolved: {
         id: 'resolved',
-        label: 'Resolved',
-        purpose: 'A card, effect, room, or threat has been consumed or made safe.',
-        a11yHint: 'Identifies a completed or no-longer-active mechanic.'
+        label: tr.s('Resolved'),
+        purpose: tr.s('A card, effect, room, or threat has been consumed or made safe.'),
+        a11yHint: tr.s('Identifies a completed or no-longer-active mechanic.')
     },
     hidden_known: {
         id: 'hidden_known',
-        label: 'Known clue',
-        purpose: 'Fair information has been learned without revealing an exact solution.',
-        a11yHint: 'Identifies partial information about hidden board state.'
+        label: tr.s('Known clue'),
+        purpose: tr.s('Fair information has been learned without revealing an exact solution.'),
+        a11yHint: tr.s('Identifies partial information about hidden board state.')
     },
     objective: {
         id: 'objective',
-        label: 'Objective',
-        purpose: 'Floor, route, boss, or bonus requirements.',
-        a11yHint: 'Identifies a goal or condition to complete.'
+        label: tr.s('Objective'),
+        purpose: tr.s('Floor, route, boss, or bonus requirements.'),
+        a11yHint: tr.s('Identifies a goal or condition to complete.')
     },
     build: {
         id: 'build',
-        label: 'Build',
-        purpose: 'Relic, archetype, or run identity effects.',
-        a11yHint: 'Identifies a run-build synergy or role.'
+        label: tr.s('Build'),
+        purpose: tr.s('Relic, archetype, or run identity effects.'),
+        a11yHint: tr.s('Identifies a run-build synergy or role.')
     },
     cost: {
         id: 'cost',
-        label: 'Cost',
-        purpose: 'Charges, risk, or opportunity spent.',
-        a11yHint: 'Identifies what will be spent or consumed.'
+        label: tr.s('Cost'),
+        purpose: tr.s('Charges, risk, or opportunity spent.'),
+        a11yHint: tr.s('Identifies what will be spent or consumed.')
     },
     forfeit: {
         id: 'forfeit',
-        label: 'Forfeit',
-        purpose: 'Rewards, score, objectives, or Perfect Memory value that will be lost.',
-        a11yHint: 'Identifies value that will be lost by this action.'
+        label: tr.s('Forfeit'),
+        purpose: tr.s('Rewards, score, objectives, or Perfect Memory value that will be lost.'),
+        a11yHint: tr.s('Identifies value that will be lost by this action.')
     },
     locked: {
         id: 'locked',
-        label: 'Locked',
-        purpose: 'Unavailable actions, gates, requirements, or contracts.',
-        a11yHint: 'Identifies something unavailable and why.'
+        label: tr.s('Locked'),
+        purpose: tr.s('Unavailable actions, gates, requirements, or contracts.'),
+        a11yHint: tr.s('Identifies something unavailable and why.')
     },
     momentum: {
         id: 'momentum',
-        label: 'Momentum',
-        purpose: 'Streaks, chain tiers, route payoff, and build engines changing state.',
-        a11yHint: 'Identifies a positive or negative run-state swing.'
+        label: tr.s('Momentum'),
+        purpose: tr.s('Streaks, chain tiers, route payoff, and build engines changing state.'),
+        a11yHint: tr.s('Identifies a positive or negative run-state swing.')
     }
 };
 
@@ -148,7 +149,7 @@ export const CORE_SAFE_MEMORY_TAX: MemoryTaxScore = {
 export type PerfectMemoryImpact = 'allowed' | 'locks_perfect_memory';
 
 export const perfectMemoryImpactCopy = (impact: PerfectMemoryImpact): string =>
-    impact === 'allowed' ? 'Perfect Memory-safe.' : 'Assist used: Perfect Memory locked.';
+    impact === 'allowed' ? tr.s('Perfect Memory-safe.') : tr.s('Assist used: Perfect Memory locked.');
 
 export const assertTokenCoverage = (tokens: readonly MechanicTokenId[]): boolean =>
     tokens.every((token) => MECHANIC_TOKEN_DEFINITIONS[token]?.id === token);

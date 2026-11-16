@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { RealmId } from './contracts';
 
 /**
@@ -14,11 +15,11 @@ import type { RealmId } from './contracts';
 
 /** What a reaction between two realms is called. */
 export const REALM_REACTION_NAMES: Readonly<Record<RealmId, Readonly<Record<RealmId, string>>>> = {
-    frost: { frost: 'Deep Freeze', ember: 'Thaw', tide: 'Meltwater', storm: 'Hailstorm', grove: 'First Spring' },
-    ember: { frost: 'Quench', ember: 'Flare', tide: 'Steam', storm: 'Firestorm', grove: 'Ashbloom' },
-    tide: { frost: 'Freeze-over', ember: 'Boil', tide: 'Surge', storm: 'Downpour', grove: 'Mire' },
-    storm: { frost: 'Whiteout', ember: 'Kindled Sky', tide: 'Deluge', storm: 'Squall', grove: 'Thornstorm' },
-    grove: { frost: 'Frostbloom', ember: 'Wildfire', tide: 'Flood', storm: 'Green Lightning', grove: 'Overrun' }
+    frost: { frost: tr.s('Deep Freeze'), ember: tr.s('Thaw'), tide: tr.s('Meltwater'), storm: tr.s('Hailstorm'), grove: tr.s('First Spring') },
+    ember: { frost: tr.s('Quench'), ember: tr.s('Flare'), tide: tr.s('Steam'), storm: tr.s('Firestorm'), grove: tr.s('Ashbloom') },
+    tide: { frost: tr.s('Freeze-over'), ember: tr.s('Boil'), tide: tr.s('Surge'), storm: tr.s('Downpour'), grove: tr.s('Mire') },
+    storm: { frost: tr.s('Whiteout'), ember: tr.s('Kindled Sky'), tide: tr.s('Deluge'), storm: tr.s('Squall'), grove: tr.s('Thornstorm') },
+    grove: { frost: tr.s('Frostbloom'), ember: tr.s('Wildfire'), tide: tr.s('Flood'), storm: tr.s('Green Lightning'), grove: tr.s('Overrun') }
 };
 
 export const realmReactionName = (from: RealmId, to: RealmId): string => REALM_REACTION_NAMES[from][to];

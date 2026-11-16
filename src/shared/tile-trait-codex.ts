@@ -1,3 +1,4 @@
+import { tr } from './i18n';
 import type { TileTraitKind } from './contracts';
 import {
     TILE_TRAIT_COPY,
@@ -17,10 +18,10 @@ export interface TileTraitCodexRow {
 const TRAIT_KIND_ORDER: readonly TileTraitKind[] = ['echo', 'heavy', 'conduit', 'stasis'];
 
 const INTERACTION_DESCRIPTIONS: Record<TileTraitInteractionTag, string> = {
-    'conduit:adjacent-score': 'Match Conduit beside any other trait to convert local board texture into score.',
-    'conduit:echo-peek': 'Match Conduit beside Echo to add a peek charge to the Conduit payoff.',
-    'conduit:stasis-lock': 'Match Conduit beside Stasis to add score and pulse a safe next-turn trait block when the board can support it.',
-    'stasis:nearby-block': 'Match Stasis while another safe pair remains to block a nearby trait tile from being opened first next turn.'
+    'conduit:adjacent-score': tr.s('Match Conduit beside any other trait to convert local board texture into score.'),
+    'conduit:echo-peek': tr.s('Match Conduit beside Echo to add a peek charge to the Conduit payoff.'),
+    'conduit:stasis-lock': tr.s('Match Conduit beside Stasis to add score and pulse a safe next-turn trait block when the board can support it.'),
+    'stasis:nearby-block': tr.s('Match Stasis while another safe pair remains to block a nearby trait tile from being opened first next turn.')
 };
 
 export const getTileTraitCodexRows = (): TileTraitCodexRow[] =>
@@ -31,7 +32,7 @@ export const getTileTraitCodexRows = (): TileTraitCodexRow[] =>
         return {
             id: `trait-${kind}`,
             title: `${copy.label} · ${describeTraitMark(tileTraitMark(kind))}`,
-            description: `Match: ${copy.match} Miss: ${copy.mismatch}`
+            description: tr`Match: ${copy.match} Miss: ${copy.mismatch}`
         };
     });
 

@@ -1,3 +1,4 @@
+import { plural, tr } from './i18n';
 import { getAchievementProgressSummary } from './achievements';
 import type { SaveData } from './contracts';
 import {
@@ -141,10 +142,10 @@ const META_PROGRESS_MILESTONES: Array<{
     tier: MetaProgressionDifficultyTier;
     reward: string;
 }> = [
-    { level: 1, tier: 'initiate', reward: 'Profile ladder opened' },
-    { level: 3, tier: 'adept', reward: 'Adept-tier challenge focus' },
-    { level: 5, tier: 'ascendant', reward: 'Ascendant mastery identity' },
-    { level: 8, tier: 'legend', reward: 'Legend long-run prestige target' }
+    { level: 1, tier: 'initiate', reward: tr.s('Profile ladder opened') },
+    { level: 3, tier: 'adept', reward: tr.s('Adept-tier challenge focus') },
+    { level: 5, tier: 'ascendant', reward: tr.s('Ascendant mastery identity') },
+    { level: 8, tier: 'legend', reward: tr.s('Legend long-run prestige target') }
 ];
 
 export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceRow[] => {
@@ -154,29 +155,29 @@ export const getMetaHonorMarkSourceRows = (save: SaveData): MetaHonorMarkSourceR
     return [
         {
             id: 'achievements',
-            label: 'Achievements',
+            label: tr.s('Achievements'),
             marks: achievementProgress.earned * 2,
             cap: achievementProgress.total * 2,
             progress: { current: achievementProgress.earned, target: achievementProgress.total },
-            nextMarkCopy: achievementProgress.earned < achievementProgress.total ? 'Earn one more achievement for 2 honor marks.' : null,
+            nextMarkCopy: achievementProgress.earned < achievementProgress.total ? tr.s('Earn one more achievement for 2 honor marks.') : null,
             nextMarkUnitsRemaining: achievementProgress.earned < achievementProgress.total ? 1 : null
         },
         {
             id: 'sharp_floors',
-            label: 'Sharp floors',
+            label: tr.s('Sharp floors'),
             marks: sharpFloors,
             cap: 7,
             progress: { current: sharpFloors, target: 7 },
-            nextMarkCopy: sharpFloors < 7 ? 'Clear one more Sharp floor for 1 honor mark.' : null,
+            nextMarkCopy: sharpFloors < 7 ? tr.s('Clear one more Sharp floor for 1 honor mark.') : null,
             nextMarkUnitsRemaining: sharpFloors < 7 ? 1 : null
         },
         {
             id: 'no_powers_mastery',
-            label: 'No-powers mastery',
+            label: tr.s('No-powers mastery'),
             marks: noPowers,
             cap: 5,
             progress: { current: noPowers, target: 5 },
-            nextMarkCopy: noPowers < 5 ? 'Raise your best no-powers floor by 1 for 1 honor mark.' : null,
+            nextMarkCopy: noPowers < 5 ? tr.s('Raise your best no-powers floor by 1 for 1 honor mark.') : null,
             nextMarkUnitsRemaining: noPowers < 5 ? 1 : null
         }
     ];
@@ -213,17 +214,17 @@ export const getPermanentUpgradeRows = (save: SaveData): MetaProgressionRow[] =>
         {
             id: 'upgrade_scholar_prep_slot',
             track: 'permanent_upgrade',
-            title: 'Scholar Prep Slot',
-            description: 'Future permanent upgrade slot; visible for planning but locked until the balance pass ships.',
+            title: tr.s('Scholar Prep Slot'),
+            description: tr.s('Future permanent upgrade slot; visible for planning but locked until the balance pass ships.'),
             status: lockedStatusForProgress(bestNoPowers, 8, false, false),
             progress: { current: Math.min(bestNoPowers, 8), target: 8 },
-            reward: 'Future pre-run assist slot',
+            reward: tr.s('Future pre-run assist slot'),
             currencyId: 'honor_marks',
             cost: 12,
             gameplayAffecting: true,
             localOnly: true,
-            gate: 'Deferred: requires REG-016 feature flag and balance pass before enabling.',
-            source: 'No-powers mastery',
+            gate: tr.s('Deferred: requires REG-016 feature flag and balance pass before enabling.'),
+            source: tr.s('No-powers mastery'),
             modeRule: 'visible_in_classic'
         }
     ];
@@ -305,7 +306,7 @@ export const applyMetaProgressionUnlock = (save: SaveData, rowId: string): MetaP
             row: null,
             applied: false,
             reason: 'unknown_row',
-            feedbackCopy: 'Progression reward not found.'
+            feedbackCopy: tr.s('Progression reward not found.')
         };
     }
     if (isDeferredMetaProgressionRow(row)) {
@@ -314,7 +315,7 @@ export const applyMetaProgressionUnlock = (save: SaveData, rowId: string): MetaP
             row,
             applied: false,
             reason: 'deferred',
-            feedbackCopy: `${row.title} is visible for planning, but is not enabled in this build.`
+            feedbackCopy: tr`${row.title} is visible for planning, but is not enabled in this build.`
         };
     }
     if (row.status === 'owned') {
@@ -323,7 +324,7 @@ export const applyMetaProgressionUnlock = (save: SaveData, rowId: string): MetaP
             row,
             applied: false,
             reason: 'already_owned',
-            feedbackCopy: `${row.title} is already owned.`
+            feedbackCopy: tr`${row.title} is already owned.`
         };
     }
     if (row.status !== 'available') {
@@ -332,7 +333,7 @@ export const applyMetaProgressionUnlock = (save: SaveData, rowId: string): MetaP
             row,
             applied: false,
             reason: 'locked',
-            feedbackCopy: `${row.title} needs ${row.progress.target - row.progress.current} more from ${row.source}.`
+            feedbackCopy: tr`${row.title} needs ${row.progress.target - row.progress.current} more from ${row.source}.`
         };
     }
 
@@ -341,7 +342,7 @@ export const applyMetaProgressionUnlock = (save: SaveData, rowId: string): MetaP
         row,
         applied: false,
         reason: 'unknown_row',
-        feedbackCopy: 'Progression reward has no unlock application rule yet.'
+        feedbackCopy: tr.s('Progression reward has no unlock application rule yet.')
     };
 };
 
@@ -361,13 +362,13 @@ export const getMetaProgressionDifficultyTier = (profileLevel: number): MetaProg
 export const getMetaProgressionDifficultyTierLabel = (tier: MetaProgressionDifficultyTier): string => {
     switch (tier) {
         case 'legend':
-            return 'Legend tier';
+            return tr.s('Legend tier');
         case 'ascendant':
-            return 'Ascendant tier';
+            return tr.s('Ascendant tier');
         case 'adept':
-            return 'Adept tier';
+            return tr.s('Adept tier');
         case 'initiate':
-            return 'Initiate tier';
+            return tr.s('Initiate tier');
     }
 };
 
@@ -403,16 +404,16 @@ export const getMetaProgressionMilestones = (save: SaveData): MetaProgressionMil
 export const getNextMetaProgressionMilestone = (save: SaveData): MetaProgressionMilestoneRow | null =>
     getMetaProgressionMilestones(save).find((row) => row.status === 'upcoming') ?? null;
 
-const pluralHonorMarks = (count: number): string => `${count} honor mark${count === 1 ? '' : 's'}`;
+const pluralHonorMarks = (count: number): string => `${plural(count, { one: '{0} honor mark', other: '{0} honor marks' })}`;
 
 const rowProgressCopy = (row: MetaProgressionRow): string => {
     if (row.status === 'owned') {
-        return 'Owned';
+        return tr.s('Owned');
     }
     if (row.status === 'available') {
-        return 'Ready to unlock';
+        return tr.s('Ready to unlock');
     }
-    return `${row.progress.current}/${row.progress.target} from ${row.source}`;
+    return tr`${row.progress.current}/${row.progress.target} from ${row.source}`;
 };
 
 const rowFeedback = (row: MetaProgressionRow | null): MetaProgressionRewardFeedback | null =>
@@ -437,14 +438,14 @@ export const getMetaProgressionFeedback = (save: SaveData): MetaProgressionFeedb
     const nextMilestone = getNextMetaProgressionMilestone(save);
     const honorMarksToNextLevel = board.levelProgress.target - board.levelProgress.current;
     const nextMilestoneCopy = nextMilestone
-        ? `${nextMilestone.label} at profile level ${nextMilestone.level} (${pluralHonorMarks(nextMilestone.marksRemaining)}).`
-        : 'Legend tier reached; keep pushing long-run mastery.';
+        ? tr`${nextMilestone.label} at profile level ${nextMilestone.level} (${pluralHonorMarks(nextMilestone.marksRemaining)}).`
+        : tr.s('Legend tier reached; keep pushing long-run mastery.');
     const motivationCopy =
         nextReward?.status === 'available'
-            ? `${nextReward.title} is ready.`
+            ? tr`${nextReward.title} is ready.`
             : nextReward
-              ? `Next: ${nextReward.title} (${nextReward.progressCopy}).`
-              : 'All visible rewards are complete.';
+              ? tr`Next: ${nextReward.title} (${nextReward.progressCopy}).`
+              : tr.s('All visible rewards are complete.');
 
     return {
         profileLevel: board.level,
@@ -471,21 +472,21 @@ export const buildPermanentUpgradeRows = (save: SaveData): PermanentUpgradeRow[]
     return [
         {
             id: 'ascendant_title_track',
-            title: 'Ascendant title track',
+            title: tr.s('Ascendant title track'),
             status: noPowers >= 5 ? 'unlocked' : noPowers > 0 ? 'in_progress' : 'locked',
             offlineOnly: true,
             payToSkip: false,
             progress: { current: Math.min(noPowers, 5), target: 5 },
-            reward: 'Ascendant title cosmetics'
+            reward: tr.s('Ascendant title cosmetics')
         },
         {
             id: 'sharp_cosmetic_track',
-            title: 'Sharp cosmetic track',
+            title: tr.s('Sharp cosmetic track'),
             status: sharpFloors >= 3 ? 'unlocked' : sharpFloors > 0 ? 'in_progress' : 'locked',
             offlineOnly: true,
             payToSkip: false,
             progress: { current: Math.min(sharpFloors, 3), target: 3 },
-            reward: 'Bronze crest cosmetics'
+            reward: tr.s('Bronze crest cosmetics')
         }
     ];
 };

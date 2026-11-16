@@ -1,3 +1,4 @@
+import { plural, tr } from './i18n';
 import type { RunState } from './contracts';
 import { summarizeDescent } from './descent-run-summary';
 import { describeRunModeIdentity } from './run-mode-identity';
@@ -23,7 +24,7 @@ export interface RunShareText {
     readonly shareable: boolean;
 }
 
-const GAME_NAME = 'Memory Dungeon';
+const GAME_NAME = tr.s('Memory Dungeon');
 
 export const buildRunShareText = (run: RunState): RunShareText => {
     const summary = run.lastRunSummary;
@@ -35,18 +36,18 @@ export const buildRunShareText = (run: RunState): RunShareText => {
     const feverFloors = summary?.feverFloors ?? runNonNegativeInteger(run.feverFloorsThisRun);
     const bestRipple = summary?.bestRipple ?? Math.max(runNonNegativeInteger(run.bestRippleThisRun), runNonNegativeInteger(run.bestRippleThisFloor));
     const chain = [
-        runNonNegativeInteger(bestChain) > 0 ? `, best chain ×${runNonNegativeInteger(bestChain)}` : '',
+        runNonNegativeInteger(bestChain) > 0 ? tr`, best chain ×${runNonNegativeInteger(bestChain)}` : '',
         runNonNegativeInteger(feverFloors) > 0
-            ? `, Fever on ${runNonNegativeInteger(feverFloors)} ${runNonNegativeInteger(feverFloors) === 1 ? 'floor' : 'floors'}`
+            ? tr`, Fever on ${plural(runNonNegativeInteger(feverFloors), { one: '{0} floor', other: '{0} floors' })}`
             : '',
         // A ripple of one wave is every match ever made; only a reaction that carried is news.
-        runNonNegativeInteger(bestRipple) >= 2 ? `, ripple ×${runNonNegativeInteger(bestRipple)}` : ''
+        runNonNegativeInteger(bestRipple) >= 2 ? tr`, ripple ×${runNonNegativeInteger(bestRipple)}` : ''
     ].join('');
     // Where in the Descent (DGE-007): the act and the Dread, so a friend handed the key knows what is ahead.
     // They ride the sentence, not the key: the key is a replay recipe, and old keys parse as they did.
     const descent = run.passAndPlay ? null : summarizeDescent(run, null);
-    const place = descent ? ` (${descent.actTitle}, Dread ${descent.tierName})` : '';
-    const headline = `${GAME_NAME} — ${identity.label}: floor ${floor}${place}, ${score} points${chain}`;
+    const place = descent ? tr` (${descent.actTitle}, Dread ${descent.tierName})` : '';
+    const headline = tr`${GAME_NAME} — ${identity.label}: floor ${floor}${place}, ${score} points${chain}`;
 
     const recipe = describeRunShareKey(run);
     if ('refusal' in recipe) {

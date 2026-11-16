@@ -1,3 +1,4 @@
+import { plural, tr } from '../../shared/i18n';
 import type { LocalProgressRegistryRow } from '../../shared/local-progress-registry';
 
 /**
@@ -9,20 +10,20 @@ import type { LocalProgressRegistryRow } from '../../shared/local-progress-regis
  */
 
 export const PROFILE_PROGRESS_COPY = {
-    label: 'Progress',
-    noRows: 'Play a run to start tracking progress here.',
+    label: tr.s('Progress'),
+    noRows: tr.s('Play a run to start tracking progress here.'),
     /** Chain line in the screen subtitle. Zero reads as none yet rather than "0 Sharp floors". */
-    sharpFloors: (floors: number): string => (floors > 0 ? `${floors} Sharp floor${floors === 1 ? '' : 's'}` : 'no Sharp floor yet')
+    sharpFloors: (floors: number): string => (floors > 0 ? `${plural(floors, { one: '{0} Sharp floor', other: '{0} Sharp floors' })}` : tr.s('no Sharp floor yet'))
 } as const;
 
 export const PROFILE_PROGRESS_SOURCE_LABEL: Record<LocalProgressRegistryRow['source'], string> = {
-    objective_board: 'Objective',
-    quest_campaign: 'Quest'
+    objective_board: tr.s('Objective'),
+    quest_campaign: tr.s('Quest')
 };
 
 export const PROFILE_PROGRESS_STATUS_LABEL: Record<LocalProgressRegistryRow['status'], string> = {
-    active: 'In progress',
-    completed: 'Done',
-    failed: 'Missed',
-    locked: 'Locked'
+    active: tr.s('In progress'),
+    completed: tr.s('Done'),
+    failed: tr.s('Missed'),
+    locked: tr.s('Locked')
 };

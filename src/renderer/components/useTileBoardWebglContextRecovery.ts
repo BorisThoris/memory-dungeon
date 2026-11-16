@@ -1,3 +1,4 @@
+import { tr } from '../../shared/i18n';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLatestRef } from '../hooks/useLatestRef';
 
@@ -49,7 +50,7 @@ export const useTileBoardWebglContextRecovery = ({
             const onRestored = (): void => {
                 setGpuSurfaceLost(false);
                 setWebglCanvasRemountKey((key) => key + 1);
-                announceRef.current('Graphics context restored. Board rebuilt.');
+                announceRef.current(tr.s('Graphics context restored. Board rebuilt.'));
                 if (announcementTimeoutRef.current !== null) {
                     window.clearTimeout(announcementTimeoutRef.current);
                 }

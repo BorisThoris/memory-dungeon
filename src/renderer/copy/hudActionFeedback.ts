@@ -1,10 +1,11 @@
+import { englishOf, tr } from '../../shared/i18n';
 import type { FindableKind, TileTraitKind } from '../../shared/contracts';
 import { getFindableKindLabel, getFindableRewardCopy } from '../../shared/findables';
 import { TILE_TRAIT_COUNT_KINDS } from '../../shared/session-stats-rules';
 import { TILE_TRAIT_COPY } from '../../shared/tile-trait-rules';
 
 export const getFindableAnnouncementText = (kind: FindableKind): string =>
-    `${getFindableKindLabel(kind)} claimed: ${getFindableRewardCopy(kind)}.`;
+    tr`${getFindableKindLabel(kind)} claimed: ${getFindableRewardCopy(kind)}.`;
 
 export const getFindableToastText = (kind: FindableKind): string =>
     `${getFindableKindLabel(kind)} ${getFindableRewardCopy(kind)}`;
@@ -94,38 +95,38 @@ export const getHudActionFeedbackProfile = (
     text: string,
     priority: 'info' | 'error' = 'info'
 ): HudActionFeedbackProfile => {
-    const normalized = text.toLowerCase();
+    const normalized = englishOf(text).toLowerCase();
     if (priority === 'error' || /\b(contact|bit)\b/.test(normalized)) {
-        return { label: 'Critical', tone: 'danger' };
+        return { label: tr.s('Critical'), tone: 'danger' };
     }
     if (/\bchain\s+x?\d+\s+broken\b/.test(normalized)) {
-        return { label: 'Chain break', tone: 'danger' };
+        return { label: tr.s('Chain break'), tone: 'danger' };
     }
     if (/\b(no match|broken|penalty|expired)\b/.test(normalized)) {
-        return { label: 'Miss', tone: 'danger' };
+        return { label: tr.s('Miss'), tone: 'danger' };
     }
     if (/\bpayoff stack\b/.test(normalized)) {
-        return { label: 'Payoff stack', tone: 'reward' };
+        return { label: tr.s('Payoff stack'), tone: 'reward' };
     }
     if (/\bcashout hit\b/.test(normalized)) {
-        return { label: 'Cashout hit', tone: 'reward' };
+        return { label: tr.s('Cashout hit'), tone: 'reward' };
     }
     if (/\breward cashout\b/.test(normalized)) {
-        return { label: 'Reward cashout', tone: 'reward' };
+        return { label: tr.s('Reward cashout'), tone: 'reward' };
     }
     if (/\btrait combo surge\b/.test(normalized)) {
-        return { label: 'Trait surge', tone: 'trait' };
+        return { label: tr.s('Trait surge'), tone: 'trait' };
     }
     if (/\b(chain times|(?:clean|sharp|fever) reached|surge)\b/.test(normalized)) {
-        return { label: 'Chain', tone: 'chain' };
+        return { label: tr.s('Chain'), tone: 'chain' };
     }
     if (/\b(trait|stasis|row\/swap|shuffle charge)\b/.test(normalized)) {
-        return { label: 'Trait play', tone: 'trait' };
+        return { label: tr.s('Trait play'), tone: 'trait' };
     }
     if (/\b(cashout|claimed|gained|reward|gold|cache|favor)\b/.test(normalized)) {
-        return { label: 'Reward burst', tone: 'reward' };
+        return { label: tr.s('Reward burst'), tone: 'reward' };
     }
-    return { label: 'Action result', tone: 'info' };
+    return { label: tr.s('Action result'), tone: 'info' };
 };
 
 export const countTileTraitTotal = (counts: Partial<Record<TileTraitKind, number>> | undefined): number =>
@@ -139,7 +140,7 @@ export const tileTraitKindLabels = (kinds: readonly string[]): string[] =>
     TILE_TRAIT_COUNT_KINDS.filter((kind) => kinds.includes(kind)).map((kind) => TILE_TRAIT_COPY[kind].label);
 
 export const joinReadableList = (items: readonly string[]): string =>
-    items.length <= 1 ? items[0] ?? '' : `${items.slice(0, -1).join(', ')} and ${items.at(-1)}`;
+    items.length <= 1 ? items[0] ?? '' : tr`${items.slice(0, -1).join(', ')} and ${items.at(-1)}`;
 
 export const pluralize = (count: number, singular: string, plural = `${singular}s`): string =>
     `${count} ${count === 1 ? singular : plural}`;

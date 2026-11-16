@@ -1,3 +1,4 @@
+import { plural, tr } from './i18n';
 import type { ElementReactionImpact, RunState, Tile, TileSuit } from './contracts';
 import { runNonNegativeInteger } from './run-number-guards';
 import { isSingletonUtilityPairKey, isWildPairKey } from './tile-identity';
@@ -79,12 +80,12 @@ export interface ElementReactionDefinition {
 }
 
 export const ELEMENT_REACTIONS: Readonly<Record<ElementReactionKind, ElementReactionDefinition>> = {
-    steam: { kind: 'steam', name: 'Steam', elements: ['ember', 'tide'], effect: 'douse fires and reveal p nearby faces until the next flip' },
-    blaze: { kind: 'blaze', name: 'Blaze', elements: ['ember', 'moss'], effect: 'burn vines, seeds and blooms; gain one gold per two power, rounded up' },
-    melt: { kind: 'melt', name: 'Thaw', elements: ['ember', 'bone'], effect: 'melt ice, snow and rime; gain 25 × p² score' },
-    freezeover: { kind: 'freezeover', name: 'Freeze-over', elements: ['tide', 'bone'], effect: 'douse fires and calm the arena for p + 1 turns' },
-    flood: { kind: 'flood', name: 'Flood', elements: ['tide', 'moss'], effect: 'ripen seeds into 2-gold blooms; Water and Grove each gain p resonance' },
-    frostbloom: { kind: 'frostbloom', name: 'Frostbloom', elements: ['moss', 'bone'], effect: 'the p face-down cards nearest the match each gain a charge' }
+    steam: { kind: 'steam', name: tr.s('Steam'), elements: ['ember', 'tide'], effect: tr.s('douse fires and reveal p nearby faces until the next flip') },
+    blaze: { kind: 'blaze', name: tr.s('Blaze'), elements: ['ember', 'moss'], effect: tr.s('burn vines, seeds and blooms; gain one gold per two power, rounded up') },
+    melt: { kind: 'melt', name: tr.s('Thaw'), elements: ['ember', 'bone'], effect: tr.s('melt ice, snow and rime; gain 25 × p² score') },
+    freezeover: { kind: 'freezeover', name: tr.s('Freeze-over'), elements: ['tide', 'bone'], effect: tr.s('douse fires and calm the arena for p + 1 turns') },
+    flood: { kind: 'flood', name: tr.s('Flood'), elements: ['tide', 'moss'], effect: tr.s('ripen seeds into 2-gold blooms; Water and Grove each gain p resonance') },
+    frostbloom: { kind: 'frostbloom', name: tr.s('Frostbloom'), elements: ['moss', 'bone'], effect: tr.s('the p face-down cards nearest the match each gain a charge') }
 };
 
 export const ELEMENT_REACTION_KINDS = Object.keys(ELEMENT_REACTIONS) as ElementReactionKind[];
@@ -305,11 +306,11 @@ export const resolveElementReaction = (kind: ElementReactionKind, potency: numbe
 export const elementReactionSummary = (kind: ElementReactionKind, potency: number): string => {
     const p = Math.max(1, runNonNegativeInteger(potency));
     return {
-        steam: `Douse fire · reveal up to ${p} ${p === 1 ? 'face' : 'faces'}`,
-        blaze: `Burn vines, seeds and blooms · +${Math.ceil(p / BLAZE_POTENCY_PER_GOLD)} gold`,
-        melt: `Melt ice, snow and rime · +${THAW_SCORE_PER_POTENCY_SQUARED * p * p} score`,
-        freezeover: `Douse fire · calm arena for ${p + 1} turns`,
-        flood: `Ripen seeds · +${p} Water and Grove resonance`,
-        frostbloom: `Charge up to ${p} ${p === 1 ? 'card' : 'cards'} · charges add resonance when matched`
+        steam: tr`Douse fire · reveal up to ${plural(p, { one: '{0} face', other: '{0} faces' })}`,
+        blaze: tr`Burn vines, seeds and blooms · +${Math.ceil(p / BLAZE_POTENCY_PER_GOLD)} gold`,
+        melt: tr`Melt ice, snow and rime · +${THAW_SCORE_PER_POTENCY_SQUARED * p * p} score`,
+        freezeover: tr`Douse fire · calm arena for ${p + 1} turns`,
+        flood: tr`Ripen seeds · +${p} Water and Grove resonance`,
+        frostbloom: tr`Charge up to ${plural(p, { one: '{0} card', other: '{0} cards' })} · charges add resonance when matched`
     }[kind];
 };
