@@ -4107,8 +4107,8 @@
     {
       "path": "e2e/offline.spec.ts",
       "category": "test",
-      "bytes": 3680,
-      "sha256": "af06fb11e03b1434e9861df0e900688482a080944c6101702014ee71a296f04b"
+      "bytes": 4853,
+      "sha256": "32e4e00f401430832db694beb72d0533b23a8b30744f55f50d8061fcf8408dc5"
     },
     {
       "path": "e2e/original-cards-meteor.spec.ts",
@@ -4707,8 +4707,8 @@
     {
       "path": "public/sw.js",
       "category": "other",
-      "bytes": 5193,
-      "sha256": "cf182e96324177873498b79ddd7a44f32103035ae61bdd66e2ba6fa47090a509"
+      "bytes": 6770,
+      "sha256": "3ff7e293badf271b7a9cc0164977917b9c1f3e3399eaae5075f6e00e0e618ad9"
     },
     {
       "path": "public/trailers/reel.jpg",
@@ -14475,8 +14475,8 @@
     {
       "path": "src/renderer/serviceWorker.ts",
       "category": "source",
-      "bytes": 1600,
-      "sha256": "c57974e10fbec23c6481be5ead74aa5cd5f4da5d745670832db541b01de5aa46"
+      "bytes": 2674,
+      "sha256": "36e7af6e70c7f2e1df7b44df422e8ab20f229e4b57b8447fe19e9a1784e42a2c"
     },
     {
       "path": "src/renderer/steamStorePage.ts",
@@ -34098,7 +34098,7 @@
       "path": "src/renderer/serviceWorker.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 37,
+      "lineCount": 58,
       "imports": [],
       "exports": [
         "symbol:src/renderer/serviceWorker.ts#registerServiceWorker",
@@ -62762,7 +62762,7 @@
       "kind": "value",
       "file": "src/renderer/serviceWorker.ts",
       "line": 19,
-      "endLine": 36
+      "endLine": 57
     },
     {
       "id": "symbol:src/renderer/serviceWorker.ts#ServiceWorkerEnv",

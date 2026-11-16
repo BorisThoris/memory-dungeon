@@ -27,10 +27,31 @@ export const registerServiceWorker = (): void => {
     if (!shouldRegisterServiceWorker(env)) {
         return;
     }
+    // The default keeps 250 entries; the boot alone loads more than that, and the list is what the
+    // worker is told to cache.
+    performance.setResourceTimingBufferSize?.(2000);
     // After load, so installing the worker never competes with the boot for bandwidth.
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js').catch((error: unknown) => {
             console.warn('[offline] service worker registration failed', error);
+        });
+        // Hand the worker every file this session used, now and after the idle-time art loads, so
+        // even the first visit (loaded before the worker existed) is complete offline.
+        const sendUsed = (): void => {
+            void navigator.serviceWorker.ready.then((registration) => {
+                const urls = performance
+                    .getEntriesByType('resource')
+                    .map((entry) => entry.name)
+                    .filter((name) => name.startsWith(location.origin));
+                registration.active?.postMessage({ type: 'cache-used', urls: [location.origin + '/', ...urls] });
+            });
+        };
+        sendUsed();
+        window.setTimeout(sendUsed, 20_000);
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') {
+                sendUsed();
+            }
         });
     });
 };

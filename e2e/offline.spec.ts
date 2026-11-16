@@ -38,8 +38,18 @@ test('the game reloads and starts a run with no connection', async ({ context, p
         .poll(
             () =>
                 page.evaluate(async (urls) => {
+                    // Everything this page loaded, including what came before the test listened.
+                    const all = new Set([
+                        ...urls,
+                        ...performance.getEntriesByType('resource').map((entry) => entry.name),
+                        ...[...document.querySelectorAll<HTMLScriptElement>('script[src]')].map((script) => script.src),
+                        ...[...document.querySelectorAll<HTMLLinkElement>('link[rel="stylesheet"], link[rel="modulepreload"]')].map((link) => link.href)
+                    ]);
                     const missing: string[] = [];
-                    for (const url of urls) if (!(await caches.match(url, { ignoreSearch: false }))) missing.push(url);
+                    for (const url of all) {
+                        if (!url.startsWith(location.origin) || url.endsWith('/sw.js')) continue;
+                        if (!(await caches.match(url, { ignoreVary: true }))) missing.push(url);
+                    }
                     return missing.filter((url) => !new URL(url).pathname.match(/^\/(?:trailers|artwork|wip-assets|privacy)/));
                 }, [...fetched]),
             { timeout: 60_000 }
@@ -57,13 +67,23 @@ test('the game reloads and starts a run with no connection', async ({ context, p
         if (reason.includes('ERR_ABORTED')) aborted.push(request.url());
         else failed.push(`${request.url()} ${reason}`);
     });
+    const consoleErrors: string[] = [];
+    page.on('console', (message) => {
+        if (message.type() === 'error') consoleErrors.push(message.text().slice(0, 300));
+    });
+    page.on('pageerror', (error) => consoleErrors.push(String(error).slice(0, 300)));
     await page.reload({ timeout: 120_000 });
-    await expect(page.locator('#boot-splash')).toHaveCount(0, { timeout: 120_000 });
+    await expect
+        .poll(() => page.locator('#boot-splash').count(), {
+            timeout: 120_000,
+            message: `boot never finished offline; failed: ${JSON.stringify(failed)}; console: ${JSON.stringify(consoleErrors)}`
+        })
+        .toBe(0);
     await expect(page.locator('[data-e2e-menu-pointer]')).toBeAttached({ timeout: 60_000 });
     expect(failed).toEqual([]);
     const uncached = await page.evaluate(async (urls) => {
         const missing: string[] = [];
-        for (const url of urls) if (!(await caches.match(url))) missing.push(url);
+        for (const url of urls) if (!(await caches.match(url, { ignoreVary: true }))) missing.push(url);
         return missing;
     }, aborted);
     expect(uncached).toEqual([]);

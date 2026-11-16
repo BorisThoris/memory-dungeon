@@ -14,6 +14,9 @@
  *   game itself never loads.
  */
 const CACHE = 'memory-dungeon-v1';
+// Hashed same-origin files: the copy is the same whatever Origin header asked (fonts and module
+// scripts send one, the worker's own fetches do not), so a Vary: Origin must not hide it.
+const MATCH = { ignoreVary: true };
 const SHELL = ['/', '/index.html', '/site.webmanifest', '/favicon.svg'];
 const NEVER = /^\/(?:trailers|artwork|wip-assets|privacy)(?:\/|\.|$)/;
 
@@ -53,7 +56,7 @@ const pageFromNetwork = async (request) => {
         }
         return response;
     } catch {
-        const cached = (await caches.match('/index.html')) || (await caches.match('/'));
+        const cached = (await caches.match('/index.html', MATCH)) || (await caches.match('/', MATCH));
         return cached || new Response('Memory Dungeon needs one visit online before it can play offline.', {
             status: 503,
             headers: { 'Content-Type': 'text/plain; charset=utf-8' }
@@ -62,7 +65,7 @@ const pageFromNetwork = async (request) => {
 };
 
 const cacheFirst = async (request) => {
-    const cached = await caches.match(request);
+    const cached = await caches.match(request, MATCH);
     if (cached) {
         return cached;
     }
@@ -70,7 +73,7 @@ const cacheFirst = async (request) => {
 };
 
 const staleWhileRevalidate = async (request) => {
-    const cached = await caches.match(request);
+    const cached = await caches.match(request, MATCH);
     const refresh = fetch(request)
         .then((response) => put(request, response))
         .catch(() => undefined);
@@ -88,7 +91,7 @@ const staleWhileRevalidate = async (request) => {
 const rangeFromCache = async (request) => {
     const url = new URL(request.url);
     const whole = new Request(url.pathname + url.search);
-    let response = await caches.match(whole);
+    let response = await caches.match(whole, MATCH);
     if (!response) {
         response = await put(whole, await fetch(whole));
     }
@@ -113,6 +116,42 @@ const rangeFromCache = async (request) => {
         }
     });
 };
+
+/*
+ * The page sends the files it has used (its resource timing list): some were loaded before this
+ * worker controlled the page (the whole first visit), and some the browser served from its memory
+ * cache without asking. Cache whichever of them are missing, so offline has everything a session saw.
+ */
+self.addEventListener('message', (event) => {
+    const data = event.data;
+    if (!data || data.type !== 'cache-used' || !Array.isArray(data.urls)) {
+        return;
+    }
+    event.waitUntil(
+        caches.open(CACHE).then(async (cache) => {
+            for (const raw of data.urls) {
+                let url;
+                try {
+                    url = new URL(raw);
+                } catch {
+                    continue;
+                }
+                if (url.origin !== self.location.origin || NEVER.test(url.pathname) || url.pathname === '/sw.js') {
+                    continue;
+                }
+                const key = url.pathname + url.search;
+                if (await cache.match(key, MATCH)) {
+                    continue;
+                }
+                try {
+                    await put(new Request(key), await fetch(key));
+                } catch {
+                    // Offline or gone: the next session will try again.
+                }
+            }
+        })
+    );
+});
 
 self.addEventListener('fetch', (event) => {
     const { request } = event;
