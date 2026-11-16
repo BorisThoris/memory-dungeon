@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3434,
+    "trackedFileCount": 3436,
     "codeFileCount": 1350,
     "exportedSymbolCount": 4471,
     "contentItemCount": 16,
@@ -3973,6 +3973,12 @@
       "sha256": "1b2d23d01e5733ce42d862ff576c7ceb7531168dab069732ec9b3ad5699ec182"
     },
     {
+      "path": "e2e/desktop-launch.spec.ts",
+      "category": "test",
+      "bytes": 2145,
+      "sha256": "85f75f197995b0c8cebbded4b2899bacc06f6d8e471f7af6efa3a02c0a6aaae6"
+    },
+    {
       "path": "e2e/element-resonance.spec.ts",
       "category": "test",
       "bytes": 11619,
@@ -4461,8 +4467,8 @@
     {
       "path": "package.json",
       "category": "configuration",
-      "bytes": 34318,
-      "sha256": "034d1b527d7ca5fb4209da3fc026c90f76b1ee842cff8411a9569596bd1f78f0"
+      "bytes": 34398,
+      "sha256": "9f1f663c365fec294a4cb0c419d1a41b24a11c2932c4709cb6ef237f01a04e28"
     },
     {
       "path": "packages/notifications/package.json",
@@ -4569,8 +4575,14 @@
     {
       "path": "playwright.config.ts",
       "category": "configuration",
-      "bytes": 3905,
-      "sha256": "c71eb1d9e3eb30bd66e2100e3809649d3557a956758326edf1ca47a2f1a36f2b"
+      "bytes": 4032,
+      "sha256": "25bbc58e6c96a6ec703f7639810016b976be5406f0fb5b42c0bd33ae8b5fd58a"
+    },
+    {
+      "path": "playwright.desktop.config.ts",
+      "category": "configuration",
+      "bytes": 477,
+      "sha256": "6dac7413cd17b8800a6dd9430472a4dc319ca8b369cda472ecc3a38744fa0b6b"
     },
     {
       "path": "public/.well-known/assetlinks.json",

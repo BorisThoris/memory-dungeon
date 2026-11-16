@@ -49,6 +49,8 @@ const workers = Number.isFinite(parsedWorkers) && parsedWorkers > 0 ? parsedWork
 /** REF-079: fresh browser context per test is Playwright default; block SWs to avoid cross-test cache bleed. */
 const config: PlaywrightTestConfig = {
     testDir: './e2e',
+    // Electron launches the built app itself; playwright.desktop.config.ts runs it.
+    testIgnore: 'desktop-launch.spec.ts',
     /*
      * The app is a single strict-port Vite/WebGL target; broad parallel Playwright runs overload
      * startup, WebGL contexts, and route fixtures. Shards may opt into more workers through env.
