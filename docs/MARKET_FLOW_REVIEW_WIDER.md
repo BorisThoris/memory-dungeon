@@ -11,7 +11,9 @@ Rules for the competitor cells: every claim comes from a source below; a cell wi
 **not found** (it does not mean the product lacks the flow). Store listings differ by storefront and
 version; where sources disagree the disagreement is shown, not resolved. Sources marked
 **(snippet)** were seen only as search-result summaries, not fetched and read; treat those cells as
-weaker. Store-listing wording is paraphrased.
+weaker. On 2026-11-17 every snippet source was fetched again: those that opened are marked
+**(fetched 2026-11-17)** and their cells corrected to what the page says; the rest refuse automated
+readers (HTTP 403 or no DNS answer) and stay snippets. Store-listing wording is paraphrased.
 
 Owner decisions that filter every gap (not proposed as changes): runs are punishing (miss bank); the
 store is a stop every third floor, not a menu screen; only `classic` and `pass_and_play` ship;
@@ -28,29 +30,29 @@ Mobile puzzle / match
 - Candy Crush Saga, App Store (US): https://apps.apple.com/us/app/candy-crush-saga/id553834731
 - King community, Candy Crush Friends Saga accessibility article (snippet; the page returned 404
   when fetched): https://community.king.com/en/kb/articles/2697-play-your-way-new-accessibility-features-in-candy-crush-friends-saga
-- King community thread asking for colour-blind settings in Saga (snippet): https://community.king.com/en/candy-crush-saga/discussion/comment/750706
+- King community thread on accessibility in Saga (fetched 2026-11-17: the page names accessibility but shows no colour-blind request): https://community.king.com/en/candy-crush-saga/discussion/comment/750706
 - Royal Match, App Store (US): https://apps.apple.com/us/app/royal-match/id1482155847
-- Royal Match, Wikipedia, offline play (snippet): https://www.wikipedia.org/wiki/Royal_Match
+- Royal Match, Wikipedia, offline play (fetched 2026-11-17): https://www.wikipedia.org/wiki/Royal_Match
 - Two Dots, App Store (US): https://apps.apple.com/us/app/two-dots-fun-dot-game/id880178264
-- Monument Valley, Family Gaming Database accessibility page (snippet): https://www.familygamingdatabase.com/accessibility/Monument+Valley
-- Monument Valley 3 launched on Netflix without ads or IAP (snippet; a search result also says it later left Netflix for other platforms in 2025, unverified): https://gamedeveloper.com/business/monument-valley-3-is-heading-to-netflix-games-to-avoid-app-store-compromise-
+- Monument Valley, Family Gaming Database accessibility page (fetched 2026-11-17: not yet assessed, 0 features documented): https://www.familygamingdatabase.com/accessibility/Monument+Valley
+- Monument Valley 3 launched as a Netflix Games exclusive (fetched 2026-11-17; the article does not say whether it has ads or IAP, and a search result saying it later left Netflix in 2025 is unverified): https://gamedeveloper.com/business/monument-valley-3-is-heading-to-netflix-games-to-avoid-app-store-compromise-
 
 Card / solitaire
 - Microsoft Solitaire Collection, App Store (US): https://apps.apple.com/us/app/microsoft-solitaire-collection/id1103438575
-- Microsoft Solitaire Collection, Xbox achievement list (snippet): https://www.exophase.com/game/microsoft-solitaire-collection-xbox-one/achievements/
-- Solitaire Grand Harvest, App Store (US) (snippet): https://apps.apple.com/us/app/-/id1223338261
-- Hearthstone new player experience, wiki (snippet): https://hearthstone.wiki.gg/wiki/New_player_experience
-- Hearthstone Catch-Up Packs, community summary of Blizzard's announcement (snippet): https://www.hearthstonetopdecks.com/introducing-catch-up-packs-containing-up-to-50-cards-per-pack/
+- Microsoft Solitaire Collection, Xbox achievement list (snippet; HTTP 403 on 2026-11-17, as was TrueAchievements): https://www.exophase.com/game/microsoft-solitaire-collection-xbox-one/achievements/
+- Solitaire Grand Harvest, App Store (US) (fetched 2026-11-17): https://apps.apple.com/us/app/-/id1223338261
+- Hearthstone new player experience, wiki (fetched 2026-11-17): https://hearthstone.wiki.gg/wiki/New_player_experience
+- Hearthstone Catch-Up Packs, community summary of Blizzard's announcement (fetched 2026-11-17): https://www.hearthstonetopdecks.com/introducing-catch-up-packs-containing-up-to-50-cards-per-pack/
 - Marvel Snap onboarding, Second Dinner via mobilegamer.biz: https://mobilegamer.biz/second-dinner-reveals-the-secrets-of-marvel-snaps-onboarding-and-card-design/
-- Marvel Snap onboarding analysis, play before an account (snippet): https://alliance.xyz/essays/removing-web3s-friction-pt-1-progressive-onboarding-and-games
+- Marvel Snap onboarding analysis, play before an account (fetched 2026-11-17): https://alliance.xyz/essays/removing-web3s-friction-pt-1-progressive-onboarding-and-games
 
 Brain training
 - Lumosity, App Store (US): https://apps.apple.com/us/app/lumosity-brain-training/id577232024
-- Lumosity, AppAdvice listing, seven languages (snippet): https://appadvice.com/app/lumosity-mobile/577232024
-- Lumosity help, "The new Lumosity", streaks more visible (snippet): https://lumositybeta.zendesk.com/hc/en-us/articles/33395618060951-The-New-Lumosity-What-s-Changed-and-Why
+- Lumosity, AppAdvice listing, seven languages (snippet; no DNS answer on 2026-11-17): https://appadvice.com/app/lumosity-mobile/577232024
+- Lumosity help, "The new Lumosity", streaks more visible (snippet; HTTP 403 on 2026-11-17): https://lumositybeta.zendesk.com/hc/en-us/articles/33395618060951-The-New-Lumosity-What-s-Changed-and-Why
 - Elevate, App Store (US): https://apps.apple.com/us/app/id875063456
-- Elevate help, streak freeze (snippet): https://support.elevateapp.com/hc/en-us/articles/28507604797595-What-is-a-streak-freeze
-- Elevate help, training reminder time (snippet; title only): https://support.elevateapp.com/hc/en-us/articles/4402971596699-Can-I-change-the-time-I-receive-my-training-reminder
+- Elevate help, streak freeze (snippet; HTTP 403 on 2026-11-17): https://support.elevateapp.com/hc/en-us/articles/28507604797595-What-is-a-streak-freeze
+- Elevate help, training reminder time (snippet, title only; HTTP 403 on 2026-11-17): https://support.elevateapp.com/hc/en-us/articles/4402971596699-Can-I-change-the-time-I-receive-my-training-reminder
 - Elevate help, reset progress (snippet; title only): https://support.elevateapp.com/hc/en-us/articles/4402925241115-Can-I-reset-my-progress
 - Peak, App Store (US): https://apps.apple.com/us/app/peak-brain-games-training/id806223188
 
@@ -66,17 +68,17 @@ Platform
 
 | Flow | Candy Crush Saga | Royal Match | Two Dots | Monument Valley | MS Solitaire Collection | Solitaire Grand Harvest | Hearthstone / Marvel Snap | Lumosity | Elevate | Peak |
 |---|---|---|---|---|---|---|---|---|---|---|
-| First run / tutorial | nf | nf | nf | nf | nf | nf | HS: three practice matches, playable or skippable, then the Apprentice Track. Snap: the whole tutorial without an account; a simplified first match; Quicksilver guaranteed in the opening hand instead of a mulligan | nf | nf | nf |
+| First run / tutorial | nf | nf | nf | nf | nf | nf | HS: an introductory tutorial, completed or skipped, then the Apprentice Track, which unlocks the classes and modes. Snap: the whole tutorial without an account; a simplified first match; Quicksilver guaranteed in the opening hand instead of a mulligan | nf | nf | nf |
 | Daily return loop | Daily login for free boosters and lives | nf | Seasonal events | nf | Daily Challenges, five new each day; monthly badges | Daily free gifts on return | nf | Daily workout; streaks made more visible, one game a day keeps a streak | Workout calendar logs streaks; two streak freezes, earned or bought | Daily workouts |
 | Progression / meta | Time-limited events | Events, Royal Pass, collections | 5000+ levels, scavenger-hunt maps | nf | Star Club packs, events, XP | Farm built with earned gems | HS: Apprentice Track rewards; Snap: card unlocks ordered to teach card interactions | Progress toward goals, insights | Adaptive difficulty | Progress insights and statistics |
-| Accessibility | No declared App Store features; colour-blind settings requested by players. Sister game Friends Saga: reduce shake, limit effects, hints off | None declared | None declared; the description says a colour-blind mode is free to all | Not yet assessed by Family Gaming Database | None declared | nf | nf | None declared | None declared | None declared |
-| Languages | English + 28 | English + 12 | English + 12 | nf | English + 14 | nf | nf | Conflict: English only (US App Store) vs seven languages (AppAdvice) | English only | English + 13 |
+| Accessibility | No declared App Store features; a player thread on accessibility (no colour-blind request found in it). Sister game Friends Saga: reduce shake, limit effects, hints off | None declared | None declared; the description says a colour-blind mode is free to all | Not yet assessed by Family Gaming Database | None declared | nf | nf | None declared | None declared | None declared |
+| Languages | English + 28 | English + 12 | English + 12 | nf | English + 14 | English + 14 | nf | Conflict: English only (US App Store) vs seven languages (AppAdvice) | English only | English + 13 |
 | Save / sync | Optional Facebook connection syncs progress | nf | nf | nf | Microsoft/Xbox account saves progress, cross-platform | nf | nf | nf | Help article on resetting progress (title only) | nf |
-| Social | Share lives, compare with friends, tournaments, leaderboards | Team events (user review) | Friends, Game Center leaderboards and achievements | nf | Compete with others (signed in) | Challenge friends; Game Center leaderboards | nf | nf | nf | nf |
-| Store / monetization | IAP: gold bars, moves, lives, boosters | IAP bundles, Royal Pass | IAP: moves, lives, currency; random items | MV3 launched on Netflix, no ads or IAP (may be stale) | Ads; Premium removes ads | nf | nf | Subscription | nf | Subscription (Peak Pro) |
+| Social | Share lives, compare with friends, tournaments, leaderboards | Team events (user review) | Friends, Game Center leaderboards and achievements | nf | Compete with others (signed in) | Game Center named in the listing; challenging friends only in a user review | nf | nf | nf | nf |
+| Store / monetization | IAP: gold bars, moves, lives, boosters | IAP bundles, Royal Pass | IAP: moves, lives, currency; random items | MV3 launched as a Netflix Games exclusive (ads and IAP not stated) | Ads; Premium removes ads | nf | nf | Subscription | nf | Subscription (Peak Pro) |
 | Notifications / reminders | nf | nf | nf | nf | nf | nf | nf | nf (third-party reviews only) | Help article on changing the reminder time (title only) | nf |
 | Offline | Offline play stated | Playable offline; competitive events online | nf | nf | A persistent connection is required | nf | nf | nf | nf | nf |
-| Achievements | nf | nf | Game Center | nf | 75+ Xbox achievements | Game Center | nf | Badges | nf | nf |
+| Achievements | nf | nf | Game Center | nf | 75+ Xbox achievements | nf (Game Center named, achievements not) | nf | Badges | nf | nf |
 | Help / support | nf | nf | nf | nf | nf | nf | nf | Help centre | Help centre | nf |
 | Controller | nf | nf | nf | nf | nf | nf | nf | nf | nf | nf |
 | Rating prompt | nf | nf | nf | nf | nf | nf | nf | nf | nf | nf |
@@ -144,6 +146,20 @@ held to claims rules (the FTC settlement already noted in `MARKET_SIMILAR_GAMES_
   - **Descent map:** the four acts, their floors and bosses, how far the run is, and the next
     milestone, shown on the pause sheet (`src/renderer/components/DescentMap.tsx`,
     `descentMapModel.ts`).
+
+## Dependency security (2026-11-17)
+
+- **What ships is clean:** `yarn audit --groups dependencies` finds 0 advisories in the 63 runtime
+  packages, and `gate:security` (`scripts/audit-summary.mjs`) fails on any runtime advisory.
+- **Build tools:** 12 moderate advisories, two packages: `minimatch` <11.0.1 (globparts denial of
+  service, via `typescript-eslint`, `ts-morph`, `depcheck`, `electron-builder`, `rimraf`) and `glob`
+  <14.0.2 (AbortSignal bypass, via `rimraf`). They run only on our own sources at build time;
+  forcing those majors under the tools would risk the build for no player-facing gain. Left as is.
+- **GitHub Dependabot (156 open, 6 critical):** every alert is against
+  `my-react-native-game/package-lock.json`, a folder deleted from `main` in September 2024
+  (`aeb2a9078`, "removed unneeded folder"); GitHub returns 404 for it. The alerts point at code
+  that no longer exists. On the owner's word all 156 were dismissed as "not used" on 2026-11-17,
+  each with a note naming the removal commit; nothing in the game needed to change.
 
 ## Prioritized gaps
 
