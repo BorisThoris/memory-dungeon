@@ -37,6 +37,9 @@ export const gameOverScreenCopy = {
     achievementsNoteOffShared: tr.s('Achievements are off in a shared game.'),
     achievementsNoteOffPractice: tr.s('Achievements are off in practice.'),
     achievementsNoteOffTestPace: tr.s('Achievements are off at the test pace.'),
+    /** The one-time rate link (`rateGame.ts`), by the store this build can send the player to. */
+    rateOnPlay: tr.s('Enjoying the Dungeon? Rate it on Google Play'),
+    rateOnSteam: tr.s('Enjoying the Dungeon? Review it on Steam'),
     actionKicker: tr.s('Next move'),
     actionHeading: tr.s('Continue the archive'),
     playAgainLabel: tr.s('Play Again'),

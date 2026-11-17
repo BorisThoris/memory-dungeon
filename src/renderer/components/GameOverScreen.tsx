@@ -388,7 +388,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         {ratePrompt ? (
                             <p className={styles.copy} data-testid="game-over-rate">
                                 <a className={styles.wishlistLink} href={ratePrompt.url} rel="noopener noreferrer" target="_blank">
-                                    {ratePrompt.store === 'play' ? tr.s('Enjoying the Dungeon? Rate it on Google Play') : tr.s('Enjoying the Dungeon? Review it on Steam')}
+                                    {ratePrompt.store === 'play' ? gameOverScreenCopy.rateOnPlay : gameOverScreenCopy.rateOnSteam}
                                 </a>
                             </p>
                         ) : null}

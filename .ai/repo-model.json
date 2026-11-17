@@ -11415,8 +11415,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 28524,
-      "sha256": "02374abf3597cba9223c878e44dd7ebb62382e5a4bcab34e4f7a24ca788dc90d"
+      "bytes": 28483,
+      "sha256": "12a57d43d9392279bdaa7123d78790eaf8814d3f6d61af9b6e20f76e4beafad2"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -13593,8 +13593,8 @@
     {
       "path": "src/renderer/copy/gameOverScreen.ts",
       "category": "source",
-      "bytes": 11863,
-      "sha256": "dd6bad76d665c91b8a064340a8c2e083146eaee644384d3b9787ed9404c63f80"
+      "bytes": 12099,
+      "sha256": "e007c223bf1dcc4282c5f1d182427a63cc0fec18fb85218ed6298c92a2b8b048"
     },
     {
       "path": "src/renderer/copy/gameOverWardenLine.test.ts",
@@ -31876,7 +31876,7 @@
       "path": "src/renderer/copy/gameOverScreen.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 212,
+      "lineCount": 215,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/descent-length-rules.ts",
@@ -60668,24 +60668,24 @@
       "name": "achievementsNote",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 185,
-      "endLine": 211
+      "line": 188,
+      "endLine": 214
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#descentEndLine",
       "name": "descentEndLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 166,
-      "endLine": 171
+      "line": 169,
+      "endLine": 174
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#descentFirstsLine",
       "name": "descentFirstsLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 174,
-      "endLine": 175
+      "line": 177,
+      "endLine": 178
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#gameOverScreenCopy",
@@ -60693,23 +60693,23 @@
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
       "line": 10,
-      "endLine": 142
+      "endLine": 145
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#runEndReasonLine",
       "name": "runEndReasonLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 177,
-      "endLine": 178
+      "line": 180,
+      "endLine": 181
     },
     {
       "id": "symbol:src/renderer/copy/gameOverScreen.ts#wardenEndLine",
       "name": "wardenEndLine",
       "kind": "value",
       "file": "src/renderer/copy/gameOverScreen.ts",
-      "line": 152,
-      "endLine": 163
+      "line": 155,
+      "endLine": 166
     },
     {
       "id": "symbol:src/renderer/copy/gameplayEventAnnouncement.ts#buildGameplayEventAnnouncement",
