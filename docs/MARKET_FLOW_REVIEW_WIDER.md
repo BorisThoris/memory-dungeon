@@ -13,7 +13,9 @@ version; where sources disagree the disagreement is shown, not resolved. Sources
 **(snippet)** were seen only as search-result summaries, not fetched and read; treat those cells as
 weaker. On 2026-11-17 every snippet source was fetched again: those that opened are marked
 **(fetched 2026-11-17)** and their cells corrected to what the page says; the rest refuse automated
-readers (HTTP 403 or no DNS answer) and stay snippets. Store-listing wording is paraphrased.
+readers (HTTP 403 or no DNS answer) and stay snippets. A headless Chromium got the same answer: the
+help centres and Exophase put up a bot-verification page (not worked around), and appadvice.com no
+longer resolves. Store-listing wording is paraphrased.
 
 Owner decisions that filter every gap (not proposed as changes): runs are punishing (miss bank); the
 store is a stop every third floor, not a menu screen; only `classic` and `pass_and_play` ship;
@@ -48,7 +50,7 @@ Card / solitaire
 
 Brain training
 - Lumosity, App Store (US): https://apps.apple.com/us/app/lumosity-brain-training/id577232024
-- Lumosity, AppAdvice listing, seven languages (snippet; no DNS answer on 2026-11-17): https://appadvice.com/app/lumosity-mobile/577232024
+- Lumosity, AppAdvice listing, seven languages (snippet; the site no longer resolves, so the claim cannot be checked): https://appadvice.com/app/lumosity-mobile/577232024
 - Lumosity help, "The new Lumosity", streaks more visible (snippet; HTTP 403 on 2026-11-17): https://lumositybeta.zendesk.com/hc/en-us/articles/33395618060951-The-New-Lumosity-What-s-Changed-and-Why
 - Elevate, App Store (US): https://apps.apple.com/us/app/id875063456
 - Elevate help, streak freeze (snippet; HTTP 403 on 2026-11-17): https://support.elevateapp.com/hc/en-us/articles/28507604797595-What-is-a-streak-freeze
@@ -72,7 +74,7 @@ Platform
 | Daily return loop | Daily login for free boosters and lives | nf | Seasonal events | nf | Daily Challenges, five new each day; monthly badges | Daily free gifts on return | nf | Daily workout; streaks made more visible, one game a day keeps a streak | Workout calendar logs streaks; two streak freezes, earned or bought | Daily workouts |
 | Progression / meta | Time-limited events | Events, Royal Pass, collections | 5000+ levels, scavenger-hunt maps | nf | Star Club packs, events, XP | Farm built with earned gems | HS: Apprentice Track rewards; Snap: card unlocks ordered to teach card interactions | Progress toward goals, insights | Adaptive difficulty | Progress insights and statistics |
 | Accessibility | No declared App Store features; a player thread on accessibility (no colour-blind request found in it). Sister game Friends Saga: reduce shake, limit effects, hints off | None declared | None declared; the description says a colour-blind mode is free to all | Not yet assessed by Family Gaming Database | None declared | nf | nf | None declared | None declared | None declared |
-| Languages | English + 28 | English + 12 | English + 12 | nf | English + 14 | English + 14 | nf | Conflict: English only (US App Store) vs seven languages (AppAdvice) | English only | English + 13 |
+| Languages | English + 28 | English + 12 | English + 12 | nf | English + 14 | English + 14 | nf | English (US App Store, re-read 2026-11-17); an unverifiable snippet claimed seven | English only | English + 13 |
 | Save / sync | Optional Facebook connection syncs progress | nf | nf | nf | Microsoft/Xbox account saves progress, cross-platform | nf | nf | nf | Help article on resetting progress (title only) | nf |
 | Social | Share lives, compare with friends, tournaments, leaderboards | Team events (user review) | Friends, Game Center leaderboards and achievements | nf | Compete with others (signed in) | Game Center named in the listing; challenging friends only in a user review | nf | nf | nf | nf |
 | Store / monetization | IAP: gold bars, moves, lives, boosters | IAP bundles, Royal Pass | IAP: moves, lives, currency; random items | MV3 launched as a Netflix Games exclusive (ads and IAP not stated) | Ads; Premium removes ads | nf | nf | Subscription | nf | Subscription (Peak Pro) |
@@ -85,8 +87,8 @@ Platform
 | Account deletion | nf | nf | nf | nf | nf | nf | nf | nf | nf | nf |
 
 What the sources agree on: the free-to-play leaders run a **daily return reason** (gift, challenge
-or workout) and a **streak** with forgiveness (Elevate's freezes); the puzzle and card titles ship in **13 to 29 languages** (the brain-training apps vary: Elevate
-English only, Lumosity in dispute); the puzzle leaders that mention it **play offline**, while
+or workout) and a **streak** with forgiveness (Elevate's freezes, from a help-centre snippet that could not be re-read); the puzzle and card titles ship in **13 to 29 languages** (the brain-training apps list English only on the US App Store:
+Elevate and Lumosity); the puzzle leaders that mention it **play offline**, while
 Microsoft Solitaire Collection requires a connection; accessibility is mostly undeclared on store pages, with
 colour-blind modes the most named feature. The brain-training leaders sell a subscription and are
 held to claims rules (the FTC settlement already noted in `MARKET_SIMILAR_GAMES_RESEARCH.md`).
