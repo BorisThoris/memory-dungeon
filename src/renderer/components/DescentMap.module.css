@@ -74,3 +74,15 @@
     font-variant-numeric: lining-nums;
     color: var(--margin-paper-soft, #e7ddca);
 }
+
+/*
+ * A phone gives each act a column too narrow for its name and boss; they wrapped into tall stacks
+ * and made the pause sheet scroll (ui-fit-contract, pause @ phone). There the bars and the caption,
+ * which names the next milestone, carry the map.
+ */
+@media (max-width: 600px) {
+    .title,
+    .floors {
+        display: none;
+    }
+}

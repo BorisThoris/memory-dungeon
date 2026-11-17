@@ -11139,8 +11139,8 @@
     {
       "path": "src/renderer/components/DescentMap.module.css",
       "category": "source",
-      "bytes": 1442,
-      "sha256": "a269444f59cfc9a011ba39f31eebe29b29fd244a348bbc7f00d04defa115a1e6"
+      "bytes": 1785,
+      "sha256": "8bd4a45c1da0cb4c40592f8b6706389105a65fa97f314a99ad66013bbae5cc9d"
     },
     {
       "path": "src/renderer/components/DescentMap.tsx",
