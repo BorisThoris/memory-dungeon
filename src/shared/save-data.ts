@@ -54,6 +54,8 @@ export const DEFAULT_SETTINGS: Settings = {
     shuffleScoreTaxEnabled: false,
     pairProximityHintsEnabled: true,
     highContrast: false,
+    vibration: true,
+    largerText: false,
     keyBindings: DEFAULT_KEY_BINDINGS
 };
 
@@ -416,6 +418,8 @@ export const settingsBoundarySchema = z.object({
     screenShakeIntensity: z.unknown().optional(),
     weakerShuffleMode: z.unknown().optional(),
     highContrast: z.unknown().optional(),
+    vibration: z.unknown().optional(),
+    largerText: z.unknown().optional(),
     keyBindings: z.unknown().optional()
 });
 
@@ -545,6 +549,8 @@ const normalizeSettings = (input?: SettingsBoundary | Partial<Settings>): Settin
                 ? source.pairProximityHintsEnabled
                 : DEFAULT_SETTINGS.pairProximityHintsEnabled,
         highContrast: typeof source.highContrast === 'boolean' ? source.highContrast : false,
+        vibration: typeof source.vibration === 'boolean' ? source.vibration : true,
+        largerText: typeof source.largerText === 'boolean' ? source.largerText : false,
         keyBindings: normalizeKeyBindings(source.keyBindings)
     };
 };

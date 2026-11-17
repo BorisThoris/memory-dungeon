@@ -255,6 +255,26 @@ describe('Keys, High Contrast and What’s new', () => {
         expect(useAppStore.getState().updateSettings).toHaveBeenCalledWith(expect.objectContaining({ highContrast: true }));
     });
 
+    it('offers Vibration apart from Reduce Motion and saves it off', async () => {
+        const user = userEvent.setup();
+        render(<SettingsScreen presentation="page" />);
+        await user.click(screen.getByRole('button', { name: /accessibility/i }));
+        const vibration = screen.getByRole('checkbox', { name: /^vibration/i });
+        expect(vibration).toBeChecked();
+        await user.click(vibration);
+        await user.click(screen.getByRole('button', { name: 'Save' }));
+        expect(useAppStore.getState().updateSettings).toHaveBeenCalledWith(expect.objectContaining({ vibration: false }));
+    });
+
+    it('offers Larger text and saves it', async () => {
+        const user = userEvent.setup();
+        render(<SettingsScreen presentation="page" />);
+        await user.click(screen.getByRole('button', { name: /accessibility/i }));
+        await user.click(screen.getByRole('checkbox', { name: /^larger text/i }));
+        await user.click(screen.getByRole('button', { name: 'Save' }));
+        expect(useAppStore.getState().updateSettings).toHaveBeenCalledWith(expect.objectContaining({ largerText: true }));
+    });
+
     it('lists what changed, newest week first', async () => {
         const user = userEvent.setup();
         render(<SettingsScreen presentation="page" />);

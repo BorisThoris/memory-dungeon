@@ -19,6 +19,9 @@ const DESCENT_MILESTONE_NAMES: Readonly<Record<DescentActId, string>> = {
     abyss: tr.s('The Warden')
 };
 
+/** The boss an act ends on, for the Descent map; the Gate ends on reaching the Living Dungeon, not on a boss. */
+export const descentActBossName = (id: DescentActId): string | null => (id === 'gate' ? null : DESCENT_MILESTONE_NAMES[id]);
+
 export interface Milestone {
     readonly name: string;
     /** The floor the milestone stands on. */

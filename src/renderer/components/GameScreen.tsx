@@ -138,6 +138,7 @@ import { MemorizeSkipLayer } from './MemorizeSkipLayer';
 import RunShell, { type RunShellTool } from './RunShell';
 import { profileDeepestFloor } from '../../shared/profile-deepest-floor';
 import { describeRunModeIdentity } from '../../shared/run-mode-identity';
+import { DescentMap } from './DescentMap';
 import { RUN_SHELL_GLYPHS } from './runShellGlyphs';
 import MainMenuBackground from './MainMenuBackground';
 import FloorClearBeat, { FLOOR_CLEAR_BEAT_EXIT_MS } from './FloorClearBeat';
@@ -2760,6 +2761,8 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 </div>
                             ) : null}
                         </dl>
+                        {/* The road: acts, bosses and the Warden ahead. A shared table plays no Descent. */}
+                        {isPassAndPlayRun(run.passAndPlay) ? null : <DescentMap run={run} />}
                     </OverlayModal>
                 </Presence>
                 {!suppressStatusOverlays && shortcutsHelpOpen ? (

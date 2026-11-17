@@ -601,10 +601,23 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         valueLabel={draft.reduceMotion ? tr.s('Off') : `${Math.round(draft.screenShakeIntensity * 100)}%`}
                                                     />
                                                     <ToggleRow
+                                                        checked={!draft.reduceMotion && draft.vibration !== false}
+                                                        disabled={draft.reduceMotion}
+                                                        hint={SETTINGS_HINTS.vibration}
+                                                        label={tr.s("Vibration")}
+                                                        onChange={(next) => patchSettings('vibration', next)}
+                                                    />
+                                                    <ToggleRow
                                                         checked={draft.highContrast ?? false}
                                                         hint={SETTINGS_HINTS.highContrast}
                                                         label={tr.s("High Contrast")}
                                                         onChange={(next) => patchSettings('highContrast', next)}
+                                                    />
+                                                    <ToggleRow
+                                                        checked={draft.largerText ?? false}
+                                                        hint={SETTINGS_HINTS.largerText}
+                                                        label={tr.s("Larger text")}
+                                                        onChange={(next) => patchSettings('largerText', next)}
                                                     />
                                                     <ToggleRow
                                                         checked={draft.tileFocusAssist}

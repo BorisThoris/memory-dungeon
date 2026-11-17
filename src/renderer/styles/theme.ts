@@ -475,6 +475,19 @@ export const applyHighContrastToDocument = (on: boolean, html: HTMLElement = doc
     else delete html.dataset.contrast;
 };
 
+/** Larger text (Settings › Accessibility): the reading prose one step up. */
+export const LARGER_TEXT_SCALE = 1.2;
+
+/**
+ * Larger text goes on `<html>` like High Contrast, so a dialog portaled to `document.body` reads
+ * it too. Only prose that has room to grow reads `--reading-text-scale` (the Codex entry, the
+ * Settings notes); fitted rows, the HUD and the cards keep their sizes, which UI Scale governs.
+ */
+export const applyLargerTextToDocument = (on: boolean, html: HTMLElement = document.documentElement): void => {
+    if (on) html.style.setProperty('--reading-text-scale', String(LARGER_TEXT_SCALE));
+    else html.style.removeProperty('--reading-text-scale');
+};
+
 export type RendererThemeDensity = 'compact' | 'roomy';
 
 export const buildRendererThemeStyle = (

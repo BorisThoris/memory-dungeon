@@ -501,7 +501,8 @@
 
 .fieldText span {
     font-style: italic;
-    font-size: clamp(0.78rem, 1.7vh, 0.86rem);
+    /* Larger text (Settings › Accessibility) scales the notes, not the controls' fitted rows. */
+    font-size: calc(clamp(0.78rem, 1.7vh, 0.86rem) * var(--reading-text-scale, 1));
     line-height: 1.4;
     color: var(--margin-paper-dim);
 }
@@ -1136,7 +1137,7 @@
 }
 
 .shortLandscapeShell .fieldText span {
-    font-size: 0.76rem;
+    font-size: calc(0.76rem * var(--reading-text-scale, 1));
 }
 
 .shortLandscapeShell .segmentButton,

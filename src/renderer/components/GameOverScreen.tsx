@@ -37,6 +37,7 @@ import { dreadForRun, dreadTier } from '../../shared/dread-rules';
 import { isPassAndPlayRun, resolvePassAndPlayOutcome } from '../../shared/pass-and-play-rules';
 import { discoveryAt } from '../../shared/run-signature-rules';
 import { GATE_OMEN_COPY } from '../copy/verbArrivalCopy';
+import { markRateAsked, ratePromptFor } from '../rateGame';
 
 interface GameOverScreenProps {
     run: RunState;
@@ -167,6 +168,19 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
     };
     const contentLock = getActiveContentLock();
     const steamStoreUrl = getSteamStorePageUrl();
+    // One quiet link to the store, once per device, after a run worth rating (rateGame.ts). Decided on
+    // arrival so a re-render does not take it away; marked asked as soon as it is shown.
+    const [ratePrompt] = useState(() => {
+        const finished = saveData.playerStats?.runsFinished ?? 0;
+        return ratePromptFor({
+            wardenCleared: summary?.runEndReason === 'warden_cleared',
+            runsFinished: finished,
+            counted: runStartSaveData != null && finished === (runStartSaveData.playerStats?.runsFinished ?? 0) + 1
+        });
+    });
+    useEffect(() => {
+        if (ratePrompt) markRateAsked();
+    }, [ratePrompt]);
 
     useEffect(() => {
         resumeUiSfxContext();
@@ -371,6 +385,13 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         </div>
 
                         {rematchComparison ? <p className={styles.personalBest} data-testid="rematch-comparison">{rematchComparison}</p> : null}
+                        {ratePrompt ? (
+                            <p className={styles.copy} data-testid="game-over-rate">
+                                <a className={styles.wishlistLink} href={ratePrompt.url} rel="noopener noreferrer" target="_blank">
+                                    {ratePrompt.store === 'play' ? tr.s('Enjoying the Dungeon? Rate it on Google Play') : tr.s('Enjoying the Dungeon? Review it on Steam')}
+                                </a>
+                            </p>
+                        ) : null}
                         {personalBest === null ? null : (
                             <p
                                 className={styles.personalBest}

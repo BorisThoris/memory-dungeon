@@ -40,3 +40,15 @@ describe('forEachRendererThemeCssVar', () => {
         }
     });
 });
+
+describe('Larger text', () => {
+    it('puts the reading scale on <html> and takes it off again', async () => {
+        const { applyLargerTextToDocument, LARGER_TEXT_SCALE } = await import('./theme');
+        const html = document.createElement('html');
+        applyLargerTextToDocument(true, html);
+        expect(html.style.getPropertyValue('--reading-text-scale')).toBe(String(LARGER_TEXT_SCALE));
+        expect(LARGER_TEXT_SCALE).toBeGreaterThan(1);
+        applyLargerTextToDocument(false, html);
+        expect(html.style.getPropertyValue('--reading-text-scale')).toBe('');
+    });
+});

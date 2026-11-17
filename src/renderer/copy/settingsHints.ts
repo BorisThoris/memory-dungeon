@@ -26,6 +26,8 @@ export const SETTINGS_HINTS = {
         tr.s('Colour vision: every element carries its own symbol on the back of its cards, and the card trait colours are tested to stay distinct with protanopia, deuteranopia and tritanopia.'),
     highContrast: tr.s('Sets the menus’ and the run’s secondary text at full strength and draws the rules and panel edges heavier. The card art is unchanged.'),
     reduceMotion: tr.s('Reduces shake, camera motion and animated effects, and stops the room flashing (lightning, a break, Fever).'),
+    largerText: tr.s('Codex entries and these notes one step larger. UI Scale sizes everything else.'),
+    vibration: tr.s('Phone taps and controller rumble. Always off while motion is reduced.'),
     screenShakeIntensity: tr.s('How hard bombs, meteors and big breaks shake the board.'),
     resolveDelayMultiplier: tr.s('Match, miss and study timing. Applies to new runs.'),
     sfxVolume: tr.s('Tile flips, rewards, and hit feedback.'),

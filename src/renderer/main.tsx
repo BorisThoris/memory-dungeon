@@ -1,7 +1,9 @@
 import { loadBootLocale } from './i18n/bootLocale';
+import { rememberAndroidAppSession } from './rateGame';
 import { registerServiceWorker } from './serviceWorker';
 
 registerServiceWorker();
+rememberAndroidAppSession();
 
 /*
  * The language first, then everything else: copy modules build their text when they evaluate, so

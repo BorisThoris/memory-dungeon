@@ -1,4 +1,5 @@
 import type { ChainTier } from '../../shared/chain-tier-rules';
+import { vibrationEnabled } from './vibrationSwitch';
 
 /**
  * Controller rumble for the break, through the Gamepad vibration actuator.
@@ -61,7 +62,7 @@ export const rumbleGamepads = (
     pattern: RumblePattern | null,
     { reduceMotion, gamepads = defaultGamepads }: { reduceMotion: boolean; gamepads?: GamepadSource }
 ): number => {
-    if (!pattern || reduceMotion) {
+    if (!pattern || reduceMotion || !vibrationEnabled()) {
         return 0;
     }
     let rumbled = 0;

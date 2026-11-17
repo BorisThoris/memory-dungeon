@@ -25,7 +25,7 @@ import { TutorialHallContext } from './components/tutorialHallContext';
 import { useGamepadNavigation } from './hooks/useGamepadNavigation';
 import { useRichPresence } from './hooks/useRichPresence';
 import styles from './styles/App.module.css';
-import { applyHighContrastToDocument, buildRendererThemeStyle } from './styles/theme';
+import { applyHighContrastToDocument, applyLargerTextToDocument, buildRendererThemeStyle } from './styles/theme';
 import { resolveAdaptiveMusicState, useGameplayMusic } from './audio/gameplayMusic';
 import { useFeverDuck } from './audio/feverDuck';
 import { resolutionGapDuckMultiplier } from './audio/resolutionGapDuck';
@@ -41,6 +41,7 @@ import {
 import { useAppStore } from './store/useAppStore';
 import { hasDesktopBridge } from './desktop-client';
 import { hardwareBackApplies, useHardwareBack } from './hooks/useHardwareBack';
+import { setVibrationEnabled } from './input/vibrationSwitch';
 import { preloadRunAssets } from './assets/preloadRunAssets';
 import { getNavigationShellChromeContract } from './store/navigationModel';
 
@@ -159,6 +160,10 @@ const App = () => {
     );
     // Dialogs portal to `document.body`, outside the app root's inline theme: High Contrast goes on `<html>` too.
     useEffect(() => applyHighContrastToDocument(highContrast), [highContrast]);
+    const largerText = settings.largerText === true;
+    useEffect(() => applyLargerTextToDocument(largerText), [largerText]);
+    // Phone taps and controller rumble read this switch directly (vibrationSwitch.ts).
+    setVibrationEnabled(settings.vibration !== false);
     const activeView = hydrated ? view : 'boot';
     const [introPlayback, setIntroPlayback] = useState<Exclude<IntroPlaybackState, 'playing'>>('pending');
     const shellChromeContract = getNavigationShellChromeContract({

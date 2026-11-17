@@ -15,8 +15,10 @@
  * Reduce motion turns it off, as it does controller rumble. The setting is this game's one switch
  * for "less shaking", and a buzz in the hand is shaking. That does leave a reduce-motion player on
  * a muted phone with only the bar, which is the honest trade: the setting is a request, not an
- * oversight to route around.
+ * oversight to route around. The Vibration setting (`vibrationSwitch.ts`) turns it off on its own.
  */
+import { vibrationEnabled } from './vibrationSwitch';
+
 export type VibrateFn = (pattern: number | number[]) => boolean;
 
 const defaultVibrate = (): VibrateFn | null => {
@@ -52,7 +54,7 @@ type TapOptions = { vibrate?: VibrateFn | null };
  * not been interacted with yet are all silent no-ops, the same contract the gamepad rumble keeps.
  */
 const tap = (reduceMotion: boolean, ms: number, options: TapOptions): boolean => {
-    if (reduceMotion) {
+    if (reduceMotion || !vibrationEnabled()) {
         return false;
     }
     const vibrate = options.vibrate === undefined ? defaultVibrate() : options.vibrate;

@@ -8,6 +8,23 @@ import {
     tapStudyClosing,
     tapToolPress
 } from './touchHaptics';
+import { setVibrationEnabled } from './vibrationSwitch';
+
+describe('the Vibration setting', () => {
+    it('silences every tap on its own, without Reduce Motion', () => {
+        const vibrate = vi.fn(() => true);
+        setVibrationEnabled(false);
+        try {
+            expect(tapToolPress(false, { vibrate })).toBe(false);
+            expect(tapStudyClosing(false, { vibrate })).toBe(false);
+            expect(tapItemImpact(false, 0.9, { vibrate })).toBe(false);
+            expect(vibrate).not.toHaveBeenCalled();
+        } finally {
+            setVibrationEnabled(true);
+        }
+        expect(tapToolPress(false, { vibrate })).toBe(true);
+    });
+});
 
 describe('tapToolPress', () => {
     it('ticks for a press, and stays a tick', () => {

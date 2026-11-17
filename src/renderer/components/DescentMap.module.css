@@ -1,0 +1,76 @@
+﻿/* The Descent's road on the pause sheet (DescentMap.tsx). */
+.map {
+    margin-top: 0.9rem;
+}
+
+.track {
+    display: flex;
+    gap: 0.35rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.act {
+    display: flex;
+    flex-basis: 0;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.bar {
+    position: relative;
+    display: block;
+    height: 0.4rem;
+    overflow: hidden;
+    border: 1px solid var(--margin-hairline, rgba(242, 211, 157, 0.3));
+    border-radius: 999px;
+}
+
+.fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    background: var(--margin-gold, #d9b26a);
+}
+
+.act[data-state='ahead'] .title,
+.act[data-state='ahead'] .floors {
+    color: var(--margin-paper-dim, rgba(231, 221, 202, 0.7));
+}
+
+.act[data-state='current'] .bar {
+    border-color: var(--margin-gold, #d9b26a);
+}
+
+.title {
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    color: var(--margin-paper, #f4ecdc);
+}
+
+.floors {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    font-variant-numeric: lining-nums;
+    color: var(--margin-paper-soft, #e7ddca);
+}
+
+.boss {
+    overflow-wrap: break-word;
+    hyphens: auto;
+    font-style: italic;
+}
+
+.caption {
+    margin: 0.5rem 0 0;
+    font-size: 0.85rem;
+    line-height: 1.35;
+    font-variant-numeric: lining-nums;
+    color: var(--margin-paper-soft, #e7ddca);
+}

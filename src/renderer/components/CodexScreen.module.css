@@ -151,7 +151,8 @@
 
 .entryBody {
     margin: 0;
-    font-size: 0.98rem;
+    /* Larger text (Settings › Accessibility); the entry pane scrolls, so it has room to grow. */
+    font-size: calc(0.98rem * var(--reading-text-scale, 1));
     line-height: 1.6;
     color: var(--margin-paper-soft);
 }

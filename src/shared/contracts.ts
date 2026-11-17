@@ -418,6 +418,13 @@ export interface Settings {
      * strength, heavier hairlines and scrims. The card art on the WebGL board is unchanged.
      */
     highContrast?: boolean;
+    /**
+     * Phone taps and controller rumble (2026-11-17); missing reads as on. Reduce Motion still stops
+     * them outright; this lets a player keep the motion and drop the buzz.
+     */
+    vibration?: boolean;
+    /** The reading prose (Codex entries, Settings notes) one step up, apart from UI Scale (2026-11-17). */
+    largerText?: boolean;
     /** The keyboard's rebindable actions (`key-bindings.ts`); missing reads as the defaults. */
     keyBindings?: KeyBindings;
 }

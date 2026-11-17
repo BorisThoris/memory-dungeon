@@ -131,6 +131,19 @@ held to claims rules (the FTC settlement already noted in `MARKET_SIMILAR_GAMES_
 - **P1 back button:** `src/renderer/hooks/useHardwareBack.ts` in the Android app and installed web apps (a browser tab keeps its own back), checked by `e2e/hardware-back.spec.ts`.
 - **P1 support:** Settings > About > Report a problem (`src/renderer/supportReport.ts`).
 - **Localization:** the seven owner-chosen languages (`docs/LOCALIZATION_PLAN.md`).
+- **P2 (2026-11-17):**
+  - **Rate the game:** one link on the results screen, once per device, after a Warden win or
+    the fifth finished run (`src/renderer/rateGame.ts`). It points to Google Play in the Android
+    app, and to Steam only on a desktop build packaged with `VITE_STEAM_STORE_URL`. A browser tab
+    never shows it.
+  - **Vibration:** a Settings › Accessibility switch apart from Reduce Motion, covering phone taps
+    and controller rumble (`src/renderer/input/vibrationSwitch.ts`).
+  - **Larger text:** Codex entries and the Settings notes one step up
+    (`--reading-text-scale`, `applyLargerTextToDocument` in `styles/theme.ts`). Fitted rows, the
+    HUD and the cards are unchanged; UI Scale still sizes those.
+  - **Descent map:** the four acts, their floors and bosses, how far the run is, and the next
+    milestone, shown on the pause sheet (`src/renderer/components/DescentMap.tsx`,
+    `descentMapModel.ts`).
 
 ## Prioritized gaps
 

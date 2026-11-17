@@ -6,6 +6,22 @@ import {
     rumbleForFeverArrival,
     rumbleGamepads
 } from './gamepadRumble';
+import { setVibrationEnabled } from './vibrationSwitch';
+
+describe('rumble and the Vibration setting', () => {
+    it('stays still when Vibration is off', () => {
+        const playEffect = vi.fn(() => Promise.resolve());
+        const gamepads = () => [{ vibrationActuator: { playEffect } }];
+        setVibrationEnabled(false);
+        try {
+            expect(rumbleGamepads(RUMBLE_FEVER_ARRIVAL, { reduceMotion: false, gamepads })).toBe(0);
+        } finally {
+            setVibrationEnabled(true);
+        }
+        expect(playEffect).not.toHaveBeenCalled();
+        expect(rumbleGamepads(RUMBLE_FEVER_ARRIVAL, { reduceMotion: false, gamepads })).toBe(1);
+    });
+});
 
 describe('controller rumble on a break', () => {
     it('scales with the tier and is nothing below Clean', () => {
