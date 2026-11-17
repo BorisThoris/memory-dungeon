@@ -163,6 +163,17 @@ held to claims rules (the FTC settlement already noted in `MARKET_SIMILAR_GAMES_
   that no longer exists. On the owner's word all 156 were dismissed as "not used" on 2026-11-17,
   each with a note naming the removal commit; nothing in the game needed to change.
 
+## Production scope (owner, 2026-11-17)
+
+- **Translations ship as labelled machine drafts.** The language row says they are machine-made
+  and may read oddly; native review follows through player reports (Settings > About > Report a
+  problem) or a paid service, and does not block launch.
+- **Production is the web game and the Play app.** Steam is later: the rate link reaches Steam
+  once the desktop build is packaged with `VITE_STEAM_STORE_URL` set to a store page the owner
+  makes in Steamworks; no code change is needed.
+- **Unread sources stay marked.** Five sources sit behind bot-verification pages and one site is
+  gone; their cells say so, and no prioritized gap rests on them.
+
 ## Prioritized gaps
 
 ### P0: production blockers
