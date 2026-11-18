@@ -4413,8 +4413,8 @@
     {
       "path": "index.html",
       "category": "other",
-      "bytes": 11182,
-      "sha256": "154ae9831bf385d51333ff1548ca5a150bf72ae29da2c1a20018e5f0188e95c5"
+      "bytes": 11122,
+      "sha256": "91aca1d0d6f33393cad8e8f2d7eda28c5f4cd49843cc9808e5f438e6bf99d445"
     },
     {
       "path": "knip.json",
