@@ -8,6 +8,8 @@ interface AppErrorBoundaryProps {
     readonly report?: (report: { componentStack: string | null; message: string; stack: string | null }) => void;
     /** How the fallback's action puts the player back somewhere usable. */
     readonly reload?: () => void;
+    /** Runs once when a render throws, before the fallback shows (drops a run that cannot be continued). */
+    readonly onCrash?: () => void;
 }
 
 interface AppErrorBoundaryState {
@@ -33,6 +35,11 @@ export class AppErrorBoundary extends Component<AppErrorBoundaryProps, AppErrorB
     }
 
     componentDidCatch(error: Error, info: ErrorInfo): void {
+        try {
+            this.props.onCrash?.();
+        } catch {
+            // The fallback matters more than the clean-up.
+        }
         try {
             this.props.report?.({
                 componentStack: info.componentStack ?? null,

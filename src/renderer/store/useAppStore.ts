@@ -114,7 +114,10 @@ import { createHydratedAppStatePatch, SAVE_RECOVERY_FAILED_NOTICE } from './hydr
 import { createRunLifecycleController } from './runLifecycleController';
 import { createAppStoreInitialState } from './appStoreInitialState';
 import { createRunStartStatePatch } from './runStartState';
-import { clearSuspendedRun, isSuspendableRun, readSuspendedRun, summarizeSuspendedRun, writeSuspendedRun } from './suspendedRun';
+import { clearSuspendedRun, isSuspendableRun, markSuspendedRunContinued, readSuspendedRun, summarizeSuspendedRun, writeSuspendedRun } from './suspendedRun';
+
+/** Set by Save and leave for the one store update that takes the run off the board. */
+let keepSuspendedRunOnLeave = false;
 import { enqueueItemDrops, itemDropsBetween } from './itemDropFeed';
 import type { AppState } from './appStoreTypes';
 import { publishItemEffects, verbItemEffect, type ItemEffect } from '../components/itemEffects';
@@ -344,6 +347,7 @@ export const useAppStore = create<AppState>((set, get) => ({
             return;
         }
         clearAllTimers();
+        markSuspendedRunContinued();
         // A snapshot is frozen (paused, or between floors), so the board waits behind the pause
         // menu and Resume restarts its clocks with the time they had left.
         set({ ...createRunStartStatePatch(suspended.run, suspended.runStartSaveData ?? get().saveData), suspendedRun: null });
@@ -394,6 +398,15 @@ export const useAppStore = create<AppState>((set, get) => ({
     goToMenu: () => {
         clearAllTimers();
         set(createMenuSurfacePatch());
+    },
+
+    leaveRunForLater: () => {
+        const { run, runStartSaveData } = get();
+        // Only closing the app kept a run; leaving from the pause menu always lost it.
+        const kept = isSuspendableRun(run) && writeSuspendedRun(freezeRunSnapshotForPlayingMetaOverlay(run), runStartSaveData);
+        clearAllTimers();
+        keepSuspendedRunOnLeave = kept;
+        set({ ...createMenuSurfacePatch(), suspendedRun: kept ? summarizeSuspendedRun(readSuspendedRun()) : null });
     },
 
     openModeSelect: () => {
@@ -994,6 +1007,11 @@ const isSuspendMoment = (previous: RunState | null, next: RunState): boolean =>
 useAppStore.subscribe((state, previous) => {
     if (state.run === previous.run) return;
     if (previous.run && (!state.run || state.run.status === 'gameOver')) {
+        // Save and leave wrote the snapshot on purpose; leaving any other way ends the run.
+        if (keepSuspendedRunOnLeave && !state.run) {
+            keepSuspendedRunOnLeave = false;
+            return;
+        }
         clearSuspendedRun();
         return;
     }

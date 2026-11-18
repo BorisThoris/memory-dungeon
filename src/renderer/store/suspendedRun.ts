@@ -60,6 +60,25 @@ export const writeSuspendedRun = (run: RunState, runStartSaveData: SaveData | nu
     }
 };
 
+/*
+ * A snapshot that throws when the board is rebuilt from it would come back as Continue after every
+ * reload and throw again. A crash soon after Continue drops it (`AppErrorBoundary`).
+ */
+export const CONTINUED_RUN_CRASH_WINDOW_MS = 15_000;
+let continuedAt: number | null = null;
+
+export const markSuspendedRunContinued = (now = Date.now()): void => {
+    continuedAt = now;
+};
+
+/** Drops the kept run when the game crashed within moments of continuing it. True when it did. */
+export const dropSuspendedRunIfJustContinued = (now = Date.now()): boolean => {
+    if (continuedAt === null || now - continuedAt > CONTINUED_RUN_CRASH_WINDOW_MS) return false;
+    continuedAt = null;
+    clearSuspendedRun();
+    return true;
+};
+
 export const clearSuspendedRun = (): void => {
     try {
         storage()?.removeItem(SUSPENDED_RUN_STORAGE_KEY);

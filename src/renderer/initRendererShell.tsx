@@ -7,6 +7,7 @@ import App from './App';
 import { BootSplashTeardown } from './BootSplashTeardown';
 import { AppErrorBoundary } from './components/AppErrorBoundary';
 import { desktopClient, hasDesktopBridge } from './desktop-client';
+import { dropSuspendedRunIfJustContinued } from './store/suspendedRun';
 import { registerRendererErrorHooks } from './diagnostics/rendererErrorHooks';
 import { PlatformTiltProvider } from './platformTilt/PlatformTiltProvider';
 import { forEachRendererThemeCssVar } from './styles/theme';
@@ -33,6 +34,9 @@ const mountRendererApp = (rootElement: HTMLElement): Root => {
                 report={hasDesktopBridge() ? (report) => {
                     void desktopClient.reportRendererError(report);
                 } : undefined}
+                onCrash={() => {
+                    dropSuspendedRunIfJustContinued();
+                }}
                 reload={() => {
                     window.location.reload();
                 }}

@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3475,
     "codeFileCount": 1370,
-    "exportedSymbolCount": 4529,
+    "exportedSymbolCount": 4532,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12761
+    "relationshipCount": 12765
   },
   "inventory": [
     {
@@ -2518,7 +2518,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "9d97ec8b7b34bba5b82012727cb2ccea7502a676c7e7adba5898cb0d1cbd265d"
+      "sha256": "5b88f60fc5a296a4a9d3b143afa7fa2d2c242da3ecba5ed7ab7e00e929d9f517"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -10737,8 +10737,8 @@
     {
       "path": "src/renderer/components/AppErrorBoundary.tsx",
       "category": "source",
-      "bytes": 2788,
-      "sha256": "df48f8bbfb972d5bcfc7320ebd96589830890e4dd6a147b5747c73fdfbf78489"
+      "bytes": 3070,
+      "sha256": "e86467945b5f258cc18b20470843a3e90789d51e39571b2cbf13675f90410af3"
     },
     {
       "path": "src/renderer/components/boardFloaterPlacement.test.ts",
@@ -11487,8 +11487,8 @@
     {
       "path": "src/renderer/components/GameScreen.tsx",
       "category": "source",
-      "bytes": 157967,
-      "sha256": "c8067a853a7dbef88e3280a8a190a8f60462e9e45d644583cd0ec3d42a8d58fc"
+      "bytes": 158493,
+      "sha256": "a2aacc534671ddf9f17dc3b9dd7bbb34a44739ba533d524b75d283c7ac841823"
     },
     {
       "path": "src/renderer/components/gameScreenFeedback.ts",
@@ -13791,8 +13791,8 @@
     {
       "path": "src/renderer/copy/runDialogCopy.ts",
       "category": "source",
-      "bytes": 11362,
-      "sha256": "cc7a6c0e691abb52b991b3d522b872de0729580c80593c1eba4761588531d6ed"
+      "bytes": 11429,
+      "sha256": "a30daf559c249bff056ea4c6277a81c1ece0b7e53e51a05630e0e796b0c47963"
     },
     {
       "path": "src/renderer/copy/runEndStamp.ts",
@@ -14295,8 +14295,8 @@
     {
       "path": "src/renderer/initRendererShell.tsx",
       "category": "source",
-      "bytes": 3156,
-      "sha256": "90448faf6081df26871ef870ce04ed8d8437bfcdd2d8c760a917fdf8416008cd"
+      "bytes": 3335,
+      "sha256": "ca98dbfda4196c5faf2835ee373114bfb155c2e07cd602ca07d3b32c8a2ec5ed"
     },
     {
       "path": "src/renderer/input/carveSwipe.test.ts",
@@ -14565,8 +14565,8 @@
     {
       "path": "src/renderer/store/appStoreTypes.ts",
       "category": "source",
-      "bytes": 7503,
-      "sha256": "1302e68cf75fd41775a5c75beb0517d774fdc90d42710949f1aad590b2a26a25"
+      "bytes": 7635,
+      "sha256": "1baeeebb63c77a0bb82dbe0dde03260be50652403267ee1f7e22e4be063db53a"
     },
     {
       "path": "src/renderer/store/backgroundPersistence.test.ts",
@@ -14883,14 +14883,14 @@
     {
       "path": "src/renderer/store/suspendedRun.test.ts",
       "category": "test",
-      "bytes": 2463,
-      "sha256": "9b0a3c37e5173eae30756c22c0f6cb6510f12c1ecdcc9a842b5939f2e68548d3"
+      "bytes": 3189,
+      "sha256": "bccd91ae153db66d64265c8d5bcb9e0cb92feac9f60c58b596a0e2685688b414"
     },
     {
       "path": "src/renderer/store/suspendedRun.ts",
       "category": "source",
-      "bytes": 4336,
-      "sha256": "bc67f77777f8a1495867e6d784b7a056e6b4eb0649bcb6bcbf5456f8dbefc712"
+      "bytes": 5066,
+      "sha256": "1c894bcc88308141110d4bf2d77194aadf5b5113795b7b0ade3b9234394d68ed"
     },
     {
       "path": "src/renderer/store/tilePressAudioCues.test.ts",
@@ -14919,14 +14919,14 @@
     {
       "path": "src/renderer/store/useAppStore.test.ts",
       "category": "test",
-      "bytes": 44294,
-      "sha256": "3fa183779d67a91a0c88265c0fbf7903b533442fdefa4626ea0da21bb3051fa7"
+      "bytes": 45112,
+      "sha256": "520258a4e7903fdd133ebc6cf4748fafc98fe3f5efc2ae7f910cb23301b63a64"
     },
     {
       "path": "src/renderer/store/useAppStore.ts",
       "category": "source",
-      "bytes": 39474,
-      "sha256": "ed5f3541ab94585e3995f7dc46933e62fe7b0205c19221d080fe4b855fe2d0c9"
+      "bytes": 40371,
+      "sha256": "94d5ae197570988685ae41d8655bcfccd0024e89e64c0d6dfcc44eff14c4cc43"
     },
     {
       "path": "src/renderer/styles/App.module.css",
@@ -23461,7 +23461,7 @@
       "path": "src/renderer/components/AppErrorBoundary.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 72,
+      "lineCount": 79,
       "imports": [
         "file:src/renderer/copy/appErrorBoundary.ts"
       ],
@@ -25582,7 +25582,7 @@
       "path": "src/renderer/components/GameScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 2937,
+      "lineCount": 2948,
       "imports": [
         "file:src/renderer/audio/dailyMusic.ts",
         "file:src/renderer/audio/gameSfx.ts",
@@ -32435,7 +32435,7 @@
       "path": "src/renderer/copy/runDialogCopy.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 198,
+      "lineCount": 199,
       "imports": [
         "file:src/shared/i18n.ts"
       ],
@@ -33690,7 +33690,7 @@
       "path": "src/renderer/initRendererShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 77,
+      "lineCount": 81,
       "imports": [
         "file:src/renderer/App.tsx",
         "file:src/renderer/BootSplashTeardown.tsx",
@@ -33698,6 +33698,7 @@
         "file:src/renderer/desktop-client.ts",
         "file:src/renderer/diagnostics/rendererErrorHooks.ts",
         "file:src/renderer/platformTilt/PlatformTiltProvider.tsx",
+        "file:src/renderer/store/suspendedRun.ts",
         "file:src/renderer/styles/theme.ts",
         "file:src/shared/i18n.ts"
       ],
@@ -34397,7 +34398,7 @@
       "path": "src/renderer/store/appStoreTypes.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 152,
+      "lineCount": 154,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/suspendedRun.ts",
@@ -35411,7 +35412,7 @@
       "path": "src/renderer/store/suspendedRun.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 54,
+      "lineCount": 69,
       "imports": [
         "file:src/renderer/store/suspendedRun.ts",
         "file:src/shared/game-core.ts",
@@ -35425,13 +35426,16 @@
       "path": "src/renderer/store/suspendedRun.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 115,
+      "lineCount": 134,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/renderer/store/suspendedRun.ts#clearSuspendedRun",
+        "symbol:src/renderer/store/suspendedRun.ts#CONTINUED_RUN_CRASH_WINDOW_MS",
+        "symbol:src/renderer/store/suspendedRun.ts#dropSuspendedRunIfJustContinued",
         "symbol:src/renderer/store/suspendedRun.ts#isSuspendableRun",
+        "symbol:src/renderer/store/suspendedRun.ts#markSuspendedRunContinued",
         "symbol:src/renderer/store/suspendedRun.ts#readSuspendedRun",
         "symbol:src/renderer/store/suspendedRun.ts#summarizeSuspendedRun",
         "symbol:src/renderer/store/suspendedRun.ts#SUSPENDED_RUN_FORMAT",
@@ -35520,7 +35524,7 @@
       "path": "src/renderer/store/useAppStore.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 1059,
+      "lineCount": 1078,
       "imports": [
         "file:src/renderer/store/matchScorePop.ts",
         "file:src/renderer/store/suspendedRun.ts",
@@ -35546,7 +35550,7 @@
       "path": "src/renderer/store/useAppStore.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 1035,
+      "lineCount": 1053,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -51297,8 +51301,8 @@
       "name": "AppErrorBoundary",
       "kind": "class",
       "file": "src/renderer/components/AppErrorBoundary.tsx",
-      "line": 28,
-      "endLine": 71
+      "line": 30,
+      "endLine": 78
     },
     {
       "id": "symbol:src/renderer/components/boardFloaterPlacement.ts#BoardFloaterAnchor",
@@ -53265,8 +53269,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameScreen.tsx",
-      "line": 2936,
-      "endLine": 2936
+      "line": 2947,
+      "endLine": 2947
     },
     {
       "id": "symbol:src/renderer/components/GameScreen.tsx#FLOOR_CLEAR_BEAT_FRAME_CAP_MS",
@@ -61250,39 +61254,39 @@
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
       "line": 17,
-      "endLine": 19
+      "endLine": 20
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#FEATURED_FLOOR_GOAL_COPY",
       "name": "FEATURED_FLOOR_GOAL_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 191,
-      "endLine": 197
+      "line": 192,
+      "endLine": 198
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#FLOOR_STATUS_COPY",
       "name": "FLOOR_STATUS_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 28,
-      "endLine": 30
+      "line": 29,
+      "endLine": 31
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#MEMORIZE_SKIP_COPY",
       "name": "MEMORIZE_SKIP_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 174,
-      "endLine": 177
+      "line": 175,
+      "endLine": 178
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#MISS_BANK_TITLE",
       "name": "MISS_BANK_TITLE",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 190,
-      "endLine": 190
+      "line": 191,
+      "endLine": 191
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#PAUSE_DIALOG_COPY",
@@ -61297,64 +61301,64 @@
       "name": "PERFECT_MEMORY_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 183,
-      "endLine": 187
+      "line": 184,
+      "endLine": 188
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#ROUTE_CHOICE_COPY",
       "name": "ROUTE_CHOICE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 33,
-      "endLine": 41
+      "line": 34,
+      "endLine": 42
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LABELS",
       "name": "RUN_SHELL_LABELS",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 71,
-      "endLine": 90
+      "line": 72,
+      "endLine": 91
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_LINE_COPY",
       "name": "RUN_SHELL_LINE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 132,
-      "endLine": 164
+      "line": 133,
+      "endLine": 165
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_SHELL_PAR_COPY",
       "name": "RUN_SHELL_PAR_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 53,
-      "endLine": 68
+      "line": 54,
+      "endLine": 69
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#RUN_TOOL_REASONS",
       "name": "RUN_TOOL_REASONS",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 99,
-      "endLine": 117
+      "line": 100,
+      "endLine": 118
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#SHORTCUTS_COPY",
       "name": "SHORTCUTS_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 21,
-      "endLine": 25
+      "line": 22,
+      "endLine": 26
     },
     {
       "id": "symbol:src/renderer/copy/runDialogCopy.ts#WARDEN_CHOICE_COPY",
       "name": "WARDEN_CHOICE_COPY",
       "kind": "value",
       "file": "src/renderer/copy/runDialogCopy.ts",
-      "line": 125,
-      "endLine": 130
+      "line": 126,
+      "endLine": 131
     },
     {
       "id": "symbol:src/renderer/copy/runEndStamp.ts#RUN_END_REPLAY_MAX_STAMPS",
@@ -62449,16 +62453,16 @@
       "name": "bootstrapWebRenderer",
       "kind": "value",
       "file": "src/renderer/initRendererShell.tsx",
-      "line": 65,
-      "endLine": 76
+      "line": 69,
+      "endLine": 80
     },
     {
       "id": "symbol:src/renderer/initRendererShell.tsx#getRendererRootElement",
       "name": "getRendererRootElement",
       "kind": "value",
       "file": "src/renderer/initRendererShell.tsx",
-      "line": 56,
-      "endLine": 62
+      "line": 60,
+      "endLine": 66
     },
     {
       "id": "symbol:src/renderer/input/carveSwipe.ts#CARVE_SWIPE_MIN_PX",
@@ -63210,7 +63214,7 @@
       "kind": "interface",
       "file": "src/renderer/store/appStoreTypes.ts",
       "line": 17,
-      "endLine": 151
+      "endLine": 153
     },
     {
       "id": "symbol:src/renderer/store/backgroundPersistence.ts#runPersistenceInBackground",
@@ -64297,8 +64301,24 @@
       "name": "clearSuspendedRun",
       "kind": "value",
       "file": "src/renderer/store/suspendedRun.ts",
-      "line": 63,
-      "endLine": 69
+      "line": 82,
+      "endLine": 88
+    },
+    {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#CONTINUED_RUN_CRASH_WINDOW_MS",
+      "name": "CONTINUED_RUN_CRASH_WINDOW_MS",
+      "kind": "value",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 67,
+      "endLine": 67
+    },
+    {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#dropSuspendedRunIfJustContinued",
+      "name": "dropSuspendedRunIfJustContinued",
+      "kind": "value",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 75,
+      "endLine": 80
     },
     {
       "id": "symbol:src/renderer/store/suspendedRun.ts#isSuspendableRun",
@@ -64309,20 +64329,28 @@
       "endLine": 47
     },
     {
+      "id": "symbol:src/renderer/store/suspendedRun.ts#markSuspendedRunContinued",
+      "name": "markSuspendedRunContinued",
+      "kind": "value",
+      "file": "src/renderer/store/suspendedRun.ts",
+      "line": 70,
+      "endLine": 72
+    },
+    {
       "id": "symbol:src/renderer/store/suspendedRun.ts#readSuspendedRun",
       "name": "readSuspendedRun",
       "kind": "value",
       "file": "src/renderer/store/suspendedRun.ts",
-      "line": 74,
-      "endLine": 104
+      "line": 93,
+      "endLine": 123
     },
     {
       "id": "symbol:src/renderer/store/suspendedRun.ts#summarizeSuspendedRun",
       "name": "summarizeSuspendedRun",
       "kind": "value",
       "file": "src/renderer/store/suspendedRun.ts",
-      "line": 106,
-      "endLine": 114
+      "line": 125,
+      "endLine": 133
     },
     {
       "id": "symbol:src/renderer/store/suspendedRun.ts#SUSPENDED_RUN_FORMAT",
@@ -64409,16 +64437,16 @@
       "name": "putTheRunDown",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 1014,
-      "endLine": 1027
+      "line": 1032,
+      "endLine": 1045
     },
     {
       "id": "symbol:src/renderer/store/useAppStore.ts#useAppStore",
       "name": "useAppStore",
       "kind": "value",
       "file": "src/renderer/store/useAppStore.ts",
-      "line": 268,
-      "endLine": 972
+      "line": 271,
+      "endLine": 985
     },
     {
       "id": "symbol:src/renderer/styles/theme.ts#applyHighContrastToDocument",
@@ -85296,7 +85324,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1746
+          "line": 1748
         }
       ],
       "tests": [
@@ -88470,7 +88498,7 @@
         },
         {
           "path": "src/renderer/components/GameScreen.tsx",
-          "line": 1748
+          "line": 1750
         }
       ],
       "tests": [
@@ -103920,9 +103948,27 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#CONTINUED_RUN_CRASH_WINDOW_MS",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#CONTINUED_RUN_CRASH_WINDOW_MS",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#dropSuspendedRunIfJustContinued",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#dropSuspendedRunIfJustContinued",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#isSuspendableRun",
       "source": "file:src/renderer/store/suspendedRun.ts",
       "target": "symbol:src/renderer/store/suspendedRun.ts#isSuspendableRun",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/store/suspendedRun.ts->symbol:src/renderer/store/suspendedRun.ts#markSuspendedRunContinued",
+      "source": "file:src/renderer/store/suspendedRun.ts",
+      "target": "symbol:src/renderer/store/suspendedRun.ts#markSuspendedRunContinued",
       "kind": "exports"
     },
     {
@@ -135083,6 +135129,12 @@
       "id": "imports:src/renderer/initRendererShell.tsx->src/renderer/platformTilt/PlatformTiltProvider.tsx",
       "source": "file:src/renderer/initRendererShell.tsx",
       "target": "file:src/renderer/platformTilt/PlatformTiltProvider.tsx",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/initRendererShell.tsx->src/renderer/store/suspendedRun.ts",
+      "source": "file:src/renderer/initRendererShell.tsx",
+      "target": "file:src/renderer/store/suspendedRun.ts",
       "kind": "imports"
     },
     {

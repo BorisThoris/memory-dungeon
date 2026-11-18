@@ -3,6 +3,9 @@ import { createNewRun } from '../../shared/game-core';
 import { createDefaultSaveData } from '../../shared/save-data';
 import {
     clearSuspendedRun,
+    CONTINUED_RUN_CRASH_WINDOW_MS,
+    dropSuspendedRunIfJustContinued,
+    markSuspendedRunContinued,
     readSuspendedRun,
     SUSPENDED_RUN_FORMAT,
     SUSPENDED_RUN_STORAGE_KEY,
@@ -37,6 +40,18 @@ describe('a run put down and picked up again', () => {
         expect(window.localStorage.getItem(SUSPENDED_RUN_STORAGE_KEY)).toBeNull();
         const run = createNewRun(0, { runSeed: 7 });
         window.localStorage.setItem(SUSPENDED_RUN_STORAGE_KEY, JSON.stringify({ format: SUSPENDED_RUN_FORMAT + 1, savedAt: 1, run, runStartSaveData: null }));
+        expect(readSuspendedRun()).toBeNull();
+    });
+
+    it('drops a run that crashes the game right after Continue, so it cannot crash it again', () => {
+        const run = createNewRun(0, { runSeed: 9 });
+        writeSuspendedRun(run, null);
+        expect(dropSuspendedRunIfJustContinued(1_000)).toBe(false);
+        markSuspendedRunContinued(1_000);
+        expect(dropSuspendedRunIfJustContinued(1_000 + CONTINUED_RUN_CRASH_WINDOW_MS + 1)).toBe(false);
+        expect(readSuspendedRun()).not.toBeNull();
+        markSuspendedRunContinued(5_000);
+        expect(dropSuspendedRunIfJustContinued(6_000)).toBe(true);
         expect(readSuspendedRun()).toBeNull();
     });
 

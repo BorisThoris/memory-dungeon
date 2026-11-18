@@ -15,7 +15,8 @@ export const PAUSE_DIALOG_COPY = {
 } as const;
 
 export const ABANDON_DIALOG_COPY = {
-    subtitle: tr.s('You will lose this run and return to the main menu. This cannot be undone.')
+    subtitle: tr.s('Abandon ends this run for good. Save and leave keeps it, and Continue on the main menu picks it up.'),
+    saveAndLeave: tr.s('Save and leave')
 } as const;
 
 export const SHORTCUTS_COPY = {

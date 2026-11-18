@@ -29,6 +29,8 @@ export interface AppState {
     suspendedRun: SuspendedRunSummary | null;
     /** Picks the put-down run back up, paused where it was left. */
     continueSuspendedRun: () => void;
+    /** Goes to the menu with the run kept for Continue (the Retreat dialog's Save and leave). */
+    leaveRunForLater: () => void;
     /** A fresh profile on this device, the settings kept (Settings > About > Reset). */
     deleteAllProgress: () => Promise<void>;
     /** Replaces the profile with one exported from another device (validated), the settings kept. */

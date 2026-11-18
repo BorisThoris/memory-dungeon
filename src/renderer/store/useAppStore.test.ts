@@ -1055,4 +1055,23 @@ describe('a run put down and picked up again', () => {
         useAppStore.getState().resume();
         expect(useAppStore.getState().run?.status).not.toBe('paused');
     });
+
+    it('Save and leave goes to the menu with the run kept for Continue, and Abandon does not', () => {
+        useAppStore.getState().startRun();
+        notifyCurrentBoardReady();
+        useAppStore.getState().pause();
+        const left = useAppStore.getState().run!;
+
+        useAppStore.getState().leaveRunForLater();
+        const state = useAppStore.getState();
+        expect(state.view).toBe('menu');
+        expect(state.run).toBeNull();
+        expect(state.suspendedRun?.floor).toBe(left.board!.level);
+        expect(readSuspendedRun()?.run.board?.tiles).toEqual(left.board?.tiles);
+
+        useAppStore.getState().continueSuspendedRun();
+        expect(useAppStore.getState().run?.status).toBe('paused');
+        useAppStore.getState().goToMenu();
+        expect(readSuspendedRun()).toBeNull();
+    });
 });

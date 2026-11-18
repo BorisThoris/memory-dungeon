@@ -578,6 +578,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
             descendIntoEndlessAction: state.descendIntoEndless,
             dismissPowersFtue: state.dismissPowersFtue,
             goToMenu: state.goToMenu,
+            leaveRunForLater: state.leaveRunForLater,
             openCodexFromPlaying: state.openCodexFromPlaying,
             useBomb: state.useBomb,
             igniteZone: state.igniteZone,
@@ -898,6 +899,7 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
         descendIntoEndlessAction,
         dismissPowersFtue,
         goToMenu,
+        leaveRunForLater,
         useBomb: spendBomb,
         igniteZone,
         cashInCombo,
@@ -2905,6 +2907,15 @@ const GameScreen = ({ achievements, run, suppressStatusOverlays = false }: GameS
                                 onClick: () => {
                                     playUiBack();
                                     setAbandonRunConfirmOpen(false);
+                                },
+                                variant: 'secondary'
+                            },
+                            {
+                                label: ABANDON_DIALOG_COPY.saveAndLeave,
+                                onClick: () => {
+                                    playUiBack();
+                                    setAbandonRunConfirmOpen(false);
+                                    leaveRunForLater();
                                 },
                                 variant: 'secondary'
                             },
