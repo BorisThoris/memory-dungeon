@@ -61,6 +61,32 @@ const writeLocalSave = (saveData: SaveData): SaveData => {
     return normalized;
 };
 
+/** Where an unreadable browser save is kept (`<prefix><ISO time>`), newest last. */
+export const UNREADABLE_SAVE_KEY_PREFIX = `${STORAGE_KEY}.unreadable.`;
+/** As many as the desktop build keeps of its quarantined files would not fit browser storage. */
+export const UNREADABLE_SAVES_KEPT = 3;
+
+const setAsideUnreadableSave = (now = new Date()): void => {
+    const storage = getBrowserStorage();
+    if (!storage) {
+        throw new Error('Browser storage is unavailable.');
+    }
+    const raw = storage.getItem(STORAGE_KEY);
+    if (!raw) {
+        return;
+    }
+    storage.setItem(`${UNREADABLE_SAVE_KEY_PREFIX}${now.toISOString()}`, raw);
+    const kept: string[] = [];
+    for (let index = 0; index < storage.length; index += 1) {
+        const key = storage.key(index);
+        if (key?.startsWith(UNREADABLE_SAVE_KEY_PREFIX)) kept.push(key);
+    }
+    // ISO times sort as text; drop the oldest beyond the limit.
+    for (const key of kept.sort().slice(0, Math.max(0, kept.length - UNREADABLE_SAVES_KEPT))) {
+        storage.removeItem(key);
+    }
+};
+
 const fallbackClient: DesktopApi = {
     async saveSettings(settings: Settings): Promise<Settings> {
         const saveData = readLocalSave();
@@ -85,8 +111,10 @@ const fallbackClient: DesktopApi = {
         return writeLocalSave(currentSave ? { ...data, settings: currentSave.settings } : data);
     },
     async recoverUnreadableSave(): Promise<SaveData> {
-        // The browser fallback keeps its save in local storage, so there is no file to set aside;
-        // the honest equivalent is to write a fresh profile over the one that could not be read.
+        // The notice promises the old save is kept beside the new one: set the unreadable text
+        // aside under its own key first, as the desktop build moves the file aside. If it cannot be
+        // kept, nothing is overwritten and the call fails, so the notice stays up.
+        setAsideUnreadableSave();
         return writeLocalSave(createDefaultSaveData());
     },
     async getCrashReportSummary(): Promise<CrashReportSummary> {

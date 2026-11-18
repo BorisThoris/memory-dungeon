@@ -2,6 +2,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 import type { DesktopApi } from '../shared/contracts';
 import { createDefaultSaveData, normalizeUnknownSaveDataOrThrow } from '../shared/save-data';
 
+/** The test storage stub lists its keys through length and key(), as a browser's Storage does. */
+const storedKeys = (): string[] =>
+    Array.from({ length: window.localStorage.length }, (_, index) => window.localStorage.key(index)).filter((key): key is string => key !== null);
+
 describe('browser desktop client persistence', () => {
     beforeEach(() => {
         vi.resetModules();
@@ -66,5 +70,45 @@ describe('browser desktop client persistence', () => {
 
         await expect(desktopClient.saveGame(createDefaultSaveData())).rejects.toThrow('storage quota unavailable');
         expect(reportError).toHaveBeenCalledWith('[desktop-client] localStorage write failed', expect.any(Error));
+    });
+    it('keeps an unreadable save beside the fresh profile, as the recovery notice promises', async () => {
+        const { desktopClient, UNREADABLE_SAVE_KEY_PREFIX } = await import('./desktop-client');
+        window.localStorage.setItem('memory-dungeon-save-data', '{not json');
+        await expect(desktopClient.getSaveData()).rejects.toThrow();
+
+        const fresh = await desktopClient.recoverUnreadableSave();
+
+        expect(fresh).toEqual(normalizeUnknownSaveDataOrThrow(createDefaultSaveData()));
+        const kept = storedKeys().filter((key) => key.startsWith(UNREADABLE_SAVE_KEY_PREFIX));
+        expect(kept).toHaveLength(1);
+        expect(window.localStorage.getItem(kept[0]!)).toBe('{not json');
+    });
+
+    it('keeps only the newest unreadable saves', async () => {
+        const { desktopClient, UNREADABLE_SAVE_KEY_PREFIX, UNREADABLE_SAVES_KEPT } = await import('./desktop-client');
+        for (const at of ['2026-01-01', '2026-02-01', '2026-03-01']) {
+            window.localStorage.setItem(`${UNREADABLE_SAVE_KEY_PREFIX}${at}T00:00:00.000Z`, 'old');
+        }
+        window.localStorage.setItem('memory-dungeon-save-data', '{broken');
+
+        await desktopClient.recoverUnreadableSave();
+
+        const kept = storedKeys().filter((key) => key.startsWith(UNREADABLE_SAVE_KEY_PREFIX)).sort();
+        expect(kept).toHaveLength(UNREADABLE_SAVES_KEPT);
+        expect(kept.some((key) => key.includes('2026-01-01'))).toBe(false);
+        expect(window.localStorage.getItem(kept[kept.length - 1]!)).toBe('{broken');
+    });
+
+    it('overwrites nothing when the unreadable save cannot be kept', async () => {
+        const { desktopClient } = await import('./desktop-client');
+        window.localStorage.setItem('memory-dungeon-save-data', '{broken');
+        const setItem = vi.spyOn(window.localStorage, 'setItem').mockImplementation(() => {
+            throw new Error('quota');
+        });
+        vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+        await expect(desktopClient.recoverUnreadableSave()).rejects.toThrow('quota');
+        setItem.mockRestore();
+        expect(window.localStorage.getItem('memory-dungeon-save-data')).toBe('{broken');
     });
 });

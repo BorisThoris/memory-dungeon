@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3475,
     "codeFileCount": 1370,
-    "exportedSymbolCount": 4527,
+    "exportedSymbolCount": 4529,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12756
+    "relationshipCount": 12758
   },
   "inventory": [
     {
@@ -13887,14 +13887,14 @@
     {
       "path": "src/renderer/desktop-client.test.ts",
       "category": "test",
-      "bytes": 3688,
-      "sha256": "65f95687fceb29ba0c760043f854fc43978ff4a9fbcb9e7d464c79c81610ace1"
+      "bytes": 6173,
+      "sha256": "bee89b366622d4702afe707065478527ac1d5bb6e4be93b3b7f4b93d0cdb5314"
     },
     {
       "path": "src/renderer/desktop-client.ts",
       "category": "source",
-      "bytes": 5036,
-      "sha256": "9aa9a6b89125ca6e632e112f251d5dc0d76eea99b075adb069c944202827d96b"
+      "bytes": 6217,
+      "sha256": "7b197e43116e84d0ed51ffe8abf1bd239284b30138e80a9cc61a7cea677f0539"
     },
     {
       "path": "src/renderer/desktop.d.ts",
@@ -32729,7 +32729,7 @@
       "path": "src/renderer/desktop-client.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 71,
+      "lineCount": 115,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
@@ -32742,14 +32742,16 @@
       "path": "src/renderer/desktop-client.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 133,
+      "lineCount": 161,
       "imports": [
         "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
       ],
       "exports": [
         "symbol:src/renderer/desktop-client.ts#desktopClient",
-        "symbol:src/renderer/desktop-client.ts#hasDesktopBridge"
+        "symbol:src/renderer/desktop-client.ts#hasDesktopBridge",
+        "symbol:src/renderer/desktop-client.ts#UNREADABLE_SAVE_KEY_PREFIX",
+        "symbol:src/renderer/desktop-client.ts#UNREADABLE_SAVES_KEPT"
       ],
       "testedBy": [
         "file:src/renderer/App.test.tsx",
@@ -61724,16 +61726,32 @@
       "name": "desktopClient",
       "kind": "value",
       "file": "src/renderer/desktop-client.ts",
-      "line": 126,
-      "endLine": 126
+      "line": 154,
+      "endLine": 154
     },
     {
       "id": "symbol:src/renderer/desktop-client.ts#hasDesktopBridge",
       "name": "hasDesktopBridge",
       "kind": "value",
       "file": "src/renderer/desktop-client.ts",
-      "line": 132,
-      "endLine": 132
+      "line": 160,
+      "endLine": 160
+    },
+    {
+      "id": "symbol:src/renderer/desktop-client.ts#UNREADABLE_SAVE_KEY_PREFIX",
+      "name": "UNREADABLE_SAVE_KEY_PREFIX",
+      "kind": "value",
+      "file": "src/renderer/desktop-client.ts",
+      "line": 65,
+      "endLine": 65
+    },
+    {
+      "id": "symbol:src/renderer/desktop-client.ts#UNREADABLE_SAVES_KEPT",
+      "name": "UNREADABLE_SAVES_KEPT",
+      "kind": "value",
+      "file": "src/renderer/desktop-client.ts",
+      "line": 67,
+      "endLine": 67
     },
     {
       "id": "symbol:src/renderer/dev/BlueprintExplorer.tsx#default",
@@ -101976,6 +101994,18 @@
       "id": "exports:src/renderer/desktop-client.ts->symbol:src/renderer/desktop-client.ts#hasDesktopBridge",
       "source": "file:src/renderer/desktop-client.ts",
       "target": "symbol:src/renderer/desktop-client.ts#hasDesktopBridge",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/desktop-client.ts->symbol:src/renderer/desktop-client.ts#UNREADABLE_SAVE_KEY_PREFIX",
+      "source": "file:src/renderer/desktop-client.ts",
+      "target": "symbol:src/renderer/desktop-client.ts#UNREADABLE_SAVE_KEY_PREFIX",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/desktop-client.ts->symbol:src/renderer/desktop-client.ts#UNREADABLE_SAVES_KEPT",
+      "source": "file:src/renderer/desktop-client.ts",
+      "target": "symbol:src/renderer/desktop-client.ts#UNREADABLE_SAVES_KEPT",
       "kind": "exports"
     },
     {
