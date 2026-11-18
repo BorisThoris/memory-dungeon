@@ -12,13 +12,35 @@
  * - A media byte range is cut from the whole file in the cache.
  * - Not cached: other sites (the scores service), and the store trailers and artwork, which the
  *   game itself never loads.
+ * - Each visit drops the hashed files no longer in the live build (`/asset-manifest.json`): a
+ *   deploy renames them, and the cache otherwise kept every build it had ever seen.
  */
 const CACHE = 'memory-dungeon-v1';
 // Hashed same-origin files: the copy is the same whatever Origin header asked (fonts and module
 // scripts send one, the worker's own fetches do not), so a Vary: Origin must not hide it.
 const MATCH = { ignoreVary: true };
 const SHELL = ['/', '/index.html', '/site.webmanifest', '/favicon.svg'];
-const NEVER = /^\/(?:trailers|artwork|wip-assets|privacy)(?:\/|\.|$)/;
+const NEVER = /^\/(?:trailers|artwork|wip-assets|privacy|asset-manifest\.json)(?:\/|\.|$)/;
+
+/* The live build's file list; a cached /assets/ file not on it belongs to an earlier deploy. */
+const pruneOldBuilds = async (cache) => {
+    let assets;
+    try {
+        const response = await fetch('/asset-manifest.json', { cache: 'no-store' });
+        if (!response.ok) return;
+        assets = (await response.json()).assets;
+    } catch {
+        return; // Offline: keep everything, the game may need it.
+    }
+    if (!Array.isArray(assets) || assets.length === 0) return;
+    const live = new Set(assets);
+    for (const request of await cache.keys()) {
+        const { pathname } = new URL(request.url);
+        if (pathname.startsWith('/assets/') && !live.has(pathname)) {
+            await cache.delete(request, MATCH);
+        }
+    }
+};
 
 self.addEventListener('install', (event) => {
     event.waitUntil(
@@ -149,6 +171,7 @@ self.addEventListener('message', (event) => {
                     // Offline or gone: the next session will try again.
                 }
             }
+            await pruneOldBuilds(cache);
         })
     );
 });

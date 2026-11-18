@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3475,
     "codeFileCount": 1370,
-    "exportedSymbolCount": 4532,
+    "exportedSymbolCount": 4534,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12765
+    "relationshipCount": 12767
   },
   "inventory": [
     {
@@ -4707,8 +4707,8 @@
     {
       "path": "public/sw.js",
       "category": "other",
-      "bytes": 6770,
-      "sha256": "3ff7e293badf271b7a9cc0164977917b9c1f3e3399eaae5075f6e00e0e618ad9"
+      "bytes": 7766,
+      "sha256": "b8077b969c8a520cdd86a6ea61bc9076af375396454d6dfa04322eb4c441d55a"
     },
     {
       "path": "public/trailers/reel.jpg",
@@ -14379,8 +14379,8 @@
     {
       "path": "src/renderer/main.tsx",
       "category": "source",
-      "bytes": 594,
-      "sha256": "bca2be1d01b3351dfced9f2f2d276a854202ff414a106dc8af10b42135bcc902"
+      "bytes": 636,
+      "sha256": "ba7006ad145b7eb787a2f95368b4ddbe125dd06b63ca6a762b8ac72f6431fd9c"
     },
     {
       "path": "src/renderer/mainAfterLocale.tsx",
@@ -14517,14 +14517,14 @@
     {
       "path": "src/renderer/serviceWorker.test.ts",
       "category": "test",
-      "bytes": 933,
-      "sha256": "d5328d889764ddfe488b87845ca78c076560e38c4809afca42d48ef625f70e3f"
+      "bytes": 2251,
+      "sha256": "c9c7f4870f7140a9ac33ded26a75788f1fe081f022affe1c17dc5f9b1d4a8a1f"
     },
     {
       "path": "src/renderer/serviceWorker.ts",
       "category": "source",
-      "bytes": 2674,
-      "sha256": "36e7af6e70c7f2e1df7b44df422e8ab20f229e4b57b8447fe19e9a1784e42a2c"
+      "bytes": 3467,
+      "sha256": "6db589e9592f15187e2241f55566246f8fdad1afae4a82c7375f5d9ad6e7b0ff"
     },
     {
       "path": "src/renderer/steamStorePage.ts",
@@ -20841,8 +20841,8 @@
     {
       "path": "vite.config.mts",
       "category": "configuration",
-      "bytes": 7394,
-      "sha256": "30a19c5ae7d5f0c49e1113d3f37e7a411777d0e23ca52362c06f6c2c6a3902ee"
+      "bytes": 8149,
+      "sha256": "9d35c3fdb9266f97ebaaca97664f0e509c12523385914e8b251acf225e5329eb"
     },
     {
       "path": "vitest.setup.ts",
@@ -33923,7 +33923,7 @@
       "path": "src/renderer/main.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 15,
+      "lineCount": 16,
       "imports": [
         "file:src/renderer/i18n/bootLocale.ts",
         "file:src/renderer/rateGame.ts",
@@ -34274,7 +34274,7 @@
       "path": "src/renderer/serviceWorker.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 19,
+      "lineCount": 46,
       "imports": [
         "file:src/renderer/serviceWorker.ts"
       ],
@@ -34286,12 +34286,14 @@
       "path": "src/renderer/serviceWorker.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 58,
+      "lineCount": 78,
       "imports": [],
       "exports": [
         "symbol:src/renderer/serviceWorker.ts#registerServiceWorker",
+        "symbol:src/renderer/serviceWorker.ts#reloadOnStaleChunk",
         "symbol:src/renderer/serviceWorker.ts#ServiceWorkerEnv",
-        "symbol:src/renderer/serviceWorker.ts#shouldRegisterServiceWorker"
+        "symbol:src/renderer/serviceWorker.ts#shouldRegisterServiceWorker",
+        "symbol:src/renderer/serviceWorker.ts#STALE_CHUNK_RELOAD_KEY"
       ],
       "testedBy": [
         "file:src/renderer/serviceWorker.test.ts"
@@ -63117,8 +63119,16 @@
       "name": "registerServiceWorker",
       "kind": "value",
       "file": "src/renderer/serviceWorker.ts",
-      "line": 19,
-      "endLine": 57
+      "line": 39,
+      "endLine": 77
+    },
+    {
+      "id": "symbol:src/renderer/serviceWorker.ts#reloadOnStaleChunk",
+      "name": "reloadOnStaleChunk",
+      "kind": "value",
+      "file": "src/renderer/serviceWorker.ts",
+      "line": 26,
+      "endLine": 37
     },
     {
       "id": "symbol:src/renderer/serviceWorker.ts#ServiceWorkerEnv",
@@ -63135,6 +63145,14 @@
       "file": "src/renderer/serviceWorker.ts",
       "line": 16,
       "endLine": 17
+    },
+    {
+      "id": "symbol:src/renderer/serviceWorker.ts#STALE_CHUNK_RELOAD_KEY",
+      "name": "STALE_CHUNK_RELOAD_KEY",
+      "kind": "value",
+      "file": "src/renderer/serviceWorker.ts",
+      "line": 24,
+      "endLine": 24
     },
     {
       "id": "symbol:src/renderer/steamStorePage.ts#getSteamStorePageUrl",
@@ -103060,6 +103078,12 @@
       "kind": "exports"
     },
     {
+      "id": "exports:src/renderer/serviceWorker.ts->symbol:src/renderer/serviceWorker.ts#reloadOnStaleChunk",
+      "source": "file:src/renderer/serviceWorker.ts",
+      "target": "symbol:src/renderer/serviceWorker.ts#reloadOnStaleChunk",
+      "kind": "exports"
+    },
+    {
       "id": "exports:src/renderer/serviceWorker.ts->symbol:src/renderer/serviceWorker.ts#ServiceWorkerEnv",
       "source": "file:src/renderer/serviceWorker.ts",
       "target": "symbol:src/renderer/serviceWorker.ts#ServiceWorkerEnv",
@@ -103069,6 +103093,12 @@
       "id": "exports:src/renderer/serviceWorker.ts->symbol:src/renderer/serviceWorker.ts#shouldRegisterServiceWorker",
       "source": "file:src/renderer/serviceWorker.ts",
       "target": "symbol:src/renderer/serviceWorker.ts#shouldRegisterServiceWorker",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/serviceWorker.ts->symbol:src/renderer/serviceWorker.ts#STALE_CHUNK_RELOAD_KEY",
+      "source": "file:src/renderer/serviceWorker.ts",
+      "target": "symbol:src/renderer/serviceWorker.ts#STALE_CHUNK_RELOAD_KEY",
       "kind": "exports"
     },
     {

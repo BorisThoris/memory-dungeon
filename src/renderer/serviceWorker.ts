@@ -16,6 +16,26 @@ export interface ServiceWorkerEnv {
 export const shouldRegisterServiceWorker = (env: ServiceWorkerEnv): boolean =>
     env.production && !env.desktop && env.secureContext && env.supported && (env.protocol === 'https:' || env.protocol === 'http:');
 
+/*
+ * A tab (or the Play app) left open across a deploy asks for a lazy chunk the new build renamed
+ * and gets a failed import. One reload loads the new build; the run is kept by the pagehide
+ * snapshot. Once per session, so a chunk that is really missing cannot reload forever.
+ */
+export const STALE_CHUNK_RELOAD_KEY = 'memory-dungeon.stale-chunk-reload';
+
+export const reloadOnStaleChunk = (target: Window = window): void => {
+    target.addEventListener('vite:preloadError', (event) => {
+        try {
+            if (target.sessionStorage.getItem(STALE_CHUNK_RELOAD_KEY) === '1') return;
+            target.sessionStorage.setItem(STALE_CHUNK_RELOAD_KEY, '1');
+        } catch {
+            return;
+        }
+        event.preventDefault();
+        target.location.reload();
+    });
+};
+
 export const registerServiceWorker = (): void => {
     const env: ServiceWorkerEnv = {
         production: import.meta.env.PROD,

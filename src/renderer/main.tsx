@@ -1,8 +1,9 @@
 import { loadBootLocale } from './i18n/bootLocale';
 import { rememberAndroidAppSession } from './rateGame';
-import { registerServiceWorker } from './serviceWorker';
+import { registerServiceWorker, reloadOnStaleChunk } from './serviceWorker';
 
 registerServiceWorker();
+reloadOnStaleChunk();
 rememberAndroidAppSession();
 
 /*

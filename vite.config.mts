@@ -38,6 +38,19 @@ const pruneWipPublicAssetsFromBuild = () => ({
     }
 });
 
+/**
+ * Every hashed file this build ships, for the service worker (`public/sw.js`) to drop the cached
+ * files of earlier deploys: their names never come back, so without a list they piled up forever.
+ */
+const writeAssetManifest = () => ({
+    name: 'memory-dungeon-asset-manifest',
+    apply: 'build' as const,
+    generateBundle(this: { emitFile: (file: { type: 'asset'; fileName: string; source: string }) => void }, _options: unknown, bundle: Record<string, unknown>): void {
+        const assets = Object.keys(bundle).filter((name) => name.startsWith('assets/')).map((name) => `/${name}`).sort();
+        this.emitFile({ type: 'asset', fileName: 'asset-manifest.json', source: JSON.stringify({ assets }) });
+    }
+});
+
 export default defineConfig(({ mode }) => ({
     /*
      * One dependency cache per checkout. A worktree's `node_modules` is a junction to the main
@@ -51,6 +64,7 @@ export default defineConfig(({ mode }) => ({
         injectContentSecurityPolicy(mode !== 'production'),
         viteDevBlueprintApi(),
         pruneWipPublicAssetsFromBuild(),
+        writeAssetManifest(),
         react(),
         process.env.VITE_BUNDLE_ANALYZE === '1'
             ? visualizer({
