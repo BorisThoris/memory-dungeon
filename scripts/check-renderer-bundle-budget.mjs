@@ -18,13 +18,17 @@ const mib = 1024 * kib;
 // music, all of which the run preloads at boot by rule (nothing streams in play); measured 30.97
 // MiB without the portfolio media below. main grew to 1.56 MiB with the combo, Zone and curio
 // rules. Lower these when a pass shrinks the output; raising them again needs a line here.
+//
+// 2026-11-18, production audit: main 1650 -> 1700 KiB. It stood at 1.61 MiB and the audit's fixes (Save
+// and leave, assisted runs, desktop-only settings gated, the crash guard) took it 507 bytes past the
+// line; moving a screen out of the boot chunk would trade that for a load during play.
 const budgets = {
     totalBytes: 32 * mib,
     totalJsBytes: 3900 * kib,
     totalCssBytes: 1300 * kib,
     maxAssetBytes: 2000 * kib,
     maxJsChunkBytes: {
-        main: 1650 * kib,
+        main: 1700 * kib,
         GameScreen: 700 * kib,
         'vendor-three': 780 * kib,
         'vendor-pixi': 880 * kib,
