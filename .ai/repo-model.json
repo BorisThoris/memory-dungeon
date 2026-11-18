@@ -5355,8 +5355,8 @@
     {
       "path": "scripts/check-renderer-bundle-budget.mjs",
       "category": "script",
-      "bytes": 5967,
-      "sha256": "9d5d285313591065d173d13ba02bde7b8d31cc6f5f2ed9dbb53a4a05012a3ba6"
+      "bytes": 6265,
+      "sha256": "008da31fd05415c7717b1e3c8214409c65f39dce660d1ff45bf1cab2c795101e"
     },
     {
       "path": "scripts/check-test-file-extensions.mjs",
@@ -17458,7 +17458,7 @@
       "path": "src/shared/renderer-bundle-budget-script.test.ts",
       "category": "test",
       "bytes": 3544,
-      "sha256": "01cb206594a5f2b147b2c7ba875307f66e0025573383bc043a59f217c8ddd8be"
+      "sha256": "2d1b75b1f934258b98b3e409fb310ef12e11b685d0e932a4dcad4d884e37d9c8"
     },
     {
       "path": "src/shared/renderer-error-report.test.ts",
