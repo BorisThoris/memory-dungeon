@@ -196,7 +196,7 @@ const MainMenu = ({
                         <GlobalRecordBadge onChallenge={() => { playMenuOpen(); onPlay(); }} />
                     </header>
 
-                    <main className={styles.contents} data-testid="main-menu-primary-meta-frame">
+                    <section className={styles.contents} data-testid="main-menu-primary-meta-frame">
                         <p className={styles.contentsHead}>{tr.s("Contents")}</p>
                         <div aria-label={tr.s("Primary actions")} className={styles.ladder} role="group">
                             {suspendedRun ? (
@@ -296,7 +296,7 @@ const MainMenu = ({
                                 ) : null}
                             </div>
                         </div>
-                    </main>
+                    </section>
                 </div>
 
                 <footer className={styles.colophon} data-testid="main-menu-colophon">

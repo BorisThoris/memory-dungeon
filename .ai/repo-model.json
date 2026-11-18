@@ -9,7 +9,7 @@
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12781
+    "relationshipCount": 12782
   },
   "inventory": [
     {
@@ -2518,7 +2518,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "b1f8ce4ba1e92a5ca0ba806958f7674c5c43789e4c7e7dc98da7946d48cec850"
+      "sha256": "f581b186c0bbfd13f1a3b87470f80e27ec88742f0ead60699a4cc4c4ea5b3371"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -4701,8 +4701,8 @@
     {
       "path": "public/site.webmanifest",
       "category": "other",
-      "bytes": 780,
-      "sha256": "0d93130799f66c03da908caf6d3ad2f00b1e0b416fe78d87e68933d04d6fc8be"
+      "bytes": 768,
+      "sha256": "cc244381eb3af221d22bb2a3fe89c8ae269e843267576b54384b119aca96cb3e"
     },
     {
       "path": "public/sw.js",
@@ -11691,8 +11691,8 @@
     {
       "path": "src/renderer/components/MainMenu.tsx",
       "category": "source",
-      "bytes": 16994,
-      "sha256": "6fc6549f126cf28bd8527dfc891a64afcf5b40e773b2ebc6669cdbf8db7bb668"
+      "bytes": 17000,
+      "sha256": "8b943162296bf47af56237e8a001885a7a8e7ebea9e4c98d700a194e7cffce82"
     },
     {
       "path": "src/renderer/components/MainMenuBackground.module.css",
@@ -14511,8 +14511,8 @@
     {
       "path": "src/renderer/saveTransfer.ts",
       "category": "source",
-      "bytes": 3143,
-      "sha256": "ea9b4fb2d7bbb442f44c7cc67ac0393f1d882dd09b780b4a43108b9ae7bc2784"
+      "bytes": 3204,
+      "sha256": "7559f154491d5abf468c1d01a915f4cd43ed3564227f9e469f70bbe719c70c74"
     },
     {
       "path": "src/renderer/serviceWorker.test.ts",
@@ -34263,9 +34263,10 @@
       "path": "src/renderer/saveTransfer.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 64,
+      "lineCount": 65,
       "imports": [
         "file:src/shared/contracts.ts",
+        "file:src/shared/i18n.ts",
         "file:src/shared/save-data.ts"
       ],
       "exports": [
@@ -63121,48 +63122,48 @@
       "name": "downloadSaveExport",
       "kind": "value",
       "file": "src/renderer/saveTransfer.ts",
-      "line": 53,
-      "endLine": 63
+      "line": 54,
+      "endLine": 64
     },
     {
       "id": "symbol:src/renderer/saveTransfer.ts#ImportedSave",
       "name": "ImportedSave",
       "kind": "type",
       "file": "src/renderer/saveTransfer.ts",
-      "line": 18,
-      "endLine": 18
+      "line": 19,
+      "endLine": 19
     },
     {
       "id": "symbol:src/renderer/saveTransfer.ts#parseSaveExport",
       "name": "parseSaveExport",
       "kind": "value",
       "file": "src/renderer/saveTransfer.ts",
-      "line": 21,
-      "endLine": 50
+      "line": 22,
+      "endLine": 51
     },
     {
       "id": "symbol:src/renderer/saveTransfer.ts#SAVE_EXPORT_KIND",
       "name": "SAVE_EXPORT_KIND",
       "kind": "value",
       "file": "src/renderer/saveTransfer.ts",
-      "line": 11,
-      "endLine": 11
+      "line": 12,
+      "endLine": 12
     },
     {
       "id": "symbol:src/renderer/saveTransfer.ts#saveExportFileName",
       "name": "saveExportFileName",
       "kind": "value",
       "file": "src/renderer/saveTransfer.ts",
-      "line": 13,
-      "endLine": 13
+      "line": 14,
+      "endLine": 14
     },
     {
       "id": "symbol:src/renderer/saveTransfer.ts#serializeSaveExport",
       "name": "serializeSaveExport",
       "kind": "value",
       "file": "src/renderer/saveTransfer.ts",
-      "line": 15,
-      "endLine": 16
+      "line": 16,
+      "endLine": 17
     },
     {
       "id": "symbol:src/renderer/serviceWorker.ts#registerServiceWorker",
@@ -135569,6 +135570,12 @@
       "id": "imports:src/renderer/saveTransfer.ts->src/shared/contracts.ts",
       "source": "file:src/renderer/saveTransfer.ts",
       "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/saveTransfer.ts->src/shared/i18n.ts",
+      "source": "file:src/renderer/saveTransfer.ts",
+      "target": "file:src/shared/i18n.ts",
       "kind": "imports"
     },
     {

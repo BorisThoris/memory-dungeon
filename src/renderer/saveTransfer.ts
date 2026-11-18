@@ -1,4 +1,5 @@
 import { SAVE_SCHEMA_VERSION, type SaveData } from '../shared/contracts';
+import { tr } from '../shared/i18n';
 import { normalizeUnknownSaveDataOrThrow } from '../shared/save-data';
 
 /**
@@ -23,10 +24,10 @@ export const parseSaveExport = (text: string): ImportedSave => {
     try {
         parsed = JSON.parse(text);
     } catch {
-        return { ok: false, reason: 'That file is not a Memory Dungeon save.' };
+        return { ok: false, reason: tr.s('That file is not a Memory Dungeon save.') };
     }
     const wrapped = typeof parsed === 'object' && parsed !== null && (parsed as { kind?: unknown }).kind === SAVE_EXPORT_KIND;
-    if (!wrapped) return { ok: false, reason: 'That file is not a Memory Dungeon save.' };
+    if (!wrapped) return { ok: false, reason: tr.s('That file is not a Memory Dungeon save.') };
     // The save's own normaliser repairs what it can, which on boot is right; here it would turn a
     // broken file into an empty profile that silently replaces real progress. The core of a save
     // must be there before it is trusted.
@@ -40,12 +41,12 @@ export const parseSaveExport = (text: string): ImportedSave => {
         typeof save.settings !== 'object' ||
         save.settings === null
     ) {
-        return { ok: false, reason: 'That save is damaged or from a newer version of the game.' };
+        return { ok: false, reason: tr.s('That save is damaged or from a newer version of the game.') };
     }
     try {
         return { ok: true, save: normalizeUnknownSaveDataOrThrow((parsed as { save?: unknown }).save) };
     } catch {
-        return { ok: false, reason: 'That save is damaged or from a newer version of the game.' };
+        return { ok: false, reason: tr.s('That save is damaged or from a newer version of the game.') };
     }
 };
 
