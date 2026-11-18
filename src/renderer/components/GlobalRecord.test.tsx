@@ -29,7 +29,7 @@ describe('one global high score', () => {
         fireEvent.change(screen.getByLabelText('Your name'), { target: { value: 'Ada' } });
         fireEvent.click(screen.getByRole('button', { name: 'Claim global record' }));
         await screen.findByRole('dialog', { name: 'The global record is yours' });
-        expect(submitGlobalRecord).toHaveBeenCalledWith('Ada', 501);
+        expect(submitGlobalRecord).toHaveBeenCalledWith('Ada', 501, undefined);
     });
     it('allows the first positive score to establish the record and supports skipping', async () => {
         vi.mocked(fetchGlobalRecord).mockResolvedValue({ record: null });

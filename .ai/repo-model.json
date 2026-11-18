@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3477,
     "codeFileCount": 1372,
-    "exportedSymbolCount": 4537,
+    "exportedSymbolCount": 4538,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12782
+    "relationshipCount": 12783
   },
   "inventory": [
     {
@@ -4419,20 +4419,20 @@
     {
       "path": "leaderboard/check-api.mjs",
       "category": "other",
-      "bytes": 2002,
-      "sha256": "43c1c35ce658a9ae7014139198287c2b8f2b540c9faaea9222b029b9bd5be78d"
+      "bytes": 3449,
+      "sha256": "36c1d4dd31d20de64203bfc12af3d73a079c13248ccf2ce80a87bb5d7adb588c"
     },
     {
       "path": "leaderboard/README.md",
       "category": "documentation",
-      "bytes": 1426,
-      "sha256": "90e15c0f8019c073cb31e26ba494bf29b42bc74d65e6c14ee7ba3a7a51c22b0c"
+      "bytes": 2508,
+      "sha256": "04b80bb35c96201219dc0aa795867efa8b30f126043790726c7652acc8b4f1ce"
     },
     {
       "path": "leaderboard/worker.mjs",
       "category": "other",
-      "bytes": 4837,
-      "sha256": "08e302eefea112514a42e54ac5d3052301c4baf94484aa62d5e50b6c8c050cf6"
+      "bytes": 8921,
+      "sha256": "9e6f243a64e314568dcfa0ae9bbf5bf9d2e1fe1fdc75aeb28f4fd2883a5e2707"
     },
     {
       "path": "leaderboard/wrangler.toml",
@@ -6069,44 +6069,44 @@
     {
       "path": "src/locales/de.json",
       "category": "source",
-      "bytes": 383118,
-      "sha256": "056f85c05bcac4a2653c628733dc0a6a76cf0c041988420e9e075dbd6bf88cf8"
+      "bytes": 383775,
+      "sha256": "7f88ccc6e5fd44f50ac6004558d7f0e833dbf6c7b454fe6e08607b0dc4bb43af"
     },
     {
       "path": "src/locales/en.json",
       "category": "source",
-      "bytes": 353703,
-      "sha256": "681a91444fcd7a0c6d034361e72e663f7e1650f94ab3a6efe8278c6bc19540c0"
+      "bytes": 354271,
+      "sha256": "be07ad63d93b09852435a219e2eb65be50c80a6206f5bbd5d00a22c332e09a30"
     },
     {
       "path": "src/locales/es.json",
       "category": "source",
-      "bytes": 385157,
-      "sha256": "a5f7a650efa1593249b1048dc109f364863f2f047f47a746744a008a77540512"
+      "bytes": 385855,
+      "sha256": "c6750a0bbd2e84c149d7b043521753cc0284efd683bdf4d2628e57cb793f6c1b"
     },
     {
       "path": "src/locales/fr.json",
       "category": "source",
-      "bytes": 393044,
-      "sha256": "73e71f9b5745f2214ab0c48d406a1401fef2881de0db3d90938cb8798f2cb49e"
+      "bytes": 393755,
+      "sha256": "434f33545fcdd8741afa29a0c55f9fdecec73b84a574682ce5e31205d401d6f7"
     },
     {
       "path": "src/locales/pt-BR.json",
       "category": "source",
-      "bytes": 382972,
-      "sha256": "ab664cb24e9579e0c46b4f46f6fa4f6024e8a20055daba577b600802560061f9"
+      "bytes": 383619,
+      "sha256": "824e6e1971fd5bf2efa06e43f8cb6d7c3a4807ad4091750647915e962c924f9d"
     },
     {
       "path": "src/locales/ru.json",
       "category": "source",
-      "bytes": 506021,
-      "sha256": "56d05362da4106bb83a790eb2b2769dee7506ad8a3354f06b7e5ca9fd091bbb5"
+      "bytes": 506989,
+      "sha256": "c076b43c3a26a55cf24c55b89d537785531d56a8bd0aaf4619a32629ac9fe99f"
     },
     {
       "path": "src/locales/zh-Hans.json",
       "category": "source",
-      "bytes": 351542,
-      "sha256": "9487105c85ab7a6b1af506d4996280aebaeffddc87f748f76bbbafbc818e7de4"
+      "bytes": 352139,
+      "sha256": "ebad24e9d4e7df3602a612dd25c0f68169e45237ecbddc0c2b369c51d35a17ce"
     },
     {
       "path": "src/main/app-protocol.test.ts",
@@ -11415,8 +11415,8 @@
     {
       "path": "src/renderer/components/GameOverScreen.tsx",
       "category": "source",
-      "bytes": 28709,
-      "sha256": "3ed1957165f046d22789058749a9e235a74156d8de7286c171087c782940e9e7"
+      "bytes": 28830,
+      "sha256": "f8195fa71a7abd7f4731ad1a44e91ee9da9a50214254c979c4a72c1ee285fd4a"
     },
     {
       "path": "src/renderer/components/gameplayRenderProfile.ts",
@@ -11523,14 +11523,14 @@
     {
       "path": "src/renderer/components/GlobalRecord.test.tsx",
       "category": "test",
-      "bytes": 5971,
-      "sha256": "971311a50a903d33e67e208a56d188b92b3794cec292a6db3fc0220a982a8d6e"
+      "bytes": 5982,
+      "sha256": "bddd5cef74e87672b5ea8dc082baccd3825120228c0d51da3cf4b39f30f7890d"
     },
     {
       "path": "src/renderer/components/GlobalRecord.tsx",
       "category": "source",
-      "bytes": 5174,
-      "sha256": "c01510bd97d2a73b72eedfffddc7e208bedf7bc2d1b6606e913379d4125d8d7f"
+      "bytes": 5254,
+      "sha256": "b8632c61c315ae45f7691fbba408e436487252cc765ae77a8a34796d8b587f37"
     },
     {
       "path": "src/renderer/components/goldRain.test.ts",
@@ -14481,8 +14481,8 @@
     {
       "path": "src/renderer/records/globalRecord.ts",
       "category": "source",
-      "bytes": 2124,
-      "sha256": "c2ffe2dff078279b25d8e1a99bcbebe4380cddc467e695ce6f8ad18cf94d4580"
+      "bytes": 2435,
+      "sha256": "7b869d9cdeee375e3d316b8c447bbb3f7c08dd58d1db17e83acde355002328e7"
     },
     {
       "path": "src/renderer/records/playerNames.d.mts",
@@ -25323,7 +25323,7 @@
       "path": "src/renderer/components/GameOverScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 540,
+      "lineCount": 541,
       "imports": [
         "file:src/renderer/audio/gameSfx.ts",
         "file:src/renderer/audio/uiSfx.ts",
@@ -34220,13 +34220,14 @@
       "path": "src/renderer/records/globalRecord.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 40,
+      "lineCount": 42,
       "imports": [
         "file:src/shared/global-record-config.ts"
       ],
       "exports": [
         "symbol:src/renderer/records/globalRecord.ts#fetchGlobalRecord",
         "symbol:src/renderer/records/globalRecord.ts#GlobalRecord",
+        "symbol:src/renderer/records/globalRecord.ts#GlobalRecordEvidence",
         "symbol:src/renderer/records/globalRecord.ts#submitGlobalRecord"
       ],
       "testedBy": [
@@ -53122,8 +53123,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/GameOverScreen.tsx",
-      "line": 539,
-      "endLine": 539
+      "line": 540,
+      "endLine": 540
     },
     {
       "id": "symbol:src/renderer/components/gameplayRenderProfile.ts#GAMEPLAY_RENDER_PROFILE",
@@ -63098,8 +63099,8 @@
       "name": "fetchGlobalRecord",
       "kind": "value",
       "file": "src/renderer/records/globalRecord.ts",
-      "line": 34,
-      "endLine": 34
+      "line": 36,
+      "endLine": 36
     },
     {
       "id": "symbol:src/renderer/records/globalRecord.ts#GlobalRecord",
@@ -63110,12 +63111,20 @@
       "endLine": 4
     },
     {
+      "id": "symbol:src/renderer/records/globalRecord.ts#GlobalRecordEvidence",
+      "name": "GlobalRecordEvidence",
+      "kind": "interface",
+      "file": "src/renderer/records/globalRecord.ts",
+      "line": 6,
+      "endLine": 6
+    },
+    {
       "id": "symbol:src/renderer/records/globalRecord.ts#submitGlobalRecord",
       "name": "submitGlobalRecord",
       "kind": "value",
       "file": "src/renderer/records/globalRecord.ts",
-      "line": 35,
-      "endLine": 39
+      "line": 37,
+      "endLine": 41
     },
     {
       "id": "symbol:src/renderer/saveTransfer.ts#downloadSaveExport",
@@ -103102,6 +103111,12 @@
       "id": "exports:src/renderer/records/globalRecord.ts->symbol:src/renderer/records/globalRecord.ts#GlobalRecord",
       "source": "file:src/renderer/records/globalRecord.ts",
       "target": "symbol:src/renderer/records/globalRecord.ts#GlobalRecord",
+      "kind": "exports"
+    },
+    {
+      "id": "exports:src/renderer/records/globalRecord.ts->symbol:src/renderer/records/globalRecord.ts#GlobalRecordEvidence",
+      "source": "file:src/renderer/records/globalRecord.ts",
+      "target": "symbol:src/renderer/records/globalRecord.ts#GlobalRecordEvidence",
       "kind": "exports"
     },
     {

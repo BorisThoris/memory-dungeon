@@ -2,6 +2,8 @@ import { GLOBAL_RECORD_API_URL } from '../../shared/global-record-config';
 import { reject } from './playerNames.mjs';
 
 export interface GlobalRecord { name: string; score: number; at: string }
+/** What the run was, logged beside a claim so a forged record can be told from a real one (leaderboard/README.md). */
+export interface GlobalRecordEvidence { floor: number; shareKey: string | null; rules: number | null }
 interface RecordResponse { record: GlobalRecord | null; accepted?: boolean }
 class RecordServiceError extends Error {}
 
@@ -13,12 +15,12 @@ const readRecord = (value: unknown): GlobalRecord | null => {
     return row as GlobalRecord;
 };
 
-const requestRecord = async (name?: string, score?: number): Promise<RecordResponse> => {
+const requestRecord = async (name?: string, score?: number, evidence?: GlobalRecordEvidence): Promise<RecordResponse> => {
     const controller = new AbortController();
     const timeout = globalThis.setTimeout(() => controller.abort(), 8000);
     try {
         const response = await fetch(`${GLOBAL_RECORD_API_URL}/record`, {
-            ...(name !== undefined ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, score }) } : {}),
+            ...(name !== undefined ? { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ name, score, ...evidence }) } : {}),
             signal: controller.signal
         });
         const body = await response.json() as { record?: unknown; error?: string; accepted?: boolean };
@@ -32,8 +34,8 @@ const requestRecord = async (name?: string, score?: number): Promise<RecordRespo
 };
 
 export const fetchGlobalRecord = (): Promise<RecordResponse> => requestRecord();
-export const submitGlobalRecord = (name: string, score: number): Promise<RecordResponse> => {
+export const submitGlobalRecord = (name: string, score: number, evidence?: GlobalRecordEvidence): Promise<RecordResponse> => {
     const why = reject(name);
     if (why) return Promise.reject(new Error(why));
-    return requestRecord(name, score);
+    return requestRecord(name, score, evidence);
 };

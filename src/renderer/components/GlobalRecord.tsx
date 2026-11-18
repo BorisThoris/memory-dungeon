@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchGlobalRecord, submitGlobalRecord, type GlobalRecord } from '../records/globalRecord';
+import { fetchGlobalRecord, submitGlobalRecord, type GlobalRecord, type GlobalRecordEvidence } from '../records/globalRecord';
 import { reject } from '../records/playerNames.mjs';
 import OverlayModal from './OverlayModal';
 import styles from './GlobalRecord.module.css';
@@ -30,7 +30,7 @@ export const GlobalRecordBadge = ({ onChallenge }: { onChallenge: () => void }) 
     </section>;
 };
 
-export const GlobalRecordResult = ({ score, resultKey, eligible = true }: { score: number; resultKey: string; eligible?: boolean }) => {
+export const GlobalRecordResult = ({ score, resultKey, eligible = true, evidence }: { score: number; resultKey: string; eligible?: boolean; evidence?: GlobalRecordEvidence }) => {
     const [open, setOpen] = useState(false);
     const [record, setRecord] = useState<GlobalRecord | null>(null);
     const [name, setName] = useState('');
@@ -56,7 +56,7 @@ export const GlobalRecordResult = ({ score, resultKey, eligible = true }: { scor
         if (why) { setError(why);return; }
         setBusy(true);setError('');
         try {
-            const response = await submitGlobalRecord(name, score);
+            const response = await submitGlobalRecord(name, score, evidence);
             setRecord(response.record);setOutcome(response.accepted ? 'saved' : 'beaten');
         } catch (cause) { setError(cause instanceof Error ? cause.message : COPY.failed); }
         finally { setBusy(false); }
