@@ -116,6 +116,8 @@ import { createAppStoreInitialState } from './appStoreInitialState';
 import { createRunStartStatePatch } from './runStartState';
 import { clearSuspendedRun, isSuspendableRun, markSuspendedRunContinued, readSuspendedRun, summarizeSuspendedRun, writeSuspendedRun } from './suspendedRun';
 
+import { trackRunAssist } from './runAssist';
+
 /** Set by Save and leave for the one store update that takes the run off the board. */
 let keepSuspendedRunOnLeave = false;
 import { enqueueItemDrops, itemDropsBetween } from './itemDropFeed';
@@ -1023,6 +1025,11 @@ useAppStore.subscribe((state, previous) => {
             console.warn('[suspended-run] could not snapshot the run', error);
         }
     }
+});
+
+// Pair-distance hints on at any point mark the run as assisted when it ends (`runAssist.ts`).
+useAppStore.subscribe((state, previous) => {
+    trackRunAssist(previous.run, state.run, state.settings.pairProximityHintsEnabled === true);
 });
 
 /**

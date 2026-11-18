@@ -14,6 +14,8 @@ export const RUN_HISTORY_COPY = {
         tr`Copy the key for the ${record.mode} run that reached floor ${record.highestLevel}`,
     copyDone: tr.s('Copied'),
     copyFailed: tr.s('Failed'),
+    assisted: tr.s('Assisted'),
+    assistedAriaLabel: tr.s('Played with pair-distance hints on'),
     best: tr.s('Best'),
     bestAriaLabel: tr.s('Your highest scoring recorded run'),
     empty: tr.s('Finished runs are recorded here.'),

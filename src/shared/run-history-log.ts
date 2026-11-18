@@ -47,7 +47,8 @@ export const normalizeRunHistoryRecord = (input: unknown): RunHistoryRecord | nu
         ...(typeof input.clearedTurnsRelativeToPar === 'number' && Number.isSafeInteger(input.clearedTurnsRelativeToPar) ? { clearedTurnsRelativeToPar: input.clearedTurnsRelativeToPar } : {}),
         ...(typeof input.strongestReaction === 'number' && Number.isSafeInteger(input.strongestReaction) ? { strongestReaction: runNonNegativeInteger(input.strongestReaction) } : {}),
         ...(bestChain > 0 ? { bestChain } : {}),
-        ...(biggestChunk > 0 ? { biggestChunk } : {})
+        ...(biggestChunk > 0 ? { biggestChunk } : {}),
+        ...(input.assisted === true ? { assisted: true } : {})
     };
 };
 
@@ -85,7 +86,8 @@ export const buildRunHistoryRecord = (run: RunState, endedAtIso: string): RunHis
             ? { clearedTurnsRelativeToPar: run.clearedTurnsRelativeToPar ?? 0 } : {}),
         strongestReaction: runNonNegativeInteger(run.strongestReactionThisRun),
         ...(bestChain > 0 ? { bestChain } : {}),
-        ...(biggestChunk > 0 ? { biggestChunk } : {})
+        ...(biggestChunk > 0 ? { biggestChunk } : {}),
+        ...(run.assisted ? { assisted: true } : {})
     };
 };
 

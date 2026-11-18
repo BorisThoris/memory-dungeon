@@ -40,6 +40,8 @@ export const gameOverScreenCopy = {
     /** The one-time rate link (`rateGame.ts`), by the store this build can send the player to. */
     rateOnPlay: tr.s('Enjoying the Dungeon? Rate it on Google Play'),
     rateOnSteam: tr.s('Enjoying the Dungeon? Review it on Steam'),
+    /** Why a strong assisted run did not offer the global record. */
+    assistedRun: tr.s('Assisted run: pair-distance hints were on, so it stays off the global record.'),
     actionKicker: tr.s('Next move'),
     actionHeading: tr.s('Continue the archive'),
     playAgainLabel: tr.s('Play Again'),

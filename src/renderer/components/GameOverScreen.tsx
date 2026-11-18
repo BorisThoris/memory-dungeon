@@ -248,7 +248,7 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
             </div>
             <div className={styles.scrim} />
             <GlobalRecordResult key={`${run.runSeed}:${summary.totalScore}:${summary.highestLevel}`} score={summary.totalScore} resultKey={`${run.runSeed}:${summary.totalScore}:${summary.highestLevel}`}
-                eligible={!summary.practiceMode && !run.debugUsed && (summary.achievementsEnabled || passAndPlayOutcome !== null)} />
+                eligible={!summary.practiceMode && !summary.assisted && !run.debugUsed && (summary.achievementsEnabled || passAndPlayOutcome !== null)} />
             <p
                 aria-atomic="true"
                 aria-label={tr.s("Run summary announcement")}
@@ -385,6 +385,9 @@ const GameOverScreen = ({ run }: GameOverScreenProps) => {
                         </div>
 
                         {rematchComparison ? <p className={styles.personalBest} data-testid="rematch-comparison">{rematchComparison}</p> : null}
+                        {summary.assisted ? (
+                            <p className={styles.copy} data-testid="game-over-assisted">{gameOverScreenCopy.assistedRun}</p>
+                        ) : null}
                         {ratePrompt ? (
                             <p className={styles.copy} data-testid="game-over-rate">
                                 <a className={styles.wishlistLink} href={ratePrompt.url} rel="noopener noreferrer" target="_blank">

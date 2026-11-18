@@ -41,6 +41,7 @@ export const createRunSummary = (run: RunState, unlockedAchievements: Achievemen
             payoffPickupTotal,
             payoffPressureExtra: stats.mismatches,
             practiceMode: run.practiceMode,
+            ...(run.assisted ? { assisted: true } : {}),
             wildMenuRun: run.wildMenuRun,
             activeContract: run.activeContract ? { ...run.activeContract } : null,
             runEndReason: run.runEndReason ?? undefined,

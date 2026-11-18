@@ -43,6 +43,7 @@ import { projectPassAndPlayTurn } from './passAndPlayProjection';
 import { isPassAndPlayRun } from '../../shared/pass-and-play-rules';
 import { getChainTier } from '../../shared/chain-tier-rules';
 import { runNonNegativeInteger } from '../../shared/run-number-guards';
+import { withRunAssist } from './runAssist';
 
 interface RunResolutionState {
     run: RunState | null;
@@ -172,7 +173,7 @@ export const createRunResolutionController = ({
         if (nextRun.status === 'gameOver') {
             // The summary is built either way: the results screen reads it, and a shared game still
             // has to show the table what happened. Only the writes to the save are skipped.
-            nextRun = createValidatedGameOverRunSummary(nextRun, unlockedAchievements);
+            nextRun = createValidatedGameOverRunSummary(withRunAssist(nextRun), unlockedAchievements);
             if (!unrecorded) {
                 // Counted before the unlocks are evaluated, so the run that reaches a rung is the
                 // run that unlocks it. The history cannot do this job: it is capped at twenty.

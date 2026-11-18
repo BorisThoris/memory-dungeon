@@ -785,6 +785,8 @@ export interface RunSummary {
     payoffPickupTotal?: number;
     payoffPressureExtra?: number;
     practiceMode?: boolean;
+    /** Pair-distance hints were on at some point in the run (owner, 2026-11-18): kept off the global record. */
+    assisted?: boolean;
     wildMenuRun?: boolean;
     activeContract?: ContractFlags | null;
     /** How the run ended; absent on summaries written before the turn ceiling (Gen 183). */
@@ -916,6 +918,8 @@ export interface RunState {
     activeContract: ContractFlags | null;
     /** Practice runs disable achievements (optional ranked split). */
     practiceMode: boolean;
+    /** Pair-distance hints were on at some point in the run (the renderer sets it; rules never read it). */
+    assisted?: boolean;
     dailyDateKeyUtc: string | null;
     puzzleId: string | null;
     /** Sticky fingers: flat index blocked for the next opening flip after a match. */
@@ -1323,6 +1327,8 @@ export interface RunHistoryRecord {
     /** Only cleared floors contribute; older rows may not have this comparable pace metric. */
     readonly clearedTurnsRelativeToPar?: number;
     readonly strongestReaction?: number;
+    /** Played with pair-distance hints on; absent on unaided and older rows. */
+    readonly assisted?: boolean;
 }
 
 export interface SaveData {

@@ -221,6 +221,16 @@ const ProfileScreen = () => {
                                             {RUN_HISTORY_COPY.best}
                                         </span>
                                     ) : null}
+                                    {record.assisted ? (
+                                        <span
+                                            aria-label={RUN_HISTORY_COPY.assistedAriaLabel}
+                                            className={styles.historyBest}
+                                            data-testid="profile-run-history-assisted"
+                                            role="img"
+                                        >
+                                            {RUN_HISTORY_COPY.assisted}
+                                        </span>
+                                    ) : null}
                                 </div>
                                 <span className={styles.historyResult}>{RUN_HISTORY_COPY.result(record)}</span>
                                 <div className={styles.ledgerCardFoot}>
