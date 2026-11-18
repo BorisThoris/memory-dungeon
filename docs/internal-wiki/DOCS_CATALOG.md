@@ -26,6 +26,7 @@
 | [STEAM_CLOUD_SETUP.md](../STEAM_CLOUD_SETUP.md) | The owner's three steps to turn on Steam Cloud: the Auto-Cloud rows, the packaging flag, one round trip (2026-11-14) |
 | [MARKET_FLOW_REVIEW.md](../MARKET_FLOW_REVIEW.md) | Every player flow of the leading roguelikes against Memory Dungeon's, with what was added, kept different, or left to the owner (2026-11-14) |
 | [MARKET_FLOW_REVIEW_WIDER.md](../MARKET_FLOW_REVIEW_WIDER.md) | The same review widened past roguelikes: mobile puzzle, card and brain-training leaders, flow by flow, with the gaps it found and what was built for them (2026-11-16) |
+| [PRODUCTION_AUDIT_2026-11-18.md](../PRODUCTION_AUDIT_2026-11-18.md) | An independent production audit read from the source, not the reviews: twelve findings and what happened to each (fixed, owner-decided, deferred, open) (2026-11-18) |
 | [LOCALIZATION_PLAN.md](../LOCALIZATION_PLAN.md) | The seven launch languages: how copy is keyed and translated (`tr`, `plural`), how the locale is kept out of the rules, the catalogs, fonts, and the checks that hold it (2026-11-16) |
 | [DOC_CHECKBOX_INVENTORY.md](../DOC_CHECKBOX_INVENTORY.md) | Doc checkbox audit counts (maintenance) |
 | [FINDABLES.md](../FINDABLES.md) | Findables mechanic |

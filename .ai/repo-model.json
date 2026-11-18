@@ -3,7 +3,7 @@
   "generator": "scripts/ai-repo-model.mjs",
   "repository": {
     "name": "memory-dungeon",
-    "trackedFileCount": 3477,
+    "trackedFileCount": 3478,
     "codeFileCount": 1372,
     "exportedSymbolCount": 4538,
     "contentItemCount": 16,
@@ -915,8 +915,8 @@
     {
       "path": "docs/internal-wiki/DOCS_CATALOG.md",
       "category": "documentation",
-      "bytes": 20942,
-      "sha256": "959e8dd571baa5df7c37805a86daf3309999e90d98f0d21f02b73958db2b26a7"
+      "bytes": 21181,
+      "sha256": "6b71a426ac97dd2b5a57deabf21c4aec7062c15b797907ed0b5ab29b42a5ec19"
     },
     {
       "path": "docs/internal-wiki/E2E_AND_QA.md",
@@ -1391,6 +1391,12 @@
       "category": "documentation",
       "bytes": 124273,
       "sha256": "b80e2759664844bf0c7e2ebbc045551ee1a9dc7494650c0789928f176b0c6c7c"
+    },
+    {
+      "path": "docs/PRODUCTION_AUDIT_2026-11-18.md",
+      "category": "documentation",
+      "bytes": 4971,
+      "sha256": "aa8a90b25ebb37bde2a65058c5c9e2841d635b6bbda5ad137cfa95d118ddf4cb"
     },
     {
       "path": "docs/PUZZLE_CONTRIBUTING.md",
