@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import type { DesktopApi } from '../../shared/contracts';
 import { createDefaultSaveData } from '../../shared/save-data';
 import { useAppStore } from '../store/useAppStore';
 import SettingsScreen from './SettingsScreen';
@@ -196,6 +197,24 @@ describe('the crash reports line in Settings', () => {
         render(<SettingsScreen presentation="page" />);
         await user.click(screen.getByRole('button', { name: /about/i }));
     };
+
+    // Crash logs are the desktop build's (`src/main`): the rows below exist only with its bridge.
+    beforeEach(() => {
+        (window as Window & { desktop?: DesktopApi }).desktop = {} as DesktopApi;
+    });
+    afterEach(() => {
+        delete (window as Window & { desktop?: DesktopApi }).desktop;
+    });
+
+    it('leaves crash logs, Show save file and Window Mode out of the web and Play builds', async () => {
+        delete (window as Window & { desktop?: DesktopApi }).desktop;
+        const user = userEvent.setup();
+        await openAbout(user);
+        expect(screen.queryByTestId('settings-crash-reports')).toBeNull();
+        expect(screen.queryByTestId('settings-reveal-save-file')).toBeNull();
+        await user.click(screen.getByRole('button', { name: /video|display|graphics/i }));
+        expect(screen.queryByText('Window Mode')).toBeNull();
+    });
 
     it('names the folder so a report can actually be found and sent', async () => {
         useAppStore.setState({

@@ -9,7 +9,7 @@
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12758
+    "relationshipCount": 12761
   },
   "inventory": [
     {
@@ -2518,7 +2518,7 @@
       "path": "docs/system-diagrams/README.md",
       "category": "documentation",
       "bytes": 33563,
-      "sha256": "292cbeccbf5644021a0881f69edd474e8f3266cab2836eab5f09d6f242511819"
+      "sha256": "9d97ec8b7b34bba5b82012727cb2ccea7502a676c7e7adba5898cb0d1cbd265d"
     },
     {
       "path": "docs/THESIS_THE_ADDICTIVE_LOOP.md",
@@ -12345,14 +12345,14 @@
     {
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "category": "test",
-      "bytes": 14957,
-      "sha256": "dbb2f1333db74592f22f0925318aca0cf4e89c34cddf8fb8641dbd1c7f66cb3c"
+      "bytes": 15900,
+      "sha256": "703c14aba70e67fe2ce85ea38a7b737a81d263a7b68530e29c16856ba6ed5120"
     },
     {
       "path": "src/renderer/components/SettingsScreen.tsx",
       "category": "source",
-      "bytes": 62574,
-      "sha256": "39b61630b00b943dc5cdb06ba93088cb839396b508086a92f6fc77d57268ad6e"
+      "bytes": 63305,
+      "sha256": "ab1ee8ac3f7c43274045829ef544d306898ad6a0167e962c47a1c8d29654556d"
     },
     {
       "path": "src/renderer/components/shaderFirstUse.test.ts",
@@ -14295,8 +14295,8 @@
     {
       "path": "src/renderer/initRendererShell.tsx",
       "category": "source",
-      "bytes": 2986,
-      "sha256": "25c424ea3b4153f4a3c6aa0ac7f42350d185e837331db1ab20ce4904a3cd616a"
+      "bytes": 3156,
+      "sha256": "90448faf6081df26871ef870ce04ed8d8437bfcdd2d8c760a917fdf8416008cd"
     },
     {
       "path": "src/renderer/input/carveSwipe.test.ts",
@@ -28062,12 +28062,13 @@
       "path": "src/renderer/components/SettingsScreen.test.tsx",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 288,
+      "lineCount": 307,
       "imports": [
         "file:src/renderer/components/SettingsScreen.tsx",
         "file:src/renderer/dev/useDevOptions.ts",
         "file:src/renderer/saveTransfer.ts",
         "file:src/renderer/store/useAppStore.ts",
+        "file:src/shared/contracts.ts",
         "file:src/shared/save-data.ts"
       ],
       "exports": [],
@@ -28078,7 +28079,7 @@
       "path": "src/renderer/components/SettingsScreen.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 975,
+      "lineCount": 988,
       "imports": [
         "file:src/renderer/audio/uiSfx.ts",
         "file:src/renderer/breakpoints.ts",
@@ -28094,6 +28095,7 @@
         "file:src/renderer/copy/keyBindingsCopy.ts",
         "file:src/renderer/copy/patchNotesCopy.ts",
         "file:src/renderer/copy/settingsHints.ts",
+        "file:src/renderer/desktop-client.ts",
         "file:src/renderer/dev/useDevOptions.ts",
         "file:src/renderer/hooks/useEscapeLeaves.ts",
         "file:src/renderer/hooks/useModalFocusTrap.ts",
@@ -33688,7 +33690,7 @@
       "path": "src/renderer/initRendererShell.tsx",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 76,
+      "lineCount": 77,
       "imports": [
         "file:src/renderer/App.tsx",
         "file:src/renderer/BootSplashTeardown.tsx",
@@ -38457,6 +38459,7 @@
         "file:src/renderer/components/roomSpill.test.ts",
         "file:src/renderer/components/runLoadingScreen.test.tsx",
         "file:src/renderer/components/RunShell.test.tsx",
+        "file:src/renderer/components/SettingsScreen.test.tsx",
         "file:src/renderer/components/TileBoard.test.tsx",
         "file:src/renderer/components/tileBoardBreakWave.test.ts",
         "file:src/renderer/components/tileBoardCardTint.test.ts",
@@ -56342,8 +56345,8 @@
       "name": "default",
       "kind": "ExportAssignment",
       "file": "src/renderer/components/SettingsScreen.tsx",
-      "line": 974,
-      "endLine": 974
+      "line": 987,
+      "endLine": 987
     },
     {
       "id": "symbol:src/renderer/components/shaderFirstUse.ts#finishShaderProgramsOffFrame",
@@ -62446,16 +62449,16 @@
       "name": "bootstrapWebRenderer",
       "kind": "value",
       "file": "src/renderer/initRendererShell.tsx",
-      "line": 64,
-      "endLine": 75
+      "line": 65,
+      "endLine": 76
     },
     {
       "id": "symbol:src/renderer/initRendererShell.tsx#getRendererRootElement",
       "name": "getRendererRootElement",
       "kind": "value",
       "file": "src/renderer/initRendererShell.tsx",
-      "line": 55,
-      "endLine": 61
+      "line": 56,
+      "endLine": 62
     },
     {
       "id": "symbol:src/renderer/input/carveSwipe.ts#CARVE_SWIPE_MIN_PX",
@@ -129575,6 +129578,12 @@
       "kind": "imports"
     },
     {
+      "id": "imports:src/renderer/components/SettingsScreen.test.tsx->src/shared/contracts.ts",
+      "source": "file:src/renderer/components/SettingsScreen.test.tsx",
+      "target": "file:src/shared/contracts.ts",
+      "kind": "imports"
+    },
+    {
       "id": "imports:src/renderer/components/SettingsScreen.test.tsx->src/shared/save-data.ts",
       "source": "file:src/renderer/components/SettingsScreen.test.tsx",
       "target": "file:src/shared/save-data.ts",
@@ -129662,6 +129671,12 @@
       "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/copy/settingsHints.ts",
       "source": "file:src/renderer/components/SettingsScreen.tsx",
       "target": "file:src/renderer/copy/settingsHints.ts",
+      "kind": "imports"
+    },
+    {
+      "id": "imports:src/renderer/components/SettingsScreen.tsx->src/renderer/desktop-client.ts",
+      "source": "file:src/renderer/components/SettingsScreen.tsx",
+      "target": "file:src/renderer/desktop-client.ts",
       "kind": "imports"
     },
     {
@@ -159661,6 +159676,12 @@
       "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/RunShell.test.tsx",
       "source": "file:src/shared/contracts.ts",
       "target": "file:src/renderer/components/RunShell.test.tsx",
+      "kind": "tested_by"
+    },
+    {
+      "id": "tested_by:src/shared/contracts.ts->file:src/renderer/components/SettingsScreen.test.tsx",
+      "source": "file:src/shared/contracts.ts",
+      "target": "file:src/renderer/components/SettingsScreen.test.tsx",
       "kind": "tested_by"
     },
     {

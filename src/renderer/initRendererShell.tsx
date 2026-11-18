@@ -6,7 +6,7 @@ import { createRoot, type Root } from 'react-dom/client';
 import App from './App';
 import { BootSplashTeardown } from './BootSplashTeardown';
 import { AppErrorBoundary } from './components/AppErrorBoundary';
-import { desktopClient } from './desktop-client';
+import { desktopClient, hasDesktopBridge } from './desktop-client';
 import { registerRendererErrorHooks } from './diagnostics/rendererErrorHooks';
 import { PlatformTiltProvider } from './platformTilt/PlatformTiltProvider';
 import { forEachRendererThemeCssVar } from './styles/theme';
@@ -29,9 +29,10 @@ const mountRendererApp = (rootElement: HTMLElement): Root => {
              * any of them used to unmount the whole tree and leave an empty window behind.
              */}
             <AppErrorBoundary
-                report={(report) => {
+                // Only the desktop build writes a crash log; on the web, saying a report was written would be untrue.
+                report={hasDesktopBridge() ? (report) => {
                     void desktopClient.reportRendererError(report);
-                }}
+                } : undefined}
                 reload={() => {
                     window.location.reload();
                 }}

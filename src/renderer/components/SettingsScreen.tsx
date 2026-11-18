@@ -12,6 +12,7 @@ import {
     type WeakerShuffleMode
 } from '../../shared/contracts';
 import { FEATURE_CLOUD_SAVE } from '../../shared/feature-flags';
+import { hasDesktopBridge } from '../desktop-client';
 import { getProfileSummaryRows, getSaveTrustRows } from '../../shared/profile-summary';
 import { getPremiumEconomyPolicyRows } from '../../shared/premium-economy-policy';
 
@@ -77,6 +78,12 @@ const NUMERALS = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII'] as const;
  * reported on `data-settings-layout`; a stacked shell's category chooser is one <select>.
  */
 const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
+    /*
+     * Window mode, crash logs and the save file belong to the desktop build (`src/main`): on the web
+     * and in the Play app a window-mode choice was saved and never applied, the crash line spoke of
+     * logs nobody writes, and Show save file opened nothing.
+     */
+    const desktop = hasDesktopBridge();
     const comboPopEffects = useDevOptions(state => state.comboPopEffects);
     const setComboPopEffects = useDevOptions(state => state.setComboPopEffects);
     const {
@@ -516,6 +523,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
 
                                         {activeCategory === 'video' && showSubsection('display') ? (
                                             <SettingsSection title={tr.s("Display")}>
+                                                {desktop ? (
                                                 <SegmentedControl<DisplayMode>
                                                     hint={SETTINGS_HINTS.displayMode}
                                                     label={tr.s("Window Mode")}
@@ -526,6 +534,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                     ]}
                                                     value={draft.displayMode}
                                                 />
+                                                ) : null}
                                                 <SliderRow
                                                     hint={SETTINGS_HINTS.uiScale}
                                                     label={tr.s("UI Scale")}
@@ -656,11 +665,13 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                  * one is by being told where it is. Deliberately here rather than on the
                                                  * menu: a player who crashed once should not be reminded every launch.
                                                  */}
+                                                {desktop ? (
                                                 <p className={styles.headerCopy} data-testid="settings-crash-reports">
                                                     <strong>{DIAGNOSTICS_COPY.label}:</strong>{' '}
                                                     {priorCrashNotice ?? DIAGNOSTICS_COPY.none}{' '}
                                                     {DIAGNOSTICS_COPY.hint}
                                                 </p>
+                                                ) : null}
                                                 <div className={styles.profileSummaryGrid} data-testid="settings-profile-summary">
                                                     {profileSummaryRows.map((row) => (
                                                         <div className={styles.profileSummaryRow} key={row.id}>
@@ -670,6 +681,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                         </div>
                                                     ))}
                                                 </div>
+                                                {desktop ? (
                                                 <button
                                                     aria-label={SAVE_FILE_COPY.revealAriaLabel}
                                                     className={styles.word}
@@ -679,6 +691,7 @@ const SettingsScreen = ({ presentation = 'page' }: SettingsScreenProps) => {
                                                 >
                                                     {SAVE_FILE_COPY.reveal}
                                                 </button>
+                                                ) : null}
                                                 <div className={styles.profileSummaryGrid} data-testid="settings-save-trust">
                                                     {saveTrustRows.map((row) => (
                                                         <div className={styles.profileSummaryRow} key={row.id}>
