@@ -5,11 +5,11 @@
     "name": "memory-dungeon",
     "trackedFileCount": 3478,
     "codeFileCount": 1372,
-    "exportedSymbolCount": 4538,
+    "exportedSymbolCount": 4537,
     "contentItemCount": 16,
     "mechanicCount": 91,
     "stateFieldCount": 166,
-    "relationshipCount": 12783
+    "relationshipCount": 12782
   },
   "inventory": [
     {
@@ -14769,14 +14769,14 @@
     {
       "path": "src/renderer/store/runAssist.test.ts",
       "category": "test",
-      "bytes": 1637,
-      "sha256": "c19c28357fb6fe5cb2547a57a9c62287e82926e77032cb335ba1da985e50ea70"
+      "bytes": 1557,
+      "sha256": "0a01b4d237736d08fd9c96d20d95e902be2c3a6b50fa2ccbc8f0320bbc805180"
     },
     {
       "path": "src/renderer/store/runAssist.ts",
       "category": "source",
-      "bytes": 1360,
-      "sha256": "70975ab376e61bc4a1a8810eaec5a64b0b37c14f46c9aad9fe0243215c478652"
+      "bytes": 1297,
+      "sha256": "d3347d29600ec00df27098bcc5936a6c8033428ef0b31ef313dcfb6649640c8b"
     },
     {
       "path": "src/renderer/store/runLifecycleController.test.ts",
@@ -35039,7 +35039,7 @@
       "path": "src/renderer/store/runAssist.test.ts",
       "layer": "renderer",
       "role": "test",
-      "lineCount": 32,
+      "lineCount": 30,
       "imports": [
         "file:src/renderer/store/runAssist.ts",
         "file:src/shared/contracts.ts",
@@ -35054,13 +35054,12 @@
       "path": "src/renderer/store/runAssist.ts",
       "layer": "renderer",
       "role": "production",
-      "lineCount": 28,
+      "lineCount": 26,
       "imports": [
         "file:src/shared/contracts.ts"
       ],
       "exports": [
         "symbol:src/renderer/store/runAssist.ts#trackRunAssist",
-        "symbol:src/renderer/store/runAssist.ts#wasRunAssisted",
         "symbol:src/renderer/store/runAssist.ts#withRunAssist"
       ],
       "testedBy": [
@@ -64037,20 +64036,12 @@
       "endLine": 22
     },
     {
-      "id": "symbol:src/renderer/store/runAssist.ts#wasRunAssisted",
-      "name": "wasRunAssisted",
-      "kind": "value",
-      "file": "src/renderer/store/runAssist.ts",
-      "line": 24,
-      "endLine": 24
-    },
-    {
       "id": "symbol:src/renderer/store/runAssist.ts#withRunAssist",
       "name": "withRunAssist",
       "kind": "value",
       "file": "src/renderer/store/runAssist.ts",
-      "line": 27,
-      "endLine": 27
+      "line": 25,
+      "endLine": 25
     },
     {
       "id": "symbol:src/renderer/store/runLifecycleController.ts#createRunLifecycleController",
@@ -103807,12 +103798,6 @@
       "id": "exports:src/renderer/store/runAssist.ts->symbol:src/renderer/store/runAssist.ts#trackRunAssist",
       "source": "file:src/renderer/store/runAssist.ts",
       "target": "symbol:src/renderer/store/runAssist.ts#trackRunAssist",
-      "kind": "exports"
-    },
-    {
-      "id": "exports:src/renderer/store/runAssist.ts->symbol:src/renderer/store/runAssist.ts#wasRunAssisted",
-      "source": "file:src/renderer/store/runAssist.ts",
-      "target": "symbol:src/renderer/store/runAssist.ts#wasRunAssisted",
       "kind": "exports"
     },
     {

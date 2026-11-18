@@ -21,7 +21,5 @@ export const trackRunAssist = (previous: RunState | null, next: RunState | null,
     if (hintsOn && next.status !== 'gameOver') assistedThisRun = true;
 };
 
-export const wasRunAssisted = (): boolean => assistedThisRun;
-
 /** The run as it ended, marked when hints were on at any point in it. */
 export const withRunAssist = <T extends RunState>(run: T): T => (assistedThisRun ? { ...run, assisted: true } : run);
