@@ -20,7 +20,7 @@ export default {
     "deploymentUrl": "https://memory-dungeon-git.pages.dev/",
     "title": "Memory Dungeon",
     "subtitle": "Seeker of Shards: a memory roguelite",
-    "description": "A memory roguelite: read the board, match the pairs and protect the streak while relics bend the rules and every run deals deeper, harder boards. Run modes, a collection to unlock, local saves and an Electron build aimed at Steam.",
+    "description": "A memory roguelite: read the board, match the pairs and protect the streak while relics bend the rules and every run deals deeper, harder boards. Descend forty floors to the Warden, then on into Endless. Plays offline.",
     "tags": [
       "Roguelite",
       "Memory Game",
